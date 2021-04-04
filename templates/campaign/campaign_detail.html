@@ -1,0 +1,113 @@
+{% extends "dashboard/basev2.html" %} 
+{% load static %} 
+{% block content %}
+
+<!-- start container -->
+<div class="container">
+
+	<!-- start row - Bread Crumbs -->
+	<div class="row">
+		<!-- Start Col -->
+		<div class = "col-sm">
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+					<li class="breadcrumb-item"></class><a href="{% url 'campaign' %}">Campaigns</a></li>
+					<li class="breadcrumb-item active" aria-current="page" href="">{{ campaign.name }}</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+	<!-- end row -->
+
+	<!-- start row - Campaign Header -->
+	<div class="row">
+		<div class="col-md-8">
+			<h2>{{ campaign.name }}</h2>
+			<h6>by {{ campaign.created_by }}</h6>
+			<h6>{{ campaign.dcs_map }}</h6>
+			<h2>
+				{% if campaign.status.name == "Active" %}
+				<span class="badge badge-success">
+				{% elif campaign.status.name == "Inactive" %}
+				<span class="badge badge-danger">
+				{% else %}
+				<span class="badge badge-primary">
+				{% endif %}
+				{{ campaign.status }}</span>
+			</h2>
+			<p>{{ campaign.description|linebreaks }}</p>
+			<div class="btn-toolbar">
+				<div class="btn-group mr-2">
+					<a class="btn btn-sm btn-outline-secondary" href="{% url 'campaign_update' campaign.id %}" role="button">Edit</a>
+										<a class="btn btn-sm btn-outline-secondary" href="{% url 'campaign_delete' campaign.id %}" role="button">Delete</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-sm">
+			{% if campaign.campaignImage %}
+			<img src="{{ campaign.campaignImage.url }}" class="rounded float-right" alt="..." width="200" />
+			{% else %}
+			<svg class="bd-placeholder-img card-img-top" width="200" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+				<title>Placeholder</title>
+				<rect width="100%" height="100%" fill="#55595c" />
+				<text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail Not Available</text>
+			</svg>
+			{% endif %}
+		</div>
+	</div>
+	<!-- end row -->
+	<div class="row">
+		<div class="col">
+			<hr>
+			<h6>Situation</h6>
+			{{ campaign.situation|linebreaks }}
+		</div>
+	</div>
+
+
+
+	<!-- Start Row -->
+	<div class="row">
+		<div class="col"><!-- .col -->
+			<hr>
+			
+			<h4>Mission(s) <a href="{% url 'mission_add' campaign.id %}" role="button"><i class="bi bi-plus-circle"></i></a></h4>
+			<table class="table"><!-- .table -->
+				<thead class="thead-dark">
+					<tr>
+						<th scope="col">Misson</th>
+						<th scope="col">Name</th>
+						<th scope="col">Description</th>
+						<th scope="col">Date</th>
+						<th scope="col" colspan="2" style="text-align:center;">Action</th>
+						
+					</tr>
+				</thead>
+				<tbody>
+					{% if missions %} {% for mission in missions %}
+					<tr>
+						<th scope="row">{{mission.number}}</th>
+						<td><a href="{% url 'mission' mission.id %}">{{ mission.name }}</a></td>
+						<td>{{ mission.description}}</td>
+						<td>{{ mission.mission_date}}</td>
+						<td>
+							<a class="btn btn-sm btn-outline-primary" href="{% url 'mission_update' mission.id %}" role="button">Edit</a>
+						</td>
+						<td>
+							<a class="btn btn-sm btn-outline-danger" href="{% url 'mission_delete' mission.id %}" role="button">Delete</a>
+						</td>
+					</tr>
+					{% endfor %} {% else %}
+					<tr>
+						<td>No missions available.</td>
+					</tr>
+					{% endif %}
+				</tbody>
+			</table><!-- /.table -->		
+		</div><!-- /.col -->				
+	</div><!-- /.row -->
+</div><!-- /.container -->
+
+{% endblock %}

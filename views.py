@@ -1,0 +1,254 @@
+from django.shortcuts import render, redirect
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
+from urllib.parse import urlencode
+
+from django.contrib.auth import login, authenticate, logout  # add this
+from django.contrib import messages
+from django.contrib.auth.forms import AuthenticationForm  # add this
+
+from django.views.decorators.csrf import csrf_protect
+
+from .models import Campaign, Mission, Package, Flight
+from .forms import CampaignForm, MissionForm, NewUserForm, PackageForm
+
+
+def index(request):
+    """View function for home page of site."""
+
+    # Generate counts of some of the main objects
+    num_campaigns = Campaign.objects.all().count()
+    #num_instances = BookInstance.objects.all().count()
+
+    # Available books (status = 'a')
+    #num_instances_available = BookInstance.objects.filter(status__exact='a').count()
+
+    # The 'all()' is implied by default.
+    num_missions = Mission.objects.count()
+
+    context = {
+        'num_campaigns': num_campaigns,
+        'num_missions': num_missions,
+    }
+
+    # Render the HTML template index.html with the data in the context variable
+    return render(request, 'index.html', context=context)
+
+
+# Campaign Views
+
+def campaign(request):
+    campaigns = Campaign.objects.order_by('id')
+
+    context = {'campaigns': campaigns}
+
+    return render(request, 'campaign/campaign.html', context=context)
+
+
+def campaign_detail(request, link_id):
+    campaign = Campaign.objects.get(id=link_id)
+    missions = campaign.mission_set.all().order_by('number')
+
+    campaign.refresh_from_db()
+
+    context = {'campaign': campaign, 'missions': missions}
+
+    return render(request, 'campaign/campaign_detail.html', context=context)
+
+
+def campaign_create(request):
+    form = CampaignForm()
+
+    if request.method == "POST":
+        form = CampaignForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save(commit=True)
+            messages.success(request, "Campaign successfully created.")
+            return HttpResponseRedirect('/airops/campaign')
+
+    context = {'form': form}
+    return render(request, 'campaign/campaign_form.html', context=context)
+
+
+def campaign_update(request, link_id):
+    campaign = Campaign.objects.get(id=link_id)
+    form = CampaignForm(instance=campaign)
+
+    if request.method == "POST":
+        form = CampaignForm(request.POST, request.FILES, instance=campaign)
+        print(request.path)
+        if form.is_valid():
+            form.save(commit=True)
+            messages.success(request, "Campaign successfully updated.")
+            return HttpResponseRedirect('/airops/campaign/' + str(link_id))
+
+    context = {'form': form, 'link': link_id}
+    return render(request, 'campaign/campaign_form.html', context=context)
+
+
+def campaign_delete(request, link_id):
+    campaign = Campaign.objects.get(id=link_id)
+    if request.method == "POST":
+        campaign.delete()
+        messages.success(request, "Campaign successfully deleted.")
+        return HttpResponseRedirect('/airops/campaign')
+
+    context = {'item': campaign}
+    return render(request, 'campaign/campaign_delete.html', context=context)
+
+# Mission Views
+
+
+def mission(request, link_id):
+    mission = Mission.objects.get(id=link_id)
+    packages = mission.package_set.all()
+
+    context = {'mission_object': mission, 'package_object': packages}
+    return render(request, 'mission/mission_detail.html', context)
+
+
+def mission_create(request, link_id):
+    campaign = Campaign.objects.get(id=link_id)
+    missionCount = campaign.mission_set.count() + 1
+    form = MissionForm(initial={'campaign': campaign, 'number': missionCount})
+    #form.base_fields['number'].initial = missionCount
+
+    if request.method == "POST":
+        form = MissionForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save(commit=True)
+            return HttpResponseRedirect('/airops/campaign/' + str(link_id))
+
+    context = {'form': form, 'link': link_id}
+    return render(request, 'mission/mission_form.html', context=context)
+
+
+def mission_update(request, link_id):
+    mission = Mission.objects.get(id=link_id)
+    form = MissionForm(instance=mission)
+
+    if request.method == "POST":
+        form = MissionForm(request.POST, request.FILES, instance=mission)
+        print(request.path)
+        if form.is_valid():
+            form.save(commit=True)
+            print("Form Saved!")
+            return HttpResponseRedirect('/airops/mission/' + str(link_id))
+
+    context = {'form': form, 'link': link_id}
+    return render(request, 'mission/mission_form.html', context=context)
+
+
+def mission_delete(request, link_id):
+    mission = Mission.objects.get(id=link_id)
+    if request.method == "POST":
+        mission.delete()
+        return HttpResponseRedirect('/airops/campaign')
+
+    context = {'item': mission}
+    return render(request, 'mission/mission_delete.html', context=context)
+
+# Package Views
+
+
+def package(request, link_id):
+    package = Package.objects.get(id=link_id)
+    flights = package.flight_set.all()
+
+    context = {'packageObject': package, 'flightObject': flights}
+    return render(request, 'package/package_detail.html', context)
+
+
+def package_create(request, link_id):
+    mission = Mission.objects.get(id=link_id)
+
+    form = PackageForm(initial={'mission': mission})
+
+    if request.method == "POST":
+        form = PackageForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save(commit=True)
+            return HttpResponseRedirect('/airops/mission/' + str(link_id))
+
+    context = {'form': form, 'link': link_id}
+    return render(request, 'package/package_form.html', context=context)
+
+
+def package_update(request, link_id):
+    package = Package.objects.get(id=link_id)
+    form = PackageForm(instance=package)
+
+    if request.method == "POST":
+        form = PackageForm(request.POST, request.FILES, instance=package)
+        print(request.path)
+        if form.is_valid():
+            form.save(commit=True)
+            print("Form Saved!")
+            return HttpResponseRedirect('/airops/package/' + str(link_id))
+
+    context = {'form': form, 'link': link_id}
+    return render(request, 'package/package_form.html', context=context)
+
+
+def package_delete(request, link_id):
+    package = Package.objects.get(id=link_id)
+    if request.method == "POST":
+        package.delete()
+        return HttpResponseRedirect('/airops/campaign')
+
+    context = {'item': package}
+    return render(request, 'package/package_delete.html', context=context)
+
+# Other Views
+
+
+def dashboard(request):
+    context = {}
+    return render(request, 'dashboard/dashboard.html', context)
+
+
+def register_request(request):
+    if request.user.is_authenticated:
+        return redirect('campaign')
+    else:
+        if request.method == "POST":
+            form = NewUserForm(request.POST)
+            if form.is_valid():
+                user = form.save()
+                login(request, user)
+                messages.success(request, "Registration successful.")
+                return HttpResponseRedirect('/airops/campaign')
+            messages.error(
+                request, "Unsuccessful registration. Invalid information.")
+        form = NewUserForm
+        return render(request=request, template_name="dashboard/register.html", context={"register_form": form})
+
+
+@csrf_protect
+def login_request(request):
+    if request.user.is_authenticated:
+        return redirect('campaign')
+    else:
+        if request.method == "POST":
+            form = AuthenticationForm(request, data=request.POST)
+            if form.is_valid():
+                username = form.cleaned_data.get('username')
+                password = form.cleaned_data.get('password')
+                user = authenticate(username=username, password=password)
+                if user is not None:
+                    login(request, user)
+                    messages.info(
+                        request, "You are now logged in as " + username + ".")
+                    return redirect('campaign')
+                else:
+                    messages.error(request, "Invalid username or password.")
+            else:
+                messages.error(request, "Invalid username or password.")
+        form = AuthenticationForm()
+        return render(request=request, template_name="dashboard/login.html", context={"login_form": form})
+
+
+def logout_request(request):
+    logout(request)
+    messages.info(request, "You have successfully logged out.")
+    return HttpResponseRedirect('/airops/campaign')

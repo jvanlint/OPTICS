@@ -1,0 +1,69 @@
+{% extends "dashboard/basev2.html" %} {% load static %} {% block content %}
+
+<!-- Start Row -->
+<div class="row">
+	<!-- Start Col -->
+	<div class = "col-sm">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="/">Home</a></li>
+				<li class="breadcrumb-item active" aria-current="page">Campaigns</li>
+			  </ol>
+		</nav>
+	</div>
+</div>
+
+<div class="album py-5 bg-light">
+	<div class="container">
+		<!-- Start Row -->
+		<div class="row">
+			<!-- Start Col -->
+			<div class="col">
+				<h1 class="h2">Campaigns <a href="/airops/campaign/add" role="button"><i class="bi bi-plus-circle"></i></a></h1>
+			</div>
+		</div>
+		<div class="row">
+			{% if campaigns %} {% for campaign in campaigns %}
+			<div class="col-md-4">
+				<div class="card mb-4 shadow-sm">
+					{% if campaign.campaignImage %}
+					<img src="{{ campaign.campaignImage.url }}" class="card-img-top" alt="..." />
+					{% else %}
+					<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+						<title>Placeholder</title>
+						<rect width="100%" height="100%" fill="#55595c" />
+						<text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail Not Available</text>
+					</svg>
+					{% endif %}
+					<div class="card-body">
+						<h5 class="card-title">{{ campaign.name }}</h5>
+						<p class="card-title">By {{ campaign.created_by }}</p>
+						<h6>{{ campaign.dcs_map}} - {{ campaign.mission_set.count }} mission(s)</h6>
+						<h5>
+						{% if campaign.status.name == "Active" %}
+						<span class="badge badge-success">
+						{% elif campaign.status.name == "Inactive" %}
+						<span class="badge badge-danger">
+						{% else %}
+						<span class="badge badge-primary">
+						{% endif %}
+						{{ campaign.status }}</span></h5>
+						<p class="card-text">{{ campaign.description|linebreaks }}</p>
+						<div class="d-flex justify-content-between align-items-center">
+							<div class="btn-group">
+								<a class="btn btn-sm btn-outline-secondary" href="{% url 'campaign_detail' campaign.id %}" role="button">View</a>
+								<a class="btn btn-sm btn-outline-secondary" href="{% url 'campaign_update' campaign.id %}" role="button">Edit</a>
+								<a class="btn btn-sm btn-outline-secondary" href="{% url 'campaign_delete' campaign.id %}" role="button">Delete</a>
+							</div>
+						</div>
+						<!-- <p class="card-text"><small class="text-muted">3 missions(s)<br>Persian Gulf</small></p> -->
+					</div>
+				</div>
+			</div>
+			{% endfor %} {% else %}
+			<h5>No campaigns available.</h5>
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% endblock %}
