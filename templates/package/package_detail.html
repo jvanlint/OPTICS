@@ -15,7 +15,7 @@
                   <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
                   <li class="breadcrumb-item"><a href="{% url 'campaign' %}">Campaigns</a></li>
                   <li class="breadcrumb-item"><a href="{% url 'campaign' packageObject.mission.campaign.id  %}">{{ packageObject.mission.campaign.name }}</a></li>
-                  <li class="breadcrumb-item" aria-current="page"><a href="{% url 'mission' packageObject.mission.id  %}">{{packageObject.mission.name}}</a></li>
+                  <li class="breadcrumb-item"><a href="{% url 'mission' packageObject.mission.id  %}">{{packageObject.mission.name}}</a></li>
                   <li class="breadcrumb-item active" aria-current="page">{{packageObject.name}}</li>
                 </ol>
               </nav>
