@@ -34,6 +34,8 @@ urlpatterns = [
     path('threat/delete/<int:link_id>',
          views.threat_delete, name='threat_delete'),
 
+    path('flight/add/<int:link_id>', views.flight_create, name='flight_add'),
+
     path('dashboard', views.dashboard),
 
     path("register", views.register_request, name="register"),
