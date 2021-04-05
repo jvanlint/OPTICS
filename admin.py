@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Campaign, Mission, Package, Flight, Aircraft, Status, Airframe, Terrain
+from .models import Campaign, Mission, Package, Flight, Aircraft, Status, Airframe, Terrain, Threat
 from django.contrib.auth.admin import UserAdmin
 
 # Define the admin class
@@ -104,3 +104,10 @@ class AirframeAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Airframe, AirframeAdmin)
+
+
+class ThreatAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+
+
+admin.site.register(Threat, ThreatAdmin)

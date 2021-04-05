@@ -35,7 +35,54 @@
         <p class="lead">{{ mission_object.roe|linebreaks }}</p>
         <h5>Munitions Restrictions</h5>
         <p class="lead">{{ mission_object.munitions_restrictions|linebreaks }}</p>
-        
+        <h5>Weather</h5>
+        <div class="table-responsive">
+        <table class="table table-striped table-sm">
+            <thead class="thead-light">
+                <tr>
+                    <th>Cloud Base</th>
+                    <th>Tops</th>
+                    <th>Wind@SL</th>
+                    <th>Wind@7K</th>
+                    <th>Wind@26K</th>
+                    <th>QNH</th>
+                    <th>QFE</th>
+                    <th>Temp.</th>
+                    <th>SIGWX</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        {{mission_object.cloud_base}}
+                    </td>
+                    <td>
+                        {{mission_object.cloud_top}}
+                    </td>
+                    <td>
+                        {{mission_object.wind_sl}}
+                    </td>
+                    <td>
+                        {{mission_object.wind_7k}}
+                    </td>
+                    <td>
+                        {{mission_object.wind_26k}}
+                    </td>
+                    <td>
+                        {{mission_object.qnh}}
+                    </td>
+                    <td>
+                        {{mission_object.qfe}}
+                    </td>
+                    <td>
+                        {{mission_object.temp}}
+                    </td>
+                    <td>
+                        {{mission_object.sigwx}}
+                    </td>      
+                </tr>
+                </tbody>
+        </table>  
 
         <div class="btn-toolbar">
             <div class="btn-group mr-2">

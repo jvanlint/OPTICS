@@ -78,6 +78,24 @@ class Mission(models.Model):
         max_length=5, help_text='Mission time in HH:MM format.', null=True, blank=True, verbose_name="mission Start Time")
     mission_date = models.DateField(
         help_text='Proposed mission date.', null=True, blank=True, verbose_name="expected Mission Date")
+    cloud_base = models.CharField(
+        max_length=10, help_text='Enter Cloud base in K of ft.', null=True, blank=True, verbose_name="Cloud Base Altitude")
+    cloud_top = models.CharField(
+        max_length=10, help_text='Enter Cloud Tops in K of ft.', null=True, blank=True, verbose_name="Cloud Tops")
+    wind_sl = models.CharField(
+        max_length=20, help_text='Enter Wind at Sea Level', null=True, blank=True, verbose_name="Wind at Sea Level")
+    wind_7k = models.CharField(
+        max_length=20, help_text='Enter Wind at 7K ft.', null=True, blank=True, verbose_name="Wind at 7K ft")
+    wind_26k = models.CharField(
+        max_length=20, help_text='Enter Wind at 26K ft.', null=True, blank=True, verbose_name="Wind at 26K ft")
+    qnh = models.CharField(
+        max_length=20, help_text='Enter QNH', null=True, blank=True, verbose_name="QNH")
+    qfe = models.CharField(
+        max_length=20, help_text='Enter QFE', null=True, blank=True, verbose_name="QFE")
+    temp = models.CharField(
+        max_length=20, help_text='Enter temperature in C.', null=True, blank=True, verbose_name="Temperature in Celcius")
+    sigwx = models.CharField(
+        max_length=20, help_text='SIGWX', null=True, blank=True, verbose_name="SIGWX")
 
     # Metadata
 
@@ -95,12 +113,12 @@ class Mission(models.Model):
 
 
 class Package(models.Model):
-    name = models.CharField(
-        max_length=200, help_text='Enter Package Name')
-    description = models.TextField(
-        help_text='Enter Mission Description/Situation.', null=True, blank=True)
     mission = models.ForeignKey(
         'Mission', on_delete=models.CASCADE, null=True)
+    name = models.CharField(
+        max_length=200, help_text='Enter Package Name', verbose_name="Package Name")
+    description = models.TextField(
+        help_text='Enter Mission Description/Situation.', null=True, blank=True, verbose_name="Description of package objective")
 
     # Metadata
     class Meta:
@@ -173,3 +191,25 @@ class Airframe(models.Model):
     def __str__(self):
         """String for representing the MyModelName object (in Admin site etc.)."""
         return self.name
+
+
+# Threats
+
+class Threat(models.Model):
+    mission = models.ForeignKey(
+        'Mission', on_delete=models.CASCADE, null=True)
+
+    THREAT_TYPES = (
+        ('AAA', 'AAA'),
+        ('SAM', 'SAM'),
+        ('AIR', 'AIR'),
+        ('NAVAL', 'NAVAL'),
+        ('GROUND', 'GROUND'),
+
+    )
+
+    name = models.CharField(max_length=60)
+    threat_type = models.CharField(
+        max_length=10, choices=THREAT_TYPES, null=True)
+    description = models.TextField(
+        help_text='Enter Threat Description/Situation.', default="Threat description to be added here.")
