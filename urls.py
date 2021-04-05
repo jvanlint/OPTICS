@@ -28,6 +28,12 @@ urlpatterns = [
     path('package/delete/<int:link_id>',
          views.package_delete, name='package_delete'),
 
+    path('threat/add/<int:link_id>', views.threat_create, name='threat_add'),
+    path('threat/update/<int:link_id>',
+         views.threat_update, name='threat_update'),
+    path('threat/delete/<int:link_id>',
+         views.threat_delete, name='threat_delete'),
+
     path('dashboard', views.dashboard),
 
     path("register", views.register_request, name="register"),

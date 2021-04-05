@@ -16,16 +16,14 @@
 
 <main role="main" class="container">
 	<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-		<h2>Create/Edit Link</h2>
+		<h2>Create/Edit</h2>
 		<div class="btn-toolbar mb-2 mb-md-0">
 		</div>
 	</div>
 
 	<div class="starter-template">
 		<form action="" method="POST" enctype="multipart/form-data">
-
 				{% csrf_token %} {{ form|crispy }}
-            
 			<button type="submit" class="btn btn-success btn-space">Save</button> <a class="btn btn-primary" href="{% url 'mission' link %}" role="button">Cancel</a></form>
 		</form>
 	</div>

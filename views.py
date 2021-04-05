@@ -9,8 +9,8 @@ from django.contrib.auth.forms import AuthenticationForm  # add this
 
 from django.views.decorators.csrf import csrf_protect
 
-from .models import Campaign, Mission, Package, Flight
-from .forms import CampaignForm, MissionForm, NewUserForm, PackageForm
+from .models import Campaign, Mission, Package, Flight, Threat
+from .forms import CampaignForm, MissionForm, NewUserForm, PackageForm, ThreatForm
 
 
 def index(request):
@@ -102,8 +102,10 @@ def campaign_delete(request, link_id):
 def mission(request, link_id):
     mission = Mission.objects.get(id=link_id)
     packages = mission.package_set.all()
+    threat = mission.threat_set.all()
 
-    context = {'mission_object': mission, 'package_object': packages}
+    context = {'mission_object': mission,
+               'package_object': packages, 'threat_object': threat}
     return render(request, 'mission/mission_detail.html', context)
 
 
@@ -176,6 +178,7 @@ def package_create(request, link_id):
 
 def package_update(request, link_id):
     package = Package.objects.get(id=link_id)
+    missionID = package.mission.id
     form = PackageForm(instance=package)
 
     if request.method == "POST":
@@ -184,20 +187,64 @@ def package_update(request, link_id):
         if form.is_valid():
             form.save(commit=True)
             print("Form Saved!")
-            return HttpResponseRedirect('/airops/package/' + str(link_id))
+            return HttpResponseRedirect('/airops/mission/' + str(missionID))
 
-    context = {'form': form, 'link': link_id}
+    context = {'form': form, 'link': missionID}
     return render(request, 'package/package_form.html', context=context)
 
 
 def package_delete(request, link_id):
     package = Package.objects.get(id=link_id)
+    missionID = package.mission.id
     if request.method == "POST":
         package.delete()
-        return HttpResponseRedirect('/airops/campaign')
+        return HttpResponseRedirect('/airops/mission/' + str(missionID))
 
     context = {'item': package}
     return render(request, 'package/package_delete.html', context=context)
+
+
+# Threat Views
+def threat_create(request, link_id):
+    mission = Mission.objects.get(id=link_id)
+
+    form = ThreatForm(initial={'mission': mission})
+
+    if request.method == "POST":
+        form = ThreatForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save(commit=True)
+            return HttpResponseRedirect('/airops/mission/' + str(link_id))
+
+    context = {'form': form, 'link': link_id}
+    return render(request, 'threat/threat_form.html', context=context)
+
+
+def threat_update(request, link_id):
+    threat = Threat.objects.get(id=link_id)
+    form = ThreatForm(instance=threat)
+
+    if request.method == "POST":
+        form = ThreatForm(request.POST, request.FILES, instance=threat)
+        print(request.path)
+        if form.is_valid():
+            form.save(commit=True)
+            print("Form Saved!")
+            return HttpResponseRedirect('/airops/mission/')
+
+    context = {'form': form, 'link': link_id}
+    return render(request, 'threat/threat_form.html', context=context)
+
+
+def threat_delete(request, link_id):
+    threat = Threat.objects.get(id=link_id)
+    missionID = threat.mission.id
+    if request.method == "POST":
+        threat.delete()
+        return HttpResponseRedirect('/airops/mission/' + str(missionID))
+
+    context = {'item': threat}
+    return render(request, 'threat/threat_delete.html', context=context)
 
 # Other Views
 

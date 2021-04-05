@@ -1,16 +1,16 @@
 {% extends "dashboard/basev2.html" %} {% load static %} {% block content %}
 <main role="main" class="container">
 	<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-		<h1 class="h2">Package Delete Confirmation</h1>
+		<h1 class="h2">Threat Delete Confirmation</h1>
 	</div>
 
 	<div class="row">
 		<div class="col-md-6">
 			<div class="card card-body">
 				<p>Are you sure you want to delete "{{item}}"?</p>
-				<form action="{% url 'package_delete' item.id %}" method="POST">
+				<form action="{% url 'threat_delete' item.id %}" method="POST">
 					{% csrf_token %}
-					<button type="submit" class="btn btn-danger" name="confirm">Delete</button> <a class="btn btn-primary" href="{% url 'mission' item.mission.id%}" role="button">Cancel</a>
+					<button type="submit" class="btn btn-danger" name="confirm">Delete</button> <a class="btn btn-primary" href="{% url 'mission' item.mission.id %}" role="button">Cancel</a>
 				</form>
 			</div>
 		</div>

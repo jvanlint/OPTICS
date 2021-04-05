@@ -1,138 +1,147 @@
-{% extends "dashboard/basev2.html" %} 
-{% load static %} 
-{% block content %}
+{% extends "dashboard/basev2.html" %} {% load static %} {% block content %}
 
 <!-- start container -->
 <div class="container">
-
 	<!-- start row - Bread Crumbs -->
 	<div class="row">
 		<!-- Start Col -->
-		<div class = "col-sm">
-
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
-                  <li class="breadcrumb-item"><a href="{% url 'campaign' %}">Campaigns</a></li>
-                  <li class="breadcrumb-item"><a href="{% url 'campaign' mission_object.campaign.id  %}">{{ mission_object.campaign.name }}</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">{{mission_object.name}}</li>
-                </ol>
-              </nav>
+		<div class="col-sm">
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+					<li class="breadcrumb-item"><a href="{% url 'campaign' %}">Campaigns</a></li>
+					<li class="breadcrumb-item"><a href="{% url 'campaign' mission_object.campaign.id  %}">{{ mission_object.campaign.name }}</a></li>
+					<li class="breadcrumb-item active" aria-current="page">{{mission_object.name}}</li>
+				</ol>
+			</nav>
 		</div>
 	</div>
 	<!-- end row -->
 
-    <div class="starter-template">
-        <h2>{{ mission_object.name }}</h2>
-        
-        <h6>MISSION {{mission_object.number}} / {{mission_object.mission_date}} / {{mission_object.mission_time}}//</h6>
-        <hr>
-        <h5>Situation</h5>
-        <p class="lead">{{ mission_object.description|linebreaks }}</p>
-        <h5>Tactical Brief</h5>
-        <p class="lead">{{ mission_object.brief|linebreaks }}</p>
-        <h5>Rules of Engagement</h5>
-        <p class="lead">{{ mission_object.roe|linebreaks }}</p>
-        <h5>Munitions Restrictions</h5>
-        <p class="lead">{{ mission_object.munitions_restrictions|linebreaks }}</p>
-        <h5>Weather</h5>
-        <div class="table-responsive">
-        <table class="table table-striped table-sm">
-            <thead class="thead-light">
-                <tr>
-                    <th>Cloud Base</th>
-                    <th>Tops</th>
-                    <th>Wind@SL</th>
-                    <th>Wind@7K</th>
-                    <th>Wind@26K</th>
-                    <th>QNH</th>
-                    <th>QFE</th>
-                    <th>Temp.</th>
-                    <th>SIGWX</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        {{mission_object.cloud_base}}
-                    </td>
-                    <td>
-                        {{mission_object.cloud_top}}
-                    </td>
-                    <td>
-                        {{mission_object.wind_sl}}
-                    </td>
-                    <td>
-                        {{mission_object.wind_7k}}
-                    </td>
-                    <td>
-                        {{mission_object.wind_26k}}
-                    </td>
-                    <td>
-                        {{mission_object.qnh}}
-                    </td>
-                    <td>
-                        {{mission_object.qfe}}
-                    </td>
-                    <td>
-                        {{mission_object.temp}}
-                    </td>
-                    <td>
-                        {{mission_object.sigwx}}
-                    </td>      
-                </tr>
-                </tbody>
-        </table>  
+	<div class="starter-template">
+		<h2>{{ mission_object.name }}</h2>
 
-        <div class="btn-toolbar">
-            <div class="btn-group mr-2">
-                <a class="btn btn-sm btn-outline-secondary" href="{% url 'mission_update' mission_object.id %}" role="button">Edit</a>
-                                    <a class="btn btn-sm btn-outline-secondary" href="{% url 'mission_delete' mission_object.id %}" role="button">Delete</a>
-            </div>
-        </div>
-    </div>
-    <hr>
+		<h6>MISSION {{mission_object.number}} / {{mission_object.mission_date}} / {{mission_object.mission_time}}//</h6>
+		<hr />
+		<h5>Situation</h5>
+		<p class="lead">{{ mission_object.description|linebreaks }}</p>
+		<h5>Tactical Brief</h5>
+		<p class="lead">{{ mission_object.brief|linebreaks }}</p>
+		<h5>Rules of Engagement</h5>
+		<p class="lead">{{ mission_object.roe|linebreaks }}</p>
+		<h5>Munitions Restrictions</h5>
+		<p class="lead">{{ mission_object.munitions_restrictions|linebreaks }}</p>
+		<h5>Weather</h5>
+		<div class="table-responsive">
+			<table class="table table-striped table-sm">
+				<thead class="thead-light">
+					<tr>
+						<th>Cloud Base</th>
+						<th>Tops</th>
+						<th>Wind@SL</th>
+						<th>Wind@7K</th>
+						<th>Wind@26K</th>
+						<th>QNH</th>
+						<th>QFE</th>
+						<th>Temp.</th>
+						<th>SIGWX</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>{{mission_object.cloud_base}}</td>
+						<td>{{mission_object.cloud_top}}</td>
+						<td>{{mission_object.wind_sl}}</td>
+						<td>{{mission_object.wind_7k}}</td>
+						<td>{{mission_object.wind_26k}}</td>
+						<td>{{mission_object.qnh}}</td>
+						<td>{{mission_object.qfe}}</td>
+						<td>{{mission_object.temp}}</td>
+						<td>{{mission_object.sigwx}}</td>
+					</tr>
+				</tbody>
+			</table>
 
-    <h2>Package(s) <a href="{% url 'package_add' mission_object.id %}" role="button"><i class="bi bi-plus-circle"></i></a></h2>
-    <div class="table-responsive">
-        <table class="table table-striped table-sm">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Package#</th>
-                    <th>Description</th>
-                    <th scope="col" colspan="2" style="text-align:center;">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% if package_object %}
-            
-                {% for package in package_object %}
-                <tr>
-                <td>
-                    <a href="/airops/package/{{ package.id }}/">{{ package.name }}</a>
-                </td>
-                <td>{{ package.description|linebreaks }}</td>
-                <td>
-                    <a class="btn btn-sm btn-outline-primary" href="{% url 'package_update' package.id %}" role="button">Edit</a>
-                </td>
-                <td>
-                    <a class="btn btn-sm btn-outline-danger" href="{% url 'package_delete' package.id %}" role="button">Delete</a>
-                </td>
-                </tr>
-                {% endfor %}
-            </tr>
-            {% else %}
-            <tr>
-                <td>No packages are available.</td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            {% endif %}
+			<div class="btn-toolbar">
+				<div class="btn-group mr-2">
+					<a class="btn btn-sm btn-outline-secondary" href="{% url 'mission_update' mission_object.id %}" role="button">Edit</a>
+					<a class="btn btn-sm btn-outline-secondary" href="{% url 'mission_delete' mission_object.id %}" role="button">Delete</a>
+				</div>
+			</div>
+		</div>
+		<hr />
 
-            </tbody>
-        </table>
-    </div>
+		<h2>
+			Threat(s) <a href="{% url 'threat_add' mission_object.id %}" role="button"><i class="bi bi-plus-circle"></i></a>
+		</h2>
+		<div class="table-responsive">
+			<table class="table table-striped table-sm">
+				<thead class="thead-dark">
+					<tr>
+						<th>Type</th>
+						<th>Name</th>
+						<th>Description</th>
+						<th scope="col" colspan="2" style="text-align: center">Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% if threat_object %} {% for threat in threat_object %}
+					<tr>
+						<td>{{ threat.threat_type }}</td>
+						<td>{{ threat.name }}</td>
+						<td>{{ threat.description|linebreaks }}</td>
+						<td>
+							<a class="btn btn-sm btn-outline-primary" href="{% url 'threat_update' threat.id %}" role="button">Edit</a>
+						</td>
+						<td>
+							<a class="btn btn-sm btn-outline-danger" href="{% url 'threat_delete' threat.id %}" role="button">Delete</a>
+						</td>
+					</tr>
+					{% endfor %} {% else %}
+					<tr>
+						<td>No threats are available.</td>
+					</tr>
+					{% endif %}
+				</tbody>
+			</table>
+		</div>
 
+		<h2>
+			Package(s) <a href="{% url 'package_add' mission_object.id %}" role="button"><i class="bi bi-plus-circle"></i></a>
+		</h2>
+		<div class="table-responsive">
+			<table class="table table-striped table-sm">
+				<thead class="thead-dark">
+					<tr>
+						<th>Package#</th>
+						<th>Description</th>
+						<th scope="col" colspan="2" style="text-align: center">Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% if package_object %} {% for package in package_object %}
+					<tr>
+						<td>
+							<a href="/airops/package/{{ package.id }}/">{{ package.name }}</a>
+						</td>
+						<td>{{ package.description|linebreaks }}</td>
+						<td>
+							<a class="btn btn-sm btn-outline-primary" href="{% url 'package_update' package.id %}" role="button">Edit</a>
+						</td>
+						<td>
+							<a class="btn btn-sm btn-outline-danger" href="{% url 'package_delete' package.id %}" role="button">Delete</a>
+						</td>
+						{% endfor %}
+					</tr>
+					{% else %}
+					<tr>
+						<td>No packages are available.</td>
+					</tr>
+					{% endif %}
+				</tbody>
+			</table>
+		</div>
 
-{% endblock %}
+		{% endblock %}
+	</div>
+</div>
