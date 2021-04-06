@@ -135,16 +135,17 @@ class Package(models.Model):
 
 
 class Flight(models.Model):
+    package = models.ForeignKey(
+        'Package', on_delete=models.CASCADE, null=True)
     callsign = models.CharField(
         max_length=200, help_text='Enter Flight Callsign')
     radio_frequency = models.CharField(
         max_length=20, help_text='Enter Flight Frequency', blank=True, null=True)
     tacan = models.CharField(
         max_length=5, help_text='Enter Flight TACAN (if applicable)', blank=True, null=True)
-    package = models.ForeignKey(
-        'Package', on_delete=models.CASCADE, null=True)
 
     # Metadata
+
     class Meta:
         ordering = ['callsign']
 
@@ -178,7 +179,6 @@ class Aircraft(models.Model):
     def get_absolute_url(self):
         """Returns the url to access a particular instance of MyModelName."""
         return reverse('model-detail-view', args=[str(self.id)])
-
 
 
 class Airframe(models.Model):
