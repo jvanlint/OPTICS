@@ -1,0 +1,42 @@
+{% extends "dashboard/basev2.html" %} 
+{% load static %} 
+{% block content %}
+
+<!-- start container -->
+<div class="container">
+
+	<!-- start row - Bread Crumbs -->
+	<div class="row">
+		<!-- Start Col -->
+		<div class = "col-sm">
+
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                  <li class="breadcrumb-item"><a href="{% url 'campaign' %}">Campaigns</a></li>
+                  <li class="breadcrumb-item"><a href="{% url 'campaign' aircraftObject.flight.package.mission.campaign.id  %}">{{ aircraftObject.flight.package.mission.campaign.name }}</a></li>
+                  <li class="breadcrumb-item"><a href="{% url 'mission' aircraftObject.flight.package.mission.id  %}">{{aircraftObject.flight.package.mission.name}}</a></li>
+                  <li class="breadcrumb-item"><a href="{% url 'package' aircraftObject.flight.package.id  %}">{{aircraftObject.flight.package.name}}</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">{{aircraftObject.type}}</li>
+                </ol>
+              </nav>
+		</div>
+	</div>
+	<!-- end row -->
+
+    <div class="starter-template">
+        <h6>{{ aircraftObject.flight.name }}</h6>
+        <h2>{{ aircraftObject.type }}</h2>
+        <hr>
+        <p class="lead">Any other info required here?</p>
+
+        <div class="btn-toolbar">
+            <div class="btn-group mr-2">
+                <a class="btn btn-sm btn-outline-secondary" href="{% url 'aircraft_update' aircraftObject.id %}" role="button">Edit</a>
+                                    <a class="btn btn-sm btn-outline-secondary" href="{% url 'aircraft_delete' aircraftObject.id %}" role="button">Delete</a>
+            </div>
+        </div>
+    </div>
+    <hr>
+
+{% endblock %}

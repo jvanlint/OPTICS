@@ -1,0 +1,157 @@
+{% extends "dashboard/basev2.html" %} 
+{% load static %} 
+{% block content %}
+
+<!-- start container -->
+<div class="container">
+
+	<!-- start row - Bread Crumbs -->
+	<div class="row">
+		<!-- Start Col -->
+		<div class = "col-sm">
+
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                  <li class="breadcrumb-item"><a href="{% url 'campaign' %}">Campaigns</a></li>
+                  <li class="breadcrumb-item"><a href="{% url 'campaign' flightObject.package.mission.campaign.id  %}">{{ flightObject.package.mission.campaign.name }}</a></li>
+                  <li class="breadcrumb-item"><a href="{% url 'mission' flightObject.package.mission.id  %}">{{flightObject.package.mission.name}}</a></li>
+                  <li class="breadcrumb-item"><a href="{% url 'package' flightObject.package.id  %}">{{flightObject.package.name}}</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">{{flightObject.callsign}}</li>
+                </ol>
+            </nav>
+		</div>
+	</div>
+	<!-- end row -->
+
+    <div class="starter-template">
+        <h6>{{ flightObject.package.name }}</h6>
+        <h2>{{ flightObject.callsign }}</h2>
+        <hr>
+        <div class="table-responsive">
+			<table class="table table-striped table-sm">
+				<thead class="thead-light">
+					<tr>
+						<th>Radio</th>
+						<th>TACAN</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>{{flightObject.radio_frequency}}</td>
+						<td>{{flightObject.tacan}}</td>
+						
+					</tr>
+				</tbody>
+			</table>
+        </div>
+
+        <div class="btn-toolbar">
+            <div class="btn-group mr-2">
+                <a class="btn btn-sm btn-outline-secondary" href="{% url 'flight_update' flightObject.id %}" role="button">Edit</a>
+                                    <a class="btn btn-sm btn-outline-secondary" href="{% url 'flight_delete' flightObject.id %}" role="button">Delete</a>
+            </div>
+        </div>
+    </div>
+    <hr>
+
+    <h2>Aircraft <a href="{% url 'aircraft_add' flightObject.id %}" role="button"><i class="bi bi-plus-circle"></i></a></h2>
+    <div class="table-responsive">
+        <table class="table table-striped table-sm">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Type</th>
+                    <th>Pilot</th>
+                    <th>RIO/WSO</th>
+                    <th>Tail Code</th>
+                    <th scope="col" colspan="2" style="text-align:center;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if aircraftObject %}
+            
+                {% for aircraft in aircraftObject %}
+                <tr>
+                <td>
+                    {{ aircraft.type }}
+                </td>
+                <td>{{ aircraft.pilot }}</td>
+                <td>{{ aircraft.rio_wso }}</td>
+                <td>{{ aircraft.tailcode }}</td>
+                <td>
+                    <a class="btn btn-sm btn-outline-primary" href="{% url 'aircraft_update' aircraft.id %}" role="button">Edit</a>
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-outline-danger" href="{% url 'aircraft_delete' aircraft.id %}" role="button">Delete</a>
+                </td>
+                </tr>
+                {% endfor %}
+    
+                {% else %}
+                <tr>
+                    <td colspan="5">No flights are available.</td>
+                </tr>
+                {% endif %}
+
+            </tbody>
+        </table>
+    </div>
+
+    <h2>Waypoint(s) <a href="" role="button"><i class="bi bi-plus-circle"></i></a></h2>
+    <div class="table-responsive">
+        <table class="table table-striped table-sm">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Number</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Notes</th>
+                    <th scope="col" colspan="2" style="text-align:center;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Rendevous</td>
+                    <td>RVP</td>
+                    <td>Meet up with other package elements</td>
+                    <td><a class="btn btn-sm btn-outline-primary" href="" role="button">Edit</a></td>
+                    <td><a class="btn btn-sm btn-outline-danger" href="" role="button">Delete</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>Task(s) <a href="" role="button"><i class="bi bi-plus-circle"></i></a></h2>
+    <div class="table-responsive">
+        <table class="table table-striped table-sm">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Type</th>
+                    <th>Pilot</th>
+                    <th>RIO/WSO</th>
+                    <th>Tail Code</th>
+                    <th scope="col" colspan="2" style="text-align:center;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                <td>
+                    
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <a class="btn btn-sm btn-outline-primary" href="" role="button">Edit</a>
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-outline-danger" href="" role="button">Delete</a>
+                </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

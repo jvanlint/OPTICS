@@ -34,7 +34,19 @@ urlpatterns = [
     path('threat/delete/<int:link_id>',
          views.threat_delete, name='threat_delete'),
 
+     path('flight/<int:link_id>/', views.flight, name='flight'),
     path('flight/add/<int:link_id>', views.flight_create, name='flight_add'),
+    path('flight/update/<int:link_id>',
+         views.flight_update, name='flight_update'),
+    path('flight/delete/<int:link_id>',
+         views.flight_delete, name='flight_delete'),
+    
+    path('aircraft/<int:link_id>/', views.aircraft, name='aircraft'),
+    path('aircraft/add/<int:link_id>', views.aircraft_create, name='aircraft_add'),
+    path('aircraft/update/<int:link_id>',
+         views.aircraft_update, name='aircraft_update'),
+    path('aircraft/delete/<int:link_id>',
+         views.aircraft_delete, name='aircraft_delete'),
 
     path('dashboard', views.dashboard),
 

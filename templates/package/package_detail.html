@@ -60,16 +60,18 @@
                 </td>
                 <td>{{ flight.radio_frequency }}</td>
                 <td>{{ flight.tacan }}</td>
-                <td>Button here</td>
+                <td>
+                    <a class="btn btn-sm btn-outline-primary" href="{% url 'flight_update' flight.id %}" role="button">Edit</a>
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-outline-danger" href="{% url 'flight_delete' flight.id %}" role="button">Delete</a>
+                </td>
                 </tr>
                 {% endfor %}
             </tr>
             {% else %}
             <tr>
-                <td>No flights are available.</td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td colspan="5">No flights are available.</td>
             </tr>
             {% endif %}
 
