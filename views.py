@@ -104,9 +104,10 @@ def mission(request, link_id):
     packages = mission.package_set.all()
     threat = mission.threat_set.all()
     target = mission.target_set.all()
+    support = mission.support_set.all()
 
     context = {'mission_object': mission,
-               'package_object': packages, 'threat_object': threat, 'target_object': target}
+               'package_object': packages, 'threat_object': threat, 'target_object': target, 'support_object': support}
     return render(request, 'mission/mission_detail.html', context)
 
 
