@@ -151,6 +151,40 @@ class Package(models.Model):
         return self.name
 
 
+class Target(models.Model):
+
+    # Fields
+
+    mission = models.ForeignKey(
+        'Mission', on_delete=models.CASCADE, null=True)
+    name = models.CharField(
+        max_length=50, help_text='Enter target name', verbose_name="Target Name")
+    lat = models.CharField(
+        max_length=200, help_text='Enter target latitude', verbose_name="Target Latitude", null=True, blank=True)
+    long = models.CharField(
+        max_length=200, help_text='Enter target longitude.', verbose_name="Target Longitude", null=True, blank=True)
+    elev = models.CharField(
+        max_length=200, help_text='Enter target elevation.', verbose_name="Target Elevation", null=True, blank=True)
+    notes = models.TextField(
+        help_text='Any notes relevant to the target.', null=True, blank=True, verbose_name="Notes on Target")
+    target_image = models.ImageField(
+        upload_to='campaign/mission/target_images/', null=True, blank=True, help_text='Upload image of the target.', verbose_name="Target Image")
+    # Metadata
+
+    class Meta:
+        ordering = ['name']
+
+    # Methods
+
+    def get_absolute_url(self):
+        """Returns the url to access a particular instance of MyModelName."""
+        return reverse('model-detail-view', args=[str(self.id)])
+
+    def __str__(self):
+        """String for representing the MyModelName object (in Admin site etc.)."""
+        return self.name
+
+
 class Flight(models.Model):
 
     # Fields
@@ -163,6 +197,7 @@ class Flight(models.Model):
         max_length=20, help_text='Enter Flight Frequency', blank=True, null=True)
     tacan = models.CharField(
         max_length=5, help_text='Enter Flight TACAN (if applicable)', blank=True, null=True)
+    targets = models.ManyToManyField(Target)
 
     # Metadata
 
@@ -252,37 +287,3 @@ class Threat(models.Model):
         max_length=10, choices=THREAT_TYPES, null=True)
     description = models.TextField(
         help_text='Enter Threat Description/Situation.', default="Threat description to be added here.")
-
-
-class Target(models.Model):
-
-    # Fields
-
-    mission = models.ForeignKey(
-        'Mission', on_delete=models.CASCADE, null=True)
-    name = models.CharField(
-        max_length=50, help_text='Enter target name', verbose_name="Target Name")
-    lat = models.CharField(
-        max_length=200, help_text='Enter target latitude', verbose_name="Target Latitude", null=True, blank=True)
-    long = models.CharField(
-        max_length=200, help_text='Enter target longitude.', verbose_name="Target Longitude", null=True, blank=True)
-    elev = models.CharField(
-        max_length=200, help_text='Enter target elevation.', verbose_name="Target Elevation", null=True, blank=True)
-    notes = models.TextField(
-        help_text='Any notes relevant to the target.', null=True, blank=True, verbose_name="Notes on Target")
-    target_image = models.ImageField(
-        upload_to='campaign/mission/target_images/', null=True, blank=True, help_text='Upload image of the target.', verbose_name="Target Image")
-    # Metadata
-
-    class Meta:
-        ordering = ['name']
-
-    # Methods
-
-    def get_absolute_url(self):
-        """Returns the url to access a particular instance of MyModelName."""
-        return reverse('model-detail-view', args=[str(self.id)])
-
-    def __str__(self):
-        """String for representing the MyModelName object (in Admin site etc.)."""
-        return self.name
