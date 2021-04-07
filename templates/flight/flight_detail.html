@@ -133,10 +133,16 @@
 			<tbody>
 				{% for target in flightObject.targets.all %}
 				<tr>
-					<td>{{ target.name}}</td>
-					<td></td>
-					<td></td>
-					<td></td>
+					<td>{{ target.name }}</td>
+					<td>{{ target.lat }}</td>
+					<td><{{ target.long }}/td></td>
+					<td><{{ target.elev }}/td></td>
+					<td>{{ target.notes|linebreaks }}</td>
+					{% if target.target_image %}
+					<td><a href="{{ target.target_image.url }}" add target="_blank">View</a></td>
+					{% else %}
+					<td>None</td>
+					{% endif %}
 				</tr>
 				{% endfor %} {% endif %}
 			</tbody>
