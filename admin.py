@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Campaign, Mission, Package, Flight, Aircraft, Status, Airframe, Terrain, Threat, Target
+from .models import Campaign, Mission, Package, Flight, Aircraft, Status, Airframe, Terrain, Threat, Target, Support
 from django.contrib.auth.admin import UserAdmin
 
 # Define the admin class
@@ -118,3 +118,10 @@ class TargetAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Target, TargetAdmin)
+
+
+class SupportAdmin(admin.ModelAdmin):
+    list_display = ('callsign',)
+
+
+admin.site.register(Support, SupportAdmin)

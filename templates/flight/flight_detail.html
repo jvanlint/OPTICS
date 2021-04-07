@@ -80,7 +80,7 @@
 				</tr>
 				{% endfor %} {% else %}
 				<tr>
-					<td colspan="5">No flights are available.</td>
+					<td colspan="5">No aircraft specified.</td>
 				</tr>
 				{% endif %}
 			</tbody>
@@ -135,8 +135,8 @@
 				<tr>
 					<td>{{ target.name }}</td>
 					<td>{{ target.lat }}</td>
-					<td><{{ target.long }}/td></td>
-					<td><{{ target.elev }}/td></td>
+					<td>{{ target.long }}</td>
+					<td>{{ target.elev }}</td>
 					<td>{{ target.notes|linebreaks }}</td>
 					{% if target.target_image %}
 					<td><a href="{{ target.target_image.url }}" add target="_blank">View</a></td>
