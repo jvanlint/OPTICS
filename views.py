@@ -9,8 +9,8 @@ from django.contrib.auth.forms import AuthenticationForm  # add this
 
 from django.views.decorators.csrf import csrf_protect
 
-from .models import Campaign, Mission, Package, Flight, Threat, Aircraft
-from .forms import CampaignForm, MissionForm, NewUserForm, PackageForm, ThreatForm, FlightForm, AircraftForm
+from .models import Campaign, Mission, Package, Flight, Threat, Aircraft, Target
+from .forms import CampaignForm, MissionForm, NewUserForm, PackageForm, ThreatForm, FlightForm, AircraftForm, TargetForm
 
 
 def index(request):
@@ -103,9 +103,10 @@ def mission(request, link_id):
     mission = Mission.objects.get(id=link_id)
     packages = mission.package_set.all()
     threat = mission.threat_set.all()
+    target = mission.target_set.all()
 
     context = {'mission_object': mission,
-               'package_object': packages, 'threat_object': threat}
+               'package_object': packages, 'threat_object': threat, 'target_object': target}
     return render(request, 'mission/mission_detail.html', context)
 
 
@@ -249,12 +250,14 @@ def threat_delete(request, link_id):
 
 ### Flight Views ###
 
+
 def flight(request, link_id):
     flight = Flight.objects.get(id=link_id)
     aircraft = flight.aircraft_set.all()
 
     context = {'flightObject': flight, 'aircraftObject': aircraft}
     return render(request, 'flight/flight_detail.html', context)
+
 
 def flight_create(request, link_id):
     package = Package.objects.get(id=link_id)
@@ -300,12 +303,14 @@ def flight_delete(request, link_id):
 
 ### Aircraft Views ###
 
+
 def aircraft(request, link_id):
-    
+
     aircraft = Aircraft.objects.get(id=link_id)
-    
+
     context = {'aircraftObject': aircraft}
     return render(request, 'aircraft/aircraft_detail.html', context)
+
 
 def aircraft_create(request, link_id):
     flight = Flight.objects.get(id=link_id)
@@ -342,13 +347,67 @@ def aircraft_update(request, link_id):
 def aircraft_delete(request, link_id):
     aircraft = Aircraft.objects.get(id=link_id)
     flightID = aircraft.flight.id
-    
+
     if request.method == "POST":
         flight.delete()
         return HttpResponseRedirect('/airops/flight/' + str(flightID))
 
     context = {'item': aircraft}
     return render(request, 'aircraft/aircraft_delete.html', context=context)
+
+### Target Views ###
+
+
+def target(request, link_id):
+
+    target = Target.objects.get(id=link_id)
+
+    context = {'targetObject': target}
+    return render(request, 'target/target_detail.html', context)
+
+
+def target_create(request, link_id):
+    mission = Mission.objects.get(id=link_id)
+
+    form = TargetForm(initial={'mission': mission})
+
+    if request.method == "POST":
+        form = TargetForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save(commit=True)
+            return HttpResponseRedirect('/airops/mission/' + str(link_id))
+
+    context = {'form': form, 'link': link_id}
+    return render(request, 'target/target_form.html', context=context)
+
+
+def target_update(request, link_id):
+    target = Target.objects.get(id=link_id)
+    missionID = target.mission.id
+    form = TargetForm(instance=target)
+
+    if request.method == "POST":
+        form = TargetForm(request.POST, request.FILES, instance=target)
+        print(request.path)
+        if form.is_valid():
+            form.save(commit=True)
+            print("Form Saved!")
+            return HttpResponseRedirect('/airops/mission/' + str(missionID))
+
+    context = {'form': form, 'link': missionID}
+    return render(request, 'target/target_form.html', context=context)
+
+
+def target_delete(request, link_id):
+    target = Target.objects.get(id=link_id)
+    missionID = target.mission.id
+
+    if request.method == "POST":
+        target.delete()
+        return HttpResponseRedirect('/airops/mission/' + str(missionID))
+
+    context = {'item': target}
+    return render(request, 'target/target_delete.html', context=context)
 
 # Other Views
 
