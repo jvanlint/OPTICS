@@ -97,7 +97,11 @@
 						<td>{{ target.long }}</td>
 						<td>{{ target.elev}}</td>
 						<td>{{ target.notes|linebreaks }}</td>
+						{% if target.target_image %}
 						<td><a href="{{ target.target_image.url }}" add target="_blank">Image</a></td>
+						{% else %}
+						<td>None</td>
+						{% endif %}
 						<td><a class="btn btn-sm btn-outline-primary" href="{% url 'target_update' target.id %}" role="button">Edit</a></td>
 						<td><a class="btn btn-sm btn-outline-danger" href="{% url 'target_delete' target.id %}" role="button">Delete</a></td>
 					</tr>
