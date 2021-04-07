@@ -7,6 +7,7 @@ from django_resized import ResizedImageField
 class Campaign(models.Model):
 
     # Fields
+
     name = models.CharField(
         max_length=200, help_text='The Campaign Name.')
     description = models.TextField(
@@ -32,6 +33,7 @@ class Campaign(models.Model):
         ordering = ['-name']
 
     # Methods
+
     def get_absolute_url(self):
         """Returns the url to access a particular instance of MyModelName."""
         return reverse('model-detail-view', args=[str(self.id)])
@@ -42,6 +44,9 @@ class Campaign(models.Model):
 
 
 class Terrain(models.Model):
+
+    # Fields
+
     name = models.CharField(
         max_length=20, help_text='Enter Terrain Map Name.')
 
@@ -51,6 +56,9 @@ class Terrain(models.Model):
 
 
 class Status(models.Model):
+
+    # Fields
+
     name = models.CharField(
         max_length=20, help_text='Enter Status Type')
 
@@ -60,6 +68,9 @@ class Status(models.Model):
 
 
 class Mission(models.Model):
+
+    # Fields
+
     campaign = models.ForeignKey(
         'Campaign', on_delete=models.CASCADE, null=True)
     number = models.IntegerField(
@@ -103,6 +114,7 @@ class Mission(models.Model):
         ordering = ['-name']
 
     # Methods
+
     def get_absolute_url(self):
         """Returns the url to access a particular instance of MyModelName."""
         return reverse('model-detail-view', args=[str(self.id)])
@@ -113,6 +125,9 @@ class Mission(models.Model):
 
 
 class Package(models.Model):
+
+    # Fields
+
     mission = models.ForeignKey(
         'Mission', on_delete=models.CASCADE, null=True)
     name = models.CharField(
@@ -121,10 +136,12 @@ class Package(models.Model):
         help_text='Enter Mission Description/Situation.', null=True, blank=True, verbose_name="Description of package objective")
 
     # Metadata
+
     class Meta:
         ordering = ['-name']
 
     # Methods
+
     def get_absolute_url(self):
         """Returns the url to access a particular instance of MyModelName."""
         return reverse('model-detail-view', args=[str(self.id)])
@@ -135,6 +152,9 @@ class Package(models.Model):
 
 
 class Flight(models.Model):
+
+    # Fields
+
     package = models.ForeignKey(
         'Package', on_delete=models.CASCADE, null=True)
     callsign = models.CharField(
@@ -150,6 +170,7 @@ class Flight(models.Model):
         ordering = ['callsign']
 
     # Methods
+
     def get_absolute_url(self):
         """Returns the url to access a particular instance of MyModelName."""
         return reverse('model-detail-view', args=[str(self.id)])
@@ -160,6 +181,9 @@ class Flight(models.Model):
 
 
 class Aircraft(models.Model):
+
+    # Fields
+
     type = models.ForeignKey(
         'Airframe', on_delete=models.CASCADE, null=True)
     flight = models.ForeignKey(
@@ -172,25 +196,32 @@ class Aircraft(models.Model):
         max_length=20, help_text='Enter A/C tail code.', null=True, blank=True)
 
     # Metadata
+
     class Meta:
         ordering = ['type']
 
     # Methods
+
     def get_absolute_url(self):
         """Returns the url to access a particular instance of MyModelName."""
         return reverse('model-detail-view', args=[str(self.id)])
 
 
 class Airframe(models.Model):
+
+    # Fields
+
     name = models.CharField(
         max_length=200, help_text='Enter Airframe Name')
     stations = models.IntegerField(default=2)
 
     # Metadata
+
     class Meta:
         ordering = ['name']
 
     # Methods
+
     def get_absolute_url(self):
         """Returns the url to access a particular instance of MyModelName."""
         return reverse('model-detail-view', args=[str(self.id)])
@@ -200,9 +231,10 @@ class Airframe(models.Model):
         return self.name
 
 
-# Threats
-
 class Threat(models.Model):
+
+    # Fields
+
     mission = models.ForeignKey(
         'Mission', on_delete=models.CASCADE, null=True)
 
@@ -220,3 +252,37 @@ class Threat(models.Model):
         max_length=10, choices=THREAT_TYPES, null=True)
     description = models.TextField(
         help_text='Enter Threat Description/Situation.', default="Threat description to be added here.")
+
+
+class Target(models.Model):
+
+    # Fields
+
+    mission = models.ForeignKey(
+        'Mission', on_delete=models.CASCADE, null=True)
+    name = models.CharField(
+        max_length=50, help_text='Enter target name', verbose_name="Target Name")
+    lat = models.CharField(
+        max_length=200, help_text='Enter target latitude', verbose_name="Target Latitude")
+    long = models.CharField(
+        max_length=200, help_text='Enter target longitude.', verbose_name="Target Longitude")
+    elev = models.CharField(
+        max_length=200, help_text='Enter target elevation.', verbose_name="Target Elevation")
+    notes = models.TextField(
+        help_text='Any notes relevant to the target.', null=True, blank=True, verbose_name="Notes on Target")
+    target_image = models.ImageField(
+        upload_to='campaign/mission/target_images/', null=True, blank=True, help_text='Upload image of the target.', verbose_name="Target Image")
+    # Metadata
+
+    class Meta:
+        ordering = ['name']
+
+    # Methods
+
+    def get_absolute_url(self):
+        """Returns the url to access a particular instance of MyModelName."""
+        return reverse('model-detail-view', args=[str(self.id)])
+
+    def __str__(self):
+        """String for representing the MyModelName object (in Admin site etc.)."""
+        return self.name
