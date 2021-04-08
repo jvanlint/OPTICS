@@ -89,6 +89,8 @@ class Mission(models.Model):
         max_length=5, help_text='Mission time in HH:MM format.', null=True, blank=True, verbose_name="mission Start Time")
     mission_date = models.DateField(
         help_text='Proposed mission date.', null=True, blank=True, verbose_name="expected Mission Date")
+
+    # Weather
     cloud_base = models.CharField(
         max_length=10, help_text='Enter Cloud base in K of ft.', null=True, blank=True, verbose_name="Cloud Base Altitude")
     cloud_top = models.CharField(
@@ -198,6 +200,20 @@ class Flight(models.Model):
     tacan = models.CharField(
         max_length=5, help_text='Enter Flight TACAN (if applicable)', blank=True, null=True)
     targets = models.ManyToManyField(Target)
+
+    # Time Hacks
+    timehack_start = models.CharField(max_length=10, help_text='Enter time for flight takeoff.',
+                                      null=True, blank=True, verbose_name="Takeoff Time")
+    timehack_rdv1 = models.CharField(
+        max_length=10, help_text='Enter time for flight rendevous point 1.', null=True, blank=True, verbose_name="Time RDV 1")
+    timehack_rdv2 = models.CharField(
+        max_length=10, help_text='Enter time for flight rendevous point 2.', null=True, blank=True, verbose_name="Time RDV 2")
+    fuel_fob = models.CharField(
+        max_length=10, help_text='Fuel FOB', null=True, blank=True, verbose_name="Fuel FOB")
+    fuel_joker = models.CharField(
+        max_length=10, help_text='Fuel JOKER.', null=True, blank=True, verbose_name="Fuel JOKER")
+    fuel_bingo = models.CharField(
+        max_length=10, help_text='Fuel BINGO.', null=True, blank=True, verbose_name="Fuel BINGO")
 
     # Metadata
 
@@ -314,5 +330,40 @@ class Support(models.Model):
     brc = models.CharField(max_length=10, null=True, blank=True)
     icls = models.CharField(max_length=10, null=True, blank=True)
 
+    notes = models.TextField(
+        help_text='Enter notes for support resource.', null=True, blank=True)
+
+
+class Waypoint(models.Model):
+
+    # Fields
+
+    flight = models.ForeignKey(
+        'Flight', on_delete=models.CASCADE, null=True)
+
+    WAYPOINT_TYPES = (
+        ('NAV', 'NAV'),
+        ('IP', 'IP'),
+        ('CAP', 'CAP'),
+        ('STRIKE', 'STRIKE'),
+        ('CAS', 'CAS'),
+        ('DEAD', 'DEAD'),
+        ('SEAD', 'SEAD'),
+        ('BAI', 'BAI'),
+        ('TAKEOFF', 'TAKEOFF'),
+        ('LAND', 'LAND'),
+        ('DIVERT', 'DIVERT'),
+    )
+
+    name = models.CharField(max_length=50)
+    number = models.IntegerField(
+        default=1, help_text='A number representing the waypoint order.', verbose_name="waypoint number")
+    waypoint_type = models.CharField(
+        max_length=10, choices=WAYPOINT_TYPES, null=True)
+    lat = models.CharField(max_length=15, null=True, blank=True)
+    long = models.CharField(max_length=15, null=True, blank=True)
+    elevation = models.CharField(max_length=15, null=True, blank=True)
+    tot = models.CharField(max_length=15, null=True,
+                           blank=True, verbose_name="time on Target")
     notes = models.TextField(
         help_text='Enter notes for support resource.', null=True, blank=True)
