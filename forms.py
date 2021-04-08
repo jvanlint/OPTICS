@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 # import GeeksModel from models.py
-from .models import Campaign, Mission, Package, Flight, Threat, Aircraft, Target
+from .models import Campaign, Mission, Package, Flight, Threat, Aircraft, Target, Support
 
 # create a ModelForm
 
@@ -55,6 +55,13 @@ class AircraftForm(ModelForm):
     # specify the name of model to use
     class Meta:
         model = Aircraft
+        fields = "__all__"
+
+
+class SupportForm(ModelForm):
+    # specify the name of model to use
+    class Meta:
+        model = Support
         fields = "__all__"
 
 

@@ -185,7 +185,7 @@
 		</div>
 
 		<h2>
-			Support(s) <a href="" role="button"><i class="bi bi-plus-circle"></i></a>
+			Support(s) <a href="{% url 'support_add' mission_object.id %}" role="button"><i class="bi bi-plus-circle"></i></a>
 		</h2>
 
 		<div class="table-responsive">
@@ -200,6 +200,7 @@
 						<th>Spd</th>
 						<th>BRC</th>
 						<th>ICLS</th>
+						<th>Notes</th>
 						<th scope="col" colspan="2" style="text-align: center">Action</th>
 					</tr>
 				</thead>
@@ -214,9 +215,9 @@
 						<td>{{ support.speed }}</td>
 						<td>{{ support.brc }}</td>
 						<td>{{ support.icls }}</td>
-						<td>{{ support.description|linebreaks }}</td>
-						<td><a class="btn btn-sm btn-outline-primary" href="" role="button">Edit</a></td>
-						<td><a class="btn btn-sm btn-outline-danger" href="" role="button">Delete</a></td>
+						<td>{{ support.notes|linebreaks }}</td>
+						<td><a class="btn btn-sm btn-outline-primary" href="{% url 'support_update' support.id %}" role="button">Edit</a></td>
+						<td><a class="btn btn-sm btn-outline-danger" href="{% url 'support_delete' support.id %}" role="button">Delete</a></td>
 					</tr>
 					{% endfor %} {% else %}
 					<tr>

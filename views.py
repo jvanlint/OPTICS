@@ -9,8 +9,8 @@ from django.contrib.auth.forms import AuthenticationForm  # add this
 
 from django.views.decorators.csrf import csrf_protect
 
-from .models import Campaign, Mission, Package, Flight, Threat, Aircraft, Target
-from .forms import CampaignForm, MissionForm, NewUserForm, PackageForm, ThreatForm, FlightForm, AircraftForm, TargetForm
+from .models import Campaign, Mission, Package, Flight, Threat, Aircraft, Target, Support
+from .forms import CampaignForm, MissionForm, NewUserForm, PackageForm, ThreatForm, FlightForm, AircraftForm, TargetForm, SupportForm
 
 
 def index(request):
@@ -359,14 +359,6 @@ def aircraft_delete(request, link_id):
 ### Target Views ###
 
 
-def target(request, link_id):
-
-    target = Target.objects.get(id=link_id)
-
-    context = {'targetObject': target}
-    return render(request, 'target/target_detail.html', context)
-
-
 def target_create(request, link_id):
     mission = Mission.objects.get(id=link_id)
 
@@ -409,6 +401,52 @@ def target_delete(request, link_id):
 
     context = {'item': target}
     return render(request, 'target/target_delete.html', context=context)
+
+### Support Views ###
+
+
+def support_create(request, link_id):
+    mission = Mission.objects.get(id=link_id)
+
+    form = SupportForm(initial={'mission': mission})
+
+    if request.method == "POST":
+        form = SupportForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save(commit=True)
+            return HttpResponseRedirect('/airops/mission/' + str(link_id))
+
+    context = {'form': form, 'link': link_id}
+    return render(request, 'support/support_form.html', context=context)
+
+
+def support_update(request, link_id):
+    support = Support.objects.get(id=link_id)
+    missionID = support.mission.id
+    form = SupportForm(instance=support)
+
+    if request.method == "POST":
+        form = SupportForm(request.POST, request.FILES, instance=support)
+        print(request.path)
+        if form.is_valid():
+            form.save(commit=True)
+            print("Form Saved!")
+            return HttpResponseRedirect('/airops/mission/' + str(missionID))
+
+    context = {'form': form, 'link': missionID}
+    return render(request, 'support/support_form.html', context=context)
+
+
+def support_delete(request, link_id):
+    support = Support.objects.get(id=link_id)
+    missionID = target.mission.id
+
+    if request.method == "POST":
+        support.delete()
+        return HttpResponseRedirect('/airops/mission/' + str(missionID))
+
+    context = {'item': support}
+    return render(request, 'support/support_delete.html', context=context)
 
 # Other Views
 
