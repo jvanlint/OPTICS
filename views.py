@@ -6,6 +6,7 @@ from urllib.parse import urlencode
 from django.contrib.auth import login, authenticate, logout  # add this
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm  # add this
+from django.views.decorators.cache import never_cache
 
 from django.views.decorators.csrf import csrf_protect
 
@@ -99,6 +100,7 @@ def campaign_delete(request, link_id):
 # Mission Views
 
 
+@never_cache
 def mission(request, link_id):
     mission = Mission.objects.get(id=link_id)
     packages = mission.package_set.all()
@@ -155,6 +157,7 @@ def mission_delete(request, link_id):
 # Package Views
 
 
+@never_cache
 def package(request, link_id):
     package = Package.objects.get(id=link_id)
     flights = package.flight_set.all()
@@ -252,6 +255,7 @@ def threat_delete(request, link_id):
 ### Flight Views ###
 
 
+@never_cache
 def flight(request, link_id):
     flight = Flight.objects.get(id=link_id)
     aircraft = flight.aircraft_set.all()
