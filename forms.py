@@ -46,6 +46,11 @@ class TargetForm(ModelForm):
 
 class FlightForm(ModelForm):
     # specify the name of model to use
+    def __init__(self, target, *args, **kwargs):
+        super(FlightForm, self).__init__(*args, **kwargs)  # populates the post
+        self.fields['targets'].queryset = target
+        #self.fields['targets'] = forms.ModelMultipleChoiceField(queryset=Target.objects.filter(owner=user_id))
+
     class Meta:
         model = Flight
         fields = "__all__"

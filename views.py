@@ -266,11 +266,12 @@ def flight(request, link_id):
 
 def flight_create(request, link_id):
     package = Package.objects.get(id=link_id)
-
-    form = FlightForm(initial={'package': package})
+    target = Target.objects.filter(mission=package.mission.id)
+    print(target)
+    form = FlightForm(target, initial={'package': package})
 
     if request.method == "POST":
-        form = FlightForm(request.POST, request.FILES)
+        form = FlightForm(1, request.POST)
         if form.is_valid():
             form.save(commit=True)
             return HttpResponseRedirect('/airops/package/' + str(link_id))
