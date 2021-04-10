@@ -130,9 +130,17 @@
 		  </tr>
 		  
 		  <tr>
-			<th scope="row" colspan="10" bgcolor="lightgray">TACTICAL MISSION BRIEF</th>
+			<th scope="row" colspan="10" bgcolor="lightgray">TARGET INFO</th>
 		  </tr>
-		  
+		  {% for target in mission_object.target_set.all %}
+					<tr>
+						<td>{{ target.name }}</td>
+						<td>{{ target.lat }}</td>
+						<td>{{ target.long }}</td>
+						<td>{{ target.elev}}</td>
+						<td>{{ target.notes|linebreaks }}</td>
+					</tr>
+			{% endfor %}
 		  </tbody>
 	  </table>
 </div>
