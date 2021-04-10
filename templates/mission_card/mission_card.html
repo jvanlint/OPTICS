@@ -18,35 +18,38 @@
 		  <tr> 
 			<td colspan="6">
 				{% for aircraft in flight_object.aircraft_set.all%} 
-					{{aircraft.pilot}} {% if aircraft.rio_wso %}({{ aircraft.rio_wso }}){% endif %}/ 
+					{{aircraft.pilot}} {% if aircraft.rio_wso %}({{ aircraft.rio_wso }}) {% endif %}/ 
 				{% endfor %}
 			</td>
 			<td colspan="4">{{mission_object.name}}</td>
 		  </tr>
-		  
 		  <tr>
-			<th scope="row" colspan="6" bgcolor="lightgray">FLIGHT</th>
-			<th scope="row" colspan="1"bgcolor="lightgray">WEATHER</th>
-			<td scope="row" colspan="1">Vis: Good</td>
-			<td scope="row" colspan="1">Cloud Base: {{mission_object.cloud_base}}</td>
-			<td scope="row" colspan="1">Tops: {{mission_object.cloud_top}}</td>
-		  </tr>
-		  
-		  <tr>
-			<th scope="row" colspan="6">{{flight_object.callsign}}</th>
-			<th scope="row" colspan="1">WIND</th>
-			<td scope="row" colspan="1">@SL: {% if mission_object.wind_sl == null %} - {%else%} {{mission_object.wind_sl}} {%endif%}</td>
-			<td scope="row" colspan="1">@7k: {% if mission_object.wind_7k == null %} - {%else%} {{mission_object.wind_7k}} {%endif%}</td>
-			<td scope="row" colspan="1">@26K: {% if mission_object.wind_26k == null %} - {%else%} {{mission_object.wind_26k}} {%endif%}</td>
-		  </tr> 
-		  
-		  <tr>
-			<td scope="row" colspan="6" ></td>
-			<td scope="row" colspan="1">QNH: {% if mission_object.qnh == null %} - {%else%} {{mission_object.qnh}} {%endif%}</th>
-			<td scope="row" colspan="1">QFE: {% if mission_object.qfe == null %} - {%else%} {{mission_object.qfe}} {%endif%}</th>
-			<td scope="row" colspan="1">Temp: {% if mission_object.temp == null %} - {%else%} {{mission_object.temp}} {%endif%}</th>
-			<td scope="row" colspan="1">SigWx: {% if mission_object.sigwx == null %} - {%else%} {{mission_object.sigwx}} {%endif%}</th>
-		  </tr>
+			<th scope="row" colspan="10" bgcolor="lightgray">WEATHER</th>
+		 </tr>
+		 <tr>
+			<th scope="row" colspan="1">Vis</th>
+			<th scope="row" colspan="1">Cloud Base</th>
+			<th scope="row" colspan="1">Cloud Tops</th>
+			<th scope="row" colspan="1">Wind@SL</th>
+			<th scope="row" colspan="1">Wind@7K</th>
+			<th scope="row" colspan="1">Wind@26K</th>
+			<th scope="row" colspan="1">QNH</th>
+			<th scope="row" colspan="1">QNE</th>
+			<th scope="row" colspan="1">Temp</th>
+			<th scope="row" colspan="1">SIGWX</th>
+		 </tr>
+		 <tr>
+			<td scope="row" colspan="1">n/a</td>
+			<td scope="row" colspan="1">{{mission_object.cloud_base}}</td>
+			<td scope="row" colspan="1">{{mission_object.cloud_top}}</td>
+			<td scope="row" colspan="1">{% if mission_object.wind_sl == null %} - {%else%} {{mission_object.wind_sl}} {%endif%}</td>
+			<td scope="row" colspan="1">{% if mission_object.wind_7k == null %} - {%else%} {{mission_object.wind_7k}} {%endif%}</td>
+			<td scope="row" colspan="1">{% if mission_object.wind_26k == null %} - {%else%} {{mission_object.wind_26k}} {%endif%}</td>
+			<td scope="row" colspan="1">{% if mission_object.qnh == null %} - {%else%} {{mission_object.qnh}} {%endif%}</td>
+			<td scope="row" colspan="1">{% if mission_object.qfe == null %} - {%else%} {{mission_object.qfe}} {%endif%}</td>
+			<td scope="row" colspan="1">{% if mission_object.temp == null %} - {%else%} {{mission_object.temp}} {%endif%}</td>
+			<td scope="row" colspan="1">{% if mission_object.sigwx == null %} - {%else%} {{mission_object.sigwx}} {%endif%}</td>
+		 </tr>
 		  
 		  <tr>
 			<th scope="row" colspan="6" bgcolor="lightgray">TIME HACKS</th>
@@ -66,7 +69,7 @@
 		  </tr>
 		  
 		  <tr>
-			<th scope="row" colspan="1">{% if mission_object.timehack_start == null %} - {%else%} {{flight_object.timehack_start}} {%endif%}</th>
+			<th scope="row" colspan="1">n/a</th>
 			<th scope="row" colspan="1">{% if flight_object.timehack_start == null %} - {%else%} {{flight_object.timehack_start}} {%endif%}</th>
 			<td scope="row" colspan="1">{% if flight_object.timehack_rdv1 == null %} - {%else%} {{flight_object.timehack_rdv1}} {%endif%}</td>
 			<td scope="row" colspan="1">{% if flight_object.timehack_rdv2 == null %} - {%else%} {{flight_object.timehack_rdv2}} {%endif%}</td>
