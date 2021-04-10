@@ -47,6 +47,7 @@
                     <th>Callsign</th>
                     <th>Radio</th>
                     <th>Tacan</th>
+                    <th>A/C</th>
                     <th scope="col" colspan="2" style="text-align:center;">Action</th>
                 </tr>
             </thead>
@@ -60,6 +61,7 @@
                 </td>
                 <td>{{ flight.radio_frequency }}</td>
                 <td>{{ flight.tacan }}</td>
+                <td>{{flight.aircraft_set.count}}</td>
                 <td>
                     <a class="btn btn-sm btn-outline-primary" href="{% url 'flight_update' flight.id %}" role="button">Edit</a>
                 </td>
