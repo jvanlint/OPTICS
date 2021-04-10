@@ -459,6 +459,15 @@ def support_delete(request, link_id):
     context = {'item': support}
     return render(request, 'support/support_delete.html', context=context)
 
+
+# Mission Card
+def mission_card(request, mission_id, flight_id):
+    mission = Mission.objects.get(id=mission_id)
+    flight = Flight.objects.get(id=flight_id)
+
+    context = {'mission_object': mission, 'flight_object': flight}
+    return render(request, 'mission_card/mission_card.html', context)
+
 # Other Views
 
 

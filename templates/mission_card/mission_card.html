@@ -1,0 +1,252 @@
+{% extends "dashboard/basev2.html" %} {% load static %} {% block content %}
+
+<!-- start container -->
+<div class="container">
+
+	<table class="table">
+		<thead class="thead-dark">
+		  <tr>
+			<th scope="col" colspan="10">Misson Card</td>
+		  </tr>
+		</thead>
+		<tbody>
+		  <tr>
+			<th scope="row" colspan="6" bgcolor="lightgray">CALLSIGN</th>
+			<th scope="row" colspan="4"bgcolor="lightgray">MISSION</th>
+		  </tr>
+		  
+		  <tr> 
+			<td colspan="6">{% for aircraft in flight_object.aircraft_set.all%} {{aircraft.pilot}} - {% endfor %}</td>
+			<td colspan="4">{{mission_object.name}}</td>
+		  </tr>
+		  
+		  <tr>
+			<th scope="row" colspan="6" bgcolor="lightgray">FLIGHT</th>
+			<th scope="row" colspan="1"bgcolor="lightgray">WEATHER</th>
+			<td scope="row" colspan="1">Vis: Good</td>
+			<td scope="row" colspan="1">Cloud Base: {{mission_object.cloud_base}}</td>
+			<td scope="row" colspan="1">Tops: {{mission_object.cloud_top}}</td>
+		  </tr>
+		  
+		  <tr>
+			<th scope="row" colspan="6">{{flight_object.callsign}}</th>
+			<th scope="row" colspan="1">WIND</th>
+			<td scope="row" colspan="1">@SL: {% if mission_object.wind_sl == null %} - {%else%} {{mission_object.wind_sl}} {%endif%}</td>
+			<td scope="row" colspan="1">@7k: {% if mission_object.wind_7k == null %} - {%else%} {{mission_object.wind_7k}} {%endif%}</td>
+			<td scope="row" colspan="1">@26K: {% if mission_object.wind_26k == null %} - {%else%} {{mission_object.wind_26k}} {%endif%}</td>
+		  </tr> 
+		  
+		  <tr>
+			<td scope="row" colspan="6" ></td>
+			<td scope="row" colspan="1">QNH: {% if mission_object.qnh == null %} - {%else%} {{mission_object.qnh}} {%endif%}</th>
+			<td scope="row" colspan="1">QFE: {% if mission_object.qfe == null %} - {%else%} {{mission_object.qfe}} {%endif%}</th>
+			<td scope="row" colspan="1">Temp: {% if mission_object.temp == null %} - {%else%} {{mission_object.temp}} {%endif%}</th>
+			<td scope="row" colspan="1">SigWx: {% if mission_object.sigwx == null %} - {%else%} {{mission_object.sigwx}} {%endif%}</th>
+		  </tr>
+		  
+		  <tr>
+			<th scope="row" colspan="6" bgcolor="lightgray">TIME HACKS</th>
+			<th scope="row" colspan="5"bgcolor="lightgray">FUEL</th>
+		  </tr>
+		  <tr>
+			<td scope="row" colspan="1">Start</td>
+			<td scope="row" colspan="1">Take Off</td>
+			<td scope="row" colspan="1">RV 1</td>
+			<td scope="row" colspan="1">RV 2</td>
+			<td scope="row" colspan="1"></td>
+			<td scope="row" colspan="1"></td>
+			<td scope="row" colspan="1">F.O.B.</td>
+			<td scope="row" colspan="1">Joker</td>
+			<td scope="row" colspan="1">Bingo</td>
+			<td scope="row" colspan="1"></td>
+		  </tr>
+		  
+		  <tr>
+			<th scope="row" colspan="1">{% if mission_object.timehack_start == null %} - {%else%} {{flight_object.timehack_start}} {%endif%}</th>
+			<th scope="row" colspan="1">{% if flight_object.timehack_start == null %} - {%else%} {{flight_object.timehack_start}} {%endif%}</th>
+			<td scope="row" colspan="1">{% if flight_object.timehack_rdv1 == null %} - {%else%} {{flight_object.timehack_rdv1}} {%endif%}</td>
+			<td scope="row" colspan="1">{% if flight_object.timehack_start == null %} - {%else%} {{flight_object.timehack_start}} {%endif%}</td>
+			<td scope="row" colspan="1"></td>
+			<td scope="row" colspan="1"></td>
+			<td scope="row" colspan="1">{% if flight_object.fuel_fob == null %} - {%else%} {{flight_object.fuel_fob}} {%endif%}</td>
+			<td scope="row" colspan="1">{% if flight_object.fuel_joker == null %} - {%else%} {{flight_object.fuel_joker}} {%endif%}</td>
+			<td scope="row" colspan="1">{% if flight_object.fuel_bingo == null %} - {%else%} {{flight_object.fuel_bingo}} {%endif%}</td>
+			<td scope="row" colspan="1"></td>
+			
+		  </tr>
+		  
+		  <tr>
+			<td scope="row" colspan="10"></td>
+		  </tr>
+		  
+		  <tr>
+			<th scope="row" colspan="12" bgcolor="lightgray">MISSION SUPPORT</th>
+		  </tr>
+		  <tr>
+			<td scope="row" colspan="1">Type</td>
+			<td scope="row" colspan="1">Callsign</td>
+			<td scope="row" colspan="1">Freq</td>
+			<td scope="row" colspan="1">TACAN</td>
+			<td scope="row" colspan="1">Alt.</td>
+			<td scope="row" colspan="1">Speed</td>
+			<td scope="row" colspan="1">BRC</td>
+			<td scope="row" colspan="1">ICLS</td>
+			<td scope="row" colspan="2">Notes</td>
+		  </tr>
+		  
+		  <tr>
+			<th scope="row" colspan="1">Carrier</th>
+			<th scope="row" colspan="1">CVN-71</th>
+			<td scope="row" colspan="1">123.43</td>
+			<td scope="row" colspan="1">71X</td>
+			<td scope="row" colspan="1">-</td>
+			<td scope="row" colspan="1">20kts</td>
+			<td scope="row" colspan="1">304</td>
+			<td scope="row" colspan="1">5</td>
+			<td scope="row" colspan="2">Notes here.</td>
+			
+			
+		  </tr>
+		  
+		  <tr>
+			<td scope="row" colspan="10"></td>
+		  </tr>
+		  
+		  <tr>
+			<th scope="row" colspan="2" bgcolor="lightgray">FUEL</th>
+			<th scope="row" colspan="4" bgcolor="lightgray">TANKER DETAILS</th>
+			<th scope="row" colspan="1"></th>
+			<th scope="row" colspan="3" bgcolor="lightgray">WEAPON LOADOUT</th>
+		  </tr>
+		  
+		  <tr>
+			<td scope="row" colspan="1">F.O.B.</td>
+			<td scope="row" colspan="1"></td>
+			<td scope="row" colspan="1">Callsign</td>
+			<th scope="row" colspan="1">Shell</th>
+			<th scope="row" colspan="1">Texaco</th>
+			<th scope="row" colspan="1">Arco</th>
+			<td scope="row" colspan="1"></td>
+			<td scope="row" colspan="1">GUNS: CM</td>
+			<td scope="row" colspan="2">CHAFF/FLARE: Y</td>
+		  </tr>
+		  
+		  <tr>
+			<td scope="row" colspan="1">Joker</td>
+			<td scope="row" colspan="1"></td>
+			<td scope="row" colspan="1">Freq</td>
+			<th scope="row" colspan="1">252.30 AM</th>
+			<th scope="row" colspan="1">252.10 AM</th>
+			<th scope="row" colspan="1">252.2 AM</th>
+			<td scope="row" colspan="1"></td>
+			<td scope="row" colspan="1">TGP: Y</td>
+			<td scope="row" colspan="2">ECM: Y</td>
+		  </tr>
+		  
+		  <tr>
+			<td scope="row" colspan="1">Bingo</td>
+			<td scope="row" colspan="1"></td>
+			<td scope="row" colspan="1">Speed</td>
+			<th scope="row" colspan="1">.65 MACH</th>
+			<th scope="row" colspan="1">.65 MACH</th>
+			<th scope="row" colspan="1">.60 MACH</th>
+			<td scope="row" colspan="1"></td>
+			<td scope="row" colspan="3">AAMRAM x 6</td>
+		  </tr>
+		  
+		  <tr>
+			<td scope="row" colspan="2"></td>
+			<td scope="row" colspan="1">Altitude (ft)</td>
+			<th scope="row" colspan="1">20K</th>
+			<th scope="row" colspan="1">20K</th>
+			<th scope="row" colspan="1">20K</th>
+			<td scope="row" colspan="1"></td>
+			<td scope="row" colspan="3">GBU x 12</td>
+		  </tr>
+		  
+		  <tr>
+			<td scope="row" colspan="2"></td>
+			<td scope="row" colspan="1">TACAN A/A (ft)</td>
+			<th scope="row" colspan="1">16X</th>
+			<th scope="row" colspan="1">11X</th>
+			<th scope="row" colspan="1">15X</th>
+			<td scope="row" colspan="1"></td>
+			<td scope="row" colspan="3">Fuel Tank x 1 (Centerline)</td>
+		  </tr>
+		  
+		  <tr>
+			<td scope="row" colspan="10"></td>
+		  </tr>
+		  
+		  <tr>
+			<th scope="row" colspan="4" bgcolor="lightgray">Frequencies</th>
+			<th scope="row" colspan="2" bgcolor="lightgray">Carrier Details</th>
+		  </tr>
+		  
+		  <tr>
+			<td scope="row" colspan="1">Guard</td>
+			<td scope="row" colspan="1">275.500</td>
+			<td scope="row" colspan="1">Divert</td>
+			<td scope="row" colspan="1">275.500</td>
+			<td scope="row" colspan="1">ATC</td>
+			<td scope="row" colspan="1">127.43</td>
+		  </tr>
+		  
+		   <tr>
+			<td scope="row" colspan="2" bgcolor="lightgray">Flight</td>
+			<td scope="row" colspan="1">JTAC</td>
+			<td scope="row" colspan="1">123.21</td>
+			<td scope="row" colspan="1">TACAN</td>
+			<td scope="row" colspan="1">21X</td>
+		  </tr>
+		  
+		   <tr>
+			<td scope="row" colspan="1">Duke</td>
+			<td scope="row" colspan="1">275.500</td>
+			<td scope="row" colspan="1">TANKER</td>
+			<td scope="row" colspan="1">Texaco 275.500<br>Shell 342.01</td>
+			<td scope="row" colspan="1">ICLS</td>
+			<td scope="row" colspan="1">5</td>
+		  </tr>
+		  
+		   <tr>
+			<td scope="row" colspan="1">Rapier</td>
+			<td scope="row" colspan="1">275.500</td>
+			<td scope="row" colspan="1">Divert</td>
+			<td scope="row" colspan="1">275.500</td>
+			<td scope="row" colspan="1">ATC</td>
+			<td scope="row" colspan="1">TACAN</td>
+		  </tr>
+		  
+		  
+		  <tr>
+			<td scope="row" colspan="10"></td>
+		  </tr>
+		  
+		  <tr>
+			<th scope="row" colspan="10" bgcolor="lightgray">TACTICAL MISSION BRIEF</th>
+		  </tr>
+		  
+		  <tr>
+			  <td scope="row" colspan="10"><p>In order to prepare the way for deeper strikes into Iran, we have been ordered to conduct a stike against 
+	  the Early Warning Radar Command Centres outside of BANDAR ABBAS.</p>
+	  
+	  You are to:<br>
+	  - Degrade Air Defences in and around BANDAR ABBAS<br>
+	  - Degrade Air Defences in and around HAVADARYA<br>
+			  </td>
+		  </tr>
+		  
+		  <tr>
+			<td scope="row" colspan="10"></td>
+		  </tr>
+		  
+		  <tr>
+			<th scope="row" colspan="10" bgcolor="lightgray">TACTICAL MISSION BRIEF</th>
+		  </tr>
+		  
+		  </tbody>
+	  </table>
+</div>
+
+{% endblock %}

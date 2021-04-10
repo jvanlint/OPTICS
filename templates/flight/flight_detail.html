@@ -45,6 +45,7 @@
 			<div class="btn-group mr-2">
 				<a class="btn btn-sm btn-outline-secondary" href="{% url 'flight_update' flightObject.id %}" role="button">Edit</a>
 				<a class="btn btn-sm btn-outline-secondary" href="{% url 'flight_delete' flightObject.id %}" role="button">Delete</a>
+				<a class="btn btn-sm btn-outline-secondary" href="{% url 'mission_card' flightObject.package.mission.id flightObject.id %}" role="button">Mission Card</a>
 			</div>
 		</div>
 	</div>

@@ -61,6 +61,9 @@ urlpatterns = [
     path('support/delete/<int:link_id>',
          views.support_delete, name='support_delete'),
 
+    path('missioncard/mission/<int:mission_id>/flight/<int:flight_id>',
+         views.mission_card, name='mission_card'),
+
     path('dashboard', views.dashboard),
 
     path("register", views.register_request, name="register"),
