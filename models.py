@@ -199,7 +199,7 @@ class Flight(models.Model):
         max_length=20, help_text='Enter Flight Frequency', blank=True, null=True)
     tacan = models.CharField(
         max_length=5, help_text='Enter Flight TACAN (if applicable)', blank=True, null=True)
-    targets = models.ManyToManyField(Target, blank=True, null=True)
+    targets = models.ManyToManyField(Target, blank=True)
 
     # Time Hacks
     timehack_start = models.CharField(max_length=10, help_text='Enter time for flight takeoff.',
