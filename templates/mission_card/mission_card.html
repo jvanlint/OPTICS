@@ -18,7 +18,7 @@
 		  <tr> 
 			<td colspan="6">
 				{% for aircraft in flight_object.aircraft_set.all%} 
-					{{aircraft.pilot}} {% if aircraft.rio %}({{ aircraft.rio }}){% endif %}/ 
+					{{aircraft.pilot}} {% if aircraft.rio %}({{ aircraft.rio_wso }}){% endif %}/ 
 				{% endfor %}
 			</td>
 			<td colspan="4">{{mission_object.name}}</td>
