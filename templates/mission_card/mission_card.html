@@ -6,12 +6,12 @@
 	<table class="table">
 		<thead class="thead-dark">
 		  <tr>
-			<th scope="col" colspan="10">Misson Card</td>
+			<th scope="col" colspan="10">MISSION CARD / {{flight_object.callsign|upper}} FLIGHT</td>
 		  </tr>
 		</thead>
 		<tbody>
 		  <tr>
-			<th scope="row" colspan="6" bgcolor="lightgray">CALLSIGN</th>
+			<th scope="row" colspan="6" bgcolor="lightgray">CALLSIGN(S)</th>
 			<th scope="row" colspan="4"bgcolor="lightgray">MISSION</th>
 		  </tr>
 		  
@@ -132,6 +132,8 @@
 		  <tr>
 			<th scope="row" colspan="10" bgcolor="lightgray">TARGET INFO</th>
 		  </tr>
+		  <tr><td>Targets? {{ flight_object.targets }}</td></tr>
+		  
 		  {% for target in mission_object.target_set.all %}
 					<tr>
 						<td>{{ target.name }}</td>
