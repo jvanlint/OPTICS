@@ -16,7 +16,7 @@
 		  </tr>
 		  
 		  <tr> 
-			<td colspan="6">{% for aircraft in flight_object.aircraft_set.all%} {{aircraft.pilot}} - {% endfor %}</td>
+			<td colspan="6">{% for aircraft in flight_object.aircraft_set.all%} {{aircraft.pilot}} / {% endfor %}</td>
 			<td colspan="4">{{mission_object.name}}</td>
 		  </tr>
 		  
@@ -65,7 +65,7 @@
 			<th scope="row" colspan="1">{% if mission_object.timehack_start == null %} - {%else%} {{flight_object.timehack_start}} {%endif%}</th>
 			<th scope="row" colspan="1">{% if flight_object.timehack_start == null %} - {%else%} {{flight_object.timehack_start}} {%endif%}</th>
 			<td scope="row" colspan="1">{% if flight_object.timehack_rdv1 == null %} - {%else%} {{flight_object.timehack_rdv1}} {%endif%}</td>
-			<td scope="row" colspan="1">{% if flight_object.timehack_start == null %} - {%else%} {{flight_object.timehack_start}} {%endif%}</td>
+			<td scope="row" colspan="1">{% if flight_object.timehack_rdv2 == null %} - {%else%} {{flight_object.timehack_rdv2}} {%endif%}</td>
 			<td scope="row" colspan="1"></td>
 			<td scope="row" colspan="1"></td>
 			<td scope="row" colspan="1">{% if flight_object.fuel_fob == null %} - {%else%} {{flight_object.fuel_fob}} {%endif%}</td>
@@ -94,19 +94,21 @@
 			<td scope="row" colspan="2">Notes</td>
 		  </tr>
 		  
+		  {% for support in mission.support_set.all %}
 		  <tr>
-			<th scope="row" colspan="1">Carrier</th>
-			<th scope="row" colspan="1">CVN-71</th>
-			<td scope="row" colspan="1">123.43</td>
-			<td scope="row" colspan="1">71X</td>
-			<td scope="row" colspan="1">-</td>
-			<td scope="row" colspan="1">20kts</td>
-			<td scope="row" colspan="1">304</td>
-			<td scope="row" colspan="1">5</td>
-			<td scope="row" colspan="2">Notes here.</td>
+			<th scope="row" colspan="1">{{support.support_type}}</th>
+			<th scope="row" colspan="1">{{support.callsign}}</th>
+			<td scope="row" colspan="1">{{support.frequency}}</td>
+			<td scope="row" colspan="1">{{support.tacan}}</td>
+			<td scope="row" colspan="1">{{support.altitude}}/td>
+			<td scope="row" colspan="1">{{support.speed}}</td>
+			<td scope="row" colspan="1">{{support.brc}}</td>
+			<td scope="row" colspan="1">{{support.icls}}</td>
+			<td scope="row" colspan="2">{{support.notes|linebreaks}}</td>
 			
 			
 		  </tr>
+		  {% endfor %}
 		  
 		  <tr>
 			<td scope="row" colspan="10"></td>
