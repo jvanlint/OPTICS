@@ -134,7 +134,7 @@
 		  </tr>
 		  <tr><td>Targets? {{ flight_object.targets }}</td></tr>
 		  
-		  {% for target in mission_object.target_set.all %}
+		  {% for target in flight_object.target.all %}
 					<tr>
 						<td>{{ target.name }}</td>
 						<td>{{ target.lat }}</td>
