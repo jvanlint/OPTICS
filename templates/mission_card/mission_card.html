@@ -142,10 +142,10 @@
 		  
 		  {% for target in flight_object.targets.all %}
 					<tr>
-						<td>{{ target.name }}</td>
+						<td colspan="2">{{ target.name }}</td>
 						<td colspan="2">{{ target.lat }}</td>
 						<td colspan="2">{{ target.long }}</td>
-						<td>{{ target.elev}}</td>
+						<td colspan="2">{{ target.elev}}</td>
 						<td colspan="2">{{ target.notes|linebreaks }}</td>
 					</tr>
 			{% endfor %}
