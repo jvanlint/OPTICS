@@ -18,7 +18,7 @@
 <!-- start container -->
 <div class="container">
 
-	<table class="table w-auto small" id="container">
+	<table class="table w-auto med" id="container">
 		<thead class="thead-dark">
 		  <tr>
 			<th scope="col" colspan="10">MISSION CARD / {{flight_object.callsign|upper}} FLIGHT</td>
@@ -33,7 +33,11 @@
 		  <tr> 
 			<td span colspan="6">
 				{% for aircraft in flight_object.aircraft_set.all%} 
-				<span {% if aircraft.flight_lead %}class="badge badge-success"{% else %}class="badge badge-secondary"{% endif %}>{{aircraft.pilot}}</span>  {% if aircraft.rio_wso %}({{ aircraft.rio_wso }}) {% endif %}
+					{{aircraft.pilot}}
+					{% if aircraft.flight_lead %}
+					<span class="badge badge-success">LEAD</span>
+					{% endif %}
+					{% if aircraft.rio_wso %}({{ aircraft.rio_wso }}) {% endif %} /
 				{% endfor %}
 			</td>
 			<td colspan="4">{{mission_object.name}}</td>
