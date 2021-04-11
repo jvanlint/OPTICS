@@ -159,6 +159,14 @@
 		  <tr bgcolor="darkgray">
 			<th scope="row" colspan="10">TARGET INFO</th>
 		  </tr>
+
+		  <tr bgcolor="lightgray">
+			<th scope="row" colspan="2">Name</th>
+			<th scope="row" colspan="2">Lat</th>
+			<th scope="row" colspan="2">Long</th>
+			<th scope="row" colspan="2">Elev.</th>
+			<th scope="row" colspan="2">Notes</th>
+		  </tr>
 		  
 		  {% for target in flight_object.targets.all %}
 					<tr>
@@ -172,6 +180,13 @@
 
 			<tr bgcolor="darkgray">
 				<th scope="row" colspan="10">THREAT INFO</th>
+			  </tr>
+
+			  <tr bgcolor="lightgray">
+				<th scope="row" colspan="2">Type</th>
+				<th scope="row" colspan="4">Name</th>
+				<th scope="row" colspan="4">Description</th>
+
 			  </tr>
 			  
 			  {% for threat in mission_object.threat_set.all %}
