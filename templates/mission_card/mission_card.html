@@ -31,9 +31,9 @@
 		  </tr>
 		  
 		  <tr> 
-			<td colspan="6">
+			<td span colspan="6">
 				{% for aircraft in flight_object.aircraft_set.all%} 
-				{{aircraft.pilot}} {% if aircraft.flight_lead %} <span class="badge badge-success">LEAD</span> {% endif %}{% if aircraft.rio_wso %}({{ aircraft.rio_wso }}) {% endif %}/ 
+				<span {% if aircraft.flight_lead %}class="badge badge-success"{% else %}class="badge badge-secondary"{% endif %}>{{aircraft.pilot}}</span>  {% if aircraft.rio_wso %}({{ aircraft.rio_wso }}) {% endif %}
 				{% endfor %}
 			</td>
 			<td colspan="4">{{mission_object.name}}</td>
