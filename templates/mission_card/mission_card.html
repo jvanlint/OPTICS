@@ -15,11 +15,11 @@
 	function pdf(){
 		var element = document.getElementById('container');
 		var opt = {
-			margin:       1,
+			margin:       0,
 			filename:     'missioncard.pdf',
-			image:        { type: 'jpeg', quality: 0.98 },
+			image:        { type: 'png'},
 			html2canvas:  { allowTaint: true , scrollX:0, scrollY: -window.scrollY, windowWidth: element.scrollWidth },
-			jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' },
+			jsPDF:        { format: 'a4', orientation: 'portrait', compress: true, putOnlyUsedFonts: true},
 			pagebreak:		{ mode: 'avoid-all', before: '#pagebreak' }
 
 		};
@@ -32,7 +32,7 @@
 <!-- start container -->
 <div class="container">
 
-	<table class="table w-auto med" id="container">
+	<table class="tbl" id="container">
 		<thead class="thead-dark">
 		  <tr>
 			<th scope="col" colspan="10">MISSION CARD / {{flight_object.callsign|upper}} FLIGHT</td>
