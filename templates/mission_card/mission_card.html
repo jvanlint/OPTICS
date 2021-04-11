@@ -118,7 +118,7 @@
 						<td colspan="2">{{ flight.radio_frequency }}</td>
 						<td colspan="2">{{ flight.aircraft_set.first.type }}</td>
 						<td colspan="2">{{ flight.aircraft_set.count }}</td>
-						<td colspan="2">{{ package.name }}</td>
+						<td colspan="2">{{ package.name }} {% if package.frequency %}({{ package.frequency }}){% endif %}</td>
 					</tr>
 				{% endfor %}
 			{% endfor %}
