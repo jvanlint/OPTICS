@@ -98,6 +98,28 @@
 		  </tr>
 		  
 		  <tr>
+			<th scope="row" colspan="10" bgcolor="darkgray">FLIGHTS</th>
+		  </tr>
+		  <tr bgcolor="lightgray">
+			<th scope="row" colspan="2">Callsign</th>
+			<th scope="row" colspan="2">Freq</th>
+			<th scope="row" colspan="2">A/C Type</th>
+			<th scope="row" colspan="2">A/C #</th>
+			<th scope="row" colspan="2">Package</th>
+		  </tr>
+		  {% for package in mission_object.package_set.all %}
+		  	{% for flight in package.flight_set.all %}
+					<tr>
+						<td colspan="2">{{ flight.callsign }}</td>
+						<td colspan="2">{{ flight.radio_frequency }}</td>
+						<td colspan="2">{{ flight.aircraft_set.first.type }}</td>
+						<td colspan="2">{{ flight.aircraft_set.count }}</td>
+						<td colspan="2">{{ package.name }}</td>
+					</tr>
+				{% endfor %}
+			{% endfor %}
+
+		  <tr>
 			<th scope="row" colspan="12" bgcolor="darkgray">MISSION SUPPORT</th>
 		  </tr>
 		  <tr bgcolor="lightgray">
