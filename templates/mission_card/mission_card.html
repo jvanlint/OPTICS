@@ -109,7 +109,7 @@
 		  </tr>
 		  {% for package in mission_object.package_set.all %}
 		  	{% for flight in package.flight_set.all %}
-					<tr>
+					<tr {% if flight.callsign == flight_object.callsign %} bgcolor="yellow" {% endif %}>
 						<th colspan="2">{{ flight.callsign }}</th>
 						<td colspan="2">{{ flight.radio_frequency }}</td>
 						<td colspan="2">{{ flight.aircraft_set.first.type }}</td>
@@ -133,7 +133,7 @@
 			<th scope="row" colspan="1">ICLS</th>
 			<th scope="row" colspan="2">Notes</th>
 		  </tr>
-		  
+
 		  {% for support in mission_object.support_set.all %}
 		  <tr>
 			<th scope="row" colspan="1">{{support.support_type}}</th>
