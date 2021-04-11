@@ -18,8 +18,8 @@
 			margin:       1,
 			filename:     'missioncard.pdf',
 			image:        { type: 'jpeg', quality: 0.98 },
-			html2canvas:  { allowTaint: true , scrollX:0, scrollY: -window.scrollY },
-			jsPDF:        { unit: 'cm', format: 'a4', orientation: 'portrait' },
+			html2canvas:  { allowTaint: true , scrollX:0, scrollY: -window.scrollY, windowWidth: element.scrollWidth },
+			jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' },
 			pagebreak:		{ mode: 'avoid-all', before: '#pagebreak' }
 
 		};
