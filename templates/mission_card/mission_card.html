@@ -11,6 +11,20 @@
     });
 });
 	}
+
+	function pdf(){
+		var element = document.getElementById('container');
+		var opt = {
+			margin:       1,
+			filename:     'missioncard.pdf',
+			image:        { type: 'jpeg', quality: 0.98 },
+			html2canvas:  { allowTaint: true , scrollX:0, scrollY: -window.scrollY },
+			jsPDF:        { unit: 'cm', format: 'a4', orientation: 'portrait' },
+			pagebreak:		{ mode: 'avoid-all', before: '#pagebreak' }
+
+		};
+		html2pdf(element, opt);
+	}
 	</script>
 
 
@@ -123,7 +137,7 @@
 				{% endfor %}
 			{% endfor %}
 
-		  <tr>
+		  <tr id="pagebreak">
 			<th scope="row" colspan="10" bgcolor="darkgray">MISSION SUPPORT</th>
 		  </tr>
 		  <tr bgcolor="lightgray">
@@ -205,5 +219,6 @@
 </div>
 
 <button onclick="screenshot()">Download Mission Card Image</button>
+<button onclick="pdf()">Download PDF</button>
 
 {% endblock %}
