@@ -56,34 +56,8 @@
 			</td>
 			<td colspan="4">{{mission_object.name}}</td>
 		  </tr>
-		  <tr bgcolor="darkgray">
-			<th scope="row" colspan="10" >WEATHER</th>
-		 </tr>
-		 <tr bgcolor="lightgray">
-			<th scope="row" colspan="1">Vis</th>
-			<th scope="row" colspan="1">Cloud Base</th>
-			<th scope="row" colspan="1">Cloud Tops</th>
-			<th scope="row" colspan="1">Wind@SL</th>
-			<th scope="row" colspan="1">Wind@7K</th>
-			<th scope="row" colspan="1">Wind@26K</th>
-			<th scope="row" colspan="1">QNH</th>
-			<th scope="row" colspan="1">QNE</th>
-			<th scope="row" colspan="1">Temp</th>
-			<th scope="row" colspan="1">SIGWX</th>
-		 </tr>
-		 <tr>
-			<td scope="row" colspan="1">{% if mission_object.visibility == null %} - {%else%} {{mission_object.visibility}} {%endif%}</td>
-			<td scope="row" colspan="1">{{mission_object.cloud_base}}</td>
-			<td scope="row" colspan="1">{{mission_object.cloud_top}}</td>
-			<td scope="row" colspan="1">{% if mission_object.wind_sl == null %} - {%else%} {{mission_object.wind_sl}} {%endif%}</td>
-			<td scope="row" colspan="1">{% if mission_object.wind_7k == null %} - {%else%} {{mission_object.wind_7k}} {%endif%}</td>
-			<td scope="row" colspan="1">{% if mission_object.wind_26k == null %} - {%else%} {{mission_object.wind_26k}} {%endif%}</td>
-			<td scope="row" colspan="1">{% if mission_object.qnh == null %} - {%else%} {{mission_object.qnh}} {%endif%}</td>
-			<td scope="row" colspan="1">{% if mission_object.qfe == null %} - {%else%} {{mission_object.qfe}} {%endif%}</td>
-			<td scope="row" colspan="1">{% if mission_object.temp == null %} - {%else%} {{mission_object.temp}} {%endif%}</td>
-			<td scope="row" colspan="1">{% if mission_object.sigwx == null %} - {%else%} {{mission_object.sigwx}} {%endif%}</td>
-		 </tr>
 		  
+		 <!-- Time Hacks -->
 		  <tr bgcolor="darkgray">
 			<th scope="row" colspan="6">TIME HACKS</th>
 			<th scope="row" colspan="4">FUEL</th>
@@ -112,9 +86,10 @@
 			<td scope="row" colspan="1">{% if flight_object.fuel_joker == null %} - {%else%} {{flight_object.fuel_joker}} {%endif%}</td>
 			<td scope="row" colspan="1">{% if flight_object.fuel_bingo == null %} - {%else%} {{flight_object.fuel_bingo}} {%endif%}</td>
 			<td scope="row" colspan="1"></td>
-			
 		  </tr>
-		  
+		  <!-- End Time Hacks-->
+
+		  <!-- Flights Support-->
 		  <tr>
 			<th scope="row" colspan="10" bgcolor="darkgray">FLIGHTS</th>
 		  </tr>
@@ -136,7 +111,38 @@
 					</tr>
 				{% endfor %}
 			{% endfor %}
+			<!-- End Flights -->
 
+			<!-- Waypoints-->
+			<tr>
+				<th scope="row" colspan="10" bgcolor="darkgray">WAYPOINTS</th>
+			  </tr>
+			  <tr bgcolor="lightgray">
+				<th scope="row" colspan="1">Number</th>
+				<th scope="row" colspan="1">Type</th>
+				<th scope="row" colspan="2">Name</th>
+				<th scope="row" colspan="1">Lat</th>
+				<th scope="row" colspan="1">Long</th>
+				<th scope="row" colspan="1">Elev</th>
+				<th scope="row" colspan="3">Notes</th>
+				
+			  </tr>
+	
+			  {% for waypoint in flight_object.waypoint_set.all %}
+			  <tr>
+				<th scope="row" colspan="1">{{waypoint.number}}</th>
+				<td scope="row" colspan="1">{{waypoint.waypoint_type}}</td>
+				<th scope="row" colspan="2">{{waypoint.name}}</th>
+				<td scope="row" colspan="1">{{waypoint.lat}}</td>
+				<td scope="row" colspan="1">{{waypoint.long}}</td>
+				<td scope="row" colspan="1">{{waypoint.elevation}}</td>
+				<td scope="row" colspan="3">{{waypoint.notes|linebreaks}}</td>
+			  </tr>
+			  {% endfor %}
+	
+			  <!-- End Waypoints-->
+
+		  <!-- Mission Support-->
 		  <tr>
 			<th scope="row" colspan="10" bgcolor="darkgray">MISSION SUPPORT</th>
 		  </tr>
@@ -165,8 +171,40 @@
 			<td scope="row" colspan="2">{{support.notes|linebreaks}}</td>
 		  </tr>
 		  {% endfor %}
-		  
+		  <!-- End Mission Support-->
+
+		  <!-- Weather -->
 		  <tr bgcolor="darkgray" id="pagebreak">
+			<th scope="row" colspan="10" >WEATHER</th>
+		 </tr>
+		 <tr bgcolor="lightgray">
+			<th scope="row" colspan="1">Vis</th>
+			<th scope="row" colspan="1">Cloud Base</th>
+			<th scope="row" colspan="1">Cloud Tops</th>
+			<th scope="row" colspan="1">Wind@SL</th>
+			<th scope="row" colspan="1">Wind@7K</th>
+			<th scope="row" colspan="1">Wind@26K</th>
+			<th scope="row" colspan="1">QNH</th>
+			<th scope="row" colspan="1">QNE</th>
+			<th scope="row" colspan="1">Temp</th>
+			<th scope="row" colspan="1">SIGWX</th>
+		 </tr>
+		 <tr>
+			<td scope="row" colspan="1">{% if mission_object.visibility == null %} - {%else%} {{mission_object.visibility}} {%endif%}</td>
+			<td scope="row" colspan="1">{{mission_object.cloud_base}}</td>
+			<td scope="row" colspan="1">{{mission_object.cloud_top}}</td>
+			<td scope="row" colspan="1">{% if mission_object.wind_sl == null %} - {%else%} {{mission_object.wind_sl}} {%endif%}</td>
+			<td scope="row" colspan="1">{% if mission_object.wind_7k == null %} - {%else%} {{mission_object.wind_7k}} {%endif%}</td>
+			<td scope="row" colspan="1">{% if mission_object.wind_26k == null %} - {%else%} {{mission_object.wind_26k}} {%endif%}</td>
+			<td scope="row" colspan="1">{% if mission_object.qnh == null %} - {%else%} {{mission_object.qnh}} {%endif%}</td>
+			<td scope="row" colspan="1">{% if mission_object.qfe == null %} - {%else%} {{mission_object.qfe}} {%endif%}</td>
+			<td scope="row" colspan="1">{% if mission_object.temp == null %} - {%else%} {{mission_object.temp}} {%endif%}</td>
+			<td scope="row" colspan="1">{% if mission_object.sigwx == null %} - {%else%} {{mission_object.sigwx}} {%endif%}</td>
+		 </tr>
+		 <!-- End Weather -->
+
+		  <!-- Tactical Mission Brief-->
+		  <tr bgcolor="darkgray">
 			<th scope="row" colspan="10">TACTICAL MISSION BRIEF</th>
 		  </tr>
 		  
@@ -195,7 +233,9 @@
 						<td colspan="2">{{ target.notes|linebreaks }}</td>
 					</tr>
 			{% endfor %}
+		<!-- End Tactical Mission Brief -->
 
+		<!-- Threats -->
 			<tr bgcolor="darkgray">
 				<th scope="row" colspan="10">THREAT INFO</th>
 			  </tr>
@@ -214,6 +254,8 @@
 							<td colspan="4">{{ threat.description|linebreaks }}</td>
 						</tr>
 				{% endfor %}
+			<!-- End Threats -->
+
 		  </tbody>
 	  </table>
 </div>
