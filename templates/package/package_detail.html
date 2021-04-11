@@ -29,6 +29,7 @@
         <h6>MISSION {{packageObject.mission.name}} / {{packageObject.mission.mission_date}} / {{packageObject.mission.mission_time}}//</h6>
         <hr>
         <p class="lead">{{ packageObject.description|linebreaks }}</p>
+        <h4>Common Package Frequency: <span class="badge badge-primary"> {{ packageObject.frequency}}</span></h4>
 
         <div class="btn-toolbar">
             <div class="btn-group mr-2">
@@ -48,7 +49,7 @@
                     <th>Radio</th>
                     <th>Tacan</th>
                     <th>A/C Type</th>
-                    <th>A/C</th>
+                    <th># A/C</th>
                     <th scope="col" colspan="2" style="text-align:center;">Action</th>
                 </tr>
             </thead>

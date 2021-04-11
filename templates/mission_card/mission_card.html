@@ -54,7 +54,7 @@
 			<th scope="row" colspan="1">SIGWX</th>
 		 </tr>
 		 <tr>
-			<td scope="row" colspan="1">n/a</td>
+			<td scope="row" colspan="1">{% if mission_object.visibility == null %} - {%else%} {{mission_object.visibility}} {%endif%}</td>
 			<td scope="row" colspan="1">{{mission_object.cloud_base}}</td>
 			<td scope="row" colspan="1">{{mission_object.cloud_top}}</td>
 			<td scope="row" colspan="1">{% if mission_object.wind_sl == null %} - {%else%} {{mission_object.wind_sl}} {%endif%}</td>
@@ -84,7 +84,7 @@
 		  </tr>
 		  
 		  <tr>
-			<td scope="row" colspan="1">n/a</td>
+			<td scope="row" colspan="1">{% if mission_object.mission_game_time == null %} - {%else%} {{mission_object.mission_game_time}} {%endif%}</td>
 			<td scope="row" colspan="1">{% if flight_object.timehack_start == null %} - {%else%} {{flight_object.timehack_start}} {%endif%}</td>
 			<td scope="row" colspan="1">{% if flight_object.timehack_rdv1 == null %} - {%else%} {{flight_object.timehack_rdv1}} {%endif%}</td>
 			<td scope="row" colspan="1">{% if flight_object.timehack_rdv2 == null %} - {%else%} {{flight_object.timehack_rdv2}} {%endif%}</td>

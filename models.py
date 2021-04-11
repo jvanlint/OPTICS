@@ -89,8 +89,14 @@ class Mission(models.Model):
         max_length=5, help_text='Mission time in HH:MM format.', null=True, blank=True, verbose_name="mission Start Time")
     mission_date = models.DateField(
         help_text='Proposed mission date.', null=True, blank=True, verbose_name="expected Mission Date")
+    mission_game_time = models.CharField(
+        max_length=5, help_text='Mission game start time in HH:MM format.', null=True, blank=True, verbose_name="In-Game Mission Start Time")
+    mission_game_date = models.DateField(
+        help_text='Mission game date.', null=True, blank=True, verbose_name="In-Game Mission Date")
 
     # Weather
+    visibility = models.CharField(
+        max_length=100, help_text='Enter Visibility.', null=True, blank=True, verbose_name="Visibility")
     cloud_base = models.CharField(
         max_length=10, help_text='Enter Cloud base in K of ft.', null=True, blank=True, verbose_name="Cloud Base Altitude")
     cloud_top = models.CharField(
@@ -134,6 +140,8 @@ class Package(models.Model):
         'Mission', on_delete=models.CASCADE, null=True)
     name = models.CharField(
         max_length=200, help_text='Enter Package Name', verbose_name="Package Name")
+    frequency = models.CharField(
+        max_length=10, help_text='Enter Package Frequency', verbose_name="Package Frequency",  null=True, blank=True)
     description = models.TextField(
         help_text='Enter Mission Description/Situation.', null=True, blank=True, verbose_name="Description of package objective")
 
