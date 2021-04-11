@@ -375,4 +375,4 @@ class Waypoint(models.Model):
     tot = models.CharField(max_length=15, null=True,
                            blank=True, verbose_name="time on Target")
     notes = models.TextField(
-        help_text='Enter notes for support resource.', null=True, blank=True)
+        help_text='Enter notes for the waypoint.', null=True, blank=True)

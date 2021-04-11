@@ -61,6 +61,13 @@ urlpatterns = [
     path('support/delete/<int:link_id>',
          views.support_delete, name='support_delete'),
 
+    path('waypoint/add/<int:link_id>',
+         views.waypoint_create, name='waypoint_add'),
+    path('waypoint/update/<int:link_id>',
+         views.waypoint_update, name='waypoint_update'),
+    path('waypoint/delete/<int:link_id>',
+         views.waypoint_delete, name='waypoint_delete'),
+
     path('missioncard/mission/<int:mission_id>/flight/<int:flight_id>',
          views.mission_card, name='mission_card'),
 

@@ -89,7 +89,7 @@
 	</div>
 
 	<h2>
-		Waypoint(s) <a href="" role="button"><i class="bi bi-plus-circle"></i></a>
+		Waypoint(s) <a href="{% url 'waypoint_add' flightObject.id %}" role="button"><i class="bi bi-plus-circle"></i></a>
 	</h2>
 	<div class="table-responsive">
 		<table class="table table-striped table-sm">
@@ -98,19 +98,27 @@
 					<th>Number</th>
 					<th>Name</th>
 					<th>Type</th>
+					<th>Lat</th>
+					<th>Long</th>
+					<th>Elev</th>
 					<th>Notes</th>
 					<th scope="col" colspan="2" style="text-align: center">Action</th>
 				</tr>
 			</thead>
 			<tbody>
+				{% for waypoint in flightObject.waypoint_set.all %}
 				<tr>
-					<td>1</td>
-					<td>Rendevous</td>
-					<td>RVP</td>
-					<td>Meet up with other package elements</td>
-					<td><a class="btn btn-sm btn-outline-primary" href="" role="button">Edit</a></td>
-					<td><a class="btn btn-sm btn-outline-danger" href="" role="button">Delete</a></td>
+					<td>{{ waypoint.number }}</td>
+					<td>{{ waypoint.name }}</td>
+					<td>{{ waypoint.waypoint_type }}</td>
+					<td>{{ waypoint.lat }}</td>
+					<td>{{ waypoint.long }}</td>
+					<td>{{ waypoint.elevation }}</td>
+					<td>{{ waypoint.notes|linebreaks }}</td>
+					<td><a class="btn btn-sm btn-outline-primary" href="{% url 'waypoint_update' waypoint.id %}" role="button">Edit</a></td>
+					<td><a class="btn btn-sm btn-outline-danger" href="{% url 'waypoint_delete' waypoint.id %}" role="button">Delete</a></td>
 				</tr>
+				{% endfor %}
 			</tbody>
 		</table>
 	</div>
