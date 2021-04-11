@@ -68,7 +68,7 @@
 		  
 		  <tr bgcolor="darkgray">
 			<th scope="row" colspan="6">TIME HACKS</th>
-			<th scope="row" colspan="5">FUEL</th>
+			<th scope="row" colspan="4">FUEL</th>
 		  </tr>
 		  <tr bgcolor="lightgray">
 			<th scope="row" colspan="1">Start</th>
@@ -110,7 +110,7 @@
 		  {% for package in mission_object.package_set.all %}
 		  	{% for flight in package.flight_set.all %}
 					<tr>
-						<td colspan="2">{{ flight.callsign }}</td>
+						<th colspan="2">{{ flight.callsign }}</th>
 						<td colspan="2">{{ flight.radio_frequency }}</td>
 						<td colspan="2">{{ flight.aircraft_set.first.type }}</td>
 						<td colspan="2">{{ flight.aircraft_set.count }}</td>
@@ -120,7 +120,7 @@
 			{% endfor %}
 
 		  <tr>
-			<th scope="row" colspan="12" bgcolor="darkgray">MISSION SUPPORT</th>
+			<th scope="row" colspan="10" bgcolor="darkgray">MISSION SUPPORT</th>
 		  </tr>
 		  <tr bgcolor="lightgray">
 			<th scope="row" colspan="1">Type</th>
@@ -145,8 +145,6 @@
 			<td scope="row" colspan="1">{{support.brc}}</td>
 			<td scope="row" colspan="1">{{support.icls}}</td>
 			<td scope="row" colspan="2">{{support.notes|linebreaks}}</td>
-			
-			
 		  </tr>
 		  {% endfor %}
 		  
@@ -171,6 +169,18 @@
 						<td colspan="2">{{ target.notes|linebreaks }}</td>
 					</tr>
 			{% endfor %}
+
+			<tr bgcolor="darkgray">
+				<th scope="row" colspan="10">THREAT INFO</th>
+			  </tr>
+			  
+			  {% for threat in mission_object.threat_set.all %}
+						<tr>
+							<td colspan="2">{{ threat.threat_type }}</td>
+							<td colspan="4">{{ threat.name }}</td>
+							<td colspan="4">{{ threat.description|linebreaks }}</td>
+						</tr>
+				{% endfor %}
 		  </tbody>
 	  </table>
 </div>
