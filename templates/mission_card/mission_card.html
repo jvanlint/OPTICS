@@ -25,9 +25,9 @@
 		  </tr>
 		</thead>
 		<tbody>
-		  <tr>
-			<th scope="row" colspan="6" bgcolor="lightgray">CALLSIGN(S)</th>
-			<th scope="row" colspan="4"bgcolor="lightgray">MISSION</th>
+		  <tr bgcolor="darkgray">
+			<th scope="row" colspan="6">CALLSIGN(S)</th>
+			<th scope="row" colspan="4">MISSION</th>
 		  </tr>
 		  
 		  <tr> 
@@ -38,10 +38,10 @@
 			</td>
 			<td colspan="4">{{mission_object.name}}</td>
 		  </tr>
-		  <tr>
-			<th scope="row" colspan="10" bgcolor="lightgray">WEATHER</th>
+		  <tr bgcolor="darkgray">
+			<th scope="row" colspan="10" >WEATHER</th>
 		 </tr>
-		 <tr>
+		 <tr bgcolor="lightgray">
 			<th scope="row" colspan="1">Vis</th>
 			<th scope="row" colspan="1">Cloud Base</th>
 			<th scope="row" colspan="1">Cloud Tops</th>
@@ -66,26 +66,26 @@
 			<td scope="row" colspan="1">{% if mission_object.sigwx == null %} - {%else%} {{mission_object.sigwx}} {%endif%}</td>
 		 </tr>
 		  
-		  <tr>
-			<th scope="row" colspan="6" bgcolor="lightgray">TIME HACKS</th>
-			<th scope="row" colspan="5"bgcolor="lightgray">FUEL</th>
+		  <tr bgcolor="darkgray">
+			<th scope="row" colspan="6">TIME HACKS</th>
+			<th scope="row" colspan="5">FUEL</th>
 		  </tr>
-		  <tr>
-			<td scope="row" colspan="1">Start</td>
-			<td scope="row" colspan="1">Take Off</td>
-			<td scope="row" colspan="1">RV 1</td>
-			<td scope="row" colspan="1">RV 2</td>
-			<td scope="row" colspan="1"></td>
-			<td scope="row" colspan="1"></td>
-			<td scope="row" colspan="1">F.O.B.</td>
-			<td scope="row" colspan="1">Joker</td>
-			<td scope="row" colspan="1">Bingo</td>
-			<td scope="row" colspan="1"></td>
+		  <tr bgcolor="lightgray">
+			<th scope="row" colspan="1">Start</th>
+			<th scope="row" colspan="1">Take Off</th>
+			<th scope="row" colspan="1">RV 1</th>
+			<th scope="row" colspan="1">RV 2</th>
+			<th scope="row" colspan="1"></th>
+			<th scope="row" colspan="1"></th>
+			<th scope="row" colspan="1">F.O.B.</th>
+			<th scope="row" colspan="1">Joker</th>
+			<th scope="row" colspan="1">Bingo</th>
+			<th scope="row" colspan="1"></th>
 		  </tr>
 		  
 		  <tr>
-			<th scope="row" colspan="1">n/a</th>
-			<th scope="row" colspan="1">{% if flight_object.timehack_start == null %} - {%else%} {{flight_object.timehack_start}} {%endif%}</th>
+			<td scope="row" colspan="1">n/a</td>
+			<td scope="row" colspan="1">{% if flight_object.timehack_start == null %} - {%else%} {{flight_object.timehack_start}} {%endif%}</td>
 			<td scope="row" colspan="1">{% if flight_object.timehack_rdv1 == null %} - {%else%} {{flight_object.timehack_rdv1}} {%endif%}</td>
 			<td scope="row" colspan="1">{% if flight_object.timehack_rdv2 == null %} - {%else%} {{flight_object.timehack_rdv2}} {%endif%}</td>
 			<td scope="row" colspan="1"></td>
@@ -98,22 +98,18 @@
 		  </tr>
 		  
 		  <tr>
-			<td scope="row" colspan="10"></td>
+			<th scope="row" colspan="12" bgcolor="darkgray">MISSION SUPPORT</th>
 		  </tr>
-		  
-		  <tr>
-			<th scope="row" colspan="12" bgcolor="lightgray">MISSION SUPPORT</th>
-		  </tr>
-		  <tr>
-			<td scope="row" colspan="1">Type</td>
-			<td scope="row" colspan="1">Callsign</td>
-			<td scope="row" colspan="1">Freq</td>
-			<td scope="row" colspan="1">TACAN</td>
-			<td scope="row" colspan="1">Alt.</td>
-			<td scope="row" colspan="1">Speed</td>
-			<td scope="row" colspan="1">BRC</td>
-			<td scope="row" colspan="1">ICLS</td>
-			<td scope="row" colspan="2">Notes</td>
+		  <tr bgcolor="lightgray">
+			<th scope="row" colspan="1">Type</th>
+			<th scope="row" colspan="1">Callsign</th>
+			<th scope="row" colspan="1">Freq</th>
+			<th scope="row" colspan="1">TACAN</th>
+			<th scope="row" colspan="1">Alt.</th>
+			<th scope="row" colspan="1">Speed</th>
+			<th scope="row" colspan="1">BRC</th>
+			<th scope="row" colspan="1">ICLS</th>
+			<th scope="row" colspan="2">Notes</th>
 		  </tr>
 		  
 		  {% for support in mission_object.support_set.all %}
@@ -132,27 +128,16 @@
 		  </tr>
 		  {% endfor %}
 		  
-		  
-		  
-		  
-		  <tr>
-			<td scope="row" colspan="10"></td>
-		  </tr>
-		  
-		  <tr>
-			<th scope="row" colspan="10" bgcolor="lightgray">TACTICAL MISSION BRIEF</th>
+		  <tr bgcolor="darkgray">
+			<th scope="row" colspan="10">TACTICAL MISSION BRIEF</th>
 		  </tr>
 		  
 		  <tr>
 			  <td scope="row" colspan="10">{{mission_object.brief|linebreaks}}</td>
 		  </tr>
 		  
-		  <tr>
-			<td scope="row" colspan="10"></td>
-		  </tr>
-		  
-		  <tr>
-			<th scope="row" colspan="10" bgcolor="lightgray">TARGET INFO</th>
+		  <tr bgcolor="darkgray">
+			<th scope="row" colspan="10">TARGET INFO</th>
 		  </tr>
 		  
 		  {% for target in flight_object.targets.all %}
