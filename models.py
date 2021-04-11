@@ -253,6 +253,7 @@ class Aircraft(models.Model):
         max_length=30, help_text='Enter RIO/WSO Name', null=True, blank=True)
     tailcode = models.CharField(
         max_length=20, help_text='Enter A/C tail code.', null=True, blank=True)
+    flight_lead = models.BooleanField(default=False)
 
     # Metadata
 

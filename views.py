@@ -350,9 +350,9 @@ def aircraft_update(request, link_id):
         if form.is_valid():
             form.save(commit=True)
             print("Form Saved!")
-            return HttpResponseRedirect('/airops/aircraft/' + str(link_id))
+            return HttpResponseRedirect('/airops/flight/' + str(flightID))
 
-    context = {'form': form, 'link': link_id}
+    context = {'form': form, 'link': flightID}
     return render(request, 'aircraft/aircraft_form.html', context=context)
 
 
