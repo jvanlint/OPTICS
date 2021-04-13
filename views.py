@@ -12,6 +12,11 @@ from django.views.decorators.csrf import csrf_protect
 
 from .models import Campaign, Mission, Package, Flight, Threat, Aircraft, Target, Support, Waypoint
 from .forms import CampaignForm, MissionForm, NewUserForm, PackageForm, ThreatForm, FlightForm, AircraftForm, TargetForm, SupportForm, WaypointForm
+# For PDF
+from django.template.loader import get_template
+from django.views import View
+from xhtml2pdf import pisa
+from io import BytesIO
 
 
 def index(request):
@@ -567,3 +572,58 @@ def logout_request(request):
     logout(request)
     messages.info(request, "You have successfully logged out.")
     return HttpResponseRedirect('/airops/campaign')
+
+
+def render_to_pdf(template_src, context_dict={}):
+    template = get_template(template_src)
+    html = template.render(context_dict)
+    result = BytesIO()
+    pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), content_type='application/pdf')
+    return None
+
+
+data = {
+    "company": "Dennnis Ivanov Company",
+    "address": "123 Street name",
+    "city": "Vancouver",
+    "state": "WA",
+    "zipcode": "98663",
+
+
+    "phone": "555-555-2345",
+    "email": "youremail@dennisivy.com",
+    "website": "dennisivy.com",
+}
+
+# Opens up page as PDF
+
+
+class ViewPDF(View):
+    def get(self, request, *args, **kwargs):
+        mission = Mission.objects.get(id=1)
+        flight = Flight.objects.get(id=2)
+
+        data = {'mission_object': mission, 'flight_object': flight}
+
+        pdf = render_to_pdf('mission_card/pdf_template.html', data)
+        return HttpResponse(pdf, content_type='application/pdf')
+
+
+# Automaticly downloads to PDF file
+class DownloadPDF(View):
+    def get(self, request, *args, **kwargs):
+
+        pdf = render_to_pdf('mission_card/pdf_template.html', data)
+
+        response = HttpResponse(pdf, content_type='application/pdf')
+        filename = "missioncard.pdf"
+        content = "attachment; filename=%s" % (filename)
+        response['Content-Disposition'] = content
+        return response
+
+
+def pdfindex(request):
+    context = {}
+    return render(request, 'mission_card/index.html', context)
