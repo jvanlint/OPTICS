@@ -68,9 +68,6 @@ urlpatterns = [
     path('waypoint/delete/<int:link_id>',
          views.waypoint_delete, name='waypoint_delete'),
 
-    path('missioncard/mission/<int:mission_id>/flight/<int:flight_id>',
-         views.mission_card, name='mission_card'),
-
     path('dashboard', views.dashboard),
 
     path("register", views.register_request, name="register"),
@@ -79,8 +76,8 @@ urlpatterns = [
 
     path("logout", views.logout_request, name="logout"),
 
-    path('pdf_view/', views.ViewPDF.as_view(), name="pdf_view"),
+    path('pdf_view/mission/<int:mission_id>/flight/<int:flight_id>',
+         views.view_mission_card, name="pdf_view"),
     path('pdf_download/', views.DownloadPDF.as_view(), name="pdf_download"),
-    path('pdf', views.pdfindex),
 
 ]

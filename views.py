@@ -522,16 +522,6 @@ def waypoint_delete(request, link_id):
     context = {'item': waypoint}
     return render(request, 'waypoint/waypoint_delete.html', context=context)
 
-# Mission Card
-
-
-def mission_card(request, mission_id, flight_id):
-    mission = Mission.objects.get(id=mission_id)
-    flight = Flight.objects.get(id=flight_id)
-
-    context = {'mission_object': mission, 'flight_object': flight}
-    return render(request, 'mission_card/mission_card.html', context)
-
 # Other Views
 
 
@@ -586,6 +576,8 @@ def logout_request(request):
     messages.info(request, "You have successfully logged out.")
     return HttpResponseRedirect('/airops/campaign')
 
+# PDF Render
+
 
 def render_to_pdf(template_src, context_dict={}):
     template = get_template(template_src)
@@ -596,35 +588,9 @@ def render_to_pdf(template_src, context_dict={}):
         return HttpResponse(result.getvalue(), content_type='application/pdf')
     return None
 
-
-data = {
-    "company": "Dennnis Ivanov Company",
-    "address": "123 Street name",
-    "city": "Vancouver",
-    "state": "WA",
-    "zipcode": "98663",
-
-
-    "phone": "555-555-2345",
-    "email": "youremail@dennisivy.com",
-    "website": "dennisivy.com",
-}
-
-# Opens up page as PDF
-
-
-class ViewPDF(View):
-    def get(self, request, *args, **kwargs):
-        mission = Mission.objects.get(id=1)
-        flight = Flight.objects.get(id=2)
-
-        data = {'mission_object': mission, 'flight_object': flight}
-
-        pdf = render_to_pdf('mission_card/pdf_template.html', data)
-        return HttpResponse(pdf, content_type='application/pdf')
-
-
 # Automaticly downloads to PDF file
+
+
 class DownloadPDF(View):
     def get(self, request, *args, **kwargs):
 
@@ -637,6 +603,11 @@ class DownloadPDF(View):
         return response
 
 
-def pdfindex(request):
-    context = {}
-    return render(request, 'mission_card/index.html', context)
+def view_mission_card(request, mission_id, flight_id):
+    mission = Mission.objects.get(id=mission_id)
+    flight = Flight.objects.get(id=flight_id)
+
+    data = {'mission_object': mission, 'flight_object': flight}
+
+    pdf = render_to_pdf('mission_card/pdf_template.html', data)
+    return HttpResponse(pdf, content_type='application/pdf')
