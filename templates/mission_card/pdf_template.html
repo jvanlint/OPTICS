@@ -1,4 +1,5 @@
-{% load static %}<head>
+{% load static %}
+<head>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" />
 
@@ -40,250 +41,251 @@
 			-pdf-keep-in-frame-mode: shrink;
 		}
     </style>
-    </head>
+</head>
     
-    <body>
-        <!-- Content for Static Frame 'header_frame' -->
-        
-    
-        <!-- Content for Static Frame 'footer_frame' -->
-        <div id="footer_content">page <pdf:pagenumber>
-            of <pdf:pagecount>
-        </div>
-    
-        <!-- HTML Content -->
-        <table>
-		<thead class='card_tr'>
-			<tr class="card_tr">
-				<th scope="col" colspan="10" align="left">MISSION CARD / {{flight_object.callsign|upper}} FLIGHT</td>
-			</tr>
-		</thead>
-		<tbody>
-			<tr class="card_tr">
-				<th scope="row" colspan="6">CALLSIGN(S)</th>
-				<th scope="row" colspan="4">MISSION</th>
-		  	</tr>
-		  
-		  	<tr> 
-				<td colspan="6">
-					{% for aircraft in flight_object.aircraft_set.all%} 
-						{{aircraft.pilot}}
-						{% if aircraft.flight_lead %}
-							<span class="badge badge-success">LEAD</span>
-						{% endif %}
-						{% if aircraft.rio_wso %}
-							({{ aircraft.rio_wso }}) 
-						{% endif %} 
-						/
-					{% endfor %}
-				</td>
-				<td colspan="4">{{mission_object.name}}</td>
-		  	</tr>
-		  
-		  	<!-- Time Hacks -->
-			<tr bgcolor="darkgray">
-				<th colspan="6">TIME HACKS</th>
-				<th colspan="4">FUEL</th>
-			</tr>
-			<tr bgcolor="lightgray">
-				<th scope="row" colspan="1">Start</th>
-				<th scope="row" colspan="1">Take Off</th>
-				<th scope="row" colspan="1">RV 1</th>
-				<th scope="row" colspan="1">RV 2</th>
-				<th scope="row" colspan="1"></th>
-				<th scope="row" colspan="1"></th>
-				<th scope="row" colspan="1">F.O.B.</th>
-				<th scope="row" colspan="1">Joker</th>
-				<th scope="row" colspan="1">Bingo</th>
-				<th scope="row" colspan="1"></th>
-			</tr>
-			<tr>
-				<td scope="row" colspan="1">{% if mission_object.mission_game_time == null %} - {%else%} {{mission_object.mission_game_time}} {%endif%}</td>
-				<td scope="row" colspan="1">{% if flight_object.timehack_start == null %} - {%else%} {{flight_object.timehack_start}} {%endif%}</td>
-				<td scope="row" colspan="1">{% if flight_object.timehack_rdv1 == null %} - {%else%} {{flight_object.timehack_rdv1}} {%endif%}</td>
-				<td scope="row" colspan="1">{% if flight_object.timehack_rdv2 == null %} - {%else%} {{flight_object.timehack_rdv2}} {%endif%}</td>
-				<td scope="row" colspan="1"></td>
-				<td scope="row" colspan="1"></td>
-				<td scope="row" colspan="1">{% if flight_object.fuel_fob == null %} - {%else%} {{flight_object.fuel_fob}} {%endif%}</td>
-				<td scope="row" colspan="1">{% if flight_object.fuel_joker == null %} - {%else%} {{flight_object.fuel_joker}} {%endif%}</td>
-				<td scope="row" colspan="1">{% if flight_object.fuel_bingo == null %} - {%else%} {{flight_object.fuel_bingo}} {%endif%}</td>
-				<td scope="row" colspan="1"></td>
-			</tr>
-			<!-- End Time Hacks-->
+<body>
+	<!-- Content for Static Frame 'header_frame' -->
+	
 
-			<!-- Flights Support-->
-			<tr>
-				<th scope="row" colspan="10" bgcolor="darkgray">FLIGHTS</th>
-			</tr>
-			<tr bgcolor="lightgray">
-				<th scope="row" colspan="2">Callsign</th>
-				<th scope="row" colspan="2">Freq</th>
-				<th scope="row" colspan="2">A/C Type</th>
-				<th scope="row" colspan="2">A/C #</th>
-				<th scope="row" colspan="2">Package</th>
-			</tr>
-			{% for package in mission_object.package_set.all %}
-				{% for flight in package.flight_set.all %}
-					<tr {% if flight.callsign == flight_object.callsign %} bgcolor="yellow" {% endif %}>
-						<td colspan="2">{{ flight.callsign }}</td>
-						<td colspan="2">{{ flight.radio_frequency }}</td>
-						<td colspan="2">{{ flight.aircraft_set.first.type }}</td>
-						<td colspan="2">{{ flight.aircraft_set.count }}</td>
-						<td colspan="2">{{ package.name }} {% if package.frequency %}({{ package.frequency }}){% endif %}</td>
-					</tr>
+	<!-- Content for Static Frame 'footer_frame' -->
+	<div id="footer_content">page <pdf:pagenumber>
+		of <pdf:pagecount>
+	</div>
+
+	<!-- HTML Content -->
+	<table>
+	<thead class='card_tr'>
+		<tr class="card_tr">
+			<th scope="col" colspan="10" align="left">MISSION CARD / {{flight_object.callsign|upper}} FLIGHT</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr class="card_tr">
+			<th scope="row" colspan="6">CALLSIGN(S)</th>
+			<th scope="row" colspan="4">MISSION</th>
+		</tr>
+		
+		<tr> 
+			<td colspan="6">
+				{% for aircraft in flight_object.aircraft_set.all%} 
+					{{aircraft.pilot}}
+					{% if aircraft.flight_lead %}
+						<span class="badge badge-success">LEAD</span>
+					{% endif %}
+					{% if aircraft.rio_wso %}
+						({{ aircraft.rio_wso }}) 
+					{% endif %} 
+					/
 				{% endfor %}
+			</td>
+			<td colspan="4">{{mission_object.name}}</td>
+		</tr>
+		
+		<!-- Time Hacks -->
+		<tr bgcolor="darkgray">
+			<th colspan="6">TIME HACKS</th>
+			<th colspan="4">FUEL</th>
+		</tr>
+		<tr bgcolor="lightgray">
+			<th scope="row" colspan="1">Start</th>
+			<th scope="row" colspan="1">Take Off</th>
+			<th scope="row" colspan="1">RV 1</th>
+			<th scope="row" colspan="1">RV 2</th>
+			<th scope="row" colspan="1"></th>
+			<th scope="row" colspan="1"></th>
+			<th scope="row" colspan="1">F.O.B.</th>
+			<th scope="row" colspan="1">Joker</th>
+			<th scope="row" colspan="1">Bingo</th>
+			<th scope="row" colspan="1"></th>
+		</tr>
+		<tr>
+			<td scope="row" colspan="1">{% if mission_object.mission_game_time == null %} - {%else%} {{mission_object.mission_game_time}} {%endif%}</td>
+			<td scope="row" colspan="1">{% if flight_object.timehack_start == null %} - {%else%} {{flight_object.timehack_start}} {%endif%}</td>
+			<td scope="row" colspan="1">{% if flight_object.timehack_rdv1 == null %} - {%else%} {{flight_object.timehack_rdv1}} {%endif%}</td>
+			<td scope="row" colspan="1">{% if flight_object.timehack_rdv2 == null %} - {%else%} {{flight_object.timehack_rdv2}} {%endif%}</td>
+			<td scope="row" colspan="1"></td>
+			<td scope="row" colspan="1"></td>
+			<td scope="row" colspan="1">{% if flight_object.fuel_fob == null %} - {%else%} {{flight_object.fuel_fob}} {%endif%}</td>
+			<td scope="row" colspan="1">{% if flight_object.fuel_joker == null %} - {%else%} {{flight_object.fuel_joker}} {%endif%}</td>
+			<td scope="row" colspan="1">{% if flight_object.fuel_bingo == null %} - {%else%} {{flight_object.fuel_bingo}} {%endif%}</td>
+			<td scope="row" colspan="1"></td>
+		</tr>
+		<!-- End Time Hacks-->
+
+		<!-- Flights Support-->
+		<tr>
+			<th scope="row" colspan="10" bgcolor="darkgray">FLIGHTS</th>
+		</tr>
+		<tr bgcolor="lightgray">
+			<th scope="row" colspan="2">Callsign</th>
+			<th scope="row" colspan="2">Freq</th>
+			<th scope="row" colspan="2">A/C Type</th>
+			<th scope="row" colspan="2">A/C #</th>
+			<th scope="row" colspan="2">Package</th>
+		</tr>
+		{% for package in mission_object.package_set.all %}
+			{% for flight in package.flight_set.all %}
+				<tr {% if flight.callsign == flight_object.callsign %} bgcolor="yellow" {% endif %}>
+					<td colspan="2">{{ flight.callsign }}</td>
+					<td colspan="2">{{ flight.radio_frequency }}</td>
+					<td colspan="2">{{ flight.aircraft_set.first.type }}</td>
+					<td colspan="2">{{ flight.aircraft_set.count }}</td>
+					<td colspan="2">{{ package.name }} {% if package.frequency %}({{ package.frequency }}){% endif %}</td>
+				</tr>
 			{% endfor %}
-			<!-- End Flights -->
+		{% endfor %}
+		<!-- End Flights -->
 
-			<!-- Waypoints-->
+		<!-- Waypoints-->
+		<tr>
+			<th scope="row" colspan="10" bgcolor="darkgray">WAYPOINTS</th>
+		</tr>
+		<tr bgcolor="lightgray">
+			<th scope="row" colspan="1">Number</th>
+			<th scope="row" colspan="1">Type</th>
+			<th scope="row" colspan="2">Name</th>
+			<th scope="row" colspan="1">Lat</th>
+			<th scope="row" colspan="1">Long</th>
+			<th scope="row" colspan="1">Elev</th>
+			<th scope="row" colspan="1">ToT</th>
+			<th scope="row" colspan="2">Notes</th>
+		</tr>
+
+		{% for waypoint in flight_object.waypoint_set.all %}
+		<tr>
+			<th scope="row" colspan="1">{{waypoint.number}}</th>
+			<td scope="row" colspan="1">{{waypoint.waypoint_type}}</td>
+			<th scope="row" colspan="2">{{waypoint.name}}</th>
+			<td scope="row" colspan="1">{{waypoint.lat}}</td>
+			<td scope="row" colspan="1">{{waypoint.long}}</td>
+			<td scope="row" colspan="1">{{waypoint.elevation}}</td>
+			<td scope="row" colspan="1">{{waypoint.tot}}</td>
+			<td scope="row" colspan="2">{{waypoint.notes|linebreaks}}</td>
+		</tr>
+		{% endfor %}
+
+		<!-- End Waypoints-->
+
+		<!-- Mission Support-->
+		<tr>
+			<th scope="row" colspan="10" bgcolor="darkgray">MISSION SUPPORT</th>
+		</tr>
+		<tr bgcolor="lightgray">
+			<th scope="row" colspan="1">Type</th>
+			<th scope="row" colspan="1">Callsign</th>
+			<th scope="row" colspan="1">Freq</th>
+			<th scope="row" colspan="1">TACAN</th>
+			<th scope="row" colspan="1">Alt.</th>
+			<th scope="row" colspan="1">Speed</th>
+			<th scope="row" colspan="1">BRC</th>
+			<th scope="row" colspan="1">ICLS</th>
+			<th scope="row" colspan="2">Notes</th>
+		</tr>
+
+		{% for support in mission_object.support_set.all %}
 			<tr>
-				<th scope="row" colspan="10" bgcolor="darkgray">WAYPOINTS</th>
+				<th scope="row" colspan="1">{{support.support_type}}</th>
+				<th scope="row" colspan="1">{{support.callsign}}</th>
+				<td scope="row" colspan="1">{{support.frequency}}</td>
+				<td scope="row" colspan="1">{{support.tacan}}</td>
+				<td scope="row" colspan="1">{{support.altitude}}</td>
+				<td scope="row" colspan="1">{{support.speed}}</td>
+				<td scope="row" colspan="1">{{support.brc}}</td>
+				<td scope="row" colspan="1">{{support.icls}}</td>
+				<td scope="row" colspan="2">{{support.notes|linebreaks}}</td>
 			</tr>
-			<tr bgcolor="lightgray">
-				<th scope="row" colspan="1">Number</th>
-				<th scope="row" colspan="1">Type</th>
-				<th scope="row" colspan="2">Name</th>
-				<th scope="row" colspan="1">Lat</th>
-				<th scope="row" colspan="1">Long</th>
-				<th scope="row" colspan="1">Elev</th>
-				<th scope="row" colspan="1">ToT</th>
-				<th scope="row" colspan="2">Notes</th>
-			</tr>
+		{% endfor %}
+		<!-- End Mission Support-->
 
-			{% for waypoint in flight_object.waypoint_set.all %}
+		<!-- Weather -->
+		<tr bgcolor="darkgray">
+			<th scope="row" colspan="10" >WEATHER</th>
+		</tr>
+		<tr bgcolor="lightgray">
+			<th scope="row" colspan="1">Vis</th>
+			<th scope="row" colspan="1">Cloud Base</th>
+			<th scope="row" colspan="1">Cloud Tops</th>
+			<th scope="row" colspan="1">Wind@SL</th>
+			<th scope="row" colspan="1">Wind@7K</th>
+			<th scope="row" colspan="1">Wind@26K</th>
+			<th scope="row" colspan="1">QNH</th>
+			<th scope="row" colspan="1">QNE</th>
+			<th scope="row" colspan="1">Temp</th>
+			<th scope="row" colspan="1">SIGWX</th>
+		</tr>
+		<tr>
+			<td scope="row" colspan="1">{% if mission_object.visibility == null %} - {%else%} {{mission_object.visibility}} {%endif%}</td>
+			<td scope="row" colspan="1">{{mission_object.cloud_base}}</td>
+			<td scope="row" colspan="1">{{mission_object.cloud_top}}</td>
+			<td scope="row" colspan="1">{% if mission_object.wind_sl == null %} - {%else%} {{mission_object.wind_sl}} {%endif%}</td>
+			<td scope="row" colspan="1">{% if mission_object.wind_7k == null %} - {%else%} {{mission_object.wind_7k}} {%endif%}</td>
+			<td scope="row" colspan="1">{% if mission_object.wind_26k == null %} - {%else%} {{mission_object.wind_26k}} {%endif%}</td>
+			<td scope="row" colspan="1">{% if mission_object.qnh == null %} - {%else%} {{mission_object.qnh}} {%endif%}</td>
+			<td scope="row" colspan="1">{% if mission_object.qfe == null %} - {%else%} {{mission_object.qfe}} {%endif%}</td>
+			<td scope="row" colspan="1">{% if mission_object.temp == null %} - {%else%} {{mission_object.temp}} {%endif%}</td>
+			<td scope="row" colspan="1">{% if mission_object.sigwx == null %} - {%else%} {{mission_object.sigwx}} {%endif%}</td>
+		</tr>
+		<!-- End Weather -->
+
+		<!-- Tactical Mission Brief-->
+		<tr bgcolor="darkgray">
+			<th scope="row" colspan="10">TACTICAL MISSION BRIEF</th>
+		</tr>
+		<tr>
+			<td scope="row" colspan="10">{{mission_object.brief|linebreaks}}</td>
+		</tr>
+		<!-- End Tactical Mission Brief -->
+		
+		<!--  Tactical Info  -->
+		<tr bgcolor="darkgray">
+			<th scope="row" colspan="10">TARGET INFO</th>
+		</tr>
+
+		<tr bgcolor="lightgray">
+			<th scope="row" colspan="2">Name</th>
+			<th scope="row" colspan="2">Lat</th>
+			<th scope="row" colspan="2">Long</th>
+			<th scope="row" colspan="2">Elev.</th>
+			<th scope="row" colspan="2">Notes</th>
+		</tr>
+		
+		{% for target in flight_object.targets.all %}
 			<tr>
-				<th scope="row" colspan="1">{{waypoint.number}}</th>
-				<td scope="row" colspan="1">{{waypoint.waypoint_type}}</td>
-				<th scope="row" colspan="2">{{waypoint.name}}</th>
-				<td scope="row" colspan="1">{{waypoint.lat}}</td>
-				<td scope="row" colspan="1">{{waypoint.long}}</td>
-				<td scope="row" colspan="1">{{waypoint.elevation}}</td>
-				<td scope="row" colspan="1">{{waypoint.tot}}</td>
-				<td scope="row" colspan="2">{{waypoint.notes|linebreaks}}</td>
+				<td colspan="2">{{ target.name }}</td>
+				<td colspan="2">{{ target.lat }}</td>
+				<td colspan="2">{{ target.long }}</td>
+				<td colspan="2">{{ target.elev}}</td>
+				<td colspan="2">{{ target.notes|linebreaks }}</td>
 			</tr>
-			{% endfor %}
+		{% endfor %}
+		<!-- End Target Info -->
 
-			<!-- End Waypoints-->
-
-			<!-- Mission Support-->
-			<tr>
-				<th scope="row" colspan="10" bgcolor="darkgray">MISSION SUPPORT</th>
-			</tr>
-			<tr bgcolor="lightgray">
-				<th scope="row" colspan="1">Type</th>
-				<th scope="row" colspan="1">Callsign</th>
-				<th scope="row" colspan="1">Freq</th>
-				<th scope="row" colspan="1">TACAN</th>
-				<th scope="row" colspan="1">Alt.</th>
-				<th scope="row" colspan="1">Speed</th>
-				<th scope="row" colspan="1">BRC</th>
-				<th scope="row" colspan="1">ICLS</th>
-				<th scope="row" colspan="2">Notes</th>
-			</tr>
-
-			{% for support in mission_object.support_set.all %}
-				<tr>
-					<th scope="row" colspan="1">{{support.support_type}}</th>
-					<th scope="row" colspan="1">{{support.callsign}}</th>
-					<td scope="row" colspan="1">{{support.frequency}}</td>
-					<td scope="row" colspan="1">{{support.tacan}}</td>
-					<td scope="row" colspan="1">{{support.altitude}}</td>
-					<td scope="row" colspan="1">{{support.speed}}</td>
-					<td scope="row" colspan="1">{{support.brc}}</td>
-					<td scope="row" colspan="1">{{support.icls}}</td>
-					<td scope="row" colspan="2">{{support.notes|linebreaks}}</td>
-			    </tr>
-			{% endfor %}
-			<!-- End Mission Support-->
-
-			<!-- Weather -->
+		<!-- Threats -->
 			<tr bgcolor="darkgray">
-				<th scope="row" colspan="10" >WEATHER</th>
+				<th scope="row" colspan="10">THREAT INFO</th>
 			</tr>
-			<tr bgcolor="lightgray">
-				<th scope="row" colspan="1">Vis</th>
-				<th scope="row" colspan="1">Cloud Base</th>
-				<th scope="row" colspan="1">Cloud Tops</th>
-				<th scope="row" colspan="1">Wind@SL</th>
-				<th scope="row" colspan="1">Wind@7K</th>
-				<th scope="row" colspan="1">Wind@26K</th>
-				<th scope="row" colspan="1">QNH</th>
-				<th scope="row" colspan="1">QNE</th>
-				<th scope="row" colspan="1">Temp</th>
-				<th scope="row" colspan="1">SIGWX</th>
-			</tr>
-			<tr>
-				<td scope="row" colspan="1">{% if mission_object.visibility == null %} - {%else%} {{mission_object.visibility}} {%endif%}</td>
-				<td scope="row" colspan="1">{{mission_object.cloud_base}}</td>
-				<td scope="row" colspan="1">{{mission_object.cloud_top}}</td>
-				<td scope="row" colspan="1">{% if mission_object.wind_sl == null %} - {%else%} {{mission_object.wind_sl}} {%endif%}</td>
-				<td scope="row" colspan="1">{% if mission_object.wind_7k == null %} - {%else%} {{mission_object.wind_7k}} {%endif%}</td>
-				<td scope="row" colspan="1">{% if mission_object.wind_26k == null %} - {%else%} {{mission_object.wind_26k}} {%endif%}</td>
-				<td scope="row" colspan="1">{% if mission_object.qnh == null %} - {%else%} {{mission_object.qnh}} {%endif%}</td>
-				<td scope="row" colspan="1">{% if mission_object.qfe == null %} - {%else%} {{mission_object.qfe}} {%endif%}</td>
-				<td scope="row" colspan="1">{% if mission_object.temp == null %} - {%else%} {{mission_object.temp}} {%endif%}</td>
-				<td scope="row" colspan="1">{% if mission_object.sigwx == null %} - {%else%} {{mission_object.sigwx}} {%endif%}</td>
-			</tr>
-			<!-- End Weather -->
 
-			<!-- Tactical Mission Brief-->
-			<tr bgcolor="darkgray">
-				<th scope="row" colspan="10">TACTICAL MISSION BRIEF</th>
+			<tr bgcolor="lightgray">
+				<th scope="row" colspan="2">Type</th>
+				<th scope="row" colspan="4">Name</th>
+				<th scope="row" colspan="4">Description</th>
+
 			</tr>
-			<tr>
-				<td scope="row" colspan="10">{{mission_object.brief|linebreaks}}</td>
-			</tr>
-			<!-- End Tactical Mission Brief -->
 			
-			<!--  Tactical Info  -->
-			<tr bgcolor="darkgray">
-				<th scope="row" colspan="10">TARGET INFO</th>
-			</tr>
-
-			<tr bgcolor="lightgray">
-				<th scope="row" colspan="2">Name</th>
-				<th scope="row" colspan="2">Lat</th>
-				<th scope="row" colspan="2">Long</th>
-				<th scope="row" colspan="2">Elev.</th>
-				<th scope="row" colspan="2">Notes</th>
-			</tr>
-			
-			{% for target in flight_object.targets.all %}
+			{% for threat in mission_object.threat_set.all %}
 				<tr>
-					<td colspan="2">{{ target.name }}</td>
-					<td colspan="2">{{ target.lat }}</td>
-					<td colspan="2">{{ target.long }}</td>
-					<td colspan="2">{{ target.elev}}</td>
-					<td colspan="2">{{ target.notes|linebreaks }}</td>
+					<td colspan="2">{{ threat.threat_type }}</td>
+					<td colspan="4">{{ threat.name }}</td>
+					<td colspan="4">{{ threat.description|linebreaks }}</td>
 				</tr>
 			{% endfor %}
-			<!-- End Target Info -->
-
-			<!-- Threats -->
-				<tr bgcolor="darkgray">
-					<th scope="row" colspan="10">THREAT INFO</th>
-				</tr>
-
-				<tr bgcolor="lightgray">
-					<th scope="row" colspan="2">Type</th>
-					<th scope="row" colspan="4">Name</th>
-					<th scope="row" colspan="4">Description</th>
-
-				</tr>
-				
-				{% for threat in mission_object.threat_set.all %}
-					<tr>
-						<td colspan="2">{{ threat.threat_type }}</td>
-						<td colspan="4">{{ threat.name }}</td>
-						<td colspan="4">{{ threat.description|linebreaks }}</td>
-					</tr>
-				{% endfor %}
-			<!-- End Threats -->
-		</tbody>
-	</table>
-    
-        <hr>
-    
-        <p><strong>Created by O.P.T.I.C.S. - A campaign management tool by Tigershark.</strong></p>
-    </body>
+		<!-- End Threats -->
+	</tbody>
+</table>
+<h4> Target Images</h4>
+{% for target in flight_object.targets.all %}
+{% if target.target_image %}{{target.target_image.url}}<img src="{{target.target_image.url}}">{% else %}None available.{% endif %}
+{% endfor %}
+<p><strong>Created by O.P.T.I.C.S. - A campaign management tool by Tigershark.</strong></p>
+</body>
     </html>
