@@ -39,8 +39,8 @@
 			<p>{{ campaign.description|linebreaks }}</p>
 			<div class="btn-toolbar">
 				<div class="btn-group mr-2">
-					<a class="btn btn-sm btn-outline-secondary" href="{% url 'campaign_update' campaign.id %}" role="button">Edit</a>
-										<a class="btn btn-sm btn-outline-secondary" href="{% url 'campaign_delete' campaign.id %}" role="button">Delete</a>
+					<a class="btn btn-sm btn-outline-secondary" href="{% url 'campaign_update' campaign.id %}?returnUrl={{request.path}}" role="button">Edit</a>
+										<a class="btn btn-sm btn-outline-secondary" href="{% url 'campaign_delete' campaign.id %}?returnUrl={{request.path}}" role="button">Delete</a>
 				</div>
 			</div>
 		</div>
@@ -98,10 +98,10 @@
 						<td>{{ mission.description}}</td>
 						<td>{{ mission.mission_date}}</td>
 						<td>
-							<a class="btn btn-sm btn-outline-primary" href="{% url 'mission_update' mission.id %}" role="button">Edit</a>
+							<a class="btn btn-sm btn-outline-primary" href="{% url 'mission_update' mission.id %}?returnUrl={{request.path}}" role="button">Edit</a>
 						</td>
 						<td>
-							<a class="btn btn-sm btn-outline-danger" href="{% url 'mission_delete' mission.id %}" role="button">Delete</a>
+							<a class="btn btn-sm btn-outline-danger" href="{% url 'mission_delete' mission.id %}?returnUrl={{request.path}}" role="button">Delete</a>
 						</td>
 					</tr>
 					{% endfor %} {% else %}

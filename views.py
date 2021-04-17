@@ -79,6 +79,7 @@ def campaign_create(request):
 def campaign_update(request, link_id):
     campaign = Campaign.objects.get(id=link_id)
     form = CampaignForm(instance=campaign)
+    returnURL = request.GET.get('returnUrl')
 
     if request.method == "POST":
         form = CampaignForm(request.POST, request.FILES, instance=campaign)
@@ -86,20 +87,22 @@ def campaign_update(request, link_id):
         if form.is_valid():
             form.save(commit=True)
             messages.success(request, "Campaign successfully updated.")
-            return HttpResponseRedirect('/airops/campaign/' + str(link_id))
+            return HttpResponseRedirect(returnURL)
 
-    context = {'form': form, 'link': link_id}
+    context = {'form': form, 'link': link_id, 'returnURL': returnURL}
     return render(request, 'campaign/campaign_form.html', context=context)
 
 
 def campaign_delete(request, link_id):
     campaign = Campaign.objects.get(id=link_id)
+    returnURL = request.GET.get('returnUrl')
+
     if request.method == "POST":
         campaign.delete()
         messages.success(request, "Campaign successfully deleted.")
-        return HttpResponseRedirect('/airops/campaign')
+        return HttpResponseRedirect(returnURL)
 
-    context = {'item': campaign}
+    context = {'item': campaign, 'returnURL': returnURL}
     return render(request, 'campaign/campaign_delete.html', context=context)
 
 # Mission Views
@@ -137,6 +140,7 @@ def mission_create(request, link_id):
 def mission_update(request, link_id):
     mission = Mission.objects.get(id=link_id)
     form = MissionForm(instance=mission)
+    returnURL = request.GET.get('returnUrl')
 
     if request.method == "POST":
         form = MissionForm(request.POST, request.FILES, instance=mission)
@@ -144,19 +148,22 @@ def mission_update(request, link_id):
         if form.is_valid():
             form.save(commit=True)
             print("Form Saved!")
-            return HttpResponseRedirect('/airops/mission/' + str(link_id))
+            return HttpResponseRedirect(returnURL)
 
-    context = {'form': form, 'link': link_id}
+    context = {'form': form, 'link': link_id, 'returnURL': returnURL}
     return render(request, 'mission/mission_form.html', context=context)
 
 
 def mission_delete(request, link_id):
     mission = Mission.objects.get(id=link_id)
+    returnURL = request.GET.get('returnUrl')
+    campaignID = mission.campaign.id
+
     if request.method == "POST":
         mission.delete()
-        return HttpResponseRedirect('/airops/campaign')
+        return HttpResponseRedirect('/airops/campaign/' + str(campaignID))
 
-    context = {'item': mission}
+    context = {'item': mission, 'returnURL': returnURL}
     return render(request, 'mission/mission_delete.html', context=context)
 
 # Package Views
@@ -190,6 +197,7 @@ def package_update(request, link_id):
     package = Package.objects.get(id=link_id)
     missionID = package.mission.id
     form = PackageForm(instance=package)
+    returnURL = request.GET.get('returnUrl')
 
     if request.method == "POST":
         form = PackageForm(request.POST, request.FILES, instance=package)
@@ -197,20 +205,22 @@ def package_update(request, link_id):
         if form.is_valid():
             form.save(commit=True)
             print("Form Saved!")
-            return HttpResponseRedirect('/airops/mission/' + str(missionID))
+            return HttpResponseRedirect(returnURL)
 
-    context = {'form': form, 'link': missionID}
+    context = {'form': form, 'link': missionID, 'returnURL': returnURL}
     return render(request, 'package/package_form.html', context=context)
 
 
 def package_delete(request, link_id):
     package = Package.objects.get(id=link_id)
     missionID = package.mission.id
+    returnURL = request.GET.get('returnUrl')
+
     if request.method == "POST":
         package.delete()
         return HttpResponseRedirect('/airops/mission/' + str(missionID))
 
-    context = {'item': package}
+    context = {'item': package, 'returnURL': returnURL}
     return render(request, 'package/package_delete.html', context=context)
 
 
@@ -290,6 +300,7 @@ def flight_create(request, link_id):
 def flight_update(request, link_id):
     flight = Flight.objects.get(id=link_id)
     packageID = flight.package.id
+    returnURL = request.GET.get('returnUrl')
 
     # Filter the target field to just targets from the mission.
     target = Target.objects.filter(mission=flight.package.mission.id)
@@ -302,20 +313,22 @@ def flight_update(request, link_id):
         if form.is_valid():
             form.save(commit=True)
             print("Form Saved!")
-            return HttpResponseRedirect('/airops/flight/' + str(link_id))
+            return HttpResponseRedirect(returnURL)
 
-    context = {'form': form, 'link': link_id}
+    context = {'form': form, 'link': link_id, 'returnURL': returnURL}
     return render(request, 'flight/flight_form.html', context=context)
 
 
 def flight_delete(request, link_id):
     flight = Flight.objects.get(id=link_id)
     packageID = flight.package.id
+    returnURL = request.GET.get('returnUrl')
+
     if request.method == "POST":
         flight.delete()
         return HttpResponseRedirect('/airops/package/' + str(packageID))
 
-    context = {'item': flight}
+    context = {'item': flight, 'returnURL': returnURL}
     return render(request, 'flight/flight_delete.html', context=context)
 
 ### Aircraft Views ###

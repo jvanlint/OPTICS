@@ -64,8 +64,8 @@
 
 			<div class="btn-toolbar">
 				<div class="btn-group mr-2">
-					<a class="btn btn-sm btn-outline-secondary" href="{% url 'mission_update' mission_object.id %}" role="button">Edit</a>
-					<a class="btn btn-sm btn-outline-secondary" href="{% url 'mission_delete' mission_object.id %}" role="button">Delete</a>
+					<a class="btn btn-sm btn-outline-secondary" href="{% url 'mission_update' mission_object.id %}?returnUrl={{request.path}}" role="button">Edit</a>
+					<a class="btn btn-sm btn-outline-secondary" href="{% url 'mission_delete' mission_object.id %}?returnUrl={{request.path}}" role="button">Delete</a>
 				</div>
 			</div>
 		</div>
@@ -102,12 +102,12 @@
 						{% else %}
 						<td>None</td>
 						{% endif %}
-						<td><a class="btn btn-sm btn-outline-primary" href="{% url 'target_update' target.id %}" role="button">Edit</a></td>
-						<td><a class="btn btn-sm btn-outline-danger" href="{% url 'target_delete' target.id %}" role="button">Delete</a></td>
+						<td><a class="btn btn-sm btn-outline-primary" href="{% url 'target_update' target.id %}?returnUrl={{request.path}}" role="button">Edit</a></td>
+						<td><a class="btn btn-sm btn-outline-danger" href="{% url 'target_delete' target.id %}?returnUrl={{request.path}}" role="button">Delete</a></td>
 					</tr>
 					{% endfor %} {% else %}
 					<tr>
-						<td colspan="5">No targets are available.</td>
+						<td colspan="10">No targets are available.</td>
 					</tr>
 					{% endif %}
 				</tbody>
@@ -139,7 +139,7 @@
 					</tr>
 					{% endfor %} {% else %}
 					<tr>
-						<td colspan="5">No threats are available.</td>
+						<td colspan="10">No threats are available.</td>
 					</tr>
 					{% endif %}
 				</tbody>
@@ -168,16 +168,16 @@
 						<td>{{ package.description|linebreaks }}</td>
 						<td>{{ package.flight_set.count }}</td>
 						<td>
-							<a class="btn btn-sm btn-outline-primary" href="{% url 'package_update' package.id %}" role="button">Edit</a>
+							<a class="btn btn-sm btn-outline-primary" href="{% url 'package_update' package.id %}?returnUrl={{request.path}}" role="button">Edit</a>
 						</td>
 						<td>
-							<a class="btn btn-sm btn-outline-danger" href="{% url 'package_delete' package.id %}" role="button">Delete</a>
+							<a class="btn btn-sm btn-outline-danger" href="{% url 'package_delete' package.id %}?returnUrl={{request.path}}" role="button">Delete</a>
 						</td>
 						{% endfor %}
 					</tr>
 					{% else %}
 					<tr>
-						<td>No packages are available.</td>
+						<td colspan="10">No packages are available.</td>
 					</tr>
 					{% endif %}
 				</tbody>
@@ -221,7 +221,7 @@
 					</tr>
 					{% endfor %} {% else %}
 					<tr>
-						<td colspan="5">No support(s) available.</td>
+						<td colspan="10">No support(s) available.</td>
 					</tr>
 					{% endif %}
 				</tbody>

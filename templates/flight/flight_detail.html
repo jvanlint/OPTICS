@@ -43,9 +43,9 @@
 
 		<div class="btn-toolbar">
 			<div class="btn-group mr-2">
-				<a class="btn btn-sm btn-outline-secondary" href="{% url 'flight_update' flightObject.id %}" role="button">Edit</a>
-				<a class="btn btn-sm btn-outline-secondary" href="{% url 'flight_delete' flightObject.id %}" role="button">Delete</a>
-				<a class="btn btn-sm btn-outline-secondary" href="{% url 'mission_card' flightObject.package.mission.id flightObject.id %}" role="button">Mission Card</a>
+				<a class="btn btn-sm btn-outline-secondary" href="{% url 'flight_update' flightObject.id %}?returnUrl={{request.path}}" role="button">Edit</a>
+				<a class="btn btn-sm btn-outline-secondary" href="{% url 'flight_delete' flightObject.id %}?returnUrl={{request.path}}" role="button">Delete</a>
+				<a class="btn btn-sm btn-outline-secondary" href="{% url 'mission_card' flightObject.package.mission.id flightObject.id %}?returnUrl={{request.path}}" role="button">Mission Card</a>
 			</div>
 		</div>
 	</div>
@@ -73,10 +73,10 @@
 					<td>{{ aircraft.rio_wso }}</td>
 					<td>{{ aircraft.tailcode }}</td>
 					<td>
-						<a class="btn btn-sm btn-outline-primary" href="{% url 'aircraft_update' aircraft.id %}" role="button">Edit</a>
+						<a class="btn btn-sm btn-outline-primary" href="{% url 'aircraft_update' aircraft.id %}?returnUrl={{request.path}}" role="button">Edit</a>
 					</td>
 					<td>
-						<a class="btn btn-sm btn-outline-danger" href="{% url 'aircraft_delete' aircraft.id %}" role="button">Delete</a>
+						<a class="btn btn-sm btn-outline-danger" href="{% url 'aircraft_delete' aircraft.id %}?returnUrl={{request.path}}" role="button">Delete</a>
 					</td>
 				</tr>
 				{% endfor %} {% else %}
@@ -115,8 +115,8 @@
 					<td>{{ waypoint.long }}</td>
 					<td>{{ waypoint.elevation }}</td>
 					<td>{{ waypoint.notes|linebreaks }}</td>
-					<td><a class="btn btn-sm btn-outline-primary" href="{% url 'waypoint_update' waypoint.id %}" role="button">Edit</a></td>
-					<td><a class="btn btn-sm btn-outline-danger" href="{% url 'waypoint_delete' waypoint.id %}" role="button">Delete</a></td>
+					<td><a class="btn btn-sm btn-outline-primary" href="{% url 'waypoint_update' waypoint.id %}?returnUrl={{request.path}}" role="button">Edit</a></td>
+					<td><a class="btn btn-sm btn-outline-danger" href="{% url 'waypoint_delete' waypoint.id %}?returnUrl={{request.path}}" role="button">Delete</a></td>
 				</tr>
 				{% endfor %}
 			</tbody>
