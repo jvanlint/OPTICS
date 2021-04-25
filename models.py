@@ -16,7 +16,7 @@ class Campaign(models.Model):
         'Terrain', on_delete=models.CASCADE, null=True, verbose_name="dcs Terrain")
     start_date = models.DateField(
         help_text='Proposed Start Date of Campaign.', blank=True, null=True, verbose_name="Expected Start Date")
-    campaignImage = ResizedImageField(verbose_name='Campaign Image File.', size=[500, 300],
+    campaignImage = ResizedImageField(verbose_name='Campaign Image Thumbnail.', size=[500, 300],
                                       upload_to='campaign/thumbnails/', help_text='Campaign Image File.', null=True, blank=True)
     status = models.ForeignKey(
         'Status', on_delete=models.CASCADE, null=True)
@@ -26,6 +26,8 @@ class Campaign(models.Model):
         help_text='A detailed overview of the background and situation for the campaign.', null=True, blank=True)
     aoImage = models.ImageField(
         upload_to='campaign/ao_images/', null=True, blank=True, help_text='An image of the Area of Operations.', verbose_name="area of Operations Image")
+    # aoImage = ResizedImageField(verbose_name='area of Operations Image', size=[1500, 1200],
+    #                                  upload_to='campaign/ao_images', help_text='An image of the Area of Operations.', null=True, blank=True)
 
     # Metadata
 

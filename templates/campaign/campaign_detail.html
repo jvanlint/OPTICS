@@ -66,7 +66,7 @@
 			<hr>
 			<h6>Area of Operations Imagery</h6>
 			{% if campaign.aoImage %}
-			<img src="{{ campaign.aoImage.url }}" alt="..." width=800/>
+			<img class="img-fluid" src="{{ campaign.aoImage.url }}" alt="..."/>
 			{% endif %}
 		</div>
 	</div>
@@ -78,7 +78,7 @@
 		<div class="col"><!-- .col -->
 			<hr>
 			
-			<h4>Mission(s) <a href="{% url 'mission_add' campaign.id %}" role="button"><i class="bi bi-plus-circle"></i></a></h4>
+			<h4>Mission(s) <a href="{% url 'mission_add' campaign.id %}?returnUrl={{request.path}}" role="button"><i class="bi bi-plus-circle"></i></a></h4>
 			<table class="table"><!-- .table -->
 				<thead class="thead-dark">
 					<tr>

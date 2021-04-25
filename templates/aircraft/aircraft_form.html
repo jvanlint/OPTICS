@@ -7,8 +7,11 @@
 		<nav aria-label="breadcrumb">
 			<ol class="breadcrumb">
 				<li class="breadcrumb-item"><a href="/">Home</a></li>
-				<li class="breadcrumb-item"><a href="{% url 'campaign' %}">Campaigns</a></li>
-				<li class="breadcrumb-item active"  href="">Edit</li>
+				<li class="breadcrumb-item"><a href="{% url 'campaign' %}">{{ form.instance.flight.package.mission.campaign.name }}</a></li>
+				<li class="breadcrumb-item active"  href="">{{ form.instance.flight.package.mission.name }}</li>
+				<li class="breadcrumb-item active"  href="">{{ form.instance.flight.package.name }}</li>
+				<li class="breadcrumb-item active"  href="">{{ form.instance.flight.callsign }}</li>
+				<li class="breadcrumb-item active"  href="">{{ form.instance.type }}</li>
 			  </ol>
 		</nav>
 	</div>

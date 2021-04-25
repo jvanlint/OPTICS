@@ -6,6 +6,8 @@ from urllib.parse import urlencode
 from django.contrib.auth import login, authenticate, logout  # add this
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm  # add this
+from django.contrib.auth.decorators import login_required
+
 from django.views.decorators.cache import never_cache
 
 from django.views.decorators.csrf import csrf_protect
@@ -17,6 +19,8 @@ from django.template.loader import get_template
 from django.views import View
 from xhtml2pdf import pisa
 from io import BytesIO
+
+from .decorators import unauthenticated_user, allowed_users
 
 
 def index(request):
@@ -42,7 +46,7 @@ def index(request):
 
 
 # Campaign Views
-
+@login_required(login_url='login')
 def campaign(request):
     campaigns = Campaign.objects.order_by('id')
 
@@ -51,6 +55,7 @@ def campaign(request):
     return render(request, 'campaign/campaign.html', context=context)
 
 
+@login_required(login_url='login')
 def campaign_detail(request, link_id):
     campaign = Campaign.objects.get(id=link_id)
     missions = campaign.mission_set.all().order_by('number')
@@ -62,6 +67,8 @@ def campaign_detail(request, link_id):
     return render(request, 'campaign/campaign_detail.html', context=context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def campaign_create(request):
     form = CampaignForm()
 
@@ -76,6 +83,8 @@ def campaign_create(request):
     return render(request, 'campaign/campaign_form.html', context=context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def campaign_update(request, link_id):
     campaign = Campaign.objects.get(id=link_id)
     form = CampaignForm(instance=campaign)
@@ -93,6 +102,8 @@ def campaign_update(request, link_id):
     return render(request, 'campaign/campaign_form.html', context=context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def campaign_delete(request, link_id):
     campaign = Campaign.objects.get(id=link_id)
     returnURL = request.GET.get('returnUrl')
@@ -108,6 +119,7 @@ def campaign_delete(request, link_id):
 # Mission Views
 
 
+@login_required(login_url='login')
 @never_cache
 def mission(request, link_id):
     mission = Mission.objects.get(id=link_id)
@@ -121,9 +133,13 @@ def mission(request, link_id):
     return render(request, 'mission/mission_detail.html', context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def mission_create(request, link_id):
     campaign = Campaign.objects.get(id=link_id)
     missionCount = campaign.mission_set.count() + 1
+    returnURL = request.GET.get('returnUrl')
+
     form = MissionForm(initial={'campaign': campaign, 'number': missionCount})
     #form.base_fields['number'].initial = missionCount
 
@@ -133,10 +149,12 @@ def mission_create(request, link_id):
             form.save(commit=True)
             return HttpResponseRedirect('/airops/campaign/' + str(link_id))
 
-    context = {'form': form, 'link': link_id}
+    context = {'form': form, 'link': link_id, 'returnURL': returnURL}
     return render(request, 'mission/mission_form.html', context=context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def mission_update(request, link_id):
     mission = Mission.objects.get(id=link_id)
     form = MissionForm(instance=mission)
@@ -154,6 +172,8 @@ def mission_update(request, link_id):
     return render(request, 'mission/mission_form.html', context=context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def mission_delete(request, link_id):
     mission = Mission.objects.get(id=link_id)
     returnURL = request.GET.get('returnUrl')
@@ -169,6 +189,7 @@ def mission_delete(request, link_id):
 # Package Views
 
 
+@login_required(login_url='login')
 @never_cache
 def package(request, link_id):
     package = Package.objects.get(id=link_id)
@@ -178,6 +199,8 @@ def package(request, link_id):
     return render(request, 'package/package_detail.html', context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def package_create(request, link_id):
     mission = Mission.objects.get(id=link_id)
 
@@ -193,6 +216,8 @@ def package_create(request, link_id):
     return render(request, 'package/package_form.html', context=context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def package_update(request, link_id):
     package = Package.objects.get(id=link_id)
     missionID = package.mission.id
@@ -211,6 +236,8 @@ def package_update(request, link_id):
     return render(request, 'package/package_form.html', context=context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def package_delete(request, link_id):
     package = Package.objects.get(id=link_id)
     missionID = package.mission.id
@@ -225,6 +252,8 @@ def package_delete(request, link_id):
 
 
 # Threat Views
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def threat_create(request, link_id):
     mission = Mission.objects.get(id=link_id)
 
@@ -240,6 +269,8 @@ def threat_create(request, link_id):
     return render(request, 'threat/threat_form.html', context=context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def threat_update(request, link_id):
     threat = Threat.objects.get(id=link_id)
     missionID = threat.mission.id
@@ -257,6 +288,8 @@ def threat_update(request, link_id):
     return render(request, 'threat/threat_form.html', context=context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def threat_delete(request, link_id):
     threat = Threat.objects.get(id=link_id)
     missionID = threat.mission.id
@@ -270,6 +303,7 @@ def threat_delete(request, link_id):
 ### Flight Views ###
 
 
+@login_required(login_url='login')
 @never_cache
 def flight(request, link_id):
     flight = Flight.objects.get(id=link_id)
@@ -279,6 +313,8 @@ def flight(request, link_id):
     return render(request, 'flight/flight_detail.html', context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def flight_create(request, link_id):
     package = Package.objects.get(id=link_id)
 
@@ -297,6 +333,8 @@ def flight_create(request, link_id):
     return render(request, 'flight/flight_form.html', context=context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def flight_update(request, link_id):
     flight = Flight.objects.get(id=link_id)
     packageID = flight.package.id
@@ -319,6 +357,8 @@ def flight_update(request, link_id):
     return render(request, 'flight/flight_form.html', context=context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def flight_delete(request, link_id):
     flight = Flight.objects.get(id=link_id)
     packageID = flight.package.id
@@ -334,6 +374,7 @@ def flight_delete(request, link_id):
 ### Aircraft Views ###
 
 
+@login_required(login_url='login')
 def aircraft(request, link_id):
 
     aircraft = Aircraft.objects.get(id=link_id)
@@ -342,6 +383,8 @@ def aircraft(request, link_id):
     return render(request, 'aircraft/aircraft_detail.html', context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def aircraft_create(request, link_id):
     flight = Flight.objects.get(id=link_id)
 
@@ -357,6 +400,8 @@ def aircraft_create(request, link_id):
     return render(request, 'aircraft/aircraft_form.html', context=context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def aircraft_update(request, link_id):
     aircraft = Aircraft.objects.get(id=link_id)
     flightID = aircraft.flight.id
@@ -374,6 +419,8 @@ def aircraft_update(request, link_id):
     return render(request, 'aircraft/aircraft_form.html', context=context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def aircraft_delete(request, link_id):
     aircraft = Aircraft.objects.get(id=link_id)
     flightID = aircraft.flight.id
@@ -388,6 +435,8 @@ def aircraft_delete(request, link_id):
 ### Target Views ###
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def target_create(request, link_id):
     mission = Mission.objects.get(id=link_id)
 
@@ -403,6 +452,8 @@ def target_create(request, link_id):
     return render(request, 'target/target_form.html', context=context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def target_update(request, link_id):
     target = Target.objects.get(id=link_id)
     missionID = target.mission.id
@@ -420,6 +471,8 @@ def target_update(request, link_id):
     return render(request, 'target/target_form.html', context=context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def target_delete(request, link_id):
     target = Target.objects.get(id=link_id)
     missionID = target.mission.id
@@ -434,6 +487,8 @@ def target_delete(request, link_id):
 ### Support Views ###
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def support_create(request, link_id):
     mission = Mission.objects.get(id=link_id)
 
@@ -449,6 +504,8 @@ def support_create(request, link_id):
     return render(request, 'support/support_form.html', context=context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def support_update(request, link_id):
     support = Support.objects.get(id=link_id)
     missionID = support.mission.id
@@ -466,6 +523,8 @@ def support_update(request, link_id):
     return render(request, 'support/support_form.html', context=context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def support_delete(request, link_id):
     support = Support.objects.get(id=link_id)
     missionID = target.mission.id
@@ -479,6 +538,8 @@ def support_delete(request, link_id):
 
 
 # Waypoint Views
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def waypoint_create(request, link_id):
     flight = Flight.objects.get(id=link_id)
 
@@ -494,6 +555,8 @@ def waypoint_create(request, link_id):
     return render(request, 'waypoint/waypoint_form.html', context=context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def waypoint_update(request, link_id):
     waypoint = Waypoint.objects.get(id=link_id)
     flightID = waypoint.flight.id
@@ -511,6 +574,8 @@ def waypoint_update(request, link_id):
     return render(request, 'waypoint/waypoint_form.html', context=context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def waypoint_delete(request, link_id):
     waypoint = Waypoint.objects.get(id=link_id)
     flightID = waypoint.flight.id
@@ -530,6 +595,7 @@ def dashboard(request):
     return render(request, 'dashboard/dashboard.html', context)
 
 
+@unauthenticated_user
 def register_request(request):
     if request.user.is_authenticated:
         return redirect('campaign')
@@ -547,6 +613,7 @@ def register_request(request):
         return render(request=request, template_name="dashboard/register.html", context={"register_form": form})
 
 
+@unauthenticated_user
 @csrf_protect
 def login_request(request):
     if request.user.is_authenticated:
