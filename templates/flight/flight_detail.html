@@ -61,6 +61,7 @@
 					<th>Type</th>
 					<th>Pilot</th>
 					<th>RIO/WSO</th>
+					<th></th>
 					<th>Tail Code</th>
 					<th scope="col" colspan="2" style="text-align: center">Action</th>
 				</tr>
@@ -71,6 +72,7 @@
 					<td>{{ aircraft.type }}</td>
 					<td>{{ aircraft.pilot }}</td>
 					<td>{{ aircraft.rio_wso }}</td>
+					<td>{% if aircraft.flight_lead %}<span class="badge badge-primary">LEAD</span>{% endif %}</td>
 					<td>{{ aircraft.tailcode }}</td>
 					<td>
 						<a class="btn btn-sm btn-outline-primary" href="{% url 'aircraft_update' aircraft.id %}?returnUrl={{request.path}}" role="button">Edit</a>

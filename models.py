@@ -256,6 +256,7 @@ class Aircraft(models.Model):
     tailcode = models.CharField(
         max_length=20, help_text='Enter A/C tail code.', null=True, blank=True)
     flight_lead = models.BooleanField(default=False)
+    package_lead = models.BooleanField(default=False)
 
     # Metadata
 

@@ -46,6 +46,7 @@
             <thead class="thead-dark">
                 <tr>
                     <th>Callsign</th>
+                    <th></th>
                     <th>Radio</th>
                     <th>Tacan</th>
                     <th>A/C Type</th>
@@ -60,6 +61,13 @@
                 <tr>
                 <td>
                     <a href="/airops/flight/{{ flight.id }}/">{{ flight.callsign }}</a>
+                </td>
+                <td>
+                {% for aircraft in flight.aircraft_set.all %}
+                    {% if aircraft.package_lead %}
+                        <span class="badge badge-primary">LEAD</span>
+                    {% endif %}
+                {% endfor %}
                 </td>
                 <td>{{ flight.radio_frequency }}</td>
                 <td>{{ flight.tacan }}</td>
