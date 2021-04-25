@@ -179,8 +179,10 @@ class Target(models.Model):
         max_length=200, help_text='Enter target elevation.', verbose_name="Target Elevation", null=True, blank=True)
     notes = models.TextField(
         help_text='Any notes relevant to the target.', null=True, blank=True, verbose_name="Notes on Target")
-    target_image = models.ImageField(
-        upload_to='campaign/mission/target_images/', null=True, blank=True, help_text='Upload image of the target.', verbose_name="Target Image")
+    # target_image = models.ImageField(
+    #   upload_to='campaign/mission/target_images/', null=True, blank=True, help_text='Upload image of the target.', verbose_name="Target Image")
+    target_image = ResizedImageField(verbose_name='Target Image', size=[
+        1500, 1200], upload_to='campaign/mission/target_images/', help_text='Upload image of the target.', null=True, blank=True)
     # Metadata
 
     class Meta:
