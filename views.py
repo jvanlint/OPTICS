@@ -655,19 +655,18 @@ def render_to_pdf(template_src, context_dict={}):
         return HttpResponse(result.getvalue(), content_type='application/pdf')
     return None
 
-# Automaticly downloads to PDF file
 
+def download_mission_card(request, mission_id, flight_id):
+    mission = Mission.objects.get(id=mission_id)
+    flight = Flight.objects.get(id=flight_id)
 
-class DownloadPDF(View):
-    def get(self, request, *args, **kwargs):
-
-        pdf = render_to_pdf('mission_card/pdf_template.html', data)
-
-        response = HttpResponse(pdf, content_type='application/pdf')
-        filename = "missioncard.pdf"
-        content = "attachment; filename=%s" % (filename)
-        response['Content-Disposition'] = content
-        return response
+    data = {'mission_object': mission, 'flight_object': flight}
+    pdf = render_to_pdf('mission_card/pdf_template.html', data)
+    response = HttpResponse(pdf, content_type='application/pdf')
+    filename = "missioncard.pdf"
+    content = "attachment; filename=%s" % (filename)
+    response['Content-Disposition'] = content
+    return response
 
 
 def view_mission_card(request, mission_id, flight_id):

@@ -45,7 +45,8 @@
 			<div class="btn-group mr-2">
 				<a class="btn btn-sm btn-outline-secondary" href="{% url 'flight_update' flightObject.id %}?returnUrl={{request.path}}" role="button">Edit</a>
 				<a class="btn btn-sm btn-outline-secondary" href="{% url 'flight_delete' flightObject.id %}?returnUrl={{request.path}}" role="button">Delete</a>
-				<a class="btn btn-sm btn-outline-secondary" href="{% url 'pdf_view' flightObject.package.mission.id flightObject.id %}?returnUrl={{request.path}}" role="button">Mission Card</a>
+				<a class="btn btn-sm btn-outline-secondary" href="{% url 'pdf_view' flightObject.package.mission.id flightObject.id %}?returnUrl={{request.path}}" role="button">View Mission Card</a>
+				<a class="btn btn-sm btn-outline-secondary" href="{% url 'pdf_download' flightObject.package.mission.id flightObject.id %}?returnUrl={{request.path}}" role="button">Download Mission Card</a>
 			</div>
 		</div>
 	</div>
