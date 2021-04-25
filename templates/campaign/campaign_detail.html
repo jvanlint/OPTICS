@@ -86,7 +86,7 @@
 						<th scope="col">Name</th>
 						<th scope="col">Description</th>
 						<th scope="col">Date</th>
-						<th scope="col" colspan="2" style="text-align:center;">Action</th>
+						<th scope="col"></th>
 						
 					</tr>
 				</thead>
@@ -98,10 +98,8 @@
 						<td>{{ mission.description}}</td>
 						<td>{{ mission.mission_date}}</td>
 						<td>
-							<a class="btn btn-sm btn-outline-primary" href="{% url 'mission_update' mission.id %}?returnUrl={{request.path}}" role="button">Edit</a>
-						</td>
-						<td>
-							<a class="btn btn-sm btn-outline-danger" href="{% url 'mission_delete' mission.id %}?returnUrl={{request.path}}" role="button">Delete</a>
+							<a style="padding-left:25px;" href="{% url 'mission_update' mission.id %}?returnUrl={{request.path}}" role="button"><i class="bi bi-pencil"></i> </a>
+							<a style="padding-left:25px;" href="{% url 'mission_delete' mission.id %}?returnUrl={{request.path}}" role="button"><i class="bi bi-trash"></i></a>
 						</td>
 					</tr>
 					{% endfor %} {% else %}
