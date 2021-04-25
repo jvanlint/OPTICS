@@ -307,7 +307,7 @@ def threat_delete(request, link_id):
 @never_cache
 def flight(request, link_id):
     flight = Flight.objects.get(id=link_id)
-    aircraft = flight.aircraft_set.all()
+    aircraft = flight.aircraft_set.all().order_by('-flight_lead')
 
     context = {'flightObject': flight, 'aircraftObject': aircraft}
     return render(request, 'flight/flight_detail.html', context)
