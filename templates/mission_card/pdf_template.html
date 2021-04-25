@@ -70,7 +70,7 @@
 				{% for aircraft in flight_object.aircraft_set.all%} 
 					{{aircraft.pilot}}
 					{% if aircraft.flight_lead %}
-						(LEAD)
+						**LEAD**
 					{% endif %}
 					{% if aircraft.rio_wso %}
 						({{ aircraft.rio_wso }}) 

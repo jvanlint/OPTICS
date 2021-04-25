@@ -40,13 +40,12 @@
     </div>
     <hr>
 
-    <h2>Flight(s) <a href="{% url 'flight_add' packageObject.id %}" role="button"><i class="bi bi-plus-circle"></i></a></h2>
+    <h2>Flight(s) <a href="{% url 'flight_add' packageObject.id %}" role="button"><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Flight</button></a></h2>
     <div class="table-responsive">
         <table class="table table-striped table-sm">
             <thead class="thead-dark">
                 <tr>
                     <th>Callsign</th>
-                    <th></th>
                     <th>Radio</th>
                     <th>Tacan</th>
                     <th>A/C Type</th>
@@ -60,12 +59,10 @@
                 {% for flight in flightObject %}
                 <tr>
                 <td>
-                    <a href="/airops/flight/{{ flight.id }}/">{{ flight.callsign }}</a>
-                </td>
-                <td>
-                {% for aircraft in flight.aircraft_set.all %}
+                    <a href="/airops/flight/{{ flight.id }}/">{{ flight.callsign }} </a>
+                    {% for aircraft in flight.aircraft_set.all %}
                     {% if aircraft.package_lead %}
-                        <span class="badge badge-primary">LEAD</span>
+                        <span class="badge badge-info"> PACKAGE LEAD</span>
                     {% endif %}
                 {% endfor %}
                 </td>
