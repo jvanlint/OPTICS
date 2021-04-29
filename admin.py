@@ -4,6 +4,7 @@ from django.contrib import admin
 
 from .models import Campaign, Mission, Package, Flight, Aircraft, Status, Airframe, Terrain, Threat, Target, Support, Waypoint
 from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
 
 # Define the admin class
 
@@ -132,3 +133,19 @@ class WaypointAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Waypoint, WaypointAdmin)
+
+
+class MyUserAdmin(admin.ModelAdmin):
+    def group(self, user):
+        groups = []
+        for group in user.groups.all():
+            groups.append(group.name)
+        return ' '.join(groups)
+        group.short_description = 'Groups'
+
+    list_display = ['username', 'first_name', 'last_name',
+                    'is_active', 'last_login', 'group']
+
+
+admin.site.unregister(User)
+admin.site.register(User, MyUserAdmin)
