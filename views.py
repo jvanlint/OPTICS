@@ -388,10 +388,13 @@ def aircraft(request, link_id):
 def aircraft_create(request, link_id):
     flight = Flight.objects.get(id=link_id)
 
-    form = AircraftForm(initial={'flight': flight})
+    # Filter the flights field to just targets from the mission.
+    flights = Flight.objects.filter(package=flight.package.id)
+
+    form = AircraftForm(flights, initial={'flight': flight})
 
     if request.method == "POST":
-        form = AircraftForm(request.POST, request.FILES)
+        form = AircraftForm(flights, request.POST, request.FILES)
         if form.is_valid():
             form.save(commit=True)
             return HttpResponseRedirect('/airops/flight/' + str(link_id))
@@ -405,10 +408,15 @@ def aircraft_create(request, link_id):
 def aircraft_update(request, link_id):
     aircraft = Aircraft.objects.get(id=link_id)
     flightID = aircraft.flight.id
-    form = AircraftForm(instance=aircraft)
+
+    # Filter the flights field to just targets from the mission.
+    flights = Flight.objects.filter(package=aircraft.flight.package.id)
+
+    form = AircraftForm(flights, instance=aircraft)
 
     if request.method == "POST":
-        form = AircraftForm(request.POST, request.FILES, instance=aircraft)
+        form = AircraftForm(flights, request.POST,
+                            request.FILES, instance=aircraft)
         print(request.path)
         if form.is_valid():
             form.save(commit=True)

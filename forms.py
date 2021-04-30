@@ -56,7 +56,12 @@ class FlightForm(ModelForm):
 
 
 class AircraftForm(ModelForm):
+    def __init__(self, flights, *args, **kwargs):
+        super(AircraftForm, self).__init__(*args, **kwargs)
+        self.fields['flight'].queryset = flights
+
     # specify the name of model to use
+
     class Meta:
         model = Aircraft
         fields = "__all__"
