@@ -9,11 +9,20 @@ from .models import Campaign, Mission, Package, Flight, Threat, Aircraft, Target
 # create a ModelForm
 
 
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
+
 class CampaignForm(ModelForm):
+
     # specify the name of model to use
+
     class Meta:
         model = Campaign
         fields = "__all__"
+        widgets = {
+            'start_date': DateInput(),
+        }
 
 
 class MissionForm(ModelForm):
@@ -21,6 +30,9 @@ class MissionForm(ModelForm):
     class Meta:
         model = Mission
         fields = "__all__"
+        widgets = {
+            'mission_date': DateInput(), 'mission_game_date': DateInput()
+        }
 
 
 class PackageForm(ModelForm):
