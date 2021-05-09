@@ -212,6 +212,7 @@
 						<th>Spd</th>
 						<th>BRC</th>
 						<th>ICLS</th>
+						<th>Player</th>
 						<th>Notes</th>
 						<th scope="col" colspan="2" style="text-align: center">Action</th>
 					</tr>
@@ -227,6 +228,7 @@
 						<td>{{ support.speed }}</td>
 						<td>{{ support.brc }}</td>
 						<td>{{ support.icls }}</td>
+						<td>{{ support.player_name }}</td>
 						<td>{{ support.notes|linebreaks }}</td>
 						<td><a class="btn btn-sm btn-outline-primary" href="{% url 'support_update' support.id %}" role="button">Edit</a></td>
 						<td><a class="btn btn-sm btn-outline-danger" href="{% url 'support_delete' support.id %}" role="button">Delete</a></td>

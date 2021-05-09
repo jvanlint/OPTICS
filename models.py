@@ -337,6 +337,8 @@ class Support(models.Model):
     callsign = models.CharField(max_length=50)
     support_type = models.CharField(
         max_length=10, choices=THREAT_TYPES, null=True)
+    player_name = models.CharField(
+        max_length=30, null=True, blank=True)
     frequency = models.CharField(max_length=10, null=True, blank=True)
     tacan = models.CharField(max_length=10, null=True, blank=True)
     altitude = models.CharField(max_length=10, null=True, blank=True)
