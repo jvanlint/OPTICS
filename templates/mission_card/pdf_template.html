@@ -126,7 +126,7 @@
 		{% for package in mission_object.package_set.all %}
 			{% for flight in package.flight_set.all %}
 				<tr {% if flight.callsign == flight_object.callsign %} bgcolor="yellow" {% endif %}>
-					<td colspan="2">{{ flight.callsign }}</td>
+					<td colspan="2">{{ flight.callsign }} ({{ flight.task }})</td>
 					<td colspan="2">{{ flight.radio_frequency }}</td>
 					<td colspan="2">{{ flight.aircraft_set.first.type }}</td>
 					<td colspan="2">{{ flight.aircraft_set.count }}</td>

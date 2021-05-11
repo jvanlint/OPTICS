@@ -207,6 +207,8 @@ class Flight(models.Model):
         'Package', on_delete=models.CASCADE, null=True)
     callsign = models.CharField(
         max_length=200, help_text='Enter Flight Callsign')
+    task = models.ForeignKey(
+        'Task', on_delete=models.CASCADE, null=True)
     radio_frequency = models.CharField(
         max_length=20, help_text='Enter Flight Frequency', blank=True, null=True)
     tacan = models.CharField(

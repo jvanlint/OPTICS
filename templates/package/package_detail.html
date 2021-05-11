@@ -46,6 +46,7 @@
             <thead class="thead-dark">
                 <tr>
                     <th>Callsign</th>
+                    <th>Task</th>
                     <th>Radio</th>
                     <th>Tacan</th>
                     <th>A/C Type</th>
@@ -66,6 +67,7 @@
                     {% endif %}
                 {% endfor %}
                 </td>
+                <td> {{flight.task}} </td>
                 <td>{{ flight.radio_frequency }}</td>
                 <td>{{ flight.tacan }}</td>
                 <td>{{flight.aircraft_set.first.type}}</td>
