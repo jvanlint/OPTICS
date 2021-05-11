@@ -76,6 +76,8 @@ urlpatterns = [
 
     path("logout", views.logout_request, name="logout"),
 
+    path("changepassword", views.change_password, name="changepassword"),
+
     path('pdf_view/mission/<int:mission_id>/flight/<int:flight_id>',
          views.view_mission_card, name="pdf_view"),
     path('pdf_download/mission/<int:mission_id>/flight/<int:flight_id>',
