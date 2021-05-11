@@ -263,7 +263,7 @@ class Aircraft(models.Model):
     # Metadata
 
     class Meta:
-        ordering = ['type']
+        ordering = ['flight_lead']
 
     # Methods
 
@@ -383,3 +383,14 @@ class Waypoint(models.Model):
                            blank=True, verbose_name="time on Target")
     notes = models.TextField(
         help_text='Enter notes for the waypoint.', null=True, blank=True)
+
+
+class Task(models.Model):
+    task_name = models.CharField(max_length=10, null=True)
+
+    class Meta:
+        ordering = ['task_name']
+
+    def __str__(self):
+        """String for representing the Campaign object (in Admin site etc.)."""
+        return self.task_name
