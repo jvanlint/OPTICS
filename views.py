@@ -111,7 +111,7 @@ def campaign_delete(request, link_id):
     if request.method == "POST":
         campaign.delete()
         messages.success(request, "Campaign successfully deleted.")
-        return HttpResponseRedirect('/airops/campaign')
+        return HttpResponseRedirect(returnURL)
 
     context = {'item': campaign, 'returnURL': returnURL}
     return render(request, 'campaign/campaign_delete.html', context=context)
