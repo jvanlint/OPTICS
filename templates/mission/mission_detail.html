@@ -74,7 +74,7 @@
 
 		<h2>
 			Package(s)
-			<a href="{% url 'package_add' mission_object.id %}" role="button"
+			<a href="{% url 'package_add' mission_object.id %}?returnUrl={{request.path}}" role="button"
 				><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Package</button></a
 			>
 		</h2>
@@ -115,7 +115,7 @@
 
 		<h2>
 			Target(s)
-			<a href="{% url 'target_add' mission_object.id %}" role="button"
+			<a href="{% url 'target_add' mission_object.id %}?returnUrl={{request.path}}" role="button"
 				><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Target</button></a
 			>
 		</h2>
@@ -160,7 +160,7 @@
 
 		<h2>
 			Threat(s)
-			<a href="{% url 'threat_add' mission_object.id %}" role="button"
+			<a href="{% url 'threat_add' mission_object.id %}?returnUrl={{request.path}}" role="button"
 				><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Threat</button></a
 			>
 		</h2>
@@ -195,7 +195,7 @@
 
 		<h2>
 			Support(s)
-			<a href="{% url 'support_add' mission_object.id %}" role="button"
+			<a href="{% url 'support_add' mission_object.id %}?returnUrl={{request.path}}" role="button"
 				><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Support</button></a
 			>
 		</h2>
@@ -230,8 +230,8 @@
 						<td>{{ support.icls }}</td>
 						<td>{{ support.player_name }}</td>
 						<td>{{ support.notes|linebreaks }}</td>
-						<td><a class="btn btn-sm btn-outline-primary" href="{% url 'support_update' support.id %}" role="button">Edit</a></td>
-						<td><a class="btn btn-sm btn-outline-danger" href="{% url 'support_delete' support.id %}" role="button">Delete</a></td>
+						<td><a class="btn btn-sm btn-outline-primary" href="{% url 'support_update' support.id %}?returnUrl={{request.path}}" role="button">Edit</a></td>
+						<td><a class="btn btn-sm btn-outline-danger" href="{% url 'support_delete' support.id %}?returnUrl={{request.path}}" role="button">Delete</a></td>
 					</tr>
 					{% endfor %} {% else %}
 					<tr>
@@ -244,7 +244,7 @@
 
 		<h2>
 			Mission Imagery
-			<a href="{% url 'mission_imagery_add' mission_object.id %}" role="button"
+			<a href="{% url 'mission_imagery_add' mission_object.id %}?returnUrl={{request.path}}" role="button"
 				><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Image</button></a
 			>
 		</h2>

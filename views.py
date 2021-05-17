@@ -208,8 +208,8 @@ def package(request, link_id):
 @allowed_users(allowed_roles=['admin'])
 def package_create(request, link_id):
     mission = Mission.objects.get(id=link_id)
-
     form = PackageForm(initial={'mission': mission})
+    returnURL = request.GET.get('returnUrl')
 
     if request.method == "POST":
         form = PackageForm(request.POST, request.FILES)
@@ -217,7 +217,7 @@ def package_create(request, link_id):
             form.save(commit=True)
             return HttpResponseRedirect('/airops/mission/' + str(link_id))
 
-    context = {'form': form, 'link': link_id}
+    context = {'form': form, 'link': link_id, 'returnURL': returnURL}
     return render(request, 'package/package_form.html', context=context)
 
 
@@ -261,7 +261,7 @@ def package_delete(request, link_id):
 @allowed_users(allowed_roles=['admin'])
 def threat_create(request, link_id):
     mission = Mission.objects.get(id=link_id)
-
+    returnURL = request.GET.get('returnUrl')
     form = ThreatForm(initial={'mission': mission})
 
     if request.method == "POST":
@@ -270,7 +270,7 @@ def threat_create(request, link_id):
             form.save(commit=True)
             return HttpResponseRedirect('/airops/mission/' + str(link_id))
 
-    context = {'form': form, 'link': link_id}
+    context = {'form': form, 'link': link_id, 'returnURL': returnURL}
     return render(request, 'threat/threat_form.html', context=context)
 
 
@@ -290,7 +290,7 @@ def threat_update(request, link_id):
             print("Form Saved!")
             return HttpResponseRedirect(returnURL)
 
-    context = {'form': form, 'link': link_id}
+    context = {'form': form, 'link': link_id, 'returnURL': returnURL}
     return render(request, 'threat/threat_form.html', context=context)
 
 
@@ -507,7 +507,7 @@ def aircraft_delete(request, link_id):
 @allowed_users(allowed_roles=['admin'])
 def target_create(request, link_id):
     mission = Mission.objects.get(id=link_id)
-
+    returnURL = request.GET.get('returnUrl')
     form = TargetForm(initial={'mission': mission})
 
     if request.method == "POST":
@@ -516,7 +516,7 @@ def target_create(request, link_id):
             form.save(commit=True)
             return HttpResponseRedirect('/airops/mission/' + str(link_id))
 
-    context = {'form': form, 'link': link_id}
+    context = {'form': form, 'link': link_id, 'returnURL': returnURL}
     return render(request, 'target/target_form.html', context=context)
 
 
@@ -526,6 +526,7 @@ def target_update(request, link_id):
     target = Target.objects.get(id=link_id)
     missionID = target.mission.id
     form = TargetForm(instance=target)
+    returnURL = request.GET.get('returnUrl')
 
     if request.method == "POST":
         form = TargetForm(request.POST, request.FILES, instance=target)
@@ -535,7 +536,7 @@ def target_update(request, link_id):
             print("Form Saved!")
             return HttpResponseRedirect('/airops/mission/' + str(missionID))
 
-    context = {'form': form, 'link': missionID}
+    context = {'form': form, 'link': missionID, 'returnURL': returnURL}
     return render(request, 'target/target_form.html', context=context)
 
 
@@ -559,7 +560,7 @@ def target_delete(request, link_id):
 @allowed_users(allowed_roles=['admin'])
 def support_create(request, link_id):
     mission = Mission.objects.get(id=link_id)
-
+    returnURL = request.GET.get('returnUrl')
     form = SupportForm(initial={'mission': mission})
 
     if request.method == "POST":
@@ -568,7 +569,7 @@ def support_create(request, link_id):
             form.save(commit=True)
             return HttpResponseRedirect('/airops/mission/' + str(link_id))
 
-    context = {'form': form, 'link': link_id}
+    context = {'form': form, 'link': link_id, 'returnURL': returnURL}
     return render(request, 'support/support_form.html', context=context)
 
 
@@ -578,6 +579,7 @@ def support_update(request, link_id):
     support = Support.objects.get(id=link_id)
     missionID = support.mission.id
     form = SupportForm(instance=support)
+    returnURL = request.GET.get('returnUrl')
 
     if request.method == "POST":
         form = SupportForm(request.POST, request.FILES, instance=support)
@@ -587,7 +589,7 @@ def support_update(request, link_id):
             print("Form Saved!")
             return HttpResponseRedirect('/airops/mission/' + str(missionID))
 
-    context = {'form': form, 'link': missionID}
+    context = {'form': form, 'link': missionID, 'returnURL': returnURL}
     return render(request, 'support/support_form.html', context=context)
 
 
