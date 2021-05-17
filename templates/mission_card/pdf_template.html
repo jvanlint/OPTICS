@@ -1,11 +1,5 @@
 {% load static %}
 <head>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" />
-
-		<!-- Bootstrap core CSS -->
-		<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
-
     <style>
         @page {
             size: a4 portrait;
@@ -286,7 +280,7 @@
 </table>
 <h4> Target Images</h4>
 {% for target in flight_object.targets.all %}
-{% if target.target_image %}{{target.target_image.url}}<img src="{{target.target_image.url}}">{% else %}None available.{% endif %}
+{% if target.target_image %}{{target.target_image.url}}<img src="{{target.target_image.url}}"/>{% else %}None available.{% endif %}
 {% endfor %}
 <p><strong>Created by O.P.T.I.C.S. - A campaign management tool by Tigershark.</strong></p>
 </body>

@@ -12,13 +12,17 @@ from django.views.decorators.cache import never_cache
 
 from django.views.decorators.csrf import csrf_protect
 
-from .models import Campaign, Mission, Package, Flight, Threat, Aircraft, Target, Support, Waypoint
-from .forms import CampaignForm, MissionForm, NewUserForm, PackageForm, ThreatForm, FlightForm, AircraftForm, TargetForm, SupportForm, WaypointForm
+from .models import Campaign, Mission, Package, Flight, Threat, Aircraft, Target, Support, Waypoint, MissionImagery
+from .forms import CampaignForm, MissionForm, NewUserForm, PackageForm, ThreatForm, FlightForm, AircraftForm, TargetForm, SupportForm, WaypointForm, MissionImageryForm
 # For PDF
 from django.template.loader import get_template
 from django.views import View
 from xhtml2pdf import pisa
+from django.contrib.staticfiles import finders
+from django.conf import settings
+
 from io import BytesIO
+import os
 
 from .decorators import unauthenticated_user, allowed_users
 
@@ -111,7 +115,7 @@ def campaign_delete(request, link_id):
     if request.method == "POST":
         campaign.delete()
         messages.success(request, "Campaign successfully deleted.")
-        return HttpResponseRedirect(returnURL)
+        return HttpResponseRedirect('/airops/campaign')
 
     context = {'item': campaign, 'returnURL': returnURL}
     return render(request, 'campaign/campaign_delete.html', context=context)
@@ -127,9 +131,10 @@ def mission(request, link_id):
     threat = mission.threat_set.all()
     target = mission.target_set.all()
     support = mission.support_set.all()
+    imagery = mission.missionimagery_set.all()
 
     context = {'mission_object': mission,
-               'package_object': packages, 'threat_object': threat, 'target_object': target, 'support_object': support}
+               'package_object': packages, 'threat_object': threat, 'target_object': target, 'support_object': support, 'imagery_object': imagery}
     return render(request, 'mission/mission_detail.html', context)
 
 
@@ -275,6 +280,7 @@ def threat_update(request, link_id):
     threat = Threat.objects.get(id=link_id)
     missionID = threat.mission.id
     form = ThreatForm(instance=threat)
+    returnURL = request.GET.get('returnUrl')
 
     if request.method == "POST":
         form = ThreatForm(request.POST, request.FILES, instance=threat)
@@ -282,7 +288,7 @@ def threat_update(request, link_id):
         if form.is_valid():
             form.save(commit=True)
             print("Form Saved!")
-            return HttpResponseRedirect('/airops/mission/' + str(missionID))
+            return HttpResponseRedirect(returnURL)
 
     context = {'form': form, 'link': link_id}
     return render(request, 'threat/threat_form.html', context=context)
@@ -293,12 +299,66 @@ def threat_update(request, link_id):
 def threat_delete(request, link_id):
     threat = Threat.objects.get(id=link_id)
     missionID = threat.mission.id
+
     if request.method == "POST":
         threat.delete()
         return HttpResponseRedirect('/airops/mission/' + str(missionID))
 
     context = {'item': threat}
     return render(request, 'threat/threat_delete.html', context=context)
+
+# Mission Imagery Views
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def mission_imagery_create(request, link_id):
+    mission = Mission.objects.get(id=link_id)
+
+    form = MissionImageryForm(initial={'mission': mission})
+
+    if request.method == "POST":
+        form = MissionImageryForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save(commit=True)
+            return HttpResponseRedirect('/airops/mission/' + str(link_id))
+
+    context = {'form': form, 'link': link_id}
+    return render(request, 'missionImagery/missionImagery_form.html', context=context)
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def mission_imagery_update(request, link_id):
+    imagery = MissionImagery.objects.get(id=link_id)
+
+    missionID = imagery.mission.id
+    form = MissionImageryForm(instance=imagery)
+
+    if request.method == "POST":
+        form = MissionImageryForm(
+            request.POST, request.FILES, instance=imagery)
+        print(request.path)
+        if form.is_valid():
+            form.save(commit=True)
+            print("Form Saved!")
+            return HttpResponseRedirect('/airops/mission/' + str(missionID))
+
+    context = {'form': form, 'link': missionID}
+    return render(request, 'missionImagery/missionImagery_form.html', context=context)
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def mission_imagery_delete(request, link_id):
+    imagery = MissionImagery.objects.get(id=link_id)
+    missionID = imagery.mission.id
+    if request.method == "POST":
+        imagery.delete()
+        return HttpResponseRedirect('/airops/mission/' + str(missionID))
+
+    context = {'item': imagery}
+    return render(request, 'missionImagery/missionImagery_delete.html', context=context)
 
 ### Flight Views ###
 
@@ -668,14 +728,53 @@ def change_password(request):
     return render(request, 'dashboard/change_password.html', {
         'form': form
     })
+
 # PDF Render
+
+
+def fetch_resources(uri, rel):
+    """
+    Convert HTML URIs to absolute system paths so xhtml2pdf can access those
+    resources
+    """
+    print("Starting...")
+    result = finders.find(uri)
+    if result:
+        if not isinstance(result, (list, tuple)):
+            result = [result]
+        result = list(os.path.realpath(path) for path in result)
+        path = result[0]
+    else:
+        sUrl = settings.STATIC_URL        # Typically /static/
+        sRoot = settings.STATIC_ROOT      # Typically /home/userX/project_static/
+        mUrl = settings.MEDIA_URL         # Typically /media/
+        mRoot = settings.MEDIA_ROOT       # Typically /home/userX/project_static/media/
+        print("Media Root:" + mRoot)
+
+        if uri.startswith(mUrl):
+            path = os.path.join(mRoot, uri.replace(mUrl, ""))
+        elif uri.startswith(sUrl):
+            path = os.path.join(sRoot, uri.replace(sUrl, ""))
+        else:
+            print("URI: " + uri)
+            return uri
+
+    # make sure that file exists
+    if not os.path.isfile(path):
+        raise Exception(
+            'media URI must start with %s or %s' % (sUrl, mUrl)
+        )
+    print("Path: " + path)
+    return path
 
 
 def render_to_pdf(template_src, context_dict={}):
     template = get_template(template_src)
     html = template.render(context_dict)
     result = BytesIO()
-    pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
+    #pdf = pisa.CreatePDF(html, dest=result, link_callback=link_callback)
+    pdf = pisa.pisaDocument(
+        BytesIO(html.encode("ISO-8859-1")), result, link_callback)
     if not pdf.err:
         return HttpResponse(result.getvalue(), content_type='application/pdf')
     return None
@@ -694,7 +793,7 @@ def download_mission_card(request, mission_id, flight_id):
     return response
 
 
-def view_mission_card(request, mission_id, flight_id):
+def old_view_mission_card(request, mission_id, flight_id):
     mission = Mission.objects.get(id=mission_id)
     flight = Flight.objects.get(id=flight_id)
 
@@ -702,3 +801,28 @@ def view_mission_card(request, mission_id, flight_id):
 
     pdf = render_to_pdf('mission_card/pdf_template.html', data)
     return HttpResponse(pdf, content_type='application/pdf')
+
+
+def view_mission_card(request, mission_id, flight_id):
+
+    mission = Mission.objects.get(id=mission_id)
+    flight = Flight.objects.get(id=flight_id)
+
+    data = {'mission_object': mission, 'flight_object': flight}
+
+    template_path = 'mission_card/pdf_template.html'
+    context = data
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="mission_card.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response, link_callback=fetch_resources)
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response

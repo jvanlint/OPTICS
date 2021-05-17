@@ -70,6 +70,15 @@ urlpatterns = [
     path('waypoint/delete/<int:link_id>',
          views.waypoint_delete, name='waypoint_delete'),
 
+    path('mission_imagery/add/<int:link_id>',
+         views.mission_imagery_create, name='mission_imagery_add'),
+    path('mission_imagery/update/<int:link_id>',
+         views.mission_imagery_update, name='mission_imagery_update'),
+    path('mission_imagery/delete/<int:link_id>',
+         views.mission_imagery_delete, name='mission_imagery_delete'),
+
+
+
     path('dashboard', views.dashboard),
 
     path("register", views.register_request, name="register"),

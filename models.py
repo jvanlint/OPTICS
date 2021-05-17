@@ -396,3 +396,11 @@ class Task(models.Model):
     def __str__(self):
         """String for representing the Campaign object (in Admin site etc.)."""
         return self.task_name
+
+
+class MissionImagery(models.Model):
+    mission = models.ForeignKey(
+        'Mission', on_delete=models.CASCADE, null=True)
+    caption = models.CharField(max_length=100, null=True)
+    image = ResizedImageField(verbose_name='Mission Imagery', size=[
+        1500, 1200], upload_to='campaign/mission/mission_images/', help_text='Upload image for mission.', null=True, blank=True)

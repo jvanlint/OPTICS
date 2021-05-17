@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 # import GeeksModel from models.py
-from .models import Campaign, Mission, Package, Flight, Threat, Aircraft, Target, Support, Waypoint
+from .models import Campaign, Mission, Package, Flight, Threat, Aircraft, Target, Support, Waypoint, MissionImagery
 
 # create a ModelForm
 
@@ -90,6 +90,13 @@ class WaypointForm(ModelForm):
     # specify the name of model to use
     class Meta:
         model = Waypoint
+        fields = "__all__"
+
+
+class MissionImageryForm(ModelForm):
+    # specify the name of model to use
+    class Meta:
+        model = MissionImagery
         fields = "__all__"
 
 
