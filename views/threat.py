@@ -1,0 +1,56 @@
+from django.shortcuts import render
+from django.http import  HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from .view_decorators import allowed_users
+
+from ..models import Mission, Threat
+from ..forms import ThreatForm
+
+# Threat Views
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def threat_create(request, link_id):
+    mission = Mission.objects.get(id=link_id)
+
+    form = ThreatForm(initial={'mission': mission})
+
+    if request.method == "POST":
+        form = ThreatForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save(commit=True)
+            return HttpResponseRedirect('/airops/mission/' + str(link_id))
+
+    context = {'form': form, 'link': link_id}
+    return render(request, 'threat/threat_form.html', context=context)
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def threat_update(request, link_id):
+    threat = Threat.objects.get(id=link_id)
+    missionID = threat.mission.id
+    form = ThreatForm(instance=threat)
+
+    if request.method == "POST":
+        form = ThreatForm(request.POST, request.FILES, instance=threat)
+        print(request.path)
+        if form.is_valid():
+            form.save(commit=True)
+            print("Form Saved!")
+            return HttpResponseRedirect('/airops/mission/' + str(missionID))
+
+    context = {'form': form, 'link': link_id}
+    return render(request, 'threat/threat_form.html', context=context)
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def threat_delete(request, link_id):
+    threat = Threat.objects.get(id=link_id)
+    missionID = threat.mission.id
+    if request.method == "POST":
+        threat.delete()
+        return HttpResponseRedirect('/airops/mission/' + str(missionID))
+
+    context = {'item': threat}
+    return render(request, 'threat/threat_delete.html', context=context)
