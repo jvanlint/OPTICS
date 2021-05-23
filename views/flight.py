@@ -3,10 +3,9 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from .view_decorators import  allowed_users
-
+ 
 from ..models import  Package, Flight, Target
 from ..forms import  FlightForm
-
 
 ### Flight Views ###
 
