@@ -38,7 +38,7 @@
 					{% endif %}
 					<div class="card-body">
 						<h5 class="card-title">{{ campaign.name }}</h5>
-						<p class="card-title">By {{ campaign.created_by }}</p>
+						<p class="card-title">By {{ campaign.creator }}</p>
 						<h6>{{ campaign.dcs_map}} - {{ campaign.mission_set.count }} mission(s)</h6>
 						<h5>
 						{% if campaign.status.name == "Active" %}
