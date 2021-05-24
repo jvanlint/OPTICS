@@ -31,15 +31,26 @@ def is_admin(user):
     return user.groups.filter(name='admin').exists()
 
 
+def has_change_permission(self, request, obj=None):
+    if obj is not None:
+        if request.user.is_superuser:
+            return True
+        else:
+            if obj.creator != request.user:
+                return False
+            else:
+                return True
+
+
 def index(request):
     """View function for home page of site."""
 
     # Generate counts of some of the main objects
     num_campaigns = Campaign.objects.all().count()
-    #num_instances = BookInstance.objects.all().count()
+    # num_instances = BookInstance.objects.all().count()
 
     # Available books (status = 'a')
-    #num_instances_available = BookInstance.objects.filter(status__exact='a').count()
+    # num_instances_available = BookInstance.objects.filter(status__exact='a').count()
 
     # The 'all()' is implied by default.
     num_missions = Mission.objects.count()
@@ -99,7 +110,8 @@ def campaign_update(request, link_id):
     returnURL = request.GET.get('returnUrl')
 
     if request.method == "POST":
-        form = CampaignForm(request.POST, request.FILES, instance=campaign)
+        form = CampaignForm(
+            request.POST, request.FILES, instance=campaign)
         print(request.path)
         if form.is_valid():
             form.save(commit=True)
@@ -150,7 +162,7 @@ def mission_create(request, link_id):
     returnURL = request.GET.get('returnUrl')
 
     form = MissionForm(initial={'campaign': campaign, 'number': missionCount})
-    #form.base_fields['number'].initial = missionCount
+    # form.base_fields['number'].initial = missionCount
 
     if request.method == "POST":
         form = MissionForm(request.POST, request.FILES)
@@ -778,7 +790,7 @@ def render_to_pdf(template_src, context_dict={}):
     template = get_template(template_src)
     html = template.render(context_dict)
     result = BytesIO()
-    #pdf = pisa.CreatePDF(html, dest=result, link_callback=link_callback)
+    # pdf = pisa.CreatePDF(html, dest=result, link_callback=link_callback)
     pdf = pisa.pisaDocument(
         BytesIO(html.encode("ISO-8859-1")), result, link_callback)
     if not pdf.err:
