@@ -27,6 +27,10 @@ import os
 from .decorators import unauthenticated_user, allowed_users
 
 
+def is_admin(user):
+    return user.groups.filter(name='admin').exists()
+
+
 def index(request):
     """View function for home page of site."""
 
@@ -54,7 +58,7 @@ def index(request):
 def campaign(request):
     campaigns = Campaign.objects.order_by('id')
 
-    context = {'campaigns': campaigns}
+    context = {'campaigns': campaigns, 'isAdmin': is_admin(request.user)}
 
     return render(request, 'campaign/campaign.html', context=context)
 
@@ -72,7 +76,7 @@ def campaign_detail(request, link_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def campaign_create(request):
     form = CampaignForm(initial={'creator': request.user.id})
 
@@ -88,7 +92,7 @@ def campaign_create(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def campaign_update(request, link_id):
     campaign = Campaign.objects.get(id=link_id)
     form = CampaignForm(instance=campaign)
@@ -107,7 +111,7 @@ def campaign_update(request, link_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def campaign_delete(request, link_id):
     campaign = Campaign.objects.get(id=link_id)
     returnURL = request.GET.get('returnUrl')
@@ -139,7 +143,7 @@ def mission(request, link_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def mission_create(request, link_id):
     campaign = Campaign.objects.get(id=link_id)
     missionCount = campaign.mission_set.count() + 1
@@ -159,7 +163,7 @@ def mission_create(request, link_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def mission_update(request, link_id):
     mission = Mission.objects.get(id=link_id)
     form = MissionForm(instance=mission)
@@ -178,7 +182,7 @@ def mission_update(request, link_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def mission_delete(request, link_id):
     mission = Mission.objects.get(id=link_id)
     returnURL = request.GET.get('returnUrl')
@@ -205,7 +209,7 @@ def package(request, link_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def package_create(request, link_id):
     mission = Mission.objects.get(id=link_id)
     form = PackageForm(initial={'mission': mission})
@@ -222,7 +226,7 @@ def package_create(request, link_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def package_update(request, link_id):
     package = Package.objects.get(id=link_id)
     missionID = package.mission.id
@@ -242,7 +246,7 @@ def package_update(request, link_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def package_delete(request, link_id):
     package = Package.objects.get(id=link_id)
     missionID = package.mission.id
@@ -258,7 +262,7 @@ def package_delete(request, link_id):
 
 # Threat Views
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def threat_create(request, link_id):
     mission = Mission.objects.get(id=link_id)
     returnURL = request.GET.get('returnUrl')
@@ -275,7 +279,7 @@ def threat_create(request, link_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def threat_update(request, link_id):
     threat = Threat.objects.get(id=link_id)
     missionID = threat.mission.id
@@ -295,7 +299,7 @@ def threat_update(request, link_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def threat_delete(request, link_id):
     threat = Threat.objects.get(id=link_id)
     missionID = threat.mission.id
@@ -311,7 +315,7 @@ def threat_delete(request, link_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def mission_imagery_create(request, link_id):
     mission = Mission.objects.get(id=link_id)
 
@@ -328,7 +332,7 @@ def mission_imagery_create(request, link_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def mission_imagery_update(request, link_id):
     imagery = MissionImagery.objects.get(id=link_id)
 
@@ -349,7 +353,7 @@ def mission_imagery_update(request, link_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def mission_imagery_delete(request, link_id):
     imagery = MissionImagery.objects.get(id=link_id)
     missionID = imagery.mission.id
@@ -374,7 +378,7 @@ def flight(request, link_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def flight_create(request, link_id):
     package = Package.objects.get(id=link_id)
 
@@ -394,7 +398,7 @@ def flight_create(request, link_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def flight_update(request, link_id):
     flight = Flight.objects.get(id=link_id)
     packageID = flight.package.id
@@ -418,7 +422,7 @@ def flight_update(request, link_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def flight_delete(request, link_id):
     flight = Flight.objects.get(id=link_id)
     packageID = flight.package.id
@@ -444,7 +448,7 @@ def aircraft(request, link_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def aircraft_create(request, link_id):
     flight = Flight.objects.get(id=link_id)
 
@@ -464,7 +468,7 @@ def aircraft_create(request, link_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def aircraft_update(request, link_id):
     aircraft = Aircraft.objects.get(id=link_id)
     flightID = aircraft.flight.id
@@ -488,7 +492,7 @@ def aircraft_update(request, link_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def aircraft_delete(request, link_id):
     aircraft = Aircraft.objects.get(id=link_id)
     flightID = aircraft.flight.id
@@ -504,7 +508,7 @@ def aircraft_delete(request, link_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def target_create(request, link_id):
     mission = Mission.objects.get(id=link_id)
     returnURL = request.GET.get('returnUrl')
@@ -521,7 +525,7 @@ def target_create(request, link_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def target_update(request, link_id):
     target = Target.objects.get(id=link_id)
     missionID = target.mission.id
@@ -541,7 +545,7 @@ def target_update(request, link_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def target_delete(request, link_id):
     target = Target.objects.get(id=link_id)
     missionID = target.mission.id
@@ -557,7 +561,7 @@ def target_delete(request, link_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def support_create(request, link_id):
     mission = Mission.objects.get(id=link_id)
     returnURL = request.GET.get('returnUrl')
@@ -574,7 +578,7 @@ def support_create(request, link_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def support_update(request, link_id):
     support = Support.objects.get(id=link_id)
     missionID = support.mission.id
@@ -594,7 +598,7 @@ def support_update(request, link_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def support_delete(request, link_id):
     support = Support.objects.get(id=link_id)
     missionID = target.mission.id
@@ -609,7 +613,7 @@ def support_delete(request, link_id):
 
 # Waypoint Views
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def waypoint_create(request, link_id):
     flight = Flight.objects.get(id=link_id)
 
@@ -626,7 +630,7 @@ def waypoint_create(request, link_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def waypoint_update(request, link_id):
     waypoint = Waypoint.objects.get(id=link_id)
     flightID = waypoint.flight.id
@@ -645,7 +649,7 @@ def waypoint_update(request, link_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def waypoint_delete(request, link_id):
     waypoint = Waypoint.objects.get(id=link_id)
     flightID = waypoint.flight.id
