@@ -21,8 +21,7 @@ class Campaign(models.Model):
                                       upload_to='campaign/thumbnails/', help_text='Campaign Image File.', null=True, blank=True)
     status = models.ForeignKey(
         'Status', on_delete=models.CASCADE, null=True)
-    # created_by = models.CharField(
-    # max_length=200, help_text='Name of campaign creator.', null=True, blank=True)
+
     creator = models.ForeignKey(
         User, null=True, blank=True, on_delete=models.SET_NULL)
     situation = models.TextField(
