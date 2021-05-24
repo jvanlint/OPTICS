@@ -74,7 +74,7 @@ def campaign_detail(request, link_id):
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin'])
 def campaign_create(request):
-    form = CampaignForm()
+    form = CampaignForm(initial={'creator': request.user.id})
 
     if request.method == "POST":
         form = CampaignForm(request.POST, request.FILES)

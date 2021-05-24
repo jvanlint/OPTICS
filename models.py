@@ -23,10 +23,11 @@ class Campaign(models.Model):
         'Status', on_delete=models.CASCADE, null=True)
     created_by = models.CharField(
         max_length=200, help_text='Name of campaign creator.', null=True, blank=True)
+    creator = models.ForeignKey(
+        User, null=True, blank=True, on_delete=models.SET_NULL)
     situation = models.TextField(
         help_text='A detailed overview of the background and situation for the campaign.', null=True, blank=True)
-    # aoImage = models.ImageField(
-    # upload_to='campaign/ao_images/', null=True, blank=True, help_text='An image of the Area of Operations.', verbose_name="area of Operations Image")
+
     aoImage = ResizedImageField(verbose_name='area of Operations Image', size=[
                                 1500, 1200], upload_to='campaign/ao_images', help_text='An image of the Area of Operations.', null=True, blank=True)
 
