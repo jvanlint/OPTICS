@@ -152,6 +152,7 @@ class MyUserAdmin(admin.ModelAdmin):
 
     list_display = ['username', 'first_name', 'last_name',
                     'is_active', 'last_login', 'group']
+    ordering = ['username']
 
 
 admin.site.unregister(User)

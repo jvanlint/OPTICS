@@ -10,7 +10,7 @@
 			<li class="nav-item active">
 				<a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
 			</li>
-			{% if user.is_authenticated %} {% if request.user|has_group:"admin" %}
+			{% if user.is_authenticated %} 
 			<li class="nav-item">
 				<a class="nav-link" href="/airops/changepassword">Change Password</a>
 			</li>
@@ -21,10 +21,11 @@
 			<li class="nav-item">
 				<a class="nav-link" href="/airops/login">Login</a>
 			</li>
-			{% endif %}
+			{% if request.user|has_group:"admin" %}
 			<li class="nav-item">
 				<a class="nav-link" href="/admin">Admin</a>
 			</li>
+			{% endif %}
 			{% endif %}
 		</ul>
 
