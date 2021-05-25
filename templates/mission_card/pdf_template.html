@@ -167,26 +167,28 @@
 		<tr bgcolor="lightgray">
 			<th scope="row" colspan="1">Type</th>
 			<th scope="row" colspan="1">Callsign</th>
+			<th scope="row" colspan="1">Player</th>
 			<th scope="row" colspan="1">Freq</th>
 			<th scope="row" colspan="1">TACAN</th>
 			<th scope="row" colspan="1">Alt.</th>
 			<th scope="row" colspan="1">Speed</th>
 			<th scope="row" colspan="1">BRC</th>
 			<th scope="row" colspan="1">ICLS</th>
-			<th scope="row" colspan="2">Notes</th>
+			<th scope="row" colspan="1">Notes</th>
 		</tr>
 
 		{% for support in mission_object.support_set.all %}
 			<tr>
 				<th scope="row" colspan="1">{{support.support_type}}</th>
 				<th scope="row" colspan="1">{{support.callsign}}</th>
+				<th scope="row" colspan="1">{{support.player_name}}</th>
 				<td scope="row" colspan="1">{{support.frequency}}</td>
 				<td scope="row" colspan="1">{{support.tacan}}</td>
 				<td scope="row" colspan="1">{{support.altitude}}</td>
 				<td scope="row" colspan="1">{{support.speed}}</td>
 				<td scope="row" colspan="1">{{support.brc}}</td>
 				<td scope="row" colspan="1">{{support.icls}}</td>
-				<td scope="row" colspan="2">{{support.notes|linebreaks}}</td>
+				<td scope="row" colspan="1">{{support.notes|linebreaks}}</td>
 			</tr>
 		{% endfor %}
 		<!-- End Mission Support-->

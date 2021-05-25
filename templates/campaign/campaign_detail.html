@@ -37,12 +37,14 @@
 				{{ campaign.status }}</span>
 			</h2>
 			<p>{{ campaign.description|linebreaks }}</p>
+			{% if campaign.creator.username == user.username or isAdmin == True %}
 			<div class="btn-toolbar">
 				<div class="btn-group mr-2">
 					<a class="btn btn-sm btn-outline-secondary" href="{% url 'campaign_update' campaign.id %}?returnUrl={{request.path}}" role="button">Edit</a>
 										<a class="btn btn-sm btn-outline-secondary" href="{% url 'campaign_delete' campaign.id %}?returnUrl={{request.path}}" role="button">Delete</a>
 				</div>
 			</div>
+			{% endif %}
 		</div>
 
 		<div class="col-sm">
@@ -78,7 +80,11 @@
 		<div class="col"><!-- .col -->
 			<hr>
 			
-			<h4>Mission(s) <a href="{% url 'mission_add' campaign.id %}?returnUrl={{request.path}}" role="button"><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Mission</button></a></h4>
+			<h4>Mission(s) 
+				{% if campaign.creator.username == user.username or isAdmin == True %}
+				<a href="{% url 'mission_add' campaign.id %}?returnUrl={{request.path}}" role="button"><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Mission</button></a>
+				{% endif %}
+			</h4>
 			<table class="table"><!-- .table -->
 				<thead class="thead-dark">
 					<tr>
@@ -97,10 +103,12 @@
 						<td><a href="{% url 'mission' mission.id %}">{{ mission.name }}</a></td>
 						<td>{{ mission.description}}</td>
 						<td>{{ mission.mission_date}}</td>
+						{% if campaign.creator.username == user.username or isAdmin == True %}
 						<td>
 							<a style="padding-left:25px;" href="{% url 'mission_update' mission.id %}?returnUrl={{request.path}}" role="button"><i class="bi bi-pencil"></i> </a>
 							<a style="padding-left:25px;" href="{% url 'mission_delete' mission.id %}?returnUrl={{request.path}}" role="button"><i class="bi bi-trash"></i></a>
 						</td>
+						{% endif %}
 					</tr>
 					{% endfor %} {% else %}
 					<tr>

@@ -81,7 +81,8 @@ def campaign_detail(request, link_id):
 
     campaign.refresh_from_db()
 
-    context = {'campaign': campaign, 'missions': missions}
+    context = {'campaign': campaign, 'missions': missions,
+               'isAdmin': is_admin(request.user)}
 
     return render(request, 'campaign/campaign_detail.html', context=context)
 
@@ -150,7 +151,7 @@ def mission(request, link_id):
     imagery = mission.missionimagery_set.all()
 
     context = {'mission_object': mission,
-               'package_object': packages, 'threat_object': threat, 'target_object': target, 'support_object': support, 'imagery_object': imagery}
+               'package_object': packages, 'threat_object': threat, 'target_object': target, 'support_object': support, 'imagery_object': imagery, 'isAdmin': is_admin(request.user)}
     return render(request, 'mission/mission_detail.html', context)
 
 
