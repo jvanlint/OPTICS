@@ -31,6 +31,10 @@ def is_admin(user):
     return user.groups.filter(name='admin').exists()
 
 
+def is_planner(user):
+    return user.groups.filter(name='planner').exists()
+
+
 def has_change_permission(self, request, obj=None):
     if obj is not None:
         if request.user.is_superuser:
@@ -151,7 +155,7 @@ def mission(request, link_id):
     imagery = mission.missionimagery_set.all()
 
     context = {'mission_object': mission,
-               'package_object': packages, 'threat_object': threat, 'target_object': target, 'support_object': support, 'imagery_object': imagery, 'isAdmin': is_admin(request.user)}
+               'package_object': packages, 'threat_object': threat, 'target_object': target, 'support_object': support, 'imagery_object': imagery, 'isAdmin': is_admin(request.user), 'isPlanner': is_planner(request.user)}
     return render(request, 'mission/mission_detail.html', context)
 
 

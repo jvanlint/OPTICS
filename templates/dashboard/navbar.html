@@ -21,11 +21,11 @@
 			<li class="nav-item">
 				<a class="nav-link" href="/airops/login">Login</a>
 			</li>
+			{% endif %}
 			{% if request.user|has_group:"admin" %}
 			<li class="nav-item">
 				<a class="nav-link" href="/admin">Admin</a>
 			</li>
-			{% endif %}
 			{% endif %}
 		</ul>
 
