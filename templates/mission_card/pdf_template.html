@@ -24,6 +24,7 @@
             padding-top: 1;
             text-align: left;
             margin-left: 2;
+			background-color: lightgray;
 		}
         .card_tr {
             background-color: darkgray;
@@ -48,23 +49,23 @@
 
 	<!-- HTML Content -->
 	<table>
-	<thead class='card_tr'>
-		<tr class="card_tr">
+	<thead>
+		<tr >
 			<th scope="col" colspan="10" align="left">MISSION CARD / {{flight_object.callsign|upper}} FLIGHT</td>
 		</tr>
 	</thead>
 	<tbody>
-		<tr class="card_tr">
+		<tr>
 			<th scope="row" colspan="6">CALLSIGN(S)</th>
 			<th scope="row" colspan="4">MISSION</th>
 		</tr>
 		
 		<tr> 
 			<td colspan="6">
-				{% for aircraft in flight_object.aircraft_set.all%} 
+				{% for aircraft in aircraft_object %} 
 					{{aircraft.pilot}}
 					{% if aircraft.flight_lead %}
-						**LEAD**
+						=LEAD=
 					{% endif %}
 					{% if aircraft.rio_wso %}
 						({{ aircraft.rio_wso }}) 
@@ -106,7 +107,7 @@
 		</tr>
 		<!-- End Time Hacks-->
 
-		<!-- Flights Support-->
+		<!-- Packages -->
 		<tr>
 			<th scope="row" colspan="10" bgcolor="darkgray">FLIGHTS</th>
 		</tr>
@@ -114,10 +115,10 @@
 			<th scope="row" colspan="2">Callsign</th>
 			<th scope="row" colspan="2">Freq</th>
 			<th scope="row" colspan="2">A/C Type</th>
-			<th scope="row" colspan="2">A/C #</th>
+			<th scope="row" colspan="2">A/C # </th>
 			<th scope="row" colspan="2">Package</th>
 		</tr>
-		{% for package in mission_object.package_set.all %}
+		{% for package in packages_object %}
 			{% for flight in package.flight_set.all %}
 				<tr {% if flight.callsign == flight_object.callsign %} bgcolor="yellow" {% endif %}>
 					<td colspan="2">{{ flight.callsign }} ({{ flight.task }})</td>
@@ -145,11 +146,11 @@
 			<th scope="row" colspan="2">Notes</th>
 		</tr>
 
-		{% for waypoint in flight_object.waypoint_set.all %}
+		{% for waypoint in waypoints_object %}
 		<tr>
-			<th scope="row" colspan="1">{{waypoint.number}}</th>
+			<td scope="row" colspan="1">{{waypoint.number}}</td>
 			<td scope="row" colspan="1">{{waypoint.waypoint_type}}</td>
-			<th scope="row" colspan="2">{{waypoint.name}}</th>
+			<td scope="row" colspan="2">{{waypoint.name}}</td>
 			<td scope="row" colspan="1">{{waypoint.lat}}</td>
 			<td scope="row" colspan="1">{{waypoint.long}}</td>
 			<td scope="row" colspan="1">{{waypoint.elevation}}</td>
@@ -177,11 +178,11 @@
 			<th scope="row" colspan="1">Notes</th>
 		</tr>
 
-		{% for support in mission_object.support_set.all %}
+		{% for support in support_object %}
 			<tr>
-				<th scope="row" colspan="1">{{support.support_type}}</th>
-				<th scope="row" colspan="1">{{support.callsign}}</th>
-				<th scope="row" colspan="1">{{support.player_name}}</th>
+				<td scope="row" colspan="1">{{support.support_type}}</td>
+				<td scope="row" colspan="1">{{support.callsign}}</td>
+				<td scope="row" colspan="1">{{support.player_name}}</td>
 				<td scope="row" colspan="1">{{support.frequency}}</td>
 				<td scope="row" colspan="1">{{support.tacan}}</td>
 				<td scope="row" colspan="1">{{support.altitude}}</td>
@@ -195,6 +196,7 @@
 		</tbody>
 		</table>
 		<table class="page-break">
+
 		<!-- Weather -->
 		<tr bgcolor="darkgray">
 			<th scope="row" colspan="10" >WEATHER</th>
@@ -247,7 +249,7 @@
 			<th scope="row" colspan="2">Notes</th>
 		</tr>
 		
-		{% for target in flight_object.targets.all %}
+		{% for target in target_object %}
 			<tr>
 				<td colspan="2">{{ target.name }}</td>
 				<td colspan="2">{{ target.lat }}</td>
@@ -262,19 +264,40 @@
 			<tr bgcolor="darkgray">
 				<th scope="row" colspan="10">THREAT INFO</th>
 			</tr>
-
-			<tr bgcolor="lightgray">
-				<th scope="row" colspan="2">Type</th>
-				<th scope="row" colspan="4">Name</th>
-				<th scope="row" colspan="4">Description</th>
-
-			</tr>
 			
-			{% for threat in mission_object.threat_set.all %}
+			{% for threat in threat_object %}
+				<tr bgcolor="lightgray">
+					<td colspan="1">{{ threat.threat_type }}</td>
+					<td colspan="1">{{ threat.name }}</td>
+					<td colspan="8">{{ threat.description|linebreaks }}</td>
+				</tr>
+
+				<tr bgcolor="lightgray">
+					<th scope="row" colspan="1">Class</th>
+					<th scope="row" colspan="1">Type</th>
+					<th scope="row" colspan="1">Msl. Ammo</th>
+					<th scope="row" colspan="1">Min Rng</th>
+					<th scope="row" colspan="1">Max Rng</th>
+					<th scope="row" colspan="1">Min Alt</th>
+					<th scope="row" colspan="1">Max Alt</th>
+					<th scope="row" colspan="1">Acq. Time</th>
+					<th scope="row" colspan="1">RWR</th>
+					<th scope="row" colspan="1">Harm Code</th>
+				</tr>
+
 				<tr>
-					<td colspan="2">{{ threat.threat_type }}</td>
-					<td colspan="4">{{ threat.name }}</td>
-					<td colspan="4">{{ threat.description|linebreaks }}</td>
+					
+					<td colspan="1">{{ threat.threat_name.threat_class }}</td>
+					<td colspan="1">{{ threat.threat_name.threat_type }}</td>
+					<td colspan="1">{{ threat.threat_name.missile_ammo }}</td>
+					<td colspan="1">{{ threat.threat_name.range_min }} nm</td>
+					<td colspan="1">{{ threat.threat_name.range_max }} nm</td>
+					<td colspan="1">{{ threat.threat_name.alt_min }} ft</td>
+					<td colspan="1">{{ threat.threat_name.alt_max }} ft</td>
+					<td colspan="1">{{ threat.threat_name.acquire_time }} sec</td>
+					<td colspan="1">{{ threat.threat_name.harm_code }}</td>
+					<td colspan="1">{{ threat.threat_name.harm_code }}</td>
+				
 				</tr>
 			{% endfor %}
 		<!-- End Threats -->
