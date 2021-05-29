@@ -452,10 +452,14 @@ class ThreatReference(models.Model):
     acquire_time = models.DecimalField(
         default=0, help_text='Time to acquire (secs).', decimal_places=2, max_digits=8)
 
-    rwr_image = ResizedImageField(verbose_name='RWR Identifier', size=[
-        1500, 1200], upload_to='threats', help_text='Upload image for rwr.', null=True, blank=True)
+    rwr_image = ResizedImageField(verbose_name='RWR Identifier', upload_to='threats',
+                                  help_text='Upload image for rwr.', null=True, blank=True)
+    rwr_image2 = ResizedImageField(verbose_name='RWR Identifier', upload_to='threats',
+                                   help_text='Upload image for rwr.', null=True, blank=True)
+    rwr_image3 = ResizedImageField(verbose_name='RWR Identifier', upload_to='threats',
+                                   help_text='Upload image for rwr.', null=True, blank=True)
 
-    harm_code = models.CharField(max_length=5, null=True)
+    harm_code = models.CharField(max_length=20, null=True)
 
     class Meta:
         ordering = ['name']

@@ -161,7 +161,8 @@ admin.site.register(User, MyUserAdmin)
 
 
 class ThreatReferenceAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('name', 'nato_code', 'threat_class',
+                    'threat_type', 'harm_code')
 
 
 admin.site.register(ThreatReference, ThreatReferenceAdmin)
