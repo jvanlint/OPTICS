@@ -315,6 +315,8 @@ class Threat(models.Model):
 
     )
 
+    threat_name = models.ForeignKey(
+        'ThreatReference', on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=60)
     threat_type = models.CharField(
         max_length=10, choices=THREAT_TYPES, null=True)
@@ -329,7 +331,7 @@ class Support(models.Model):
     mission = models.ForeignKey(
         'Mission', on_delete=models.CASCADE, null=True)
 
-    THREAT_TYPES = (
+    SUPPORT_TYPES = (
         ('AWACS', 'AWACS'),
         ('TANKER', 'TANKER'),
         ('JTAC', 'JTAC'),
@@ -339,7 +341,7 @@ class Support(models.Model):
 
     callsign = models.CharField(max_length=50)
     support_type = models.CharField(
-        max_length=10, choices=THREAT_TYPES, null=True)
+        max_length=10, choices=SUPPORT_TYPES, null=True)
     player_name = models.CharField(
         max_length=30, null=True, blank=True)
     frequency = models.CharField(max_length=10, null=True, blank=True)
@@ -439,16 +441,16 @@ class ThreatReference(models.Model):
         default=0, help_text='Number of gun rounds.')
     missile_ammo = models.IntegerField(
         default=0, help_text='Number of missiles.')
-    range_min = models.IntegerField(
-        default=0, help_text='Minimum engagement range (nmi).')
-    range_max = models.IntegerField(
-        default=0, help_text='Maximum enagengagementement range (nmi).')
-    alt_min = models.IntegerField(
-        default=0, help_text='Minimum engagement altitude (ft).')
-    alt_max = models.IntegerField(
-        default=0, help_text='Maximum engagement altitude (ft).')
-    acquire_time = models.IntegerField(
-        default=0, help_text='Time to acquire (secs).')
+    range_min = models.DecimalField(
+        default=0, help_text='Minimum engagement range (nmi).', decimal_places=2, max_digits=8)
+    range_max = models.DecimalField(
+        default=0, help_text='Maximum enagengagementement range (nmi).', decimal_places=2, max_digits=8)
+    alt_min = models.DecimalField(
+        default=0, help_text='Minimum engagement altitude (ft).', decimal_places=2, max_digits=8)
+    alt_max = models.DecimalField(
+        default=0, help_text='Maximum engagement altitude (ft).', decimal_places=2, max_digits=8)
+    acquire_time = models.DecimalField(
+        default=0, help_text='Time to acquire (secs).', decimal_places=2, max_digits=8)
 
     rwr_image = ResizedImageField(verbose_name='RWR Identifier', size=[
         1500, 1200], upload_to='threats', help_text='Upload image for rwr.', null=True, blank=True)
