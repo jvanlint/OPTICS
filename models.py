@@ -468,4 +468,4 @@ class ThreatReference(models.Model):
 
     def __str__(self):
         """String for representing the MyModelName object (in Admin site etc.)."""
-        return self.name
+        return (self.name + " / " + self.nato_code)
