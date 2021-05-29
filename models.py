@@ -455,6 +455,8 @@ class ThreatReference(models.Model):
     rwr_image = ResizedImageField(verbose_name='RWR Identifier', size=[
         1500, 1200], upload_to='threats', help_text='Upload image for rwr.', null=True, blank=True)
 
+    harm_code = models.CharField(max_length=5, null=True)
+
     class Meta:
         ordering = ['name']
 
