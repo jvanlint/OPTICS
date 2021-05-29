@@ -454,3 +454,16 @@ class ThreatReference(models.Model):
 
     rwr_image = ResizedImageField(verbose_name='RWR Identifier', size=[
         1500, 1200], upload_to='threats', help_text='Upload image for rwr.', null=True, blank=True)
+
+    class Meta:
+        ordering = ['name']
+
+    # Methods
+
+    def get_absolute_url(self):
+        """Returns the url to access a particular instance of MyModelName."""
+        return reverse('model-detail-view', args=[str(self.id)])
+
+    def __str__(self):
+        """String for representing the MyModelName object (in Admin site etc.)."""
+        return self.name
