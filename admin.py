@@ -3,6 +3,7 @@ from django.contrib import admin
 # Register your models here.
 
 from .models import Campaign, Mission, Package, Flight, Aircraft, Status, Airframe, Terrain, Threat, Target, Support, Waypoint, Task
+from .models import ThreatReference
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
@@ -157,3 +158,10 @@ class MyUserAdmin(admin.ModelAdmin):
 
 admin.site.unregister(User)
 admin.site.register(User, MyUserAdmin)
+
+
+class ThreatReferenceAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+
+
+admin.site.register(ThreatReference, ThreatReferenceAdmin)

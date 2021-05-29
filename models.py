@@ -405,3 +405,50 @@ class MissionImagery(models.Model):
     caption = models.CharField(max_length=100, null=True)
     image = ResizedImageField(verbose_name='Mission Imagery', size=[
         1500, 1200], upload_to='campaign/mission/mission_images/', help_text='Upload image for mission.', null=True, blank=True)
+
+
+class ThreatReference(models.Model):
+
+    # Fields
+
+    GROUND_THREAT_CLASS = (
+        ('AAA', 'AAA'),
+        ('MANPAD', 'MANPAD'),
+        ('SHORAD', 'SHORAD'),
+        ('MEDRAD', 'MEDRAD'),
+        ('LONRAD', 'LONRAD'),
+        ('TGTRDR', 'TGTRDR'),
+        ('EWR-ACQR', 'EWR-ACQR'),
+    )
+
+    GROUND_THREAT_TYPE = (
+        ('OPTICAL', 'OPTICAL'),
+        ('RADAR', 'RADAR'),
+        ('LASER', 'LASER'),
+        ('IR', 'IR'),
+    )
+
+    name = models.CharField(max_length=60)
+    nato_code = models.CharField(max_length=60)
+    threat_class = models.CharField(
+        max_length=10, choices=GROUND_THREAT_CLASS, null=True)
+    threat_type = models.CharField(
+        max_length=10, choices=GROUND_THREAT_TYPE, null=True)
+
+    gun_ammo = models.IntegerField(
+        default=0, help_text='Number of gun rounds.')
+    missile_ammo = models.IntegerField(
+        default=0, help_text='Number of missiles.')
+    range_min = models.IntegerField(
+        default=0, help_text='Minimum engagement range (nmi).')
+    range_max = models.IntegerField(
+        default=0, help_text='Maximum enagengagementement range (nmi).')
+    alt_min = models.IntegerField(
+        default=0, help_text='Minimum engagement altitude (ft).')
+    alt_max = models.IntegerField(
+        default=0, help_text='Maximum engagement altitude (ft).')
+    acquire_time = models.IntegerField(
+        default=0, help_text='Time to acquire (secs).')
+
+    rwr_image = ResizedImageField(verbose_name='RWR Identifier', size=[
+        1500, 1200], upload_to='threats', help_text='Upload image for rwr.', null=True, blank=True)
