@@ -73,8 +73,8 @@ class Status(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = 'Status'
-        verbose_name_plural = 'Status'
+        verbose_name = 'Campaign Status'
+        verbose_name_plural = 'Campaign Status'
 
 
 class Mission(models.Model):
