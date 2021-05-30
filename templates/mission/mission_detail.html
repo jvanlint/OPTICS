@@ -21,7 +21,7 @@
 	<hr class="starter-template">
 		<h2>{{ mission_object.name }}</h2>
 
-		<h6>MISSION {{mission_object.number}} / {{mission_object.mission_date}} / {{mission_object.mission_time}}//</h6>
+		<h6>MISSION {{mission_object.number}} / {{mission_object.mission_date}} / {{mission_object.mission_time}} // {{ mission_object.mission_date|timeuntil }}</h6>
 		<hr />
 		<h5>Situation</h5>
 		<p class="lead">{{ mission_object.description|linebreaks }}</p>

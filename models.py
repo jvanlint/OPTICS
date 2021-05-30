@@ -96,7 +96,7 @@ class Mission(models.Model):
     munitions_restrictions = models.TextField(
         help_text='Enter any restrictions on use of munitions/weaponry.', null=True, blank=True, verbose_name="munitions restrictions")
     mission_time = models.CharField(
-        max_length=5, help_text='Mission time in HH:MM format.', null=True, blank=True, verbose_name="mission Start Time")
+        max_length=5, help_text='Mission time in HH:MM format.', null=True, blank=True, verbose_name="mission Start Time", default="20:00 AEST")
     mission_date = models.DateField(
         help_text='Proposed mission date.', null=True, blank=True, verbose_name="expected Mission Date")
     mission_game_time = models.CharField(
