@@ -18,7 +18,7 @@
 	</div>
 	<!-- end row -->
 
-	<div class="starter-template">
+	<hr class="starter-template">
 		<h2>{{ mission_object.name }}</h2>
 
 		<h6>MISSION {{mission_object.number}} / {{mission_object.mission_date}} / {{mission_object.mission_time}}//</h6>
@@ -74,12 +74,7 @@
 
 		<hr />
 
-		<h2>
-			Package{{ package_object|pluralize }}
-			<a href="{% url 'package_add' mission_object.id %}?returnUrl={{request.path}}" role="button"
-				><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Package</button></a
-			>
-		</h2>
+		<h2>Package{{ package_object|pluralize }}</h2>
 		<div class="table-responsive">
 			<table class="table table-striped table-sm">
 				<thead class="thead-dark">
@@ -113,14 +108,12 @@
 					{% endif %}
 				</tbody>
 			</table>
+			<a href="{% url 'package_add' mission_object.id %}?returnUrl={{request.path}}" role="button"
+				><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Package</button></a
+			>
 		</div>
 
-		<h2>
-			Target{{ target_object|pluralize }}
-			<a href="{% url 'target_add' mission_object.id %}?returnUrl={{request.path}}" role="button"
-				><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Target</button></a
-			>
-		</h2>
+		<h2>Target{{ target_object|pluralize }}</h2>
 
 		<div class="table-responsive">
 			<table class="table table-striped table-sm">
@@ -158,14 +151,12 @@
 					{% endif %}
 				</tbody>
 			</table>
+			<a href="{% url 'target_add' mission_object.id %}?returnUrl={{request.path}}" role="button"
+				><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Target</button></a
+			>
 		</div>
 
-		<h2>
-			Threat{{ threat_object|pluralize }}
-			<a href="{% url 'threat_add' mission_object.id %}?returnUrl={{request.path}}" role="button"
-				><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Threat</button></a
-			>
-		</h2>
+		<h2>Threat{{ threat_object|pluralize }}</h2>
 
 		<div class="table-responsive">
 			<table class="table table-striped table-sm">
@@ -193,14 +184,12 @@
 					{% endif %}
 				</tbody>
 			</table>
+			<a href="{% url 'threat_add' mission_object.id %}?returnUrl={{request.path}}" role="button"
+				><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Threat</button></a
+			>
 		</div>
 
-		<h2>
-			Support{{ support_object|pluralize }}
-			<a href="{% url 'support_add' mission_object.id %}?returnUrl={{request.path}}" role="button"
-				><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Support</button></a
-			>
-		</h2>
+		<h2>Support{{ support_object|pluralize }}</h2>
 
 		<div class="table-responsive">
 			<table class="table table-striped table-sm">
@@ -242,15 +231,18 @@
 					{% endif %}
 				</tbody>
 			</table>
+			<a href="{% url 'support_add' mission_object.id %}?returnUrl={{request.path}}" role="button"
+				><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Support</button></a
+			>
 		</div>
 
-		<h2>
-			Mission Imagery
-			<a href="{% url 'mission_imagery_add' mission_object.id %}?returnUrl={{request.path}}" role="button"
-				><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Image</button></a
-			>
-		</h2>
+		<hr>
 
+		<h2>Mission Imagery <a href="{% url 'mission_imagery_add' mission_object.id %}?returnUrl={{request.path}}" role="button"
+			><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Image</button></a
+		>
+		</h2>
+		
 		<div class="row">
 			{% if imagery_object %} {% for imagery in imagery_object %}
 			<div class="col">

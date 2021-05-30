@@ -13,7 +13,7 @@
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
 					<li class="breadcrumb-item"></class><a href="{% url 'campaign' %}">Campaigns</a></li>
-					<li class="breadcrumb-item active" aria-current="page" href="">{{ campaign.name }}</li>
+					<li class="breadcrumb-item active" aria-current="page" href="">{{ campaign_Object.name }}</li>
 				</ol>
 			</nav>
 		</div>
@@ -23,33 +23,33 @@
 	<!-- start row - Campaign Header -->
 	<div class="row">
 		<div class="col-md-8">
-			<h2>{{ campaign.name }}</h2>
-			<h6>by {{ campaign.created_by }}</h6>
-			<h6>{{ campaign.dcs_map }}</h6>
+			<h2>{{ campaign_Object.name }}</h2>
+			<h6>by {{ campaign_Object.creator }}</h6>
+			<h6>{{ campaign_Object.dcs_map }}</h6>
 			<h2>
-				{% if campaign.status.name == "Active" %}
+				{% if campaign_Object.status.name == "Active" %}
 				<span class="badge badge-success">
-				{% elif campaign.status.name == "Inactive" %}
+				{% elif campaign_Object.status.name == "Inactive" %}
 				<span class="badge badge-danger">
 				{% else %}
 				<span class="badge badge-primary">
 				{% endif %}
-				{{ campaign.status }}</span>
+				{{ campaign_Object.status }}</span>
 			</h2>
-			<p>{{ campaign.description|linebreaks }}</p>
-			{% if campaign.creator.username == user.username or isAdmin == True %}
+			<p>{{ campaign_Object.description|linebreaks }}</p>
+			{% if campaign_Object.creator.username == user.username or isAdmin == True %}
 			<div class="btn-toolbar">
 				<div class="btn-group mr-2">
-					<a class="btn btn-sm btn-outline-secondary" href="{% url 'campaign_update' campaign.id %}?returnUrl={{request.path}}" role="button">Edit</a>
-										<a class="btn btn-sm btn-outline-secondary" href="{% url 'campaign_delete' campaign.id %}?returnUrl={{request.path}}" role="button">Delete</a>
+					<a class="btn btn-sm btn-outline-secondary" href="{% url 'campaign_update' campaign_Object.id %}?returnUrl={{request.path}}" role="button">Edit</a>
+										<a class="btn btn-sm btn-outline-secondary" href="{% url 'campaign_delete' campaign_Object.id %}?returnUrl={{request.path}}" role="button">Delete</a>
 				</div>
 			</div>
 			{% endif %}
 		</div>
 
 		<div class="col-sm">
-			{% if campaign.campaignImage %}
-			<img src="{{ campaign.campaignImage.url }}" class="rounded float-right" alt="..." width="200" />
+			{% if campaign_Object.campaignImage %}
+			<img src="{{ campaign_Object.campaignImage.url }}" class="rounded float-right" alt="..." width="200" />
 			{% else %}
 			<svg class="bd-placeholder-img card-img-top" width="200" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
 				<title>Placeholder</title>
@@ -64,11 +64,11 @@
 		<div class="col">
 			<hr>
 			<h6>Situation</h6>
-			{{ campaign.situation|linebreaks }}
+			{{ campaign_Object.situation|linebreaks }}
 			<hr>
 			<h6>Area of Operations Imagery</h6>
-			{% if campaign.aoImage %}
-			<img class="img-fluid" src="{{ campaign.aoImage.url }}" alt="..."/>
+			{% if campaign_Object.aoImage %}
+			<img class="img-fluid" src="{{ campaign_Object.aoImage.url }}" alt="..."/>
 			{% endif %}
 		</div>
 	</div>
@@ -80,10 +80,8 @@
 		<div class="col"><!-- .col -->
 			<hr>
 			
-			<h4>Mission(s) 
-				{% if campaign.creator.username == user.username or isAdmin == True %}
-				<a href="{% url 'mission_add' campaign.id %}?returnUrl={{request.path}}" role="button"><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Mission</button></a>
-				{% endif %}
+			<h4>Mission{{ mission_Object|pluralize }}
+				
 			</h4>
 			<table class="table"><!-- .table -->
 				<thead class="thead-dark">
@@ -97,7 +95,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					{% if missions %} {% for mission in missions %}
+					{% if mission_Object %} {% for mission in mission_Object %}
 					<tr>
 						<th scope="row">{{mission.number}}</th>
 						<td><a href="{% url 'mission' mission.id %}">{{ mission.name }}</a></td>
@@ -112,11 +110,14 @@
 					</tr>
 					{% endfor %} {% else %}
 					<tr>
-						<td>No missions available.</td>
+						<td>No mission_Object available.</td>
 					</tr>
 					{% endif %}
 				</tbody>
-			</table><!-- /.table -->		
+			</table><!-- /.table -->
+			{% if campaign.creator.username == user.username or isAdmin == True %}
+				<a href="{% url 'mission_add' campaign_Object.id %}?returnUrl={{request.path}}" role="button"><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Mission</button></a>
+				{% endif %}		
 		</div><!-- /.col -->				
 	</div><!-- /.row -->
 </div><!-- /.container -->

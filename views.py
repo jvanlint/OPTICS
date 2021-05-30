@@ -85,7 +85,7 @@ def campaign_detail(request, link_id):
 
     campaign.refresh_from_db()
 
-    context = {'campaign': campaign, 'missions': missions,
+    context = {'campaign_Object': campaign, 'mission_Object': missions,
                'isAdmin': is_admin(request.user)}
 
     return render(request, 'campaign/campaign_detail.html', context=context)
@@ -221,7 +221,7 @@ def package(request, link_id):
     package = Package.objects.get(id=link_id)
     flights = package.flight_set.all()
 
-    context = {'packageObject': package, 'flightObject': flights}
+    context = {'package_Object': package, 'flight_Object': flights}
     return render(request, 'package/package_detail.html', context)
 
 
@@ -475,7 +475,8 @@ def aircraft_create(request, link_id):
     # Filter the flights field to just targets from the mission.
     flights = Flight.objects.filter(package=flight.package.id)
 
-    form = AircraftForm(flights, initial={'flight': flight})
+    form = AircraftForm(
+        flights, initial={'flight': flight})
 
     if request.method == "POST":
         form = AircraftForm(flights, request.POST, request.FILES)

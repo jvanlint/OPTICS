@@ -39,7 +39,7 @@
 					<div class="card-body">
 						<h5 class="card-title">{{ campaign.name }}</h5>
 						<p class="card-title">By {{ campaign.creator.username }}</p>
-						<h6>{{ campaign.dcs_map}} - {{ campaign.mission_set.count }} mission(s)</h6>
+						<h6>{{ campaign.dcs_map}} - {{ campaign.mission_set.count }} mission{{campaign.mission_set.all|pluralize}}</h6>
 						<h5>
 						{% if campaign.status.name == "Active" %}
 						<span class="badge badge-success">

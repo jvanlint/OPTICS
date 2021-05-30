@@ -28,8 +28,8 @@
 			<table class="table table-striped table-sm">
 				<thead class="thead-light">
 					<tr>
-						<th>Radio</th>
-						<th>TACAN</th>
+						<th>Flight Radio</th>
+						<th>Flight TACAN</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -52,12 +52,7 @@
 	</div>
 	<hr />
 
-	<h2>
-		Aircraft
-		<a href="{% url 'aircraft_add' flight_Object.id %}" role="button"
-			><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Aircraft</button></a
-		>
-	</h2>
+	<h2>Aircraft</h2>
 	<div class="table-responsive">
 		<table class="table table-striped table-sm">
 			<thead class="thead-dark">
@@ -90,14 +85,12 @@
 				{% endif %}
 			</tbody>
 		</table>
+		<a href="{% url 'aircraft_add' flight_Object.id %}" role="button"
+			><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Aircraft</button></a
+		>
 	</div>
 
-	<h2>
-		Waypoint{{ waypoint_Object|pluralize }}
-		<a href="{% url 'waypoint_add' flight_Object.id %}" role="button"
-			><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Waypoint</button></a
-		>
-	</h2>
+	<h2>Waypoint{{ waypoint_Object|pluralize }}</h2>
 	<div class="table-responsive">
 		<table class="table table-striped table-sm">
 			<thead class="thead-dark">
@@ -128,6 +121,9 @@
 				{% endfor %}
 			</tbody>
 		</table>
+		<a href="{% url 'waypoint_add' flight_Object.id %}" role="button"
+			><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Waypoint</button></a
+		>
 	</div>
 
 	<h2>Target{{ target_Object|pluralize }}</h2>
