@@ -57,6 +57,9 @@ class Terrain(models.Model):
         """String for representing the Campaign object (in Admin site etc.)."""
         return self.name
 
+    class Meta:
+        verbose_name_plural = 'Terrain'
+
 
 class Status(models.Model):
 
@@ -68,6 +71,10 @@ class Status(models.Model):
     def __str__(self):
         """String for representing the Campaign object (in Admin site etc.)."""
         return self.name
+
+    class Meta:
+        verbose_name = 'Status'
+        verbose_name_plural = 'Status'
 
 
 class Mission(models.Model):
@@ -254,10 +261,12 @@ class Aircraft(models.Model):
         'Airframe', on_delete=models.CASCADE, null=True)
     flight = models.ForeignKey(
         'Flight', on_delete=models.CASCADE, null=True)
-    pilot = models.CharField(
-        max_length=30, help_text='Enter Pilot Name', null=True, blank=True)
-    rio_wso = models.CharField(
-        max_length=30, help_text='Enter RIO/WSO Name', null=True, blank=True)
+    # pilot = models.CharField(
+    # max_length=30, help_text='Enter Pilot Name', null=True, blank=True)
+    pilot = models.ForeignKey(
+        User, null=True, blank=True, on_delete=models.SET_NULL, related_name='user_pilot')
+    rio_wso = models.ForeignKey(
+        User, null=True, blank=True, on_delete=models.SET_NULL, related_name='user_rio')
     tailcode = models.CharField(
         max_length=20, help_text='Enter A/C tail code.', null=True, blank=True)
     flight_lead = models.BooleanField(default=False)
@@ -267,6 +276,8 @@ class Aircraft(models.Model):
 
     class Meta:
         ordering = ['flight_lead']
+        verbose_name = 'Aircraft'
+        verbose_name_plural = 'Aircraft'
 
     # Methods
 
@@ -463,6 +474,8 @@ class ThreatReference(models.Model):
 
     class Meta:
         ordering = ['name']
+        verbose_name = 'Threat Reference'
+        verbose_name_plural = 'Threat References'
 
     # Methods
 

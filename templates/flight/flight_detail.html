@@ -10,10 +10,10 @@
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
 					<li class="breadcrumb-item"><a href="{% url 'campaign' %}">Campaigns</a></li>
-					<li class="breadcrumb-item"><a href="{% url 'campaign' flightObject.package.mission.campaign.id  %}">{{ flightObject.package.mission.campaign.name }}</a></li>
-					<li class="breadcrumb-item"><a href="{% url 'mission' flightObject.package.mission.id  %}">{{flightObject.package.mission.name}}</a></li>
-					<li class="breadcrumb-item"><a href="{% url 'package' flightObject.package.id  %}">{{flightObject.package.name}}</a></li>
-					<li class="breadcrumb-item active" aria-current="page">{{flightObject.callsign}}</li>
+					<li class="breadcrumb-item"><a href="{% url 'campaign' flight_Object.package.mission.campaign.id  %}">{{ flight_Object.package.mission.campaign.name }}</a></li>
+					<li class="breadcrumb-item"><a href="{% url 'mission' flight_Object.package.mission.id  %}">{{flight_Object.package.mission.name}}</a></li>
+					<li class="breadcrumb-item"><a href="{% url 'package' flight_Object.package.id  %}">{{flight_Object.package.name}}</a></li>
+					<li class="breadcrumb-item active" aria-current="page">{{flight_Object.callsign}}</li>
 				</ol>
 			</nav>
 		</div>
@@ -21,8 +21,8 @@
 	<!-- end row -->
 
 	<div class="starter-template">
-		<h2>{{ flightObject.callsign }}</h2>
-		<h3><span class="badge badge-dark">{{ flightObject.task }}</span></h3>
+		<h2>{{ flight_Object.callsign }}</h2>
+		<h3><span class="badge badge-dark">{{ flight_Object.task }}</span></h3>
 		<hr />
 		<div class="table-responsive">
 			<table class="table table-striped table-sm">
@@ -34,8 +34,8 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>{{flightObject.radio_frequency}}</td>
-						<td>{{flightObject.tacan}}</td>
+						<td>{{flight_Object.radio_frequency}}</td>
+						<td>{{flight_Object.tacan}}</td>
 					</tr>
 				</tbody>
 			</table>
@@ -43,10 +43,10 @@
 
 		<div class="btn-toolbar">
 			<div class="btn-group mr-2">
-				<a class="btn btn-sm btn-outline-secondary" href="{% url 'flight_update' flightObject.id %}?returnUrl={{request.path}}" role="button">Edit</a>
-				<a class="btn btn-sm btn-outline-secondary" href="{% url 'flight_delete' flightObject.id %}?returnUrl={{request.path}}" role="button">Delete</a>
-				<a class="btn btn-sm btn-outline-secondary" href="{% url 'pdf_view' flightObject.package.mission.id flightObject.id %}?returnUrl={{request.path}}" role="button">View Mission Card</a>
-				<a class="btn btn-sm btn-outline-secondary" href="{% url 'pdf_download' flightObject.package.mission.id flightObject.id %}?returnUrl={{request.path}}" role="button">Download Mission Card</a>
+				<a class="btn btn-sm btn-outline-secondary" href="{% url 'flight_update' flight_Object.id %}?returnUrl={{request.path}}" role="button">Edit</a>
+				<a class="btn btn-sm btn-outline-secondary" href="{% url 'flight_delete' flight_Object.id %}?returnUrl={{request.path}}" role="button">Delete</a>
+				<a class="btn btn-sm btn-outline-secondary" href="{% url 'pdf_view' flight_Object.package.mission.id flight_Object.id %}?returnUrl={{request.path}}" role="button">View Mission Card</a>
+				<a class="btn btn-sm btn-outline-secondary" href="{% url 'pdf_download' flight_Object.package.mission.id flight_Object.id %}?returnUrl={{request.path}}" role="button">Download Mission Card</a>
 			</div>
 		</div>
 	</div>
@@ -54,7 +54,7 @@
 
 	<h2>
 		Aircraft
-		<a href="{% url 'aircraft_add' flightObject.id %}" role="button"
+		<a href="{% url 'aircraft_add' flight_Object.id %}" role="button"
 			><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Aircraft</button></a
 		>
 	</h2>
@@ -70,7 +70,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{% if aircraftObject %} {% for aircraft in aircraftObject %}
+				{% if aircraft_Object %} {% for aircraft in aircraft_Object %}
 				<tr>
 					<td>{{ aircraft.type }}</td>
 					<td>{{ aircraft.pilot }} {% if aircraft.flight_lead %}<span class="badge badge-success">LEAD</span>{% endif %}</td>
@@ -93,8 +93,8 @@
 	</div>
 
 	<h2>
-		Waypoint(s)
-		<a href="{% url 'waypoint_add' flightObject.id %}" role="button"
+		Waypoint{{ waypoint_Object|pluralize }}
+		<a href="{% url 'waypoint_add' flight_Object.id %}" role="button"
 			><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Waypoint</button></a
 		>
 	</h2>
@@ -113,7 +113,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{% for waypoint in flightObject.waypoint_set.all %}
+				{% for waypoint in waypoint_Object %}
 				<tr>
 					<td>{{ waypoint.number }}</td>
 					<td>{{ waypoint.name }}</td>
@@ -130,11 +130,11 @@
 		</table>
 	</div>
 
-	<h2>Target(s)</h2>
+	<h2>Target{{ target_Object|pluralize }}</h2>
 	<div class="table-responsive">
 		<table class="table table-striped table-sm">
 			<thead class="thead-dark">
-				{% if flightObject.targets %}
+				{% if target_Object %}
 				<tr>
 					<th>Name</th>
 					<th>Lat</th>
@@ -145,7 +145,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{% for target in flightObject.targets.all %}
+				{% for target in target_Object %}
 				<tr>
 					<td>{{ target.name }}</td>
 					<td>{{ target.lat }}</td>

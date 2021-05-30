@@ -50,7 +50,7 @@ def index(request):
     """View function for home page of site."""
 
     # Generate counts of some of the main objects
-    num_campaigns = Campaign.objects.all().count()
+    # num_campaigns = Campaign.objects.all().count()
     # num_instances = BookInstance.objects.all().count()
 
     # Available books (status = 'a')
@@ -389,8 +389,11 @@ def mission_imagery_delete(request, link_id):
 def flight(request, link_id):
     flight = Flight.objects.get(id=link_id)
     aircraft = flight.aircraft_set.all().order_by('-flight_lead')
+    waypoints = flight.waypoint_set.all().order_by('number')
+    targets = flight.targets.all()
 
-    context = {'flightObject': flight, 'aircraftObject': aircraft}
+    context = {'flight_Object': flight, 'aircraft_Object': aircraft,
+               'waypoint_Object': waypoints, 'target_Object': targets}
     return render(request, 'flight/flight_detail.html', context)
 
 

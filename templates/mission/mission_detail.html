@@ -75,7 +75,7 @@
 		<hr />
 
 		<h2>
-			Package(s)
+			Package{{ package_object|pluralize }}
 			<a href="{% url 'package_add' mission_object.id %}?returnUrl={{request.path}}" role="button"
 				><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Package</button></a
 			>
@@ -116,7 +116,7 @@
 		</div>
 
 		<h2>
-			Target(s)
+			Target{{ target_object|pluralize }}
 			<a href="{% url 'target_add' mission_object.id %}?returnUrl={{request.path}}" role="button"
 				><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Target</button></a
 			>
@@ -161,7 +161,7 @@
 		</div>
 
 		<h2>
-			Threat(s)
+			Threat{{ threat_object|pluralize }}
 			<a href="{% url 'threat_add' mission_object.id %}?returnUrl={{request.path}}" role="button"
 				><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Threat</button></a
 			>
@@ -196,7 +196,7 @@
 		</div>
 
 		<h2>
-			Support(s)
+			Support{{ support_object|pluralize }}
 			<a href="{% url 'support_add' mission_object.id %}?returnUrl={{request.path}}" role="button"
 				><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Support</button></a
 			>
