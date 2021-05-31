@@ -519,7 +519,7 @@ def aircraft_delete(request, link_id):
     flightID = aircraft.flight.id
 
     if request.method == "POST":
-        flight.delete()
+        aircraft.delete()
         return HttpResponseRedirect('/airops/flight/' + str(flightID))
 
     context = {'item': aircraft}
