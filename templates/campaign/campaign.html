@@ -49,7 +49,7 @@
 						<span class="badge badge-primary">
 						{% endif %}
 						{{ campaign.status }}</span></h5>
-						<p class="card-text">{{ campaign.description|linebreaks }}</p>
+						<p class="card-text">{{ campaign.description|linebreaks|truncatechars:200}}</p>
 						<div class="d-flex justify-content-between align-items-center">
 							<div class="btn-group">
 								<a class="btn btn-sm btn-outline-secondary" href="{% url 'campaign_detail' campaign.id %}" role="button">View</a>
