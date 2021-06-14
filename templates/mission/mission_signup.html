@@ -59,7 +59,7 @@
 													<td></td>
 													<td>{{aircraft.type}}</td>
 													<td>{{ aircraft.pilot }}</td>
-													<td><a class="btn btn-sm btn-outline-secondary" href="{% url 'mission_signup_update' aircraft.id %}?returnUrl={{request.path}}" role="button">Take Slot</a><a class="btn btn-sm btn-outline-secondary" href="{% url 'mission_signup_remove' aircraft.id %}?returnUrl={{request.path}}" role="button">Clear Slot</a>
+													<td><a class="btn btn-sm btn-info" href="{% url 'mission_signup_update' aircraft.id %}?returnUrl={{request.path}}" role="button">Take Slot</a><a class="btn btn-sm btn-danger" href="{% url 'mission_signup_remove' aircraft.id %}?returnUrl={{request.path}}" role="button">Clear Slot</a>
 												</tr>
 												{% endfor %}
 											{% endfor %}
