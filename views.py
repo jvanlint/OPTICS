@@ -880,3 +880,13 @@ def mission_signup_update(request, link_id):
     aircraft.save()
 
     return HttpResponseRedirect(returnURL)
+
+
+def mission_signup_remove(request, link_id):
+    returnURL = request.GET.get('returnUrl')
+    aircraft = Aircraft.objects.get(pk=link_id)
+
+    aircraft.pilot = None
+    aircraft.save()
+
+    return HttpResponseRedirect(returnURL)
