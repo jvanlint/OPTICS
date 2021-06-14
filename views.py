@@ -861,3 +861,22 @@ def new_view_mission_card(request, mission_id, flight_id):
     if pisa_status.err:
         return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
+
+
+def mission_signup(request, link_id):
+    mission = Mission.objects.get(id=link_id)
+    packages = mission.package_set.all()
+
+    context = {'mission_object': mission,
+               'package_object': packages, }
+    return render(request, 'mission/mission_signup.html', context)
+
+
+def mission_signup_update(request, link_id):
+    returnURL = request.GET.get('returnUrl')
+    aircraft = Aircraft.objects.get(pk=link_id)
+
+    aircraft.pilot = request.user
+    aircraft.save()
+
+    return HttpResponseRedirect(returnURL)
