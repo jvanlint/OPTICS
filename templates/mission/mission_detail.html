@@ -64,15 +64,15 @@
 
 			<div class="btn-toolbar">
 				<div class="btn-group mr-2">
-			{% if campaign.creator.username == user.username or isAdmin == True %}
-			
+					{% if campaign.creator.username == user.username or isAdmin == True %}	
 					<a class="btn btn-sm btn-outline-secondary" href="{% url 'mission_update' mission_object.id %}?returnUrl={{request.path}}" role="button">Edit</a>
 					<a class="btn btn-sm btn-outline-secondary" href="{% url 'mission_delete' mission_object.id %}?returnUrl={{request.path}}" role="button">Delete</a>
-					<a class="btn btn-sm btn-outline-secondary" href="{% url 'mission_signup' mission_object.id %}?returnUrl={{request.path}}" role="button">Sign Up</a>
-			{% endif %}
-					<a class="btn btn-sm btn-outline-secondary" href="{% url 'mission_signup' mission_object.id %}?returnUrl={{request.path}}" role="button">Sign Up</a>
-			
+					{% endif %}
 				</div>
+			</div>
+
+			<div class="btn">
+				<a class="btn btn-sm btn-outline-secondary" href="{% url 'mission_signup' mission_object.id %}?returnUrl={{request.path}}" role="button">Sign Up</a>
 			</div>
 		</div>
 
