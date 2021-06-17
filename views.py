@@ -1,3 +1,4 @@
+from django.core.files.base import endswith_lf
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
@@ -866,9 +867,13 @@ def new_view_mission_card(request, mission_id, flight_id):
 def mission_signup(request, link_id):
     mission = Mission.objects.get(id=link_id)
     packages = mission.package_set.all()
-
+    current_seat = Aircraft.objects.filter(pilot__exact=request.user)
+    
     context = {'mission_object': mission,
-               'package_object': packages, }
+               'package_object': packages,
+               'current_seat_object': current_seat,
+               }
+    
     return render(request, 'mission/mission_signup.html', context)
 
 
