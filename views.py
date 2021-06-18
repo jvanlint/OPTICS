@@ -867,13 +867,14 @@ def new_view_mission_card(request, mission_id, flight_id):
 def mission_signup(request, link_id):
     mission = Mission.objects.get(id=link_id)
     packages = mission.package_set.all()
-    current_seat = Aircraft.objects.filter(pilot__exact=request.user)
-    
+    has_seat = len(Aircraft.objects.filter(pilot__exact=request.user)) 
+    is_owner = True # (Campaign.creator == request.user)
     context = {'mission_object': mission,
                'package_object': packages,
-               'current_seat_object': current_seat,
+               'has_seat': has_seat,
+               'is_owner': is_owner,
                }
-    
+
     return render(request, 'mission/mission_signup.html', context)
 
 
