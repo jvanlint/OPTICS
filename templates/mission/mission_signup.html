@@ -11,8 +11,7 @@
 					<li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
 					<li class="breadcrumb-item"><a href="{% url 'campaign' %}">Campaigns</a></li>
 					<li class="breadcrumb-item">
-						<a href="{% url 'campaign' mission_object.campaign.id  %}">{{ mission_object.campaign.name
-							}}</a>
+						<a href="{% url 'campaign' mission_object.campaign.id  %}">{{mission_object.campaign.name}}</a>
 					</li>
 					<li class="breadcrumb-item active" aria-current="page">{{mission_object.name}}</li>
 				</ol>
@@ -25,10 +24,10 @@
 	<h2>{{ mission_object.name }}</h2>
 
 	<h6>
-		MISSION {{mission_object.number}} / {{mission_object.mission_date}} / {{mission_object.mission_time}} / {{
-		mission_object.mission_date|timeuntil }}
+		MISSION {{mission_object.number}} / {{mission_object.mission_date}} / {{mission_object.mission_time}} / 
+		{{mission_object.mission_date|timeuntil }}
 	</h6>
-	<hr />
+	<hr/>
 
 	{% if package_object %} {% for package in package_object %}
 	<div class="card">
