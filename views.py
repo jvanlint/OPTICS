@@ -845,7 +845,9 @@ def new_view_mission_card(request, mission_id, flight_id):
     mission = Mission.objects.get(id=mission_id)
     flight = Flight.objects.get(id=flight_id)
 
-    data = {'mission_object': mission, 'flight_object': flight}
+    data = {'mission_object': mission, 
+            'flight_object': flight,
+            }
 
     template_path = 'mission_card/pdf_template.html'
     context = data
