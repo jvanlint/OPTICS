@@ -874,7 +874,7 @@ def mission_signup(request, link_id):  # link_id is the mission ID
     for package in package_list:
         has_seat += Aircraft.objects.filter(flight__package__id=package['pk']).filter(pilot=request.user).count()
     campaign = Campaign.objects.get(mission=mission)
-    is_owner = True #(campaign.creator == request.user)
+    is_owner = (campaign.creator == request.user)
     context = {'mission_object': mission,
                'package_object': packages,
                'has_seat': has_seat,
