@@ -1,4 +1,5 @@
 from django.core.files.base import endswith_lf
+from django.core import serializers
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
@@ -864,16 +865,22 @@ def new_view_mission_card(request, mission_id, flight_id):
     return response
 
 
-def mission_signup(request, link_id):
+def mission_signup(request, link_id):  # link_id is the mission ID
     mission = Mission.objects.get(id=link_id)
     packages = mission.package_set.all()
-    current_seat = Aircraft.objects.filter(pilot__exact=request.user)
     
+    has_seat = 0
+    package_list = serializers.serialize("python", packages)
+    for package in package_list:
+        has_seat += Aircraft.objects.filter(flight__package__id=package['pk']).filter(pilot=request.user).count()
+    campaign = Campaign.objects.get(mission=mission)
+    is_owner = True #(campaign.creator == request.user)
     context = {'mission_object': mission,
                'package_object': packages,
-               'current_seat_object': current_seat,
+               'has_seat': has_seat,
+               'is_owner': is_owner,
                }
-    
+
     return render(request, 'mission/mission_signup.html', context)
 
 

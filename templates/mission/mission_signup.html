@@ -1,5 +1,4 @@
-{% extends "dashboard/basev2.html" %} {% load static %} {% block content %}
-{% load user_tags %}
+{% extends "dashboard/basev2.html" %} {% load static %} {% block content %} {% load user_tags %}
 
 <!-- start container -->
 <div class="container">
@@ -11,8 +10,9 @@
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
 					<li class="breadcrumb-item"><a href="{% url 'campaign' %}">Campaigns</a></li>
-					<li class="breadcrumb-item"><a href="{% url 'campaign' mission_object.campaign.id  %}">{{
-							mission_object.campaign.name }}</a></li>
+					<li class="breadcrumb-item">
+						<a href="{% url 'campaign' mission_object.campaign.id  %}">{{mission_object.campaign.name}}</a>
+					</li>
 					<li class="breadcrumb-item active" aria-current="page">{{mission_object.name}}</li>
 				</ol>
 			</nav>
@@ -20,83 +20,69 @@
 	</div>
 	<!-- end row -->
 
-	<hr class="starter-template">
+	<hr class="starter-template" />
 	<h2>{{ mission_object.name }}</h2>
 
-	<h6>MISSION {{mission_object.number}} / {{mission_object.mission_date}} / {{mission_object.mission_time}} // {{
-		mission_object.mission_date|timeuntil }}</h6>
-	<hr />
+	<h6>
+		MISSION {{mission_object.number}} / {{mission_object.mission_date}} / {{mission_object.mission_time}} / 
+		{{mission_object.mission_date|timeuntil }}
+	</h6>
+	<hr/>
 
-	{% if package_object %}
-	{% for package in package_object %}
+	{% if package_object %} {% for package in package_object %}
 	<div class="card">
-		<div class="card-header">
-			{{ package.name }}
-		</div>
-		<div class="card-body">
-			{{ package.description|linebreaks }}
-		</div>
-		<div class="card-body">
-			<div class="table-responsive">
-				<table class="table table-striped table-sm">
+		<div class="card-header bg-light"><h3>{{ package.name }} - card header</h3></div>
+		<div class="card-body">{{ package.description|linebreaks }} card body</div>
+		<div class="card-body"> card body for table
+			<div class="class=table-responsive">
+				<table class="table ">
 					<thead class="thead-dark">
 						<tr>
-							<th>Flight Name</th>
-							<th colspan="3">Task</th>
-
+							<th scope="col" colspan="4">Flight Name - Task</th>
 						</tr>
 					</thead>
 					<tbody>
 						{% for flight in package.flight_set.all %}
-						<tr>
-							<td>{{ flight.callsign }}</td>
-							<td colspan="3">{{ flight.task }}</td>
+						<tr class="table-info text-center ">
+							<th class="w-25 text-left">{{ flight.callsign }} - {{ flight.task }}</th>
+							<th class="w-25">A/C</th>
+							<th class="w-25">Pilot</th>
+							<th class="w-25"></th>
 						</tr>
-						<tr>
-							<td></td>
-							<th>A/C</th>
-							<th>Pilot</th>
-						</tr>
-
 						{% for aircraft in flight.aircraft_set.all %}
 						<tr>
 							<td></td>
-							<td>{{aircraft.type}}</td>
-
+							<td class="text-center">{{aircraft.type}}</td>
 							{% if aircraft.pilot %}
-							<!-- aircraft has a pilot -->
-							{% if request.user == aircraft.pilot %}
-							<!-- Pilot is current user -->
-							<td><a class="btn btn-sm btn-danger"
-									href="{% url 'mission_signup_remove' aircraft.id %}?returnUrl={{request.path}}"
-									role="button">Leave Slot</a></td>
-							{% else %}
-							<!-- show the pilot's name -->
-							<td>{{aircraft.pilot}}</td>
-							{% endif %}
-							{% else %}
-							{% if current_seat_object %}
-							<!-- cannot get if len(current_seat_object == 0) to work here for some reason...-->
-							<!-- which would remove the need for the else below.-->
-							{% else %}
-							<!-- aircraft does not have a pilot -->
-							<td><a class="btn btn-sm btn-info"
+								<!-- Show the current pilot -->
+								<td class="text-center">{{aircraft.pilot}}</td>
+								{% if aircraft.pilot == user %}
+									<td class="text-center"><a class="btn btn-sm btn-danger"
+										href="{% url 'mission_signup_remove' aircraft.id %}?returnUrl={{request.path}}"
+										role="button">Leave Slot</a></td>
+								{% elif is_owner %}
+										<td class="text-center"><a class="btn btn-sm btn-warning"
+											href="{% url 'mission_signup_remove' aircraft.id %}?returnUrl={{request.path}}"
+											role="button">Clear Slot</a></td>
+								{% else %}
+									<td></td>
+								{% endif%}
+								
+							{% elif not has_seat %}
+								<td class="text-center"><a class="btn btn-sm btn-info"
 									href="{% url 'mission_signup_update' aircraft.id %}?returnUrl={{request.path}}"
-									role="button">Take Slot</a> </td>
-							{% endif %}
+									role="button">Take Slot</a></td>
+									<td></td>
+							{% else %}
+									<td class="text-center">---</td><td></td>
 							{% endif %}
 						</tr>
-						{% endfor %}
-						{% endfor %}
-
+						{% endfor %}{% endfor %}
 					</tbody>
-				</table>
+				</table> 
 			</div>
 		</div>
 	</div>
-	{% endfor %}
-	{% endif %}
+	{% endfor %}{% endif %}
 </div>
 {% endblock %}
-</div>
-</div>
