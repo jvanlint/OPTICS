@@ -1,6 +1,7 @@
 from django.db import models
 from django_resized import ResizedImageField
 from django.contrib.auth.models import User
+import requests
 
 # Create your models here.
 
@@ -140,6 +141,68 @@ class Mission(models.Model):
     def __str__(self):
         """String for representing the MyModelName object (in Admin site etc.)."""
         return self.name
+    
+    def create_discord_event(self):
+        
+        # Create message should be
+        # POST/webhooks/{webhook.id}/{webhook.token}
+        
+        # Edit message
+        # PATCH/webhooks/{webhook.id}/{webhook.token}/messages/{message.id}
+        
+        url = "https://discord.com/api/webhooks/839448434599657493/Gvc9AlUL6pticGqfP0F9iP3zOcwdEBnVtIYa5Z6xwlklD_B2ieEIvrXfuKJ5zckDQSE_"
+        
+        params = {'wait': 'true'}
+        
+        data = {
+            "content" : "OPTICS Generated Mission Event",
+            "username" : "OPTICS Bot"
+        }
+        title = self.campaign.campaign_name
+        thumbnail = self.campaign.thumbnail_image.url
+        mission_name = self.name
+        now = str(timezone.now())
+        date = self.mission_date.strftime("%b %d %Y")
+        description = (f'{self.name}\n**{date}, {self.mission_time}**\n\n{self.description}')
+        
+        data["embeds"] = [
+            {
+                "title": title,
+                "description": description,
+                "color": 16711680,
+                "fields": [
+                    {
+                        "name": "Mission Page",
+                        "value": (f'[{mission_name}]({mission_page})'),
+                        #"value": "[Cracking Eggs With A Hammer ](http://www.google.com)",
+                        "inline": True
+                    },
+                    {
+                        "name": "Sign Up Sheet",
+                        "value": "[Register here](http://www.google.com)",
+                        "inline": True
+                    }
+                ],
+                "timestamp": now,
+                "thumbnail": {
+                    "url": image_url
+                }
+            }
+        ]
+        
+        result = requests.post(url, json = data, params = params)
+        
+        print(result)
+        try:
+            result.raise_for_status()
+            jsonResponse = result.json()
+        except requests.exceptions.HTTPError as err:
+            print(err)
+        else:
+            print("Payload delivered successfully, code {}.".format(result.status_code))
+            print(jsonResponse['id'])
+        
+        return True
 
 
 class Package(models.Model):
@@ -275,7 +338,7 @@ class Aircraft(models.Model):
     # Metadata
 
     class Meta:
-        ordering = ['flight_lead']
+        ordering = ['-flight_lead']
         verbose_name = 'Aircraft'
         verbose_name_plural = 'Aircraft'
 

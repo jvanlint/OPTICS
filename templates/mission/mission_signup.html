@@ -51,7 +51,7 @@
 						</tr>
 						{% for aircraft in flight.aircraft_set.all %}
 						<tr>
-							<td></td>
+							<td>{%if aircraft.flight_lead %}<span class="badge badge-primary">Flight Lead</span>{% endif %}{%if aircraft.package_lead %}&nbsp<span class="badge badge-info">Package Lead</span>{% endif %}</td>
 							<td class="text-center">{{aircraft.type}}</td>
 							{% if aircraft.pilot %}
 								<!-- Show the current pilot -->
