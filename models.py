@@ -150,7 +150,7 @@ class Mission(models.Model):
         # Edit message
         # PATCH/webhooks/{webhook.id}/{webhook.token}/messages/{message.id}
         
-        url = "https://discord.com/api/webhooks/839448434599657493/Gvc9AlUL6pticGqfP0F9iP3zOcwdEBnVtIYa5Z6xwlklD_B2ieEIvrXfuKJ5zckDQSE_"
+        
         
         params = {'wait': 'true'}
         
