@@ -64,7 +64,7 @@
 		<div class="col">
 			<hr>
 			<h6>Situation</h6>
-			{{ campaign_Object.situation|linebreaks }}
+			{{ campaign_Object.situation|linebreaks|urlize }}
 			<hr>
 			<h6>Area of Operations Imagery</h6>
 			{% if campaign_Object.aoImage %}
