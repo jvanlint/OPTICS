@@ -1,29 +1,5 @@
-from django.core import serializers
-from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseRedirect
-
-from django.contrib.auth import login, authenticate, logout  # add this
-from django.contrib import messages
-from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm  # add this
-from django.contrib.auth.decorators import login_required
-
-from django.views.decorators.cache import never_cache
-
-from django.views.decorators.csrf import csrf_protect
-
-from .models import Campaign, Mission, Package, Flight, Threat, Aircraft, Target, Support, Waypoint, MissionImagery
-from .forms import CampaignForm, MissionForm, NewUserForm, PackageForm, ThreatForm, FlightForm, AircraftForm, \
-    TargetForm, SupportForm, WaypointForm, MissionImageryForm
 # For PDF
-from django.template.loader import get_template
-from xhtml2pdf import pisa
-from django.contrib.staticfiles import finders
-from django.conf import settings
 
-from io import BytesIO
-import os
-
-from .decorators import unauthenticated_user, allowed_users
 import os
 from io import BytesIO
 
@@ -903,6 +879,7 @@ def new_view_mission_card(request, mission_id, flight_id):
     return response
 
 
+@login_required(login_url='login')
 def mission_signup(request, link_id):  # link_id is the mission ID
     mission = Mission.objects.get(id=link_id)
     packages = mission.package_set.all()
@@ -923,6 +900,7 @@ def mission_signup(request, link_id):  # link_id is the mission ID
     return render(request, 'mission/mission_signup.html', context)
 
 
+@login_required(login_url='login')
 def mission_signup_update(request, link_id, seat_id):
     returnURL = request.GET.get('returnUrl')
     aircraft = Aircraft.objects.get(pk=link_id)
@@ -936,6 +914,7 @@ def mission_signup_update(request, link_id, seat_id):
     return HttpResponseRedirect(returnURL)
 
 
+@login_required(login_url='login')
 def mission_signup_remove(request, link_id, seat_id):
     returnURL = request.GET.get('returnUrl')
     aircraft = Aircraft.objects.get(pk=link_id)
