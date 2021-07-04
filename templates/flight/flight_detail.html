@@ -21,8 +21,10 @@
 	<!-- end row -->
 
 	<div class="starter-template">
+		<h6 class='text-muted'>Flight</h6>
 		<h2>{{ flight_Object.callsign }}</h2>
-		<h3><span class="badge badge-dark">{{ flight_Object.task }}</span></h3>
+		<h6 class='text-muted'>Task</h6>
+		<h4><b>{{ flight_Object.task }}</b></h4>
 		<hr />
 		<div class="table-responsive">
 			<table class="table table-striped table-sm">
@@ -68,7 +70,7 @@
 				{% if aircraft_Object %} {% for aircraft in aircraft_Object %}
 				<tr>
 					<td>{{ aircraft.type }}</td>
-					<td>{{ aircraft.pilot }} {% if aircraft.flight_lead %}<span class="badge badge-success">LEAD</span>{% endif %}</td>
+					<td>{{ aircraft.pilot }} {% if aircraft.flight_lead %}<span class="badge badge-success">FLIGHT LEAD</span>{% endif %}</td>
 					<td>{{ aircraft.rio_wso }}</td>
 					<td>{{ aircraft.tailcode }}</td>
 					<td>

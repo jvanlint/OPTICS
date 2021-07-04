@@ -24,9 +24,10 @@
 	<!-- end row -->
 
     <div class="starter-template">
+        <h6 class='text-muted'>Package</h6>
         <h2>{{ package_Object.name }}</h2>
-        
-        <h6>MISSION {{package_Object.mission.name}} / {{package_Object.mission.mission_date}} / {{package_Object.mission.mission_time}}//</h6>
+        <h6 class='text-muted'>Mission</h6>
+        <h6>{{package_Object.mission.name}} / {{package_Object.mission.mission_date}} / {{package_Object.mission.mission_time}}//</h6>
         <hr>
         <p class="lead">{{ package_Object.description|linebreaks }}</p>
         <h4>Common Package Frequency: <span class="badge badge-primary"> {{ package_Object.frequency}}</span></h4>
