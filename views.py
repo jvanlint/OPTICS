@@ -840,7 +840,8 @@ def view_mission_card(request, mission_id, flight_id):
     target_urls = []
     if targets:
         for target in targets:
-            target_urls.append(request.build_absolute_uri(target.target_image.url))
+            if target.target_image:
+                target_urls.append(request.build_absolute_uri(target.target_image.url))
 
     data = {'mission_object': mission,
             'flight_object': flight, 'packages_object': packages, 'aircraft_object': aircraft,
