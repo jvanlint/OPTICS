@@ -832,9 +832,16 @@ def view_mission_card(request, mission_id, flight_id):
     targets = flight.targets.all()
     threats = mission.threat_set.all()
     #threat_details = threats.threat_name.harm_code
-
+    
+    target_urls = []
+  
+    for target in targets:
+        target_urls.append(request.build_absolute_uri(target.target_image.url))
+        
+    print(target_urls)
+    
     data = {'mission_object': mission,
-            'flight_object': flight, 'packages_object': packages, 'aircraft_object': aircraft, 'waypoints_object': waypoints, 'support_object': supports, 'target_object': targets, 'threat_object': threats}
+            'flight_object': flight, 'packages_object': packages, 'aircraft_object': aircraft, 'waypoints_object': waypoints, 'support_object': supports, 'target_object': targets, 'threat_object': threats, 'urls': target_urls}
 
     pdf = render_to_pdf('mission_card/pdf_template.html', data)
     return HttpResponse(pdf, content_type='application/pdf')

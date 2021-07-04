@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Campaign, Mission, Package, Flight, Aircraft, Status, Airframe, Terrain, Threat, Target, Support, Waypoint, Task
+from .models import Campaign, Mission, Package, Flight, Aircraft, Status, Airframe, Terrain, Threat, Target, Support, Waypoint, Task, MissionImagery
 from .models import ThreatReference
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
@@ -166,3 +166,9 @@ class ThreatReferenceAdmin(admin.ModelAdmin):
 
 
 admin.site.register(ThreatReference, ThreatReferenceAdmin)
+
+class MissionImageryAdmin(admin.ModelAdmin):
+    list_display = ('caption',)
+
+
+admin.site.register(MissionImagery, MissionImageryAdmin)

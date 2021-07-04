@@ -24,7 +24,7 @@
 		<h6>MISSION {{mission_object.number}} / {{mission_object.mission_date}} / {{mission_object.mission_time}} // {{ mission_object.mission_date|timeuntil }}</h6>
 		<hr />
 		<h5>Situation</h5>
-		<p class="lead">{{ mission_object.description|linebreaks }}</p>
+		<p class="lead">{{ mission_object.description|linebreaks|urlize }}</p>
 		<h5>Tactical Brief</h5>
 		<p class="lead">{{ mission_object.brief|linebreaks }}</p>
 		<h5>Rules of Engagement</h5>
