@@ -1,25 +1,26 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django_resized import ResizedImageField
-from django.contrib.auth.models import User
 
 
 # Create your models here.
 
 
 class Campaign(models.Model):
-
     # Fields
 
     name = models.CharField(
         max_length=200, help_text='The Campaign Name.')
     description = models.TextField(
-        help_text='A brief description used for display purposes on selection screens.', default="Campaign description to be added here.")
+        help_text='A brief description used for display purposes on selection screens.',
+        default="Campaign description to be added here.")
     dcs_map = models.ForeignKey(
         'Terrain', on_delete=models.CASCADE, null=True, verbose_name="dcs Terrain")
     start_date = models.DateField(
         help_text='Proposed Start Date of Campaign.', blank=True, null=True, verbose_name="Expected Start Date")
     campaignImage = ResizedImageField(verbose_name='Campaign Image Thumbnail.', size=[500, 300],
-                                      upload_to='campaign/thumbnails/', help_text='Campaign Image File.', null=True, blank=True)
+                                      upload_to='campaign/thumbnails/', help_text='Campaign Image File.', null=True,
+                                      blank=True)
     status = models.ForeignKey(
         'Status', on_delete=models.CASCADE, null=True)
 
@@ -29,7 +30,8 @@ class Campaign(models.Model):
         help_text='A detailed overview of the background and situation for the campaign.', null=True, blank=True)
 
     aoImage = ResizedImageField(verbose_name='area of Operations Image', size=[
-                                1500, 1200], upload_to='campaign/ao_images', help_text='An image of the Area of Operations.', null=True, blank=True)
+        1500, 1200], upload_to='campaign/ao_images', help_text='An image of the Area of Operations.', null=True,
+                                blank=True)
 
     # Metadata
 
@@ -48,7 +50,6 @@ class Campaign(models.Model):
 
 
 class Terrain(models.Model):
-
     # Fields
 
     name = models.CharField(
@@ -63,7 +64,6 @@ class Terrain(models.Model):
 
 
 class Status(models.Model):
-
     # Fields
 
     name = models.CharField(
@@ -79,13 +79,13 @@ class Status(models.Model):
 
 
 class Mission(models.Model):
-
     # Fields
 
     campaign = models.ForeignKey(
         'Campaign', on_delete=models.CASCADE, null=True)
     number = models.IntegerField(
-        default=1, help_text='A number representing the mission order within the campaign.', verbose_name="mission number")
+        default=1, help_text='A number representing the mission order within the campaign.',
+        verbose_name="mission number")
     name = models.CharField(
         max_length=200, help_text='Enter Mission Name')
     description = models.TextField(
@@ -95,13 +95,16 @@ class Mission(models.Model):
     roe = models.TextField(
         help_text='Enter Rules of Engagement', null=True, blank=True, verbose_name="Rules of Engagement")
     munitions_restrictions = models.TextField(
-        help_text='Enter any restrictions on use of munitions/weaponry.', null=True, blank=True, verbose_name="munitions restrictions")
+        help_text='Enter any restrictions on use of munitions/weaponry.', null=True, blank=True,
+        verbose_name="munitions restrictions")
     mission_time = models.CharField(
-        max_length=5, help_text='Mission time in HH:MM format.', null=True, blank=True, verbose_name="mission Start Time", default="20:00 AEST")
+        max_length=5, help_text='Mission time in HH:MM format.', null=True, blank=True,
+        verbose_name="mission Start Time", default="20:00 AEST")
     mission_date = models.DateField(
         help_text='Proposed mission date.', null=True, blank=True, verbose_name="expected Mission Date")
     mission_game_time = models.CharField(
-        max_length=5, help_text='Mission game start time in HH:MM format.', null=True, blank=True, verbose_name="In-Game Mission Start Time")
+        max_length=5, help_text='Mission game start time in HH:MM format.', null=True, blank=True,
+        verbose_name="In-Game Mission Start Time")
     mission_game_date = models.DateField(
         help_text='Mission game date.', null=True, blank=True, verbose_name="In-Game Mission Date")
 
@@ -109,7 +112,8 @@ class Mission(models.Model):
     visibility = models.CharField(
         max_length=100, help_text='Enter Visibility.', null=True, blank=True, verbose_name="Visibility")
     cloud_base = models.CharField(
-        max_length=10, help_text='Enter Cloud base in K of ft.', null=True, blank=True, verbose_name="Cloud Base Altitude")
+        max_length=10, help_text='Enter Cloud base in K of ft.', null=True, blank=True,
+        verbose_name="Cloud Base Altitude")
     cloud_top = models.CharField(
         max_length=10, help_text='Enter Cloud Tops in K of ft.', null=True, blank=True, verbose_name="Cloud Tops")
     wind_sl = models.CharField(
@@ -123,7 +127,8 @@ class Mission(models.Model):
     qfe = models.CharField(
         max_length=20, help_text='Enter QFE', null=True, blank=True, verbose_name="QFE")
     temp = models.CharField(
-        max_length=20, help_text='Enter temperature in C.', null=True, blank=True, verbose_name="Temperature in Celcius")
+        max_length=20, help_text='Enter temperature in C.', null=True, blank=True,
+        verbose_name="Temperature in Celcius")
     sigwx = models.CharField(
         max_length=20, help_text='SIGWX', null=True, blank=True, verbose_name="SIGWX")
 
@@ -141,22 +146,20 @@ class Mission(models.Model):
     def __str__(self):
         """String for representing the MyModelName object (in Admin site etc.)."""
         return self.name
-    
+
     def create_discord_event(self):
-        
+
         # Create message should be
         # POST/webhooks/{webhook.id}/{webhook.token}
-        
+
         # Edit message
         # PATCH/webhooks/{webhook.id}/{webhook.token}/messages/{message.id}
-        
-        
-        
+
         params = {'wait': 'true'}
-        
+
         data = {
-            "content" : "OPTICS Generated Mission Event",
-            "username" : "OPTICS Bot"
+            "content": "OPTICS Generated Mission Event",
+            "username": "OPTICS Bot"
         }
         title = self.campaign.campaign_name
         thumbnail = self.campaign.thumbnail_image.url
@@ -164,7 +167,7 @@ class Mission(models.Model):
         now = str(timezone.now())
         date = self.mission_date.strftime("%b %d %Y")
         description = (f'{self.name}\n**{date}, {self.mission_time}**\n\n{self.description}')
-        
+
         data["embeds"] = [
             {
                 "title": title,
@@ -174,7 +177,7 @@ class Mission(models.Model):
                     {
                         "name": "Mission Page",
                         "value": (f'[{mission_name}]({mission_page})'),
-                        #"value": "[Cracking Eggs With A Hammer ](http://www.google.com)",
+                        # "value": "[Cracking Eggs With A Hammer ](http://www.google.com)",
                         "inline": True
                     },
                     {
@@ -189,9 +192,9 @@ class Mission(models.Model):
                 }
             }
         ]
-        
-        result = requests.post(url, json = data, params = params)
-        
+
+        result = requests.post(url, json=data, params=params)
+
         print(result)
         try:
             result.raise_for_status()
@@ -201,12 +204,11 @@ class Mission(models.Model):
         else:
             print("Payload delivered successfully, code {}.".format(result.status_code))
             print(jsonResponse['id'])
-        
+
         return True
 
 
 class Package(models.Model):
-
     # Fields
 
     mission = models.ForeignKey(
@@ -214,9 +216,10 @@ class Package(models.Model):
     name = models.CharField(
         max_length=200, help_text='Enter Package Name', verbose_name="Package Name")
     frequency = models.CharField(
-        max_length=10, help_text='Enter Package Frequency', verbose_name="Package Frequency",  null=True, blank=True)
+        max_length=10, help_text='Enter Package Frequency', verbose_name="Package Frequency", null=True, blank=True)
     description = models.TextField(
-        help_text='Enter Mission Description/Situation.', null=True, blank=True, verbose_name="Description of package objective")
+        help_text='Enter Mission Description/Situation.', null=True, blank=True,
+        verbose_name="Description of package objective")
 
     # Metadata
 
@@ -235,7 +238,6 @@ class Package(models.Model):
 
 
 class Target(models.Model):
-
     # Fields
 
     mission = models.ForeignKey(
@@ -253,7 +255,9 @@ class Target(models.Model):
     # target_image = models.ImageField(
     #   upload_to='campaign/mission/target_images/', null=True, blank=True, help_text='Upload image of the target.', verbose_name="Target Image")
     target_image = ResizedImageField(verbose_name='Target Image', size=[
-        1500, 1200], upload_to='campaign/mission/target_images/', help_text='Upload image of the target.', null=True, blank=True)
+        1500, 1200], upload_to='campaign/mission/target_images/', help_text='Upload image of the target.', null=True,
+                                     blank=True)
+
     # Metadata
 
     class Meta:
@@ -271,7 +275,6 @@ class Target(models.Model):
 
 
 class Flight(models.Model):
-
     # Fields
 
     package = models.ForeignKey(
@@ -290,9 +293,11 @@ class Flight(models.Model):
     timehack_start = models.CharField(max_length=10, help_text='Enter time for flight takeoff.',
                                       null=True, blank=True, verbose_name="Takeoff Time")
     timehack_rdv1 = models.CharField(
-        max_length=10, help_text='Enter time for flight rendevous point 1.', null=True, blank=True, verbose_name="Time RDV 1")
+        max_length=10, help_text='Enter time for flight rendevous point 1.', null=True, blank=True,
+        verbose_name="Time RDV 1")
     timehack_rdv2 = models.CharField(
-        max_length=10, help_text='Enter time for flight rendevous point 2.', null=True, blank=True, verbose_name="Time RDV 2")
+        max_length=10, help_text='Enter time for flight rendevous point 2.', null=True, blank=True,
+        verbose_name="Time RDV 2")
     fuel_fob = models.CharField(
         max_length=10, help_text='Fuel FOB', null=True, blank=True, verbose_name="Fuel FOB")
     fuel_joker = models.CharField(
@@ -317,21 +322,14 @@ class Flight(models.Model):
 
 
 class Aircraft(models.Model):
-
     # Fields
 
-    type = models.ForeignKey(
-        'Airframe', on_delete=models.CASCADE, null=True)
-    flight = models.ForeignKey(
-        'Flight', on_delete=models.CASCADE, null=True)
-    # pilot = models.CharField(
-    # max_length=30, help_text='Enter Pilot Name', null=True, blank=True)
-    pilot = models.ForeignKey(
-        User, null=True, blank=True, on_delete=models.SET_NULL, related_name='user_pilot')
-    rio_wso = models.ForeignKey(
-        User, null=True, blank=True, on_delete=models.SET_NULL, related_name='user_rio')
-    tailcode = models.CharField(
-        max_length=20, help_text='Enter A/C tail code.', null=True, blank=True)
+    type = models.ForeignKey('Airframe', on_delete=models.CASCADE, null=True)
+    flight = models.ForeignKey('Flight', on_delete=models.CASCADE, null=True)
+    # pilot = models.CharField(    # max_length=30, help_text='Enter Pilot Name', null=True, blank=True)
+    pilot = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name='user_pilot')
+    rio_wso = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name='user_rio')
+    tailcode = models.CharField(max_length=20, help_text='Enter A/C tail code.', null=True, blank=True)
     flight_lead = models.BooleanField(default=False)
     package_lead = models.BooleanField(default=False)
 
@@ -348,14 +346,14 @@ class Aircraft(models.Model):
         """Returns the url to access a particular instance of MyModelName."""
         return reverse('model-detail-view', args=[str(self.id)])
 
+    def multicrew(self):
+        return self.type.multicrew
 
 class Airframe(models.Model):
-
     # Fields
 
-    name = models.CharField(
-        max_length=200, help_text='Enter Airframe Name')
-    stations = models.IntegerField(default=2)
+    name = models.CharField(max_length=200, help_text='Enter Airframe Name')
+    stations = models.IntegerField(default=2)  # Weapons stations
     multicrew = models.BooleanField(default=False)
 
     # Metadata
@@ -375,7 +373,6 @@ class Airframe(models.Model):
 
 
 class Threat(models.Model):
-
     # Fields
 
     mission = models.ForeignKey(
@@ -400,7 +397,6 @@ class Threat(models.Model):
 
 
 class Support(models.Model):
-
     # Fields
 
     mission = models.ForeignKey(
@@ -431,7 +427,6 @@ class Support(models.Model):
 
 
 class Waypoint(models.Model):
-
     # Fields
 
     flight = models.ForeignKey(
@@ -481,11 +476,11 @@ class MissionImagery(models.Model):
         'Mission', on_delete=models.CASCADE, null=True)
     caption = models.CharField(max_length=100, null=True)
     image = ResizedImageField(verbose_name='Mission Imagery', size=[
-        1500, 1200], upload_to='campaign/mission/mission_images/', help_text='Upload image for mission.', null=True, blank=True)
+        1500, 1200], upload_to='campaign/mission/mission_images/', help_text='Upload image for mission.', null=True,
+                              blank=True)
 
 
 class ThreatReference(models.Model):
-
     # Fields
 
     GROUND_THREAT_CLASS = (
