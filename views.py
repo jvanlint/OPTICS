@@ -1,32 +1,27 @@
-from django.core.files.base import endswith_lf
-from django.core import serializers
-from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse
-from urllib.parse import urlencode
+# For PDF
 
-from django.contrib.auth import login, authenticate, logout  # add this
+import os
+from io import BytesIO
+
+from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm  # add this
+from django.contrib.auth import login, authenticate, logout  # add this
 from django.contrib.auth.decorators import login_required
-
-from django.views.decorators.cache import never_cache
-
-from django.views.decorators.csrf import csrf_protect
-
-from .models import Campaign, Mission, Package, Flight, Threat, Aircraft, Target, Support, Waypoint, MissionImagery, ThreatReference
-from .forms import CampaignForm, MissionForm, NewUserForm, PackageForm, ThreatForm, FlightForm, AircraftForm, TargetForm, SupportForm, WaypointForm, MissionImageryForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm  # add this
+from django.contrib.staticfiles import finders
+from django.core import serializers
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect
 # For PDF
 from django.template.loader import get_template
-from django.views import View
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect
 from xhtml2pdf import pisa
-from django.contrib.staticfiles import finders
-from django.conf import settings
-
-from io import BytesIO
-import os
 
 from .decorators import unauthenticated_user, allowed_users
+from .forms import CampaignForm, MissionForm, NewUserForm, PackageForm, ThreatForm, FlightForm, AircraftForm, \
+    TargetForm, SupportForm, WaypointForm, MissionImageryForm
+from .models import Campaign, Mission, Package, Flight, Threat, Aircraft, Target, Support, Waypoint, MissionImagery
 
 
 def is_admin(user):
@@ -143,6 +138,7 @@ def campaign_delete(request, link_id):
     context = {'item': campaign, 'returnURL': returnURL}
     return render(request, 'campaign/campaign_delete.html', context=context)
 
+
 # Mission Views
 
 
@@ -157,7 +153,8 @@ def mission(request, link_id):
     imagery = mission.missionimagery_set.all()
 
     context = {'mission_object': mission,
-               'package_object': packages, 'threat_object': threat, 'target_object': target, 'support_object': support, 'imagery_object': imagery, 'isAdmin': is_admin(request.user), 'isPlanner': is_planner(request.user)}
+               'package_object': packages, 'threat_object': threat, 'target_object': target, 'support_object': support,
+               'imagery_object': imagery, 'isAdmin': is_admin(request.user), 'isPlanner': is_planner(request.user)}
     return render(request, 'mission/mission_detail.html', context)
 
 
@@ -213,6 +210,7 @@ def mission_delete(request, link_id):
 
     context = {'item': mission, 'returnURL': returnURL}
     return render(request, 'mission/mission_delete.html', context=context)
+
 
 # Package Views
 
@@ -330,6 +328,7 @@ def threat_delete(request, link_id):
     context = {'item': threat}
     return render(request, 'threat/threat_delete.html', context=context)
 
+
 # Mission Imagery Views
 
 
@@ -382,6 +381,7 @@ def mission_imagery_delete(request, link_id):
 
     context = {'item': imagery}
     return render(request, 'missionImagery/missionImagery_delete.html', context=context)
+
 
 ### Flight Views ###
 
@@ -457,12 +457,12 @@ def flight_delete(request, link_id):
     context = {'item': flight, 'returnURL': returnURL}
     return render(request, 'flight/flight_delete.html', context=context)
 
+
 ### Aircraft Views ###
 
 
 @login_required(login_url='login')
 def aircraft(request, link_id):
-
     aircraft = Aircraft.objects.get(id=link_id)
 
     context = {'aircraftObject': aircraft}
@@ -527,6 +527,7 @@ def aircraft_delete(request, link_id):
     context = {'item': aircraft}
     return render(request, 'aircraft/aircraft_delete.html', context=context)
 
+
 ### Target Views ###
 
 
@@ -579,6 +580,7 @@ def target_delete(request, link_id):
 
     context = {'item': target}
     return render(request, 'target/target_delete.html', context=context)
+
 
 ### Support Views ###
 
@@ -684,6 +686,7 @@ def waypoint_delete(request, link_id):
     context = {'item': waypoint}
     return render(request, 'waypoint/waypoint_delete.html', context=context)
 
+
 # Other Views
 
 
@@ -758,6 +761,7 @@ def change_password(request):
         'form': form
     })
 
+
 # PDF Render
 
 
@@ -774,10 +778,10 @@ def fetch_resources(uri, rel):
         result = list(os.path.realpath(path) for path in result)
         path = result[0]
     else:
-        sUrl = settings.STATIC_URL        # Typically /static/
-        sRoot = settings.STATIC_ROOT      # Typically /home/userX/project_static/
-        mUrl = settings.MEDIA_URL         # Typically /media/
-        mRoot = settings.MEDIA_ROOT       # Typically /home/userX/project_static/media/
+        sUrl = settings.STATIC_URL  # Typically /static/
+        sRoot = settings.STATIC_ROOT  # Typically /home/userX/project_static/
+        mUrl = settings.MEDIA_URL  # Typically /media/
+        mRoot = settings.MEDIA_ROOT  # Typically /home/userX/project_static/media/
         print("Media Root:" + mRoot)
 
         if uri.startswith(mUrl):
@@ -831,28 +835,29 @@ def view_mission_card(request, mission_id, flight_id):
     supports = mission.support_set.all()
     targets = flight.targets.all()
     threats = mission.threat_set.all()
-    #threat_details = threats.threat_name.harm_code
-    
+    # threat_details = threats.threat_name.harm_code
+
     target_urls = []
-  
+
     for target in targets:
         target_urls.append(request.build_absolute_uri(target.target_image.url))
-        
+
     print(target_urls)
-    
+
     data = {'mission_object': mission,
-            'flight_object': flight, 'packages_object': packages, 'aircraft_object': aircraft, 'waypoints_object': waypoints, 'support_object': supports, 'target_object': targets, 'threat_object': threats, 'urls': target_urls}
+            'flight_object': flight, 'packages_object': packages, 'aircraft_object': aircraft,
+            'waypoints_object': waypoints, 'support_object': supports, 'target_object': targets,
+            'threat_object': threats, 'urls': target_urls}
 
     pdf = render_to_pdf('mission_card/pdf_template.html', data)
     return HttpResponse(pdf, content_type='application/pdf')
 
 
 def new_view_mission_card(request, mission_id, flight_id):
-
     mission = Mission.objects.get(id=mission_id)
     flight = Flight.objects.get(id=flight_id)
 
-    data = {'mission_object': mission, 
+    data = {'mission_object': mission,
             'flight_object': flight,
             }
 
@@ -874,14 +879,16 @@ def new_view_mission_card(request, mission_id, flight_id):
     return response
 
 
+@login_required(login_url='login')
 def mission_signup(request, link_id):  # link_id is the mission ID
     mission = Mission.objects.get(id=link_id)
     packages = mission.package_set.all()
-    
+
     has_seat = 0
     package_list = serializers.serialize("python", packages)
     for package in package_list:
         has_seat += Aircraft.objects.filter(flight__package__id=package['pk']).filter(pilot=request.user).count()
+        has_seat += Aircraft.objects.filter(flight__package__id=package['pk']).filter(rio_wso=request.user).count()
     campaign = Campaign.objects.get(mission=mission)
     is_owner = (campaign.creator == request.user)
     context = {'mission_object': mission,
@@ -893,21 +900,29 @@ def mission_signup(request, link_id):  # link_id is the mission ID
     return render(request, 'mission/mission_signup.html', context)
 
 
-def mission_signup_update(request, link_id):
+@login_required(login_url='login')
+def mission_signup_update(request, link_id, seat_id):
     returnURL = request.GET.get('returnUrl')
     aircraft = Aircraft.objects.get(pk=link_id)
+    if seat_id == 1:
+        aircraft.pilot = request.user
+    else:
+        aircraft.rio_wso = request.user
 
-    aircraft.pilot = request.user
     aircraft.save()
 
     return HttpResponseRedirect(returnURL)
 
 
-def mission_signup_remove(request, link_id):
+@login_required(login_url='login')
+def mission_signup_remove(request, link_id, seat_id):
     returnURL = request.GET.get('returnUrl')
     aircraft = Aircraft.objects.get(pk=link_id)
+    if seat_id == 1:
+        aircraft.pilot = None
+    else:
+        aircraft.rio_wso = None
 
-    aircraft.pilot = None
     aircraft.save()
 
     return HttpResponseRedirect(returnURL)
