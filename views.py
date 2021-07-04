@@ -838,11 +838,9 @@ def view_mission_card(request, mission_id, flight_id):
     # threat_details = threats.threat_name.harm_code
 
     target_urls = []
-
-    for target in targets:
-        target_urls.append(request.build_absolute_uri(target.target_image.url))
-
-    print(target_urls)
+    if targets:
+        for target in targets:
+            target_urls.append(request.build_absolute_uri(target.target_image.url))
 
     data = {'mission_object': mission,
             'flight_object': flight, 'packages_object': packages, 'aircraft_object': aircraft,
