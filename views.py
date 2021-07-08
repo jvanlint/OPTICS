@@ -390,7 +390,7 @@ def mission_imagery_delete(request, link_id):
 @never_cache
 def flight(request, link_id):
     flight = Flight.objects.get(id=link_id)
-    aircraft = flight.aircraft_set.all().order_by('-flight_lead')
+    aircraft = flight.aircraft_set.all().order_by('-flight_lead', 'type', 'pilot')
     waypoints = flight.waypoint_set.all().order_by('number')
     targets = flight.targets.all()
 

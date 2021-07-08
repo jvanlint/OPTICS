@@ -406,6 +406,8 @@ class Support(models.Model):
         ('TANKER', 'TANKER'),
         ('JTAC', 'JTAC'),
         ('CARRIER', 'CARRIER'),
+        ('LHA', 'LHA'),
+        ('ABM', 'ABM'),
 
     )
 
