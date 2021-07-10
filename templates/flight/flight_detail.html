@@ -23,8 +23,12 @@
 	<div class="starter-template">
 		<h6 class='text-muted'>Flight</h6>
 		<h2>{{ flight_Object.callsign }}</h2>
+		<br>
 		<h6 class='text-muted'>Task</h6>
-		<h4><b>{{ flight_Object.task }}</b></h4>
+		<p><b>{{ flight_Object.task }}</b></p>
+		<br>
+		<h6 class='text-muted'>Flight Coordination Notes</h6>
+		<p>{{ flight_Object.flight_coordination|linebreaks }}</p>
 		<hr />
 		<div class="table-responsive">
 			<table class="table table-striped table-sm">
