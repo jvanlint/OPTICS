@@ -59,11 +59,11 @@
 		<table class="table table-striped table-sm">
 			<thead class="thead-dark">
 				<tr>
-					<th>Type</th>
-					<th>Pilot</th>
-					<th>RIO/WSO</th>
-					<th>Tail Code</th>
-					<th scope="col" colspan="2" style="text-align: center">Action</th>
+					<th style="width: 30%">Type</th>
+					<th style="width: 20%">Pilot</th>
+					<th style="width: 20%">RIO/WSO</th>
+					<th style="width: 20%">Tail Code</th>
+					<th style="width: 10%"></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -74,10 +74,17 @@
 					<td>{{ aircraft.rio_wso }}</td>
 					<td>{{ aircraft.tailcode }}</td>
 					<td>
-						<a class="btn btn-sm btn-outline-primary" href="{% url 'aircraft_update' aircraft.id %}?returnUrl={{request.path}}" role="button">Edit</a>
-					</td>
-					<td>
-						<a class="btn btn-sm btn-outline-danger" href="{% url 'aircraft_delete' aircraft.id %}?returnUrl={{request.path}}" role="button">Delete</a>
+						<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">						
+                            <i class="bi bi-pencil"></i>&nbspAircraft
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="{% url 'aircraft_update' aircraft.id %}?returnUrl={{request.path}}">
+                                <i class="bi bi-pencil"></i>&nbspEdit
+                            </a>
+                            <a class="dropdown-item" href="{% url 'aircraft_delete' aircraft.id %}?returnUrl={{request.path}}">
+                                <i class="bi bi-trash"></i>&nbspDelete
+                            </a>
+                        </div>
 					</td>
 				</tr>
 				{% endfor %} {% else %}
@@ -97,14 +104,14 @@
 		<table class="table table-striped table-sm">
 			<thead class="thead-dark">
 				<tr>
-					<th>Number</th>
-					<th>Name</th>
-					<th>Type</th>
-					<th>Lat</th>
-					<th>Long</th>
-					<th>Elev</th>
-					<th>Notes</th>
-					<th scope="col" colspan="2" style="text-align: center">Action</th>
+					<th style="width: 5%">Number</th>
+					<th style="width: 20%">Name</th>
+					<th style="width: 20%">Type</th>
+					<th style="width: 5%">Lat</th>
+					<th style="width: 5%">Long</th>
+					<th style="width: 5%">Elev</th>
+					<th style="width: 30%">Notes</th>
+					<th style="width: 10%"></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -117,8 +124,19 @@
 					<td>{{ waypoint.long }}</td>
 					<td>{{ waypoint.elevation }}</td>
 					<td>{{ waypoint.notes|linebreaks }}</td>
-					<td><a class="btn btn-sm btn-outline-primary" href="{% url 'waypoint_update' waypoint.id %}?returnUrl={{request.path}}" role="button">Edit</a></td>
-					<td><a class="btn btn-sm btn-outline-danger" href="{% url 'waypoint_delete' waypoint.id %}?returnUrl={{request.path}}" role="button">Delete</a></td>
+					<td>
+						<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">						
+                            <i class="bi bi-pencil"></i>&nbspWaypoint
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="{% url 'waypoint_update' waypoint.id %}?returnUrl={{request.path}}">
+                                <i class="bi bi-pencil"></i>&nbspEdit
+                            </a>
+                            <a class="dropdown-item" href="{% url 'waypoint_delete' waypoint.id %}?returnUrl={{request.path}}">
+                                <i class="bi bi-trash"></i>&nbspDelete
+                            </a>
+                        </div>
+					</td>
 				</tr>
 				{% endfor %}
 			</tbody>
