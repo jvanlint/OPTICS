@@ -21,7 +21,9 @@
 	<hr class="starter-template">
 		<h2>{{ mission_object.name }}</h2>
 
-		<h6>MISSION {{mission_object.number}} / {{mission_object.mission_date}} / {{mission_object.mission_time}} // {{ mission_object.mission_date|timeuntil }}</h6>
+		<h6>MISSION {{mission_object.number}} / {{mission_object.mission_date}} / {{mission_object.mission_time}} // {{ mission_object.mission_date|timeuntil }}
+			<a class="btn btn-sm btn-primary float-right" href="{% url 'mission_signup' mission_object.id %}?returnUrl={{request.path}}" role="button">Mission Sign Up</a>
+		</h6>
 		<hr />
 		<h5 class='text-muted'>Situation</h5>
 		<p class="lead">{{ mission_object.description|linebreaks|urlize }}</p>
@@ -70,9 +72,6 @@
 					{% endif %}
 				</div>
 			</div>
-			<br>
-			<a class="btn btn-lg btn-primary" href="{% url 'mission_signup' mission_object.id %}?returnUrl={{request.path}}" role="button">Mission Sign Up</a>
-
 		</div>
 
 		<hr />
