@@ -408,6 +408,7 @@ class Support(models.Model):
         ('CARRIER', 'CARRIER'),
         ('LHA', 'LHA'),
         ('ABM', 'ABM'),
+         ('AIRFIELD', 'AIRFIELD'),
 
     )
 
