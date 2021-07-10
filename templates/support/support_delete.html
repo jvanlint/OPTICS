@@ -7,8 +7,8 @@
 	<div class="row">
 		<div class="col-md-6">
 			<div class="card card-body">
-				<p>Are you sure you want to delete "{{item}}"?</p>
-				<form action="{% url 'threat_delete' item.id %}" method="POST">
+				<p>Are you sure you want to delete "{{item.callsign}}"?</p>
+				<form action="{% url 'support_delete' item.id %}" method="POST">
 					{% csrf_token %}
 					<button type="submit" class="btn btn-danger" name="confirm">Delete</button> <a class="btn btn-primary" href="{% url 'mission' item.mission.id %}" role="button">Cancel</a>
 				</form>

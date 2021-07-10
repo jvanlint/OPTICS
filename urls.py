@@ -49,6 +49,7 @@ urlpatterns = [
     path('support/add/<int:link_id>', views.support_create, name='support_add'),
     path('support/update/<int:link_id>', views.support_update, name='support_update'),
     path('support/delete/<int:link_id>', views.support_delete, name='support_delete'),
+    path('support/copy/<int:link_id>', views.support_copy, name='support_copy'),
 
     path('waypoint/add/<int:link_id>', views.waypoint_create, name='waypoint_add'),
     path('waypoint/update/<int:link_id>', views.waypoint_update, name='waypoint_update'),

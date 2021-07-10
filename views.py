@@ -656,7 +656,7 @@ def support_update(request, link_id):
 @allowed_users(allowed_roles=['admin', 'planner', 'player'])
 def support_delete(request, link_id):
     support = Support.objects.get(id=link_id)
-    missionID = target.mission.id
+    missionID = support.mission.id
 
     if request.method == "POST":
         support.delete()
@@ -665,6 +665,27 @@ def support_delete(request, link_id):
     context = {'item': support}
     return render(request, 'support/support_delete.html', context=context)
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
+def support_copy(request, link_id):
+    support = Support.objects.get(id=link_id)
+    missionID = support.mission.id
+    
+    new_support_instance = Support(mission=support.mission, 
+                                 callsign = support.callsign + '(Copy)', 
+                                 support_type = support.support_type,
+                                 player_name = support.player_name,
+                                 frequency= support.frequency,
+                                 tacan = support.tacan,
+                                 altitude = support.altitude,
+                                 speed = support.speed,
+                                 brc = support.brc,
+                                 icls = support.icls,
+                                 notes = support.notes,
+                                 )
+    new_support_instance.save()
+
+    return HttpResponseRedirect('/airops/mission/' + str(missionID))
 
 # Waypoint Views
 @login_required(login_url='login')
