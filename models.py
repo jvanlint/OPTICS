@@ -217,9 +217,12 @@ class Package(models.Model):
         max_length=200, help_text='Enter Package Name', verbose_name="Package Name")
     frequency = models.CharField(
         max_length=10, help_text='Enter Package Frequency', verbose_name="Package Frequency", null=True, blank=True)
-    description = models.TextField(
-        help_text='Enter Mission Description/Situation.', null=True, blank=True,
-        verbose_name="Description of package objective")
+    summary = models.TextField(
+        help_text='Summary of Package objective.', null=True, blank=True,
+        verbose_name="Summary of package objective")
+    package_coordination = models.TextField(
+        help_text='Notes for package co-ordination.', null=True, blank=True,
+        verbose_name="Notes for package co-ordination")
 
     # Metadata
 
