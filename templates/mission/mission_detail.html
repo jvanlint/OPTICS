@@ -68,9 +68,11 @@
 						<a class="btn btn-sm btn-outline-secondary" href="{% url 'mission_update' mission_object.id %}?returnUrl={{request.path}}" role="button">Edit</a>
 						<a class="btn btn-sm btn-outline-secondary" href="{% url 'mission_delete' mission_object.id %}?returnUrl={{request.path}}" role="button">Delete</a>
 					{% endif %}
-					<a class="btn btn-sm btn-outline-secondary" href="{% url 'mission_signup' mission_object.id %}?returnUrl={{request.path}}" role="button">Sign Up</a>
 				</div>
 			</div>
+			<br>
+			<a class="btn btn-lg btn-primary" href="{% url 'mission_signup' mission_object.id %}?returnUrl={{request.path}}" role="button">Mission Sign Up</a>
+
 		</div>
 
 		<hr />
