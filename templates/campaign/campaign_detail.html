@@ -103,8 +103,18 @@
 						<td>{{ mission.mission_date}}</td>
 						{% if campaign.creator.username == user.username or isAdmin == True %}
 						<td>
-							<a style="padding-left:25px;" href="{% url 'mission_update' mission.id %}?returnUrl={{request.path}}" role="button"><i class="bi bi-pencil"></i> </a>
-							<a style="padding-left:25px;" href="{% url 'mission_delete' mission.id %}?returnUrl={{request.path}}" role="button"><i class="bi bi-trash"></i></a>
+							<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">						
+								<i class="bi bi-pencil"></i>&nbspMission
+							</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<a class="dropdown-item" href="{% url 'mission_update' mission.id %}?returnUrl={{request.path}}">
+									<i class="bi bi-pencil"></i>&nbspEdit
+								</a>
+								<a class="dropdown-item" href="{% url 'mission_delete' mission.id %}?returnUrl={{request.path}}">
+									<i class="bi bi-trash"></i>&nbspDelete
+								</a>
+							</div>
+							
 						</td>
 						{% endif %}
 					</tr>
