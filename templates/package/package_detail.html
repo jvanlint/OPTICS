@@ -28,9 +28,15 @@
         <h2>{{ package_Object.name }}</h2>
         <h6 class='text-muted'>Mission</h6>
         <h6>{{package_Object.mission.name}} / {{package_Object.mission.mission_date}} / {{package_Object.mission.mission_time}}//</h6>
-        <hr>
-        <p class="lead">{{ package_Object.description|linebreaks }}</p>
-        <h4>Common Package Frequency: <span class="badge badge-primary"> {{ package_Object.frequency}}</span></h4>
+        <br>
+        <h6 class='text-muted'>Package Objective Summary</h6>
+        <p class="lead">{{ package_Object.summary|linebreaks }}</p>
+        <br>
+        <h6 class='text-muted'>Package Coordination Notes</h6>
+        <p class="lead">{{ package_Object.package_coordination|linebreaks }}</p>
+        <br>
+        <h6 class='text-muted'>Package Common Frequency</h6>
+        <h4><span class="badge badge-primary"> {{ package_Object.frequency}}</span></h4>
 
         <div class="btn-toolbar">
             <div class="btn-group mr-2">
