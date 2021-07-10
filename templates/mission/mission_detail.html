@@ -64,7 +64,7 @@
 
 			<div class="btn-toolbar">
 				<div class="btn-group mr-2">
-					{% if campaign.creator.username == user.username or isAdmin == True %}	
+					{% if campaign.creator.username == user.username or isAdmin == True %}
 						<a class="btn btn-sm btn-outline-secondary" href="{% url 'mission_update' mission_object.id %}?returnUrl={{request.path}}" role="button">Edit</a>
 						<a class="btn btn-sm btn-outline-secondary" href="{% url 'mission_delete' mission_object.id %}?returnUrl={{request.path}}" role="button">Delete</a>
 					{% endif %}
@@ -80,10 +80,10 @@
 			<table class="table table-striped table-sm">
 				<thead class="thead-dark">
 					<tr>
-						<th>Package Name</th>
-						<th>Description</th>
-						<th># of Flights</th>
-						<th scope="col" colspan="2" style="text-align: center">Action</th>
+						<th style="width: 10%">Package Name</th>
+						<th style="width: 60%">Description</th>
+						<th style="width: 10%"># of Flights</th>
+						<th style="width: 10%"></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -95,10 +95,17 @@
 						<td>{{ package.description|linebreaks }}</td>
 						<td>{{ package.flight_set.count }}</td>
 						<td>
-							<a class="btn btn-sm btn-outline-primary" href="{% url 'package_update' package.id %}?returnUrl={{request.path}}" role="button">Edit</a>
-						</td>
-						<td>
-							<a class="btn btn-sm btn-outline-danger" href="{% url 'package_delete' package.id %}?returnUrl={{request.path}}" role="button">Delete</a>
+							<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">						
+								<i class="bi bi-pencil"></i>&nbspPackage
+							</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<a class="dropdown-item" href="{% url 'package_update' package.id %}?returnUrl={{request.path}}">
+									<i class="bi bi-pencil"></i>&nbspEdit
+								</a>
+								<a class="dropdown-item" href="{% url 'package_delete' package.id %}?returnUrl={{request.path}}">
+									<i class="bi bi-trash"></i>&nbspDelete
+								</a>
+							</div>
 						</td>
 						{% endfor %}
 					</tr>
@@ -120,13 +127,13 @@
 			<table class="table table-striped table-sm">
 				<thead class="thead-dark">
 					<tr>
-						<th>Name</th>
-						<th>Lat</th>
-						<th>Long</th>
-						<th>Elev</th>
-						<th>Notes</th>
-						<th>Image</th>
-						<th scope="col" colspan="2" style="text-align: center">Action</th>
+						<th style="width: 20%">Name</th>
+						<th style="width: 10%">Lat</th>
+						<th style="width: 10%">Long</th>
+						<th style="width: 10%">Elev</th>
+						<th style="width: 20%">Notes</th>
+						<th style="width: 10%">Image</th>
+						<th style="width: 10%"></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -142,8 +149,20 @@
 						{% else %}
 						<td>None</td>
 						{% endif %}
-						<td><a class="btn btn-sm btn-outline-primary" href="{% url 'target_update' target.id %}?returnUrl={{request.path}}" role="button">Edit</a></td>
-						<td><a class="btn btn-sm btn-outline-danger" href="{% url 'target_delete' target.id %}?returnUrl={{request.path}}" role="button">Delete</a></td>
+						
+						<td>
+							<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">						
+								<i class="bi bi-pencil"></i>&nbspTarget
+							</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<a class="dropdown-item" href="{% url 'target_update' target.id %}?returnUrl={{request.path}}">
+									<i class="bi bi-pencil"></i>&nbspEdit
+								</a>
+								<a class="dropdown-item" href="{% url 'target_delete' target.id %}?returnUrl={{request.path}}">
+									<i class="bi bi-trash"></i>&nbspDelete
+								</a>
+							</div>
+						</td>
 					</tr>
 					{% endfor %} {% else %}
 					<tr>
@@ -163,10 +182,10 @@
 			<table class="table table-striped table-sm">
 				<thead class="thead-dark">
 					<tr>
-						<th>Type</th>
-						<th>Name</th>
-						<th>Description</th>
-						<th scope="col" colspan="2" style="text-align: center">Action</th>
+						<th style="width: 10%">Type</th>
+						<th style="width: 30%">Name</th>
+						<th style="width: 50%">Description</th>
+						<th style="width: 10%"></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -175,8 +194,19 @@
 						<td>{{ threat.threat_type }}</td>
 						<td>{{ threat.name }}</td>
 						<td>{{ threat.description|linebreaks }}</td>
-						<td><a class="btn btn-sm btn-outline-primary" href="{% url 'threat_update' threat.id %}?returnUrl={{request.path}}" role="button">Edit</a></td>
-						<td><a class="btn btn-sm btn-outline-danger" href="{% url 'threat_delete' threat.id %}?returnUrl={{request.path}}" role="button">Delete</a></td>
+						<td>
+							<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">						
+								<i class="bi bi-pencil"></i>&nbspThreat
+							</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<a class="dropdown-item" href="{% url 'threat_update' threat.id %}?returnUrl={{request.path}}">
+									<i class="bi bi-pencil"></i>&nbspEdit
+								</a>
+								<a class="dropdown-item" href="{% url 'threat_delete' threat.id %}?returnUrl={{request.path}}">
+									<i class="bi bi-trash"></i>&nbspDelete
+								</a>
+							</div>					
+						</td>
 					</tr>
 					{% endfor %} {% else %}
 					<tr>
@@ -196,17 +226,17 @@
 			<table class="table table-striped table-sm">
 				<thead class="thead-dark">
 					<tr>
-						<th>Callsign</th>
-						<th>Type</th>
-						<th>Freq</th>
-						<th>TCN</th>
-						<th>Alt</th>
-						<th>Spd</th>
-						<th>BRC</th>
-						<th>ICLS</th>
-						<th>Player</th>
-						<th>Notes</th>
-						<th scope="col" colspan="2" style="text-align: center">Action</th>
+						<th style="width: 10%">Callsign</th>
+						<th style="width: 10%">Type</th>
+						<th style="width: 5%">Freq</th>
+						<th style="width: 5%">TCN</th>
+						<th style="width: 5%">Alt</th>
+						<th style="width: 5%">Spd</th>
+						<th style="width: 5%">BRC</th>
+						<th style="width: 5%">ICLS</th>
+						<th style="width: 10%">Player</th>
+						<th style="width: 30%">Notes</th>
+						<th style="width: 10%"></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -222,8 +252,20 @@
 						<td>{{ support.icls }}</td>
 						<td>{{ support.player_name }}</td>
 						<td>{{ support.notes|linebreaks }}</td>
-						<td><a class="btn btn-sm btn-outline-primary" href="{% url 'support_update' support.id %}?returnUrl={{request.path}}" role="button">Edit</a></td>
-						<td><a class="btn btn-sm btn-outline-danger" href="{% url 'support_delete' support.id %}?returnUrl={{request.path}}" role="button">Delete</a></td>
+						<td>
+							<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">						
+								<i class="bi bi-pencil"></i>&nbspSupport
+							</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<a class="dropdown-item" href="{% url 'support_update' support.id %}?returnUrl={{request.path}}">
+									<i class="bi bi-pencil"></i>&nbspEdit
+								</a>
+								<a class="dropdown-item" href="{% url 'support_delete' support.id %}?returnUrl={{request.path}}">
+									<i class="bi bi-trash"></i>&nbspDelete
+								</a>
+							</div>
+						</td>
+						
 					</tr>
 					{% endfor %} {% else %}
 					<tr>
