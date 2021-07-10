@@ -328,6 +328,21 @@ def threat_delete(request, link_id):
     context = {'item': threat}
     return render(request, 'threat/threat_delete.html', context=context)
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
+def threat_copy(request, link_id):
+    threat = Threat.objects.get(id=link_id)
+    missionID = threat.mission.id
+    
+    new_threat_instance = Threat(mission=threat.mission, 
+                                 threat_name= threat.threat_name, 
+                                 name = threat.name,
+                                 threat_type = threat.threat_type,
+                                 description=threat.description)
+    new_threat_instance.save()
+
+    return HttpResponseRedirect('/airops/mission/' + str(missionID))
+
 
 # Mission Imagery Views
 

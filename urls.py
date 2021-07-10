@@ -29,6 +29,7 @@ urlpatterns = [
     path('threat/add/<int:link_id>', views.threat_create, name='threat_add'),
     path('threat/update/<int:link_id>', views.threat_update, name='threat_update'),
     path('threat/delete/<int:link_id>', views.threat_delete, name='threat_delete'),
+    path('threat/copy/<int:link_id>', views.threat_copy, name='threat_copy'),
 
     path('flight/<int:link_id>/', views.flight, name='flight'),
     path('flight/add/<int:link_id>', views.flight_create, name='flight_add'),

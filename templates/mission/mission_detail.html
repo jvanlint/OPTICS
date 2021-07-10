@@ -206,6 +206,9 @@
 								<a class="dropdown-item" href="{% url 'threat_delete' threat.id %}?returnUrl={{request.path}}">
 									<i class="bi bi-trash"></i>&nbspDelete
 								</a>
+								<a class="dropdown-item" href="{% url 'threat_copy' threat.id %}?returnUrl={{request.path}}">
+									<i class="bi bi-plus"></i>&nbspCopy
+								</a>
 							</div>					
 						</td>
 					</tr>
