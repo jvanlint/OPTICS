@@ -542,6 +542,19 @@ def aircraft_delete(request, link_id):
     context = {'item': aircraft}
     return render(request, 'aircraft/aircraft_delete.html', context=context)
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
+def aircraft_copy(request, link_id):
+    aircraft = Aircraft.objects.get(id=link_id)
+    flightID = aircraft.flight.id
+    
+    new_aircraft_instance = Aircraft( 
+                                 type = aircraft.type, 
+                                 flight = aircraft.flight,
+                                 )
+    new_aircraft_instance.save()
+    
+    return HttpResponseRedirect('/airops/flight/' + str(flightID))
 
 ### Target Views ###
 

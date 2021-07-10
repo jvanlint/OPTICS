@@ -40,6 +40,7 @@ urlpatterns = [
     path('aircraft/add/<int:link_id>', views.aircraft_create, name='aircraft_add'),
     path('aircraft/update/<int:link_id>', views.aircraft_update, name='aircraft_update'),
     path('aircraft/delete/<int:link_id>', views.aircraft_delete, name='aircraft_delete'),
+    path('aircraft/copy/<int:link_id>', views.aircraft_copy, name='aircraft_copy'),
 
     path('target/add/<int:link_id>', views.target_create, name='target_add'),
     path('target/update/<int:link_id>', views.target_update, name='target_update'),
