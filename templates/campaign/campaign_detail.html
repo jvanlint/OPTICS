@@ -125,7 +125,7 @@
 				</tbody>
 			</table><!-- /.table -->
 			{% if campaign.creator.username == user.username or isAdmin == True %}
-				<a href="{% url 'mission_add' campaign_Object.id %}?returnUrl={{request.path}}" role="button"><button type="button" class="btn btn-sm btn-primary float-right"><i class="bi bi-plus"></i> Add Mission</button></a>
+				<a href="{% url 'mission_add' campaign_Object.id %}?returnUrl={{request.path}}" role="button"><button type="button" class="btn btn-sm btn-success float-right"><i class="bi bi-plus"></i> Add Mission</button></a>
 				{% endif %}		
 		</div><!-- /.col -->				
 	</div><!-- /.row -->
