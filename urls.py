@@ -44,6 +44,7 @@ urlpatterns = [
     path('target/add/<int:link_id>', views.target_create, name='target_add'),
     path('target/update/<int:link_id>', views.target_update, name='target_update'),
     path('target/delete/<int:link_id>', views.target_delete, name='target_delete'),
+    path('target/copy/<int:link_id>', views.target_copy, name='target_copy'),
 
     path('support/add/<int:link_id>', views.support_create, name='support_add'),
     path('support/update/<int:link_id>', views.support_update, name='support_update'),

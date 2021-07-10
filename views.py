@@ -335,7 +335,7 @@ def threat_copy(request, link_id):
     missionID = threat.mission.id
     
     new_threat_instance = Threat(mission=threat.mission, 
-                                 threat_name= threat.threat_name, 
+                                 threat_name= threat.threat_name + '(Copy)', 
                                  name = threat.name,
                                  threat_type = threat.threat_type,
                                  description=threat.description)
@@ -596,6 +596,21 @@ def target_delete(request, link_id):
     context = {'item': target}
     return render(request, 'target/target_delete.html', context=context)
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'planner', 'player'])
+def target_copy(request, link_id):
+    target = Target.objects.get(id=link_id)
+    missionID = target.mission.id
+    
+    new_target_instance = Target(mission=target.mission, 
+                                 name= target.name + '(Copy)', 
+                                 lat = target.lat,
+                                 long = target.long,
+                                 elev= target.elev,
+                                 notes = target.notes)
+    new_target_instance.save()
+
+    return HttpResponseRedirect('/airops/mission/' + str(missionID))
 
 ### Support Views ###
 
