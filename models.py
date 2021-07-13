@@ -127,13 +127,13 @@ class Mission(models.Model):
         blank=True,
         verbose_name="munitions restrictions",
     )
-    mission_time = models.CharField(
+    mission_time = models.TimeField(
         max_length=5,
         help_text="Mission time in HH:MM format. (UTC)",
         null=True,
         blank=True,
         verbose_name="mission Start Time (UTC)",
-        default="20:00 AEST",
+        default="10:00",
     )
     mission_date = models.DateTimeField(
         help_text="Proposed mission Date. (UTC)",

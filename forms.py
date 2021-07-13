@@ -1,3 +1,6 @@
+import pprint
+from datetime import timezone, datetime
+
 from django.forms import ModelForm
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
@@ -45,6 +48,14 @@ class MissionForm(ModelForm):
         model = Mission
         fields = "__all__"
         widgets = {"mission_date": DateInput(), "mission_game_date": DateInput()}
+
+    def clean(self):
+        # Combine the Mission date and time and set to UTC
+        self.cleaned_data["mission_date"] = datetime.combine(
+            self.cleaned_data["mission_date"],
+            self.cleaned_data["mission_time"],
+            tzinfo=timezone.utc,
+        )
 
 
 class PackageForm(ModelForm):
@@ -141,7 +152,6 @@ class ProfileForm(forms.ModelForm):
     timezone = forms.ChoiceField(
         required=True,
         choices=utils.get_timezones(),
-
     )
 
     class Meta:

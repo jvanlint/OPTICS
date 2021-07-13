@@ -1,7 +1,9 @@
 # For PDF
 
 import os
+from datetime import timezone
 from io import BytesIO
+from zoneinfo import ZoneInfo
 
 from django.conf import settings
 from django.contrib import messages
@@ -184,6 +186,7 @@ def mission(request, link_id):
         "imagery_object": imagery,
         "isAdmin": is_admin(request.user),
         "isPlanner": is_planner(request.user),
+        "user_timezone": request.user.profile.timezone,
     }
     return render(request, "mission/mission_detail.html", context)
 
@@ -201,6 +204,10 @@ def mission_create(request, link_id):
     if request.method == "POST":
         form = MissionForm(request.POST, request.FILES)
         if form.is_valid():
+            # Mission date and time are combined in the form's clean function
+            # https://stackoverflow.com/questions/53742129/how-do-you-modify-form-data-before-saving-it-while-using-djangos-createview
+
+            # form.mission_date=form.mission_date.replace(tzinfo=timezone.utc)
             '''
             combine the time and date responses and create a date/time to be 
             saved in the mission datetime field.
@@ -213,7 +220,10 @@ def mission_create(request, link_id):
             https://docs.djangoproject.com/en/3.2/ref/settings/#time-input-formats
             https://docs.djangoproject.com/en/3.2/ref/models/fields/#datetimefield
             http://diveintohtml5.info/forms.html
-            
+            mission_data is datetime UTC+10 (settings.py default timezone)
+            mission_time is string
+            mission_game_time is string
+            mission_game_date is datetime UTC+10
             '''
             form.save(commit=True)
             return HttpResponseRedirect("/airops/campaign/" + str(link_id))
@@ -228,7 +238,6 @@ def mission_update(request, link_id):
     mission = Mission.objects.get(id=link_id)
     form = MissionForm(instance=mission)
     returnURL = request.GET.get("returnUrl")
-
     if request.method == "POST":
         form = MissionForm(request.POST, request.FILES, instance=mission)
         print(request.path)
