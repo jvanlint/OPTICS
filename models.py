@@ -751,6 +751,7 @@ class ThreatReference(models.Model):
 class UserProfile(models.Model):
     """Profile data about a user.
     Timezone info stored here
+    https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html#onetoone
     """
 
     user = models.OneToOneField(

@@ -4,13 +4,26 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 # import GeeksModel from models.py
-from .models import Campaign, Mission, Package, Flight, Threat, Aircraft, Target, Support, Waypoint, MissionImagery
+from .models import (
+    Campaign,
+    Mission,
+    Package,
+    Flight,
+    Threat,
+    Aircraft,
+    Target,
+    Support,
+    Waypoint,
+    MissionImagery,
+    UserProfile,
+)
+
 
 # create a ModelForm
 
 
 class DateInput(forms.DateInput):
-    input_type = 'date'
+    input_type = "date"
 
 
 class CampaignForm(ModelForm):
@@ -21,7 +34,7 @@ class CampaignForm(ModelForm):
         model = Campaign
         fields = "__all__"
         widgets = {
-            'start_date': DateInput(),
+            "start_date": DateInput(),
         }
 
 
@@ -30,9 +43,7 @@ class MissionForm(ModelForm):
     class Meta:
         model = Mission
         fields = "__all__"
-        widgets = {
-            'mission_date': DateInput(), 'mission_game_date': DateInput()
-        }
+        widgets = {"mission_date": DateInput(), "mission_game_date": DateInput()}
 
 
 class PackageForm(ModelForm):
@@ -60,7 +71,7 @@ class FlightForm(ModelForm):
     # specify the name of model to use
     def __init__(self, target, *args, **kwargs):
         super(FlightForm, self).__init__(*args, **kwargs)
-        self.fields['targets'].queryset = target
+        self.fields["targets"].queryset = target
 
     class Meta:
         model = Flight
@@ -70,16 +81,15 @@ class FlightForm(ModelForm):
 class AircraftForm(ModelForm):
     def __init__(self, flights, *args, **kwargs):
         super(AircraftForm, self).__init__(*args, **kwargs)
-        self.fields['flight'].queryset = flights
-        self.fields['pilot'].queryset = User.objects.order_by('username')
-        self.fields['rio_wso'].queryset = User.objects.order_by('username')
+        self.fields["flight"].queryset = flights
+        self.fields["pilot"].queryset = User.objects.order_by("username")
+        self.fields["rio_wso"].queryset = User.objects.order_by("username")
 
     # specify the name of model to use
 
     class Meta:
         model = Aircraft
         fields = "__all__"
-    
 
 
 class SupportForm(ModelForm):
@@ -108,12 +118,47 @@ class NewUserForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ("username", "first_name", "last_name",
-                  "email", "password1", "password2")
+        fields = (
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "password1",
+            "password2",
+        )
 
     def save(self, commit=True):
         user = super(NewUserForm, self).save(commit=False)
-        user.email = self.cleaned_data['email']
+        user.email = self.cleaned_data["email"]
+        if commit:
+            user.save()
+        return user
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = (
+            "callsign",
+            "timezone",
+        )
+
+
+class UserForm(forms.ModelForm):
+    email = forms.EmailField(required=True)
+
+    class Meta:
+        model = User
+        fields = (
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+        )
+
+    def save(self, commit=True):
+        user = super(UserForm, self).save(commit=False)
+        user.email = self.cleaned_data["email"]
         if commit:
             user.save()
         return user
