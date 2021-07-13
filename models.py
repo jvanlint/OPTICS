@@ -129,17 +129,17 @@ class Mission(models.Model):
     )
     mission_time = models.CharField(
         max_length=5,
-        help_text="Mission time in HH:MM format.",
+        help_text="Mission time in HH:MM format. (UTC)",
         null=True,
         blank=True,
-        verbose_name="mission Start Time",
+        verbose_name="mission Start Time (UTC)",
         default="20:00 AEST",
     )
     mission_date = models.DateTimeField(
-        help_text="Proposed mission date / time.",
+        help_text="Proposed mission Date. (UTC)",
         null=True,
         blank=True,
-        verbose_name="expected Mission date / time",
+        verbose_name="expected Mission Date (UTC)",
     )
     mission_game_time = models.CharField(
         max_length=5,
@@ -149,10 +149,10 @@ class Mission(models.Model):
         verbose_name="In-Game Mission Start Time",
     )
     mission_game_date = models.DateTimeField(
-        help_text="Mission game date / time.",
+        help_text="Mission game date.",
         null=True,
         blank=True,
-        verbose_name="In-Game Mission date / time",
+        verbose_name="In-Game Mission Date",
     )
 
     # Weather
@@ -753,7 +753,6 @@ class UserProfile(models.Model):
     Timezone info stored here
     https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html#onetoone
     """
-
     user = models.OneToOneField(
         User,
         primary_key=True,

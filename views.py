@@ -201,6 +201,20 @@ def mission_create(request, link_id):
     if request.method == "POST":
         form = MissionForm(request.POST, request.FILES)
         if form.is_valid():
+            '''
+            combine the time and date responses and create a date/time to be 
+            saved in the mission datetime field.
+            Do this also for the update view below (extract to a function)
+            Also will need to do the reverse for the view of this field.
+            https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior
+            https://www.programiz.com/python-programming/datetime
+            https://realpython.com/python39-new-features/#proper-time-zone-support
+            check settings.py for correct time format
+            https://docs.djangoproject.com/en/3.2/ref/settings/#time-input-formats
+            https://docs.djangoproject.com/en/3.2/ref/models/fields/#datetimefield
+            http://diveintohtml5.info/forms.html
+            
+            '''
             form.save(commit=True)
             return HttpResponseRedirect("/airops/campaign/" + str(link_id))
 
