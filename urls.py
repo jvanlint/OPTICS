@@ -82,6 +82,9 @@ urlpatterns = [
         template_name='auth/password_reset_done.html'),
          name='password_reset_complete'),
 
+    path('profile', views.update_profile, name="profile"),
+
+
     path('pdf_view/mission/<int:mission_id>/flight/<int:flight_id>', views.view_mission_card, name="pdf_view"),
     path('pdf_download/mission/<int:mission_id>/flight/<int:flight_id>', views.download_mission_card,
          name="pdf_download"),
