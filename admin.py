@@ -2,17 +2,36 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Campaign, Mission, Package, Flight, Aircraft, Status, Airframe, Terrain, Threat, Target, Support, Waypoint, Task, MissionImagery
-from .models import ThreatReference
+from .models import (
+    Campaign,
+    Mission,
+    Package,
+    Flight,
+    Aircraft,
+    Status,
+    Airframe,
+    Terrain,
+    Threat,
+    Target,
+)
+from .models import (
+    Support,
+    Waypoint,
+    Task,
+    MissionImagery,
+    ThreatReference,
+    UserProfile,
+)
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
+from django.contrib.auth.admin import UserAdmin
 
 # Define the admin class
 
 
 class CampaignAdmin(admin.ModelAdmin):
-    list_display = ('name', 'start_date', 'status')
-    list_filter = ('start_date', 'status')
+    list_display = ("name", "start_date", "status")
+    list_filter = ("start_date", "status")
 
 
 # Register the admin class with the associated model
@@ -25,12 +44,13 @@ class PackageInline(admin.TabularInline):
 
 
 class MissionAdmin(admin.ModelAdmin):
-    list_display = ('number', 'name', 'mission_date', 'get_campaign')
+    list_display = ("number", "name", "mission_date", "get_campaign")
     inlines = [PackageInline]
 
     def get_campaign(self, obj):
         return obj.campaign.name
-    get_campaign.short_description = 'Campaign'
+
+    get_campaign.short_description = "Campaign"
 
 
 admin.site.register(Mission, MissionAdmin)
@@ -42,133 +62,152 @@ class FlightInline(admin.TabularInline):
 
 
 class PackageAdmin(admin.ModelAdmin):
-    list_display = ('name', 'get_mission', 'get_campaign')
+    list_display = ("name", "get_mission", "get_campaign")
     inlines = [FlightInline]
 
     def get_mission(self, obj):
         return obj.mission.name
-    get_mission.short_description = 'Mission'
+
+    get_mission.short_description = "Mission"
 
     def get_campaign(self, obj):
         return obj.mission.campaign.name
-    get_campaign.short_description = 'Campaign'
+
+    get_campaign.short_description = "Campaign"
 
 
 admin.site.register(Package, PackageAdmin)
 
 
 class FlightAdmin(admin.ModelAdmin):
-    list_display = ('callsign', 'get_package', 'get_mission', 'get_campaign')
+    list_display = ("callsign", "get_package", "get_mission", "get_campaign")
 
     def get_package(self, obj):
         return obj.package.name
-    get_package.short_description = 'Package'
+
+    get_package.short_description = "Package"
 
     def get_mission(self, obj):
         return obj.package.mission.name
-    get_mission.short_description = 'Mission'
+
+    get_mission.short_description = "Mission"
 
     def get_campaign(self, obj):
         return obj.package.mission.campaign.name
-    get_campaign.short_description = 'Campaign'
+
+    get_campaign.short_description = "Campaign"
 
 
 admin.site.register(Flight, FlightAdmin)
 
 
 class AircraftAdmin(admin.ModelAdmin):
-    list_display = ('type', 'get_flight')
+    list_display = ("type", "get_flight")
 
     def get_flight(self, obj):
         return obj.flight.callsign
-    get_flight.short_description = 'Flight'
+
+    get_flight.short_description = "Flight"
 
 
 admin.site.register(Aircraft, AircraftAdmin)
 
 
 class StatusAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ("name",)
 
 
 admin.site.register(Status, StatusAdmin)
 
 
 class TerrainAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ("name",)
 
 
 admin.site.register(Terrain, TerrainAdmin)
 
 
 class AirframeAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ("name",)
 
 
 admin.site.register(Airframe, AirframeAdmin)
 
 
 class ThreatAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ("name",)
 
 
 admin.site.register(Threat, ThreatAdmin)
 
 
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ('task_name',)
+    list_display = ("task_name",)
 
 
 admin.site.register(Task, TaskAdmin)
 
 
 class TargetAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ("name",)
 
 
 admin.site.register(Target, TargetAdmin)
 
 
 class SupportAdmin(admin.ModelAdmin):
-    list_display = ('callsign',)
+    list_display = ("callsign",)
 
 
 admin.site.register(Support, SupportAdmin)
 
 
 class WaypointAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ("name",)
 
 
 admin.site.register(Waypoint, WaypointAdmin)
 
 
-class MyUserAdmin(admin.ModelAdmin):
+class UserProfileInline(admin.StackedInline):
+    model = UserProfile
+    can_delete = False
+    verbose_name_plural = "UserInfo"
+
+
+class UserProfileAdmin(admin.ModelAdmin):
     def group(self, user):
         groups = []
         for group in user.groups.all():
             groups.append(group.name)
-        return ' '.join(groups)
-        group.short_description = 'Groups'
+        return " ".join(groups)
 
-    list_display = ['username', 'first_name', 'last_name',
-                    'is_active', 'last_login', 'group']
-    ordering = ['username']
+    group.short_description = "Groups"
+    inlines = [UserProfileInline, ]
+    list_display = [
+        "username",
+        "first_name",
+        "last_name",
+        "is_active",
+        "last_login",
+        "group",
+    ]
+    ordering = ["username"]
 
 
 admin.site.unregister(User)
-admin.site.register(User, MyUserAdmin)
+admin.site.register(User, UserProfileAdmin)
 
 
 class ThreatReferenceAdmin(admin.ModelAdmin):
-    list_display = ('name', 'nato_code', 'threat_class',
-                    'threat_type', 'harm_code')
+    list_display = ("name", "nato_code", "threat_class", "threat_type", "harm_code")
 
 
 admin.site.register(ThreatReference, ThreatReferenceAdmin)
 
+
 class MissionImageryAdmin(admin.ModelAdmin):
-    list_display = ('caption',)
+    list_display = ("caption",)
 
 
 admin.site.register(MissionImagery, MissionImageryAdmin)

@@ -1,4 +1,6 @@
-{% extends "dashboard/basev2.html" %} {% load static %} {% block content %}
+{% extends "dashboard/basev2.html" %} {% load static %}
+{% load tz %}
+{% block content %}
 
 <!-- start container -->
 <div class="container">
@@ -21,7 +23,7 @@
 	<hr class="starter-template">
 		<h2>{{ mission_object.name }}</h2>
 
-		<h6>MISSION {{mission_object.number}} / {{mission_object.mission_date}} / {{mission_object.mission_time}} // {{ mission_object.mission_date|timeuntil }}
+		<h6>MISSION {{mission_object.number}} set for {{mission_object.mission_date|timezone:user_timezone}} in {{ mission_object.mission_date|timeuntil }} local time.
 			<a class="btn btn-sm btn-primary float-right" href="{% url 'mission_signup' mission_object.id %}?returnUrl={{request.path}}" role="button">Mission Sign Up</a>
 		</h6>
 		<hr />
