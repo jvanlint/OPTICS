@@ -51,11 +51,14 @@ class MissionForm(ModelForm):
 
     def clean(self):
         # Combine the Mission date and time and set to UTC
-        self.cleaned_data["mission_date"] = datetime.combine(
-            self.cleaned_data["mission_date"],
-            self.cleaned_data["mission_time"],
-            tzinfo=timezone.utc,
-        )
+        if self.cleaned_data["mission_date"] and self.cleaned_data["mission_time"]:
+            self.cleaned_data["mission_date"] = datetime.combine(
+                self.cleaned_data["mission_date"],
+                self.cleaned_data["mission_time"],
+                tzinfo=timezone.utc,
+            )
+
+
 
 
 class PackageForm(ModelForm):
