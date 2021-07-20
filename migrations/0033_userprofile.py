@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             name='UserProfile',
             fields=[
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, primary_key=True, related_name='profile', serialize=False, to='auth.user', verbose_name='user')),
-                ('timezone', models.CharField(blank=True, max_length=256, null=True, default='Australia/Melbourne')),
+                ('timezone', models.CharField(blank=True, max_length=256, null=True)),
                 ('callsign', models.CharField(blank=True, max_length=256, null=True)),
             ],
             options={

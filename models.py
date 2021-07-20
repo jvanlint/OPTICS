@@ -1,4 +1,3 @@
-
 from django.db import models
 from django.utils import timezone
 from django_resized import ResizedImageField
@@ -6,7 +5,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
 from django.contrib.auth.models import User
-# Create your models here.
+from django.conf import settings
 
 
 class Campaign(models.Model):
@@ -753,6 +752,7 @@ class UserProfile(models.Model):
     Timezone info stored here
     https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html#onetoone
     """
+
     user = models.OneToOneField(
         User,
         primary_key=True,
@@ -761,7 +761,9 @@ class UserProfile(models.Model):
         on_delete=models.CASCADE,
     )
 
-    timezone = models.CharField(max_length=256, blank=True, null=True)
+    timezone = models.CharField(
+        max_length=256, blank=True, null=True, default=settings.TIME_ZONE
+    )
     callsign = models.CharField(max_length=256, blank=True, null=True)
 
     def __str__(self):
