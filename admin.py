@@ -13,6 +13,7 @@ from .models import (
     Terrain,
     Threat,
     Target,
+    WebHook,
 )
 from .models import (
     Support,
@@ -27,6 +28,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
 
 # Define the admin class
+
+admin.site.site_url = '/'
 
 
 class CampaignAdmin(admin.ModelAdmin):
@@ -211,3 +214,9 @@ class MissionImageryAdmin(admin.ModelAdmin):
 
 
 admin.site.register(MissionImagery, MissionImageryAdmin)
+
+class WebHookAdmin(admin.ModelAdmin):
+    list_display = ('service_name', 'url',)
+    ordering = ['-service_name']
+
+admin.site.register(WebHook, WebHookAdmin)

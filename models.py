@@ -229,26 +229,29 @@ class Mission(models.Model):
         """String for representing the MyModelName object (in Admin site etc.)."""
         return self.name
 
-    def create_discord_event(self):
-
+    def create_discord_event(self, image_url):
         # Create message should be
         # POST/webhooks/{webhook.id}/{webhook.token}
-
+        
         # Edit message
         # PATCH/webhooks/{webhook.id}/{webhook.token}/messages/{message.id}
-
-        params = {"wait": "true"}
-
-        data = {"content": "OPTICS Generated Mission Event", "username": "OPTICS Bot"}
+        
+        webhook_instance = WebHook.objects.get(service_name__exact='Discord')
+        url = webhook_instance.url
+        
+        params = {'wait': 'true'}
+        
+        data = {
+            "content" : "OPTICS Generated Mission Event",
+            "username" : "OPTICS Bot"
+        }
         title = self.campaign.campaign_name
         thumbnail = self.campaign.thumbnail_image.url
         mission_name = self.name
         now = str(timezone.now())
         date = self.mission_date.strftime("%b %d %Y")
-        description = (
-            f"{self.name}\n**{date}, {self.mission_time}**\n\n{self.description}"
-        )
-
+        description = (f'{self.name}\n**{date}, {self.mission_time}**\n\n{self.description}')
+        
         data["embeds"] = [
             {
                 "title": title,
@@ -257,23 +260,26 @@ class Mission(models.Model):
                 "fields": [
                     {
                         "name": "Mission Page",
-                        "value": (f"[{mission_name}]({mission_page})"),
-                        # "value": "[Cracking Eggs With A Hammer ](http://www.google.com)",
-                        "inline": True,
+                        #"value": (f'[{mission_name}]({mission_page})'),
+                        "value": (f'[{mission_name}](Link to go here)'),
+                        #"value": "[Cracking Eggs With A Hammer ](http://www.google.com)",
+                        "inline": True
                     },
                     {
                         "name": "Sign Up Sheet",
                         "value": "[Register here](http://www.google.com)",
-                        "inline": True,
-                    },
+                        "inline": True
+                    }
                 ],
                 "timestamp": now,
-                "thumbnail": {"url": image_url},
+                "thumbnail": {
+                    "url": image_url
+                }
             }
         ]
-
-        result = requests.post(url, json=data, params=params)
-
+        
+        result = requests.post(url, json = data, params = params)
+        
         print(result)
         try:
             result.raise_for_status()
@@ -282,8 +288,8 @@ class Mission(models.Model):
             print(err)
         else:
             print("Payload delivered successfully, code {}.".format(result.status_code))
-            print(jsonResponse["id"])
-
+            print(jsonResponse['id'])
+        
         return True
 
 
@@ -782,3 +788,13 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+class WebHook(models.Model):
+    service_name = models.CharField(max_length=30, 
+                            help_text='Enter the service/app the webhook is for', 
+                            verbose_name="Service Name")
+    url = models.CharField(max_length=255, 
+                            help_text='Enter the web hook URL.', 
+                            verbose_name="Web Hook URL")
+    class Meta:
+        ordering = ['-service_name']
