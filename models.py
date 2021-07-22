@@ -252,6 +252,8 @@ class Mission(models.Model):
         now = str(timezone.now())
         date = self.mission_date.strftime("%b %d %Y")
         description = (f'{self.name}\n**{date}, {self.mission_time}**\n\n{self.description}')
+        register_url = reverse('mission_signup', args=(self.id,))
+        mission_page = reverse('mission', args=(self.id,))
         
         data["embeds"] = [
             {
@@ -261,14 +263,14 @@ class Mission(models.Model):
                 "fields": [
                     {
                         "name": "Mission Page",
-                        #"value": (f'[{mission_name}]({mission_page})'),
-                        "value": (f'[{mission_name}](Link to go here)'),
+                        "value": (f'[{mission_name}]({mission_page})'),
                         #"value": "[Cracking Eggs With A Hammer ](http://www.google.com)",
                         "inline": True
                     },
                     {
                         "name": "Sign Up Sheet",
-                        "value": "[Register here](http://www.google.com)",
+                        #{% url 'mission_signup' self.id %}?returnUrl={{request.path}}
+                        "value": (f'[Register here]({register_url})'),
                         "inline": True
                     }
                 ],
