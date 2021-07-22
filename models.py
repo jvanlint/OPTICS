@@ -214,6 +214,11 @@ class Mission(models.Model):
     sigwx = models.CharField(
         max_length=20, help_text="SIGWX", null=True, blank=True, verbose_name="SIGWX"
     )
+    
+    discord_msg_id = models.CharField(max_length=20, 
+                                      blank=True, 
+                                      null=True,
+                                      verbose_name="Discord Msg ID")
 
     # Metadata
 
@@ -283,7 +288,12 @@ class Mission(models.Model):
             }
         ]
         
-        result = requests.post(url, json = data, params = params)
+        
+        if self.discord_msg_id:
+            patch_url = url + (f'/messages/{self.discord_msg_id}')
+            result = requests.patch(patch_url, json = data, params = params)
+        else:
+            result = requests.post(url, json = data, params = params)
         
         print(result)
         try:
@@ -294,6 +304,8 @@ class Mission(models.Model):
         else:
             print("Payload delivered successfully, code {}.".format(result.status_code))
             print(jsonResponse['id'])
+            self.discord_msg_id = jsonResponse['id']
+            self.save()
         
         return True
 
