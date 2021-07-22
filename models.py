@@ -6,6 +6,7 @@ from django.dispatch import receiver
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.conf import settings
+import requests
 
 
 class Campaign(models.Model):
@@ -245,8 +246,8 @@ class Mission(models.Model):
             "content" : "OPTICS Generated Mission Event",
             "username" : "OPTICS Bot"
         }
-        title = self.campaign.campaign_name
-        thumbnail = self.campaign.thumbnail_image.url
+        title = self.campaign.name
+        thumbnail = image_url
         mission_name = self.name
         now = str(timezone.now())
         date = self.mission_date.strftime("%b %d %Y")
