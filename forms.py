@@ -48,6 +48,7 @@ class MissionForm(ModelForm):
         model = Mission
         fields = "__all__"
         widgets = {"mission_date": DateInput(), "mission_game_date": DateInput()}
+        exclude = ("discord_msg_id",)
 
     def clean(self):
         # Combine the Mission date and time and set to UTC
