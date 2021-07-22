@@ -230,7 +230,7 @@ class Mission(models.Model):
         """String for representing the MyModelName object (in Admin site etc.)."""
         return self.name
 
-    def create_discord_event(self, image_url):
+    def create_discord_event(self, image_url, request):
         # Create message should be
         # POST/webhooks/{webhook.id}/{webhook.token}
         
@@ -251,9 +251,11 @@ class Mission(models.Model):
         mission_name = self.name
         now = str(timezone.now())
         date = self.mission_date.strftime("%b %d %Y")
-        description = (f'{self.name}\n**{date}, {self.mission_time}**\n\n{self.description}')
-        register_url = reverse('mission_signup', args=(self.id,))
-        mission_page = reverse('mission', args=(self.id,))
+        description = (f'{self.name}\n**{date}, {self.mission_time} UTC**\n\n{self.description}')
+        register_url = request.build_absolute_uri(reverse('mission_signup', args=(self.id,)))
+        mission_page = request.build_absolute_uri(reverse('mission', args=(self.id,)))
+        
+        print(register_url)
         
         data["embeds"] = [
             {
