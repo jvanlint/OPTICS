@@ -245,9 +245,10 @@ def mission_update(request, link_id):
         form = MissionForm(request.POST, request.FILES, instance=mission)
         
         if form.is_valid():
-            form.save(commit=True)
+            saved_obj = form.save(commit=True)
             # Post to Discord.
-            mission.create_discord_event(image_url, request)
+            if saved_obj.notify_discord:
+                mission.create_discord_event(image_url, request)
             return HttpResponseRedirect(returnURL)
 
     context = {"form": form, "link": link_id, "returnURL": returnURL}

@@ -141,6 +141,9 @@ class Mission(models.Model):
         blank=True,
         verbose_name="expected Mission Date (UTC)",
     )
+    
+    notify_discord = models.BooleanField(default=False, verbose_name="Send Notification To Discord")
+    
     mission_game_time = models.CharField(
         max_length=5,
         help_text="Mission game start time in HH:MM format.",
