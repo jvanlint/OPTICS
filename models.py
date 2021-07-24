@@ -238,6 +238,25 @@ class Mission(models.Model):
         """String for representing the MyModelName object (in Admin site etc.)."""
         return self.name
 
+    def delete_discord_event(self):
+        webhook_instance = WebHook.objects.get(service_name__exact='Discord')
+        url = webhook_instance.url
+        params = {'wait': 'true'}
+        
+        if self.discord_msg_id:
+            
+            delete_url = url + (f'/messages/{self.discord_msg_id}')
+            result = requests.delete(delete_url, params = params)
+        
+            try:
+                result.raise_for_status()
+            except requests.exceptions.HTTPError as err:
+                print(err)
+            else:
+                print("Payload delivered successfully, code {}.".format(result.status_code))
+
+        return True
+        
     def create_discord_event(self, image_url, request):
         # Create message should be
         # POST/webhooks/{webhook.id}/{webhook.token}

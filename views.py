@@ -197,6 +197,7 @@ def mission_create(request, link_id):
     campaign = Campaign.objects.get(id=link_id)
     missionCount = campaign.mission_set.count() + 1
     returnURL = request.GET.get("returnUrl")
+    image_url = request.build_absolute_uri(campaign.campaignImage.url)
 
     form = MissionForm(initial={"campaign": campaign, "number": missionCount})
     # form.base_fields['number'].initial = missionCount
@@ -225,7 +226,10 @@ def mission_create(request, link_id):
             mission_game_time is string
             mission_game_date is datetime UTC+10
             '''
-            form.save(commit=True)
+            
+            
+            mission = form.save(commit=True)
+            mission.create_discord_event(image_url, request)
             return HttpResponseRedirect("/airops/campaign/" + str(link_id))
 
     context = {"form": form, "link": link_id, "returnURL": returnURL}
@@ -263,6 +267,7 @@ def mission_delete(request, link_id):
     campaignID = mission.campaign.id
 
     if request.method == "POST":
+        mission.delete_discord_event()
         mission.delete()
         return HttpResponseRedirect("/airops/campaign/" + str(campaignID))
 
