@@ -229,7 +229,8 @@ def mission_create(request, link_id):
             
             
             mission = form.save(commit=True)
-            mission.create_discord_event(image_url, request)
+            if mission.notify_discord:
+                mission.create_discord_event(image_url, request)
             return HttpResponseRedirect("/airops/campaign/" + str(link_id))
 
     context = {"form": form, "link": link_id, "returnURL": returnURL}
@@ -250,7 +251,7 @@ def mission_update(request, link_id):
         
         if form.is_valid():
             saved_obj = form.save(commit=True)
-            # Post to Discord.
+            # If flag is enabled Post to Discord.
             if saved_obj.notify_discord:
                 mission.create_discord_event(image_url, request)
             return HttpResponseRedirect(returnURL)
@@ -267,7 +268,8 @@ def mission_delete(request, link_id):
     campaignID = mission.campaign.id
 
     if request.method == "POST":
-        mission.delete_discord_event()
+        if mission.discord_msg_id:
+            mission.delete_discord_event()
         mission.delete()
         return HttpResponseRedirect("/airops/campaign/" + str(campaignID))
 
