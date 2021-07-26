@@ -852,7 +852,21 @@ def register_request(request):
                     profile_form.save()
                     messages.success(request, "Registration successful.")
                     return HttpResponseRedirect("/airops/campaign")
-            messages.error(request, "Unsuccessful registration. Invalid information.")
+                else:
+                    messages.error(request, "Unsuccessful registration. Invalid profile information.")
+                    return render(
+                        request=request,
+                        template_name="dashboard/register.html",
+                        context={"register_form": user_form, "profile_form": profile_form},
+                    )
+            else:
+                messages.error(request, "Unsuccessful registration. Invalid user information.")
+                profile_form = ProfileForm
+                return render(
+                    request=request,
+                    template_name="dashboard/register.html",
+                    context={"register_form": user_form, "profile_form": profile_form},
+                )
         user_form = NewUserForm
         profile_form = ProfileForm
         return render(
