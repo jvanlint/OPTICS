@@ -832,13 +832,14 @@ def register_request(request):
     else:
         if request.method == "POST":
             user_form = NewUserForm(request.POST)
-            profile_form = ProfileForm(request.POST, instance=request.user.profile)
-            if user_form.is_valid() and profile_form.is_valid():
+            if user_form.is_valid():
                 user = user_form.save()
-                profile_form.save()
                 login(request, user)
-                messages.success(request, "Registration successful.")
-                return HttpResponseRedirect("/airops/campaign")
+                profile_form = ProfileForm(request.POST, instance=request.user.profile)
+                if profile_form.is_valid():
+                    profile_form.save()
+                    messages.success(request, "Registration successful.")
+                    return HttpResponseRedirect("/airops/campaign")
             messages.error(request, "Unsuccessful registration. Invalid information.")
         user_form = NewUserForm
         profile_form = ProfileForm
