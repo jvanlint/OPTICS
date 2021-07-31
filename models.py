@@ -172,7 +172,7 @@ class Mission(models.Model):
     )
     notify_discord = models.BooleanField(
         default=False, 
-        verbose_name="Send Notification To Discord"
+        verbose_name="Send Notification To Discord if Webhook configured."
     )
     mission_game_time = models.CharField(
         max_length=5,

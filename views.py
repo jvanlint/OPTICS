@@ -109,6 +109,7 @@ def campaign_detail(request, link_id):
         "campaign_Object": campaign,
         "mission_Object": missions,
         "isAdmin": is_admin(request.user),
+        "user_timezone": request.user.profile.timezone,
     }
 
     return render(request, "campaign/campaign_detail.html", context=context)

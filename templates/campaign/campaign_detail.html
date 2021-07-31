@@ -1,5 +1,6 @@
 {% extends "dashboard/basev2.html" %} 
 {% load static %} 
+{% load tz %}
 {% block content %}
 
 <!-- start container -->
@@ -100,7 +101,7 @@
 						<th scope="row">{{mission.number}}</th>
 						<td><a href="{% url 'mission' mission.id %}">{{ mission.name }}</a></td>
 						<td>{{ mission.description}}</td>
-						<td>{{ mission.mission_date}}</td>
+						<td>{{ mission.mission_date|timezone:user_timezone}}</td>
 						{% if campaign.creator.username == user.username or isAdmin == True %}
 						<td>
 							<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">						
