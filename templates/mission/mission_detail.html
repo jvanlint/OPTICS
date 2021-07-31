@@ -28,14 +28,37 @@
 			<a class="btn btn-sm btn-primary float-right" href="{% url 'mission_signup' mission_object.id %}?returnUrl={{request.path}}" role="button">Mission Sign Up</a>
 		</h6>
 		<hr />
+		<h5 class='text-muted'>Mission Time</h5>
+		<p>{{ mission_object.mission_game_date }} // {{ mission_object.mission_game_time }}</p>
 		<h5 class='text-muted'>Situation</h5>
-		<p class="lead">{{ mission_object.description|linebreaks|urlize }}</p>
+		
+		{% if mission_object.description %}
+			<p class="lead">{{ mission_object.description|linebreaks|urlize }}</p>
+		{% else %}
+			<p>N/A</p>
+		{% endif %}
+		
 		<h5 class='text-muted'>Tactical Brief</h5>
-		<p class="lead">{{ mission_object.brief|linebreaks|urlize }}</p>
+		{% if mission_object.brief %}
+			<p class="lead">{{ mission_object.brief|linebreaks|urlize }}</p>
+		{% else %}
+			<p>N/A</p>
+		{% endif %}
+		
 		<h5 class='text-muted'>Rules of Engagement</h5>
-		<p class="lead">{{ mission_object.roe|linebreaks }}</p>
+		{% if mission_object.roe %}
+			<p class="lead">{{ mission_object.roe|linebreaks }}</p>
+		{% else %}
+			<p>N/A</p>
+		{% endif %}
+
 		<h5 class='text-muted'>Munitions Restrictions</h5>
-		<p class="lead">{{ mission_object.munitions_restrictions|linebreaks }}</p>
+		{% if mission_object.munitions_restrictions %}
+			<p class="lead">{{ mission_object.munitions_restrictions|linebreaks }}</p>
+		{% else %}
+			<p>N/A</p>
+		{% endif %}
+		
 		<h5 class='text-muted'>Weather</h5>
 		<div class="table-responsive">
 			<table class="table table-striped table-sm">

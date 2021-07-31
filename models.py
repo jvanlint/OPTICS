@@ -12,7 +12,10 @@ import requests
 class Campaign(models.Model):
     # Fields
 
-    name = models.CharField(max_length=200, help_text="The Campaign Name.")
+    name = models.CharField(
+        max_length=200, 
+        help_text="The Campaign Name."
+    )
     description = models.TextField(
         help_text="A brief description used for display purposes on selection screens.",
         default="Campaign description to be added here.",
@@ -34,15 +37,22 @@ class Campaign(models.Model):
         null=True,
         blank=True,
     )
-    status = models.ForeignKey("Status", on_delete=models.CASCADE, null=True)
-
-    creator = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
+    status = models.ForeignKey(
+        "Status", 
+        on_delete=models.CASCADE, 
+        null=True
+    )
+    creator = models.ForeignKey(
+        User, 
+        null=True, 
+        blank=True, 
+        on_delete=models.SET_NULL
+    )
     situation = models.TextField(
         help_text="A detailed overview of the background and situation for the campaign.",
         null=True,
         blank=True,
     )
-
     aoImage = ResizedImageField(
         verbose_name="area of Operations Image",
         size=[1500, 1200],
@@ -64,32 +74,44 @@ class Campaign(models.Model):
         return reverse("model-detail-view", args=[str(self.id)])
 
     def __str__(self):
-        """String for representing the Campaign object (in Admin site etc.)."""
         return self.name
 
 
 class Terrain(models.Model):
     # Fields
 
-    name = models.CharField(max_length=20, help_text="Enter Terrain Map Name.")
+    name = models.CharField(
+        max_length=20, 
+        help_text="Enter Terrain Map Name."
+    )
 
+    # Methods
+    
     def __str__(self):
-        """String for representing the Campaign object (in Admin site etc.)."""
         return self.name
+        
+    # Metadata
 
     class Meta:
+        ordering = ["-name"]
         verbose_name_plural = "Terrain"
 
 
 class Status(models.Model):
     # Fields
 
-    name = models.CharField(max_length=20, help_text="Enter Status Type")
-
+    name = models.CharField(
+        max_length=20, 
+        help_text="Enter Status Type"
+    )
+    
+    # Methods
+    
     def __str__(self):
-        """String for representing the Campaign object (in Admin site etc.)."""
         return self.name
-
+    
+    # Metadata
+    
     class Meta:
         verbose_name = "Campaign Status"
         verbose_name_plural = "Campaign Status"
@@ -98,13 +120,20 @@ class Status(models.Model):
 class Mission(models.Model):
     # Fields
 
-    campaign = models.ForeignKey("Campaign", on_delete=models.CASCADE, null=True)
+    campaign = models.ForeignKey(
+        "Campaign", 
+        on_delete=models.CASCADE, 
+        null=True
+    )
     number = models.IntegerField(
         default=1,
         help_text="A number representing the mission order within the campaign.",
         verbose_name="mission number",
     )
-    name = models.CharField(max_length=200, help_text="Enter Mission Name")
+    name = models.CharField(
+        max_length=200, 
+        help_text="Enter Mission Name"
+    )
     description = models.TextField(
         help_text="Enter Mission Description/Situation.",
         default="Mission description to be added here.",
@@ -141,9 +170,10 @@ class Mission(models.Model):
         blank=True,
         verbose_name="expected Mission Date (UTC)",
     )
-    
-    notify_discord = models.BooleanField(default=False, verbose_name="Send Notification To Discord")
-    
+    notify_discord = models.BooleanField(
+        default=False, 
+        verbose_name="Send Notification To Discord"
+    )
     mission_game_time = models.CharField(
         max_length=5,
         help_text="Mission game start time in HH:MM format.",
@@ -202,10 +232,18 @@ class Mission(models.Model):
         verbose_name="Wind at 26K ft",
     )
     qnh = models.CharField(
-        max_length=20, help_text="Enter QNH", null=True, blank=True, verbose_name="QNH"
+        max_length=20, 
+        help_text="Enter QNH", 
+        null=True, 
+        blank=True, 
+        verbose_name="QNH"
     )
     qfe = models.CharField(
-        max_length=20, help_text="Enter QFE", null=True, blank=True, verbose_name="QFE"
+        max_length=20, 
+        help_text="Enter QFE", 
+        null=True, 
+        blank=True, 
+        verbose_name="QFE"
     )
     temp = models.CharField(
         max_length=20,
@@ -215,13 +253,17 @@ class Mission(models.Model):
         verbose_name="Temperature in Celcius",
     )
     sigwx = models.CharField(
-        max_length=20, help_text="SIGWX", null=True, blank=True, verbose_name="SIGWX"
+        max_length=20, 
+        help_text="SIGWX", 
+        null=True, 
+        blank=True, 
+        verbose_name="SIGWX"
     )
-    
     discord_msg_id = models.CharField(max_length=20, 
-                                      blank=True, 
-                                      null=True,
-                                      verbose_name="Discord Msg ID")
+        blank=True, 
+        null=True,
+        verbose_name="Discord Msg ID"
+    )
 
     # Metadata
 
@@ -230,12 +272,7 @@ class Mission(models.Model):
 
     # Methods
 
-    def get_absolute_url(self):
-        """Returns the url to access a particular instance of MyModelName."""
-        return reverse("model-detail-view", args=[str(self.id)])
-
     def __str__(self):
-        """String for representing the MyModelName object (in Admin site etc.)."""
         return self.name
 
     def delete_discord_event(self):
@@ -335,9 +372,16 @@ class Mission(models.Model):
 class Package(models.Model):
     # Fields
 
-    mission = models.ForeignKey("Mission", on_delete=models.CASCADE, null=True)
+    mission = models.ForeignKey(
+        "Mission", 
+        on_delete=models.
+        CASCADE, 
+        null=True
+    )
     name = models.CharField(
-        max_length=200, help_text="Enter Package Name", verbose_name="Package Name"
+        max_length=200, 
+        help_text="Enter Package Name", 
+        verbose_name="Package Name"
     )
     frequency = models.CharField(
         max_length=10,
@@ -366,21 +410,22 @@ class Package(models.Model):
 
     # Methods
 
-    def get_absolute_url(self):
-        """Returns the url to access a particular instance of MyModelName."""
-        return reverse("model-detail-view", args=[str(self.id)])
-
     def __str__(self):
-        """String for representing the MyModelName object (in Admin site etc.)."""
         return self.name
 
 
 class Target(models.Model):
     # Fields
 
-    mission = models.ForeignKey("Mission", on_delete=models.CASCADE, null=True)
+    mission = models.ForeignKey(
+        "Mission", 
+        on_delete=models.CASCADE, 
+        null=True
+    )
     name = models.CharField(
-        max_length=50, help_text="Enter target name", verbose_name="Target Name"
+        max_length=50, 
+        help_text="Enter target name", 
+        verbose_name="Target Name"
     )
     lat = models.CharField(
         max_length=200,
@@ -409,8 +454,6 @@ class Target(models.Model):
         blank=True,
         verbose_name="Notes on Target",
     )
-    # target_image = models.ImageField(
-    #   upload_to='campaign/mission/target_images/', null=True, blank=True, help_text='Upload image of the target.', verbose_name="Target Image")
     target_image = ResizedImageField(
         verbose_name="Target Image",
         size=[1500, 1200],
@@ -427,21 +470,27 @@ class Target(models.Model):
 
     # Methods
 
-    def get_absolute_url(self):
-        """Returns the url to access a particular instance of MyModelName."""
-        return reverse("model-detail-view", args=[str(self.id)])
-
     def __str__(self):
-        """String for representing the MyModelName object (in Admin site etc.)."""
         return self.name
 
 
 class Flight(models.Model):
     # Fields
 
-    package = models.ForeignKey("Package", on_delete=models.CASCADE, null=True)
-    callsign = models.CharField(max_length=200, help_text="Enter Flight Callsign")
-    task = models.ForeignKey("Task", on_delete=models.CASCADE, null=True)
+    package = models.ForeignKey(
+        "Package", 
+        on_delete=models.CASCADE, 
+        null=True
+    )
+    callsign = models.CharField(
+        max_length=200, 
+        help_text="Enter Flight Callsign"
+    )
+    task = models.ForeignKey(
+        "Task", 
+        on_delete=models.CASCADE, 
+        null=True
+    )
     flight_coordination = models.TextField(
         help_text="Use this field to enter in any notes that the flight lead might need to use to coordinate other members of the flight,",
         null=True,
@@ -449,7 +498,10 @@ class Flight(models.Model):
         verbose_name="Notes for flight co-ordination",
     )
     radio_frequency = models.CharField(
-        max_length=20, help_text="Enter Flight Frequency", blank=True, null=True
+        max_length=20, 
+        help_text="Enter Flight Frequency", 
+        blank=True, 
+        null=True
     )
     tacan = models.CharField(
         max_length=5,
@@ -457,7 +509,10 @@ class Flight(models.Model):
         blank=True,
         null=True,
     )
-    targets = models.ManyToManyField(Target, blank=True)
+    targets = models.ManyToManyField(
+        Target, 
+        blank=True
+    )
 
     # Time Hacks
     timehack_start = models.CharField(
@@ -510,20 +565,22 @@ class Flight(models.Model):
 
     # Methods
 
-    def get_absolute_url(self):
-        """Returns the url to access a particular instance of MyModelName."""
-        return reverse("model-detail-view", args=[str(self.id)])
-
     def __str__(self):
-        """String for representing the MyModelName object (in Admin site etc.)."""
         return self.callsign
-
 
 class Aircraft(models.Model):
     # Fields
 
-    type = models.ForeignKey("Airframe", on_delete=models.CASCADE, null=True)
-    flight = models.ForeignKey("Flight", on_delete=models.CASCADE, null=True)
+    type = models.ForeignKey(
+        "Airframe", 
+        on_delete=models.CASCADE, 
+        null=True
+    )
+    flight = models.ForeignKey(
+        "Flight", 
+        on_delete=models.CASCADE, 
+        null=True
+    )
     pilot = models.ForeignKey(
         User,
         null=True,
@@ -532,13 +589,24 @@ class Aircraft(models.Model):
         related_name="user_pilot",
     )
     rio_wso = models.ForeignKey(
-        User, null=True, blank=True, on_delete=models.SET_NULL, related_name="user_rio"
+        User, 
+        null=True, 
+        blank=True, 
+        on_delete=models.SET_NULL, 
+        related_name="user_rio"
     )
     tailcode = models.CharField(
-        max_length=20, help_text="Enter A/C tail code.", null=True, blank=True
+        max_length=20, 
+        help_text="Enter A/C tail code.", 
+        null=True, 
+        blank=True
     )
-    flight_lead = models.BooleanField(default=False)
-    package_lead = models.BooleanField(default=False)
+    flight_lead = models.BooleanField(
+        default=False
+    )
+    package_lead = models.BooleanField(
+        default=False
+    )
 
     # Metadata
 
@@ -549,20 +617,22 @@ class Aircraft(models.Model):
 
     # Methods
 
-    def get_absolute_url(self):
-        """Returns the url to access a particular instance of MyModelName."""
-        return reverse("model-detail-view", args=[str(self.id)])
-
     def multicrew(self):
         return self.type.multicrew
-
 
 class Airframe(models.Model):
     # Fields
 
-    name = models.CharField(max_length=200, help_text="Enter Airframe Name")
-    stations = models.IntegerField(default=2)  # Weapons stations
-    multicrew = models.BooleanField(default=False)
+    name = models.CharField(
+        max_length=200, 
+        help_text="Enter Airframe Name"
+    )
+    stations = models.IntegerField(
+        default=2
+    )
+    multicrew = models.BooleanField(
+        default=False
+    )
 
     # Metadata
 
@@ -571,20 +641,13 @@ class Airframe(models.Model):
 
     # Methods
 
-    def get_absolute_url(self):
-        """Returns the url to access a particular instance of MyModelName."""
-        return reverse("model-detail-view", args=[str(self.id)])
-
     def __str__(self):
-        """String for representing the MyModelName object (in Admin site etc.)."""
         return self.name
 
 
 class Threat(models.Model):
-    # Fields
-
-    mission = models.ForeignKey("Mission", on_delete=models.CASCADE, null=True)
-
+    
+    # Values
     THREAT_TYPES = (
         ("AAA", "AAA"),
         ("SAM", "SAM"),
@@ -592,23 +655,35 @@ class Threat(models.Model):
         ("NAVAL", "NAVAL"),
         ("GROUND", "GROUND"),
     )
+    
+    # Fields
 
-    threat_name = models.ForeignKey(
-        "ThreatReference", on_delete=models.CASCADE, null=True
+    mission = models.ForeignKey(
+        "Mission", 
+        on_delete=models.CASCADE, 
+        null=True
     )
-    name = models.CharField(max_length=60)
-    threat_type = models.CharField(max_length=10, choices=THREAT_TYPES, null=True)
+    threat_name = models.ForeignKey(
+        "ThreatReference", 
+        on_delete=models.CASCADE, 
+        null=True
+    )
+    name = models.CharField(
+        max_length=60
+    )
+    threat_type = models.CharField(
+        max_length=10, 
+        choices=THREAT_TYPES, 
+        null=True
+    )
     description = models.TextField(
         help_text="Enter Threat Description/Situation.",
         default="Threat description to be added here.",
     )
 
-
 class Support(models.Model):
-    # Fields
-
-    mission = models.ForeignKey("Mission", on_delete=models.CASCADE, null=True)
-
+    #Values
+    
     SUPPORT_TYPES = (
         ("AWACS", "AWACS"),
         ("TANKER", "TANKER"),
@@ -618,27 +693,65 @@ class Support(models.Model):
         ("ABM", "ABM"),
         ("AIRFIELD", "AIRFIELD"),
     )
-
-    callsign = models.CharField(max_length=50)
-    support_type = models.CharField(max_length=10, choices=SUPPORT_TYPES, null=True)
-    player_name = models.CharField(max_length=30, null=True, blank=True)
-    frequency = models.CharField(max_length=10, null=True, blank=True)
-    tacan = models.CharField(max_length=10, null=True, blank=True)
-    altitude = models.CharField(max_length=10, null=True, blank=True)
-    speed = models.CharField(max_length=10, null=True, blank=True)
-    brc = models.CharField(max_length=10, null=True, blank=True)
-    icls = models.CharField(max_length=10, null=True, blank=True)
-
-    notes = models.TextField(
-        help_text="Enter notes for support resource.", null=True, blank=True
-    )
-
-
-class Waypoint(models.Model):
+    
     # Fields
 
-    flight = models.ForeignKey("Flight", on_delete=models.CASCADE, null=True)
+    mission = models.ForeignKey(
+        "Mission", 
+        on_delete=models.CASCADE, 
+        null=True
+    )
+    callsign = models.CharField(
+        max_length=50
+    )
+    support_type = models.CharField(
+        max_length=10, 
+        choices=SUPPORT_TYPES,
+        null=True
+    )
+    player_name = models.CharField(
+        max_length=30, 
+        null=True, 
+        blank=True
+    )
+    frequency = models.CharField(
+        max_length=10, 
+        null=True, 
+        blank=True
+    )
+    tacan = models.CharField(
+        max_length=10, 
+        null=True, 
+        blank=True
+    )
+    altitude = models.CharField(
+        max_length=10, 
+        null=True, 
+        blank=True
+    )
+    speed = models.CharField(
+        max_length=10, 
+        null=True, 
+        blank=True
+    )
+    brc = models.CharField(
+        max_length=10, 
+        null=True, 
+        blank=True
+    )
+    icls = models.CharField(
+        max_length=10, 
+        null=True, 
+        blank=True
+    )
+    notes = models.TextField(
+        help_text="Enter notes for support resource.", 
+        null=True, 
+        blank=True
+    )
 
+class Waypoint(models.Model):
+    #Values
     WAYPOINT_TYPES = (
         ("NAV", "NAV"),
         ("IP", "IP"),
@@ -652,39 +765,75 @@ class Waypoint(models.Model):
         ("LAND", "LAND"),
         ("DIVERT", "DIVERT"),
     )
+    
+    # Fields
 
-    name = models.CharField(max_length=50)
+    flight = models.ForeignKey(
+        "Flight", 
+        on_delete=models.CASCADE, 
+        null=True
+    )
+    name = models.CharField(
+        max_length=50
+    )
     number = models.IntegerField(
         default=1,
         help_text="A number representing the waypoint order.",
         verbose_name="waypoint number",
     )
-    waypoint_type = models.CharField(max_length=10, choices=WAYPOINT_TYPES, null=True)
-    lat = models.CharField(max_length=15, null=True, blank=True)
-    long = models.CharField(max_length=15, null=True, blank=True)
-    elevation = models.CharField(max_length=15, null=True, blank=True)
+    waypoint_type = models.CharField(
+        max_length=10, 
+        choices=WAYPOINT_TYPES, 
+        null=True)
+    lat = models.CharField(
+        max_length=15, 
+        null=True, 
+        blank=True)
+    long = models.CharField(
+        max_length=15, 
+        null=True, 
+        blank=True
+    )
+    elevation = models.CharField(
+        max_length=15, 
+        null=True, 
+        blank=True
+    )
     tot = models.CharField(
-        max_length=15, null=True, blank=True, verbose_name="time on Target"
+        max_length=15, 
+        null=True, 
+        blank=True, 
+        verbose_name="time on Target"
     )
     notes = models.TextField(
-        help_text="Enter notes for the waypoint.", null=True, blank=True
+        help_text="Enter notes for the waypoint.", 
+        null=True, 
+        blank=True
     )
 
 
 class Task(models.Model):
-    task_name = models.CharField(max_length=10, null=True)
+    task_name = models.CharField(
+        max_length=10, 
+        null=True
+    )
 
     class Meta:
         ordering = ["task_name"]
 
     def __str__(self):
-        """String for representing the Campaign object (in Admin site etc.)."""
         return self.task_name
 
-
 class MissionImagery(models.Model):
-    mission = models.ForeignKey("Mission", on_delete=models.CASCADE, null=True)
-    caption = models.CharField(max_length=100, null=True)
+    mission = models.ForeignKey(
+        "Mission", 
+        on_delete=models.CASCADE, 
+        null=True
+    )
+    caption = models.CharField(
+        max_length=100, 
+        null=True
+    )
     image = ResizedImageField(
         verbose_name="Mission Imagery",
         size=[1500, 1200],
