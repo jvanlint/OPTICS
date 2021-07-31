@@ -1,0 +1,40 @@
+{% extends "layouts/base.html" %} {% block title %} Create/Edit Campaign {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
+<main class="c-main">
+	<div class="container-fluid">
+		<div class="fade-in">
+			<div class="card">
+				<div class="card-header">
+					<strong>Campaign</strong> {{ action }}
+				</div>
+				<div class="card-body">
+					<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+						{% csrf_token %} {% for field in form %}
+						<div class="form-group row">
+							<label class="col-md-3 col-form-label" for="{{ form.campaign_name.id_for_label }}">{{ field.label }}</label>
+							<div class="col-md-9">
+								{{ field }}
+								<span class="help-block">{{ field.errors }}</span>
+							</div>
+						</div>
+						{% endfor %} {% for field in form %} {% for error in field.errors %}
+						<p style="color: red">{{ error }}</p>
+						{% endfor %} {% endfor %}
+					
+				</div>
+				<div class="card-footer">
+					<button class="btn btn-sm btn-primary" type="submit">Save</button>
+					<a href="{{returnURL}}" class="btn btn-sm btn-danger" role="button">Cancel</a>
+				</div>
+			</form>
+			</div>
+		</div>
+	</div>
+</main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

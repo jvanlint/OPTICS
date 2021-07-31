@@ -8,6 +8,23 @@ from django.contrib.auth.models import User
 from django.conf import settings
 import requests
 
+# Required for Generic Keys for Comments
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
+
+class Comment(models.Model):
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    comment = models.TextField()
+    date_created = models.DateTimeField(auto_now_add=True)
+
+    # Below the mandatory fields for generic relation
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey()
+
+    class Meta:
+        ordering = ['-date_created']
 
 class Campaign(models.Model):
     # Fields
@@ -61,6 +78,10 @@ class Campaign(models.Model):
         null=True,
         blank=True,
     )
+    date_created = models.DateTimeField(
+        auto_now_add=True
+    )
+    comments = GenericRelation(Comment)
 
     # Metadata
 
@@ -954,11 +975,25 @@ class UserProfile(models.Model):
         related_name="profile",
         on_delete=models.CASCADE,
     )
-
+    profile_image = ResizedImageField(
+        verbose_name='User profile image.', 
+      size=[200, 200],
+      upload_to='user/profilepics/', 
+      help_text='User profile image file.', 
+      null=True, 
+      blank=True, 
+      default='assets/img/avatars/pilot1.png'
+     )
     timezone = models.CharField(
-        max_length=256, blank=True, null=True, default=settings.TIME_ZONE
+        max_length=256, 
+        blank=True, 
+        null=True, 
+        default=settings.TIME_ZONE
     )
-    callsign = models.CharField(max_length=256, blank=True, null=True)
+    callsign = models.CharField(
+        max_length=256, 
+        blank=True, 
+        null=True)
 
     def __str__(self):
         return self.user.username

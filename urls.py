@@ -7,8 +7,8 @@ urlpatterns = [
     path('', views.campaign, name='index'),
 
     path('campaign/<int:link_id>/', views.campaign_detail, name='campaign'),
-    path('campaign', views.campaign, name='campaign'), path('campaign_detail/<int:link_id>/',
-                                                            views.campaign_detail, name='campaign_detail'),
+    path('campaign', views.campaign, name='campaign'), 
+    path('campaign_detail/<int:link_id>/', views.campaign_detail, name='campaign_detail'),
     path('campaign/add', views.campaign_create, name='campaign_add'),
     path('campaign/update/<int:link_id>', views.campaign_update, name='campaign_update'),
     path('campaign/delete/<int:link_id>', views.campaign_delete, name='campaign_delete'),
@@ -62,13 +62,13 @@ urlpatterns = [
 
     path('dashboard', views.dashboard),
 
-    path("register", views.register_request, name="register"),
+    path('register', views.register_request, name='register'),
 
-    path("login", views.login_request, name="login"),
+    path('login', views.login_request, name='login'),
 
-    path("logout", views.logout_request, name="logout"),
+    path('logout', views.logout_request, name='logout'),
 
-    path("changepassword", views.change_password, name="changepassword"),
+    path('changepassword', views.change_password, name='changepassword'),
 
     path('reset_password/', auth_views.PasswordResetView.as_view(template_name='auth/password_reset.html'),
          name='reset_password'),
@@ -82,11 +82,37 @@ urlpatterns = [
         template_name='auth/password_reset_done.html'),
          name='password_reset_complete'),
 
-    path('profile', views.update_profile, name="profile"),
+    path('profile', views.update_profile, name='profile'),
 
 
-    path('pdf_view/mission/<int:mission_id>/flight/<int:flight_id>', views.view_mission_card, name="pdf_view"),
+    path('pdf_view/mission/<int:mission_id>/flight/<int:flight_id>', views.view_mission_card, name='pdf_view'),
     path('pdf_download/mission/<int:mission_id>/flight/<int:flight_id>', views.download_mission_card,
-         name="pdf_download"),
+         name='pdf_download'),
 
 ]
+
+# Campaign URL Patterns - V2
+urlpatterns += [
+    path('v2/', views.campaigns_all, name='home'),
+    path('v2/campaigns/', views.campaigns_all, name='campaigns'),
+    path('v2/campaign/<int:link_id>/', views.campaign_detail_v2, name='campaign_detail_v2'),
+    path("v2/campaign/add", views.campaign_add_v2, name="campaign_add_v2"),
+    path('v2/campaign/update/<int:link_id>', views.campaign_update_v2, name='campaign_update_v2'),
+    path('v2/campaign/<int:link_id>/', views.campaign_detail_v2, name='campaign_detail_v2'),
+    path("v2/campaign/delete/<int:link_id>", views.campaign_delete_v2, name="campaign_delete_v2"),
+]
+
+# Profile URL Patterns - V2
+urlpatterns += [
+    path('v2/profile/<int:link_id>', views.user_profile_view, name='user_profile'),
+]
+
+# Commments URL Patterns - V2
+urlpatterns += [
+    path('v2/campaign/comment/add', views.campaign_add_comment, name='campaign_add_comment'),
+]
+
+
+
+
+

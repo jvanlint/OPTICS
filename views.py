@@ -16,6 +16,9 @@ from django.db import transaction
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 
+
+from django.contrib.auth.models import User
+
 # For PDF
 from django.template.loader import get_template
 from django.views.decorators.cache import never_cache
@@ -23,6 +26,9 @@ from django.views.decorators.csrf import csrf_protect
 from xhtml2pdf import pisa
 
 from .decorators import unauthenticated_user, allowed_users
+
+from django.urls import reverse, reverse_lazy
+
 from .forms import (
     CampaignForm,
     MissionForm,
@@ -38,6 +44,7 @@ from .forms import (
     ProfileForm,
     UserForm,
 )
+
 from .models import (
     Campaign,
     Mission,
@@ -49,6 +56,7 @@ from .models import (
     Support,
     Waypoint,
     MissionImagery,
+    Comment,
 )
 
 
@@ -1127,3 +1135,180 @@ def update_profile(request):
         "profiles/profile.html",
         {"user_form": user_form, "profile_form": profile_form},
     )
+
+##################################
+###### Version 2 Views Code ######
+##################################
+
+
+# **** Campaigns Code *****
+
+@login_required(login_url='login')
+def campaigns_all(request):
+    campaigns_queryset = Campaign.objects.order_by('id')
+    
+    breadcrumbs = {'Home': ''}
+    
+    context = {'campaigns': campaigns_queryset, 
+               'isAdmin': is_admin(request.user),
+               'breadcrumbs': breadcrumbs,
+               }
+    
+
+    # Render the HTML template index.html with the data in the context variable
+    return render(request, 
+        'v2/campaign/campaigns.html', 
+        context=context
+    )
+
+@login_required(login_url='login')
+def campaign_add_v2(request):
+    
+    breadcrumbs = {'Home': reverse('home'), 'Add': ''}
+    
+    if request.method == 'POST':
+        form = CampaignForm(request.POST, 
+                            request.FILES)
+        if form.is_valid():
+            form.save(commit=True)
+            #messages.success(request, "Campaign successfully created.")
+            return HttpResponseRedirect(reverse_lazy('campaigns'))
+    else:
+        form = CampaignForm(initial={'creator': request.user.id})
+
+    context = {'form': form, 
+               'action': 'Add',
+               'breadcrumbs': breadcrumbs,
+               }
+
+    # Render the HTML template index.html with the data in the context variable
+    return render(request, 
+                  'v2/campaign/campaign_form.html', 
+                  context)
+
+@login_required(login_url='login')
+def campaign_update_v2(request, link_id):
+    campaign = Campaign.objects.get(id=link_id)
+    form = CampaignForm(instance=campaign)
+    returnURL = request.GET.get('returnUrl')
+    breadcrumbs = {'Home': reverse('home'),  campaign.name: reverse('campaign_detail_v2', args=(campaign.id,)), 'Edit': ''}
+
+    if request.method == "POST":
+        form = CampaignForm(request.POST, 
+                            request.FILES, 
+                            instance=campaign)
+        print(request.path)
+        if form.is_valid():
+            form.save(commit=True)
+            #messages.success(request, "Campaign successfully updated.")
+            return HttpResponseRedirect(returnURL)
+
+    context = {'form': form, 
+               'link': link_id,
+               'returnURL': returnURL,
+               'breadcrumbs': breadcrumbs,
+               'action': 'Edit'}
+    return render(request, 
+                  'v2/campaign/campaign_form.html', 
+                  context=context)
+
+@login_required(login_url='login')
+def campaign_delete_v2(request, link_id):
+    campaign = Campaign.objects.get(id=link_id)
+    returnURL = request.GET.get('returnUrl')
+    
+
+    # Delete the campaign thumbnail before deleting the actual DB record.
+    #Check to see if a campaign thumbnail exists.
+    if campaign.campaignImage:
+        os.remove(os.path.join(settings.MEDIA_ROOT,  str(campaign.campaignImage)))
+        
+    #Check to see if an AO Image exists.
+    if campaign.aoImage:
+        os.remove(os.path.join(settings.MEDIA_ROOT,  str(campaign.aoImage)))
+    
+    campaign.delete()
+    #messages.success(request, "Campaign successfully deleted.")
+    return HttpResponseRedirect(returnURL)
+
+@login_required(login_url='login')
+def campaign_detail_v2(request, link_id):
+    campaign = Campaign.objects.get(id=link_id)
+    missions = campaign.mission_set.all().order_by('number')
+    comments = campaign.comments.all()
+    print(reverse_lazy('home'))
+    breadcrumbs = {'Home': reverse_lazy('home'),  campaign.name: ''}
+
+    campaign.refresh_from_db()
+
+    context = {'campaign_object': campaign, 
+               'mission_object': missions, 
+               'isAdmin': is_admin(request.user), 
+               'comments': comments,
+               'breadcrumbs': breadcrumbs,
+               }
+
+    return render(request, 
+                  'v2/campaign/campaign.html', 
+                  context=context)
+    
+# **** End Campaigns Code *****
+
+# **** Profiles Code *****
+@login_required(login_url='login')
+def own_profile_view(request):
+    comments = Comment.objects.filter(user=request.user)
+
+    context = {'comments': comments}
+    # Render the HTML template index.html with the data in the context variable
+    return render(request, 'v2/profile/profile.html', context=context)
+
+def select_avatar(request):
+    context = {}
+    newfile = []
+    files = os.listdir(os.path.join(
+        settings.STATIC_ROOT, "assets/img/avatars/"))
+    for file in files:
+        newfile.append('assets/img/avatars/' + file)
+
+    context = {'files': newfile}
+    return render(request, 'v2/profile/avatar_selection.html', context=context)
+
+def change_avatar(request):
+    avatar_image = request.GET.get('avatar')
+    profile = Profile.objects.get(user=request.user)
+    profile.profile_image = avatar_image
+    profile.save()
+
+    context = {}
+
+    return render(request, 'v2/profile/profile.html', context=context)
+
+@login_required(login_url='login')
+def user_profile_view(request, link_id):
+
+    user_profile = User.objects.get(pk=link_id)
+
+    comments = Comment.objects.filter(user=user_profile)
+
+    context = {'profile_object': user_profile, 'comments': comments}
+    # Render the HTML template index.html with the data in the context variable
+    return render(request, 'v2/profile/user_profile.html', context=context)
+
+# **** Comments Code *****
+def campaign_add_comment(request):
+    # if this is a POST request we need to process the form data
+    campaign_id = request.GET.get('campaign_id')
+    returnURL = request.GET.get('returnUrl')
+
+    if request.method == 'POST':
+        comment_data = request.POST.dict()
+        comment = comment_data.get("comment_text")
+        # Get the post object
+        campaign = Campaign.objects.get(pk=campaign_id)
+        campaign.comments.create(comment=comment, 
+                                 user=request.user)
+
+        return HttpResponseRedirect(returnURL)
+
+

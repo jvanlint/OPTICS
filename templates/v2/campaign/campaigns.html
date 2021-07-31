@@ -1,0 +1,135 @@
+{% extends "layouts/base.html" %}
+{% load static %} 
+{% block title %} OPTICS | All Campaigns {% endblock title%}
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} 
+{% block content %}
+{% include 'includes/confirm_delete_modal.html' %}
+
+
+<main class="c-main">
+        <div class="container-fluid">
+		<div class="fade-in">
+                        <!-- .row -->
+			<div class="row" style="margin-bottom:20px;">
+				<div class="col">
+					<h4>Available Campaigns</h4>
+                                </div>
+                                <div class="col">
+                                        <a href="{% url 'campaign_add_v2' %}">
+                                        <button class="btn btn-success float-right" type="button">
+                                        <svg class="c-icon">
+                                        <use xlink:href="{% get_static_prefix %}assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
+                                        </svg>
+                                        Add Campaign
+                                        </button></a>
+                                </div>
+				<!-- /.col-->	
+			</div>
+                        <!-- /.row-->
+                        
+                        <!-- .row -->
+			<div class="row">
+                        {% if campaigns %} 
+                                {% for campaign in campaigns %}
+                                <!-- .col--> 
+	                        <div class="col-sm-6 col-md-4">
+                                        <!-- .card -->
+                                        <div class="card">
+                                                <a href="{% url 'campaign_detail_v2' campaign.id %}">
+        		                                <img src="{% if campaign.campaignImage %}{{ campaign.campaignImage.url }}{% else %}{% static 'assets/no_image.png' %}{% endif %}" class="card-img-top" alt="..." />
+                                                        <h4>
+                                                                {% if campaign.status.name == "Active" %}
+                                                                        <span style="position: absolute; top: 5px;left: 5px;" class="badge badge-success">
+                                                                {% elif campaign.status.name == "Inactive" %}
+                                                                        <span style="position: absolute; top: 5px;left: 5px;" class="badge badge-danger">
+                                                                {% else %}
+                                                                        <span style="position: absolute; top: 5px;left: 5px;" class="badge badge-warning">
+                                                                {% endif %}
+                                                                {{ campaign.status }}</span>
+                                                        </h4>
+                                                </a>
+                                                
+                                                <!-- .card-header -->
+                                                <div class="card-header">
+							<h3>{{ campaign.name }}</h3>
+                                                        <h5>{{ campaign.dcs_map }}</h5>
+                                                        <svg class="c-icon" title="Number of missions">
+                                                        <use xlink:href="{% get_static_prefix %}assets/vendors/@coreui/icons/svg/free.svg#cil-map"></use>
+                                                        </svg>&nbsp{{ campaign.mission_set.count }}
+                                                        <svg class="c-icon" title="Number of comments">
+                                                        <use xlink:href="{% get_static_prefix %}assets/vendors/@coreui/icons/svg/free.svg#cil-comment-square"></use>
+                                                        </svg>&nbsp{{ campaign.comments.count }}
+                                                         
+                                                        
+                                                        <div class="media text-muted pt-3">
+                                                                <div class="c-avatar"><img class="c-avatar-img" src="{% static campaign.creator.profile.profile_image %}" alt="" /></div>
+                                                                <p class="media-body pb-3 pl-2 mb-0  lh-125">
+                                                                        <a href="{% url 'user_profile' campaign.creator.id %}"><strong class="d-block text-gray-dark">{{ campaign.creator.username }}</strong></a>
+                                                                        {{ campaign.date_created }}
+                                                                </p>
+                                                        </div>
+						</div>
+                                                <!-- /.card-header -->
+                                                
+                                                <!-- .card-body -->
+						<div class="card-body">
+                                                        {{ campaign.description|linebreaks|truncatechars:150}}
+                                                </div>  
+                                                <!-- /.card-body-->
+            
+                                                <!-- Card Footer-->
+                                                <div class="card-footer">
+                                                        {% if campaign.creator.username == user.username or isAdmin == True %}
+                                                                <button class="btn-sm btn-primary dropdown-toggle float-right" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                                        {% else %}
+                                                                <button class="btn-sm btn-primary dropdown-toggle float-right" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled="">
+                                                        {% endif %}
+                                                
+                                                        <svg class="c-icon">
+                                                                <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
+                                                        </svg>
+                                                        &nbspCampaign</button>
+                                                        <!-- .dropdown-menu-->
+                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                                <a class="dropdown-item" href="{% url 'campaign_update_v2' campaign.id %}?returnUrl={{request.path}}">
+                                                                        <svg class="c-icon">
+                                                        		      <use xlink:href="{% get_static_prefix %}assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
+                                                        		</svg>
+                                                        		&nbspEdit
+                                                                </a>
+                                                                <a class="dropdown-item" id="generate_{{campaign.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the {{ campaign.campaign_name }} campaign will be deleted." data-buttontext="Delete" href="{% url 'campaign_delete_v2' campaign.id %}">
+                                                                        <svg class="c-icon">
+                                                        		      <use xlink:href="{% get_static_prefix %}assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+                                                        		</svg>
+                                                        		&nbspDelete
+                                                                </a>
+                                                        </div>
+                                                        <!-- /.dropdown-menu-->
+                                                </div>
+                                                <!-- /.card-footer-->  
+					</div>
+                                        <!-- /.card--> 
+				</div>
+				<!-- /.col-->
+                                {% endfor %} 
+                        {% else %}
+                                <div class="col-sm-6 col-md-4">
+                                    <h5>No campaigns available.</h5>
+                                </div>
+			{% endif %}
+			</div>
+			<!-- /.row-->
+		</div>
+                <!-- /.fade-in-->
+	</div>
+        <!-- /.container-fluid-->
+</main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<!-- Confirm Delete JS -->
+<script src="{% get_static_prefix %}assets/js/confirm_delete.js"></script>
+{% endblock javascripts %}

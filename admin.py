@@ -13,6 +13,7 @@ from .models import (
     Terrain,
     Threat,
     Target,
+    UserProfile,
     WebHook,
 )
 from .models import (
@@ -220,3 +221,9 @@ class WebHookAdmin(admin.ModelAdmin):
     ordering = ['-service_name']
 
 admin.site.register(WebHook, WebHookAdmin)
+
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ("user", "callsign", "profile_image", "timezone",)
+
+
+admin.site.register(UserProfile, UserProfileAdmin)
