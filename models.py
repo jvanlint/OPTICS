@@ -280,6 +280,20 @@ class Mission(models.Model):
         blank=True, 
         verbose_name="SIGWX"
     )
+    creator = models.ForeignKey(
+        User, 
+        null=True, 
+        blank=True, 
+        on_delete=models.SET_NULL, 
+        verbose_name='Mission Creator'
+    )
+    date_created = models.DateTimeField(
+        auto_now_add=True
+    )
+    last_modified = models.DateTimeField(
+        auto_now=True
+    )
+    comments = GenericRelation(Comment)
     discord_msg_id = models.CharField(max_length=20, 
         blank=True, 
         null=True,

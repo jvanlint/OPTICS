@@ -1,0 +1,58 @@
+{% extends "layouts/base.html" %} {% block title %} Create/Edit {{form_title}} {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
+<main class="c-main">
+	<div class="container-fluid">
+		<div class="fade-in">
+			<div class="card">
+				<div class="card-header"><i class="fa fa-align-justify"></i> {{table_name}} </div>
+				<div class="card-body">
+				  <table class="table table-responsive-sm table-striped">
+					<thead>
+					  <tr>
+						{% for field in form %}
+							<th>{{field.label}}</th>
+						{% endfor %}
+						<th class="text-right"></th>
+					  </tr>
+					</thead>
+					<tbody>
+						{% for item in data %}
+						<tr>
+							{% for field in form %}
+							<td>{{item.name}}</td>
+							{% endfor %}
+							<td class="text-right">
+								<button class="btn btn-sm btn-info dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
+								<div class="dropdown-menu " aria-labelledby="dropdownMenuButton">
+									<a class="dropdown-item disabled" href="#">
+										<svg class="c-icon">
+											<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
+										</svg>
+										&nbspEdit
+									</a>
+									<a class="dropdown-item" href="#">
+										<svg class="c-icon">
+											<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+										</svg>
+										&nbspDelete
+									</a>
+								</div>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+				</div>
+			  </div>
+			</div>
+			<!-- /.col-->
+		</div>
+	</div>
+</main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

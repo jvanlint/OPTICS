@@ -167,7 +167,7 @@
 				<div class="c-avatar"><img class="c-avatar-img" src="{% static user.profile.profile_image %}" alt="user@email.com" /></div>
 			</a>
 			<div class="dropdown-menu dropdown-menu-right pt-0">
-				<div class="dropdown-header bg-gray-900 py-2" style="color: white"><strong>{{user.username}}</strong></div>
+				<div class="dropdown-header bg-gray-900 py-2" style="color: white"><strong>{{user.username}} <br>({{user.profile.callsign}})</strong></div>
 
 				<a class="dropdown-item" href="#">
 					<svg class="c-icon mr-2">
@@ -177,7 +177,7 @@
 				>
 				<div class="dropdown-header bg-light py-2"><strong>Profile</strong></div>
 
-				<a class="dropdown-item" href="{% url 'profile' %}">
+				<a class="dropdown-item" href="{% url 'profile_v2' %}">
 					<svg class="c-icon mr-2">
 						<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-user"></use>
 					</svg>

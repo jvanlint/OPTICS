@@ -15,17 +15,25 @@ from ..forms import MissionForm
 # ---------------- Mission -------------------------
 
 @login_required(login_url='login')
-def mission(request, link_id):
+def mission_v2(request, link_id):
 	mission_queryset = Mission.objects.get(id=link_id)
 	mission_files_queryset = mission_queryset.missionfile_set.all()
 	combat_files_queryset = mission_queryset.combatflitefile_set.all()
 	comments = mission_queryset.comments.all()
+	packages = mission_queryset.package_set.all()
+	targets = mission_queryset.target_set.all()
+	threats = mission_queryset.threat_set.all()
+	supports = mission_queryset.support_set.all()
 	user_profile = UserProfile.objects.get(user=request.user)
 	
-	breadcrumbs = {'Home': reverse('home'),  mission_queryset.campaign.campaign_name: reverse('campaign_detail', args=(mission_queryset.campaign.id,)), mission_queryset.name:''}
+	breadcrumbs = {'Home': reverse('campaigns'),  mission_queryset.campaign.name: reverse('campaign_detail_v2', args=(mission_queryset.campaign.id,)), mission_queryset.name:''}
  
 	context = {
-			   'mission_object': mission_queryset, 
+			   'mission_object': mission_queryset,
+			   'package_object': packages,
+			   'target_object': targets,
+			   'threat_object': threats,
+			   'support_object': supports,
 			   'mission_files': mission_files_queryset,
 			   'combat_files': combat_files_queryset,
 			   'isAdmin': user_profile.is_admin(), 
@@ -34,11 +42,11 @@ def mission(request, link_id):
 			   }
 
 	return render(request, 
-				  'mission/mission.html', 
+				  'v2/mission/mission.html', 
 				  context=context)
 
 @login_required(login_url='login')
-def mission_add(request, link_id):
+def mission_add_v2(request, link_id):
 	campaign = Campaign.objects.get(id=link_id)
 	missionCount = campaign.mission_set.count() + 1
 	returnURL = request.GET.get('returnUrl')
@@ -57,11 +65,11 @@ def mission_add(request, link_id):
 
 	context = {'form': form, 'form_title': form_title,
 			   'link': link_id, 'returnURL': returnURL}
-	return render(request, 'generic/data_entry_form.html', context=context)
+	return render(request, 'v2/generic/data_entry_form.html', context=context)
 
 
 @login_required(login_url='login')
-def mission_update(request, link_id):
+def mission_update_v2(request, link_id):
 	mission = Mission.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
 	
@@ -84,10 +92,10 @@ def mission_update(request, link_id):
 
 	context = {'form': form, 'form_title': form_title,
 			   'link': link_id, 'returnURL': returnURL}
-	return render(request, 'generic/data_entry_form.html', context=context)
+	return render(request, 'v2/generic/data_entry_form.html', context=context)
 
 @login_required(login_url='login')
-def mission_delete(request, link_id):
+def mission_delete_v2(request, link_id):
 	mission = Mission.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
 	

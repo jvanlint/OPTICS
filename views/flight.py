@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from ..decorators import allowed_users
 from django.views.decorators.cache import never_cache
 
-from ..models import Flight, UserProfile
+from ..models import Flight, Package, Target, UserProfile
 from ..forms import FlightForm
 
 @login_required(login_url="login")

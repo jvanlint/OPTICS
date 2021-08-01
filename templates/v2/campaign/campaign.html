@@ -173,7 +173,7 @@
 										{% if mission_object %} {% for mission in mission_object %}
 										<tr>
 											<td>{{mission.number}}</td>
-											<td><a href="{% url 'mission' mission.id %}">{{mission.name}}</a></td>
+											<td><a href="{% url 'mission_v2' mission.id %}">{{mission.name}}</a></td>
 											<td>{{mission.description}}</td>
 											<td>{{mission.mission_date}}</td>
 											<td>
@@ -184,13 +184,13 @@
 													&nbspMission
 												</button>
 												<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-													<a class="dropdown-item" href="{% url 'mission_update' mission.id %}?returnUrl={{request.path}}">
+													<a class="dropdown-item" href="{% url 'mission_update_v2' mission.id %}?returnUrl={{request.path}}">
 														<svg class="c-icon">
 															<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
 														</svg>
 														&nbspEdit
 													</a>
-													<a class="dropdown-item" id="generatemission_{{mission.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the {{ mission.name }} mission will be deleted." data-buttontext="Delete" href="{% url 'mission_delete' mission.id %}?returnUrl={{request.path}}">
+													<a class="dropdown-item" id="generatemission_{{mission.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the {{ mission.name }} mission will be deleted." data-buttontext="Delete" href="{% url 'mission_delete_v2' mission.id %}?returnUrl={{request.path}}">
 														<svg class="c-icon">
 															<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
 														</svg>
@@ -210,7 +210,7 @@
 						</div>
 						<div class="card-footer">
 						<h6>
-							<a href="{% url 'mission_add' campaign_object.id %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
+							<a href="{% url 'mission_add_v2' campaign_object.id %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
 								<svg class="c-icon">
 									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
 								</svg>

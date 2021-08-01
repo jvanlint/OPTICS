@@ -100,14 +100,38 @@ urlpatterns += [
     path("v2/campaign/delete/<int:link_id>", views.campaign_delete_v2, name="campaign_delete_v2"),
 ]
 
+# Mission URL Patterns - V2
+urlpatterns += [
+    path('v2/mission/<int:link_id>', views.mission_v2, name='mission_v2'),
+    path('v2/mission/add/<int:link_id>', views.mission_add_v2, name='mission_add_v2'),
+    path('v2/mission/update/<int:link_id>',
+         views.mission_update_v2, name='mission_update_v2'),
+    path("v2/mission/delete/<int:link_id>", views.mission_delete_v2,
+         name="mission_delete_v2"),
+    path("v2/mission/comment/add", views.mission_add_comment,
+         name="mission_add_comment"),
+    path("v2/mission/file/delete/<int:link_id>", views.mission_file_delete,
+         name="mission_file_delete"),
+]
 # Profile URL Patterns - V2
 urlpatterns += [
-    path('v2/profile/<int:link_id>', views.user_profile_view, name='user_profile'),
+    path("v2/profile/", views.own_profile_view, name="profile_v2"),
+    path("v2/profile/<int:link_id>", views.user_profile_view, name="user_profile"),
+    path("v2/avatar_select", views.select_avatar, name="select_avatar"),
+    path("v2/avatar_change", views.change_avatar, name="avatar_change"),
 ]
 
 # Commments URL Patterns - V2
 urlpatterns += [
     path('v2/campaign/comment/add', views.campaign_add_comment, name='campaign_add_comment'),
+]
+
+# User Password and Access Management URL Patterns
+
+urlpatterns += [
+    
+    path("change_password/", auth_views.PasswordChangeView.as_view(
+        template_name="authentication/change_password.html"), name="change_password_v2"),
 ]
 
 

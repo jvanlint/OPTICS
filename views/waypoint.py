@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from ..decorators import allowed_users
 from django.views.decorators.cache import never_cache
 
-from ..models import Waypoint, UserProfile
+from ..models import Waypoint, Flight, UserProfile
 from ..forms import WaypointForm
 
 @login_required(login_url="login")
