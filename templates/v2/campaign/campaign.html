@@ -48,7 +48,7 @@
 				<div class="col-sm-12 col-md-5">
 					<div class="card">
 						<div class="card-header">
-							<h2>{{campaign_object.campaign_name}} <img class="float-right rounded" height="100" src="{% if campaign_object.campaignImage %}{{ campaign_object.campaignImage.url }}{% else %}{% static 'assets/no_image.png' %}{% endif %}" /></h2>
+							<h2>{{campaign_object.name}} <img class="float-right rounded" height="100" src="{% if campaign_object.campaignImage %}{{ campaign_object.campaignImage.url }}{% else %}{% static 'assets/no_image.png' %}{% endif %}" /></h2>
 							<h5>{{ campaign_object.dcs_map }}</h5>
 							<h3>
 								{% if campaign_object.status.name == "Active" %}
