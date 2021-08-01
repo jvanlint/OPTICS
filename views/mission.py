@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from ..decorators import allowed_users
 from django.views.decorators.cache import never_cache
+from django.core import serializers
 
 from ..models import Mission, Package, Campaign, UserProfile
 from ..forms import MissionForm

@@ -16,8 +16,9 @@ from ..models import Comment, UserProfile
 @login_required(login_url='login')
 def own_profile_view(request):
 	comments = Comment.objects.filter(user=request.user)
+	breadcrumbs = {'Home': reverse('campaigns'),  'Own Profile': ''}
 
-	context = {'comments': comments}
+	context = {'comments': comments, 'breadcrumbs': breadcrumbs,}
 	# Render the HTML template index.html with the data in the context variable
 	return render(request, 'v2/profile/profile.html', context=context)
 
@@ -46,11 +47,12 @@ def change_avatar(request):
 
 @login_required(login_url='login')
 def user_profile_view(request, link_id):
-
+	
 	user_profile = User.objects.get(pk=link_id)
+	breadcrumbs = {'Home': reverse('campaigns'),  'User Profile': ''}
 
 	comments = Comment.objects.filter(user=user_profile)
 
-	context = {'profile_object': user_profile, 'comments': comments}
+	context = {'profile_object': user_profile, 'comments': comments, 'breadcrumbs': breadcrumbs,}
 	# Render the HTML template index.html with the data in the context variable
 	return render(request, 'v2/profile/user_profile.html', context=context)
