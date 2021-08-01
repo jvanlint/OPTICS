@@ -6,6 +6,7 @@ from ..decorators import allowed_users
 from django.views.decorators.cache import never_cache
 
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import PasswordChangeForm
 
 from ..decorators import unauthenticated_user, allowed_users
 from django.views.decorators.csrf import csrf_protect

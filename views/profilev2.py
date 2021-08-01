@@ -9,7 +9,6 @@ from django.urls import reverse, reverse_lazy
 
 from django.contrib.auth.models import User
 
-
 from ..models import Comment, UserProfile
 
 
