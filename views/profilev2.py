@@ -1,4 +1,5 @@
 import os
+from django.conf import settings
 
 from django.contrib.auth.decorators import login_required
 
@@ -33,11 +34,13 @@ def select_avatar(request):
 
 def change_avatar(request):
 	avatar_image = request.GET.get('avatar')
-	profile = Profile.objects.get(user=request.user)
+	profile = UserProfile.objects.get(user=request.user)
 	profile.profile_image = avatar_image
 	profile.save()
 
-	context = {}
+	comments = Comment.objects.filter(user=request.user)
+
+	context = {'comments': comments}
 
 	return render(request, 'v2/profile/profile.html', context=context)
 

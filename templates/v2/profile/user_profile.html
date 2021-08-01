@@ -51,38 +51,41 @@
 						<div class="card-header">Discussions</div>
 						<div class="card-body">
 							<div class="row">
+								
+								<table class="table table-responsive-sm table-striped">
+									<thead>
+										<tr>
+											<th>Comment</th>
+											<th>Content Type</th>
+											<th>Name</th>
+											<th>Object</th>
+											<th>Date</th>
+										</tr>
+									</thead>
 								{% if comments %}
-									<table class="table table-responsive-sm table-striped">
-										<thead>
-											<tr>
-												<th>Comment</th>
-												<th>Content Type</th>
-												<th>Name</th>
-												<th>Object</th>
-												<th>Date</th>
-											</tr>
-										</thead>
-										<tbody>
-											{% for comment in comments %}
-											<tr>
-												<td>{{comment.comment}}</td>
-												<td>{{ comment.content_type.model}}</td>
-												<td>{{ comment.content_object}}</td>
-												{% if "campaign" in comment.content_type.name %}
-												<td><a href="{% url 'campaign_detail' comment.object_id%}">Link</a></td>
-	
-												{% else %}
-												<td>{{ comment.content_object}} / {{comment.content_type.name}}</td>
-												{% endif %}
-	
-												<td>{{ comment.date_created }}</td>
-											</tr>
-	
-											{% endfor %}
-										</tbody>
-									</table>
+									<tbody>
+										{% for comment in comments %}
+										<tr>
+											<td>{{comment.comment}}</td>
+											<td>{{ comment.content_type.model}}</td>
+											<td>{{ comment.content_object}}</td>
+											{% if "campaign" in comment.content_type.name %}
+											<td><a href="{% url 'campaign_detail' comment.object_id%}">Link</a></td>
+
+											{% else %}
+											<td>{{ comment.content_object}} / {{comment.content_type.name}}</td>
+											{% endif %}
+
+											<td>{{ comment.date_created }}</td>
+										</tr>
+
+										{% endfor %}
+									</tbody>
+								</table>
 								{% else %}
-									<p>No comments made yet.
+									<td colspan=5>No comments made yet.</td>
+									</tbody>
+								</table>
 								{% endif %}
 							</div>
 						</div>
