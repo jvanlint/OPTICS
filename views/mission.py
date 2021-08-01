@@ -6,7 +6,7 @@ from ..decorators import allowed_users
 from django.views.decorators.cache import never_cache
 from django.core import serializers
 
-from ..models import Mission, Package, Campaign, UserProfile
+from ..models import Mission, Package, Campaign, Aircraft, UserProfile
 from ..forms import MissionForm
 
 @login_required(login_url="login")
