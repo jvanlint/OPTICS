@@ -79,8 +79,8 @@
 								<div class="tab-content">
 									<div class="tab-pane active" id="situation" role="tabpanel">{{campaign_object.situation|linebreaks}}</div>
 									<div class="tab-pane" id="aoimage" role="tabpanel">
-										{% if campaign_object.ao_image %}
-										<a href="{{campaign_object.ao_image.url}}" target="_blank"><img class="img-fluid" src="{{campaign_object.ao_image.url}}" /></a>
+										{% if campaign_object.aoImage %}
+										<a href="{{campaign_object.ao_image.url}}" target="_blank"><img class="img-fluid" src="{{campaign_object.aoImage.url}}" /></a>
 										{% else %}
 										<p>No Area of Operation images available.</p>
 										{% endif %}
@@ -100,13 +100,13 @@
 								&nbspCampaign
 							</button>
 							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-								<a class="dropdown-item" href="{% url 'campaign_update' campaign_object.id %}?returnUrl={{request.path}}">
+								<a class="dropdown-item" href="{% url 'campaign_update_v2' campaign_object.id %}?returnUrl={{request.path}}">
 									<svg class="c-icon">
 										<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
 									</svg>
 									&nbspEdit
 								</a>
-								<a class="dropdown-item" id="generate_{{campaign_object.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the {{ campaign_object.campaign_name }} campaign will be deleted." data-buttontext="Delete" href="{% url 'campaign_delete' campaign_object.id %}">
+								<a class="dropdown-item" id="generate_{{campaign_object.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the {{ campaign_object.campaign_name }} campaign will be deleted." data-buttontext="Delete" href="{% url 'campaign_delete_v2' campaign_object.id %}">
 									<svg class="c-icon">
 										<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
 									</svg>

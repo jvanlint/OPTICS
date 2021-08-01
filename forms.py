@@ -33,12 +33,35 @@ class DateInput(forms.DateInput):
 class CampaignForm(ModelForm):
 
     # specify the name of model to use
-
+    def __init__(self, *args, **kwargs):
+        super(CampaignForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+    
     class Meta:
         model = Campaign
         fields = "__all__"
         widgets = {
-            "start_date": DateInput(),
+            "start_date": DateInput(
+                attrs={
+                    'style': 'width: 150px;'
+                    }
+            ),
+            'creator': forms.Select(
+                attrs={
+                    'style': 'width: 150px;'
+                    }
+            ),
+            'dcs_map': forms.Select(
+                attrs={
+                    'style': 'width: 150px;'
+                    }
+            ),
+            'status': forms.Select(
+                attrs={
+                    'style': 'width: 150px;'
+                    }
+            ),
         }
 
 

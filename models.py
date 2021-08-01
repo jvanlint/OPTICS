@@ -998,6 +998,24 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username
 
+    def is_admin(self):
+        return self.user.groups.filter(name="admin").exists()
+    
+    
+    def is_planner(self):
+        return self.user.groups.filter(name="planner").exists()
+    
+    
+    def has_change_permission(self, request, obj=None):
+        if obj is not None:
+            if request.user.is_superuser:
+                return True
+            else:
+                if obj.creator != request.user:
+                    return False
+                else:
+                    return True
+    
     class Meta:
         db_table = "user_profile"
 
@@ -1021,3 +1039,42 @@ class WebHook(models.Model):
                             verbose_name="Web Hook URL")
     class Meta:
         ordering = ['-service_name']
+
+
+class MissionFile (models.Model):
+    mission = models.ForeignKey('Mission', 
+                                 on_delete=models.CASCADE, 
+                                 null=True)
+    name = models.CharField(
+        max_length=100, help_text='Enter Mission File Name', verbose_name="Misison File Name")
+    mission_file = models.FileField(null=True)
+    uploaded_by = models.ForeignKey(User, 
+                                null=True, 
+                                blank=True, 
+                                on_delete=models.SET_NULL, 
+                                verbose_name='Mission File Uploader')
+    date_uploaded = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-date_uploaded']
+        verbose_name = 'Mission File'
+        
+    
+class CombatFliteFile (models.Model):
+    mission = models.ForeignKey('Mission', 
+                                 on_delete=models.CASCADE, 
+                                 null=True)
+    name = models.CharField(max_length=100, 
+                            help_text='Enter CombatFlite File Name', 
+                            verbose_name="Combat Flight File Name")
+    combatflite_file = models.FileField(null=True)
+    uploaded_by = models.ForeignKey(User, 
+                                null=True, 
+                                blank=True, 
+                                on_delete=models.SET_NULL, 
+                                verbose_name='CombatFlite File Uploader')
+    date_uploaded = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-date_uploaded']
+        verbose_name = 'Combat Flite File'
