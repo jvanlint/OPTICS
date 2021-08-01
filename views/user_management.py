@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 from ..decorators import allowed_users
 from django.views.decorators.cache import never_cache
 
+from django.contrib.auth import login, authenticate, logout
+
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
 
