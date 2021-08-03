@@ -1,4 +1,6 @@
-from django.shortcuts import render
+from django.contrib.auth import authenticate, login, update_session_auth_hash, logout
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
