@@ -304,24 +304,29 @@
   </tr>
 
   <tr bgcolor="lightgray">
-    <th scope="row" colspan="20">Name</th>
-    <th scope="row" colspan="20">Lat</th>
-    <th scope="row" colspan="20">Long</th>
-    <th scope="row" colspan="20">Elev.</th>
-    <th scope="row" colspan="20">Notes</th>
+    <th scope="row" colspan="40">Name</th>
+    <th scope="row" colspan="25">Lat</th>
+    <th scope="row" colspan="25">Long</th>
+    <th scope="row" colspan="10">Elev.</th>
   </tr>
 
   {% for target in target_object %}
     <tr>
-      <td colspan="20">{{ target.name }}</td>
-      <td colspan="20">{{ target.lat }}</td>
-      <td colspan="20">{{ target.long }}</td>
-      <td colspan="20">{{ target.elev }}</td>
-      <td colspan="20">{{ target.notes|linebreaks }}</td>
+      <td colspan="40">{{ target.name }}</td>
+      <td colspan="25">{{ target.lat }}</td>
+      <td colspan="25">{{ target.long }}</td>
+      <td colspan="10">{{ target.elev }}</td>
+      {% if target.notes %} </tr>
+        <td scope="row" colspan="100">{{ target.notes|linebreaks }}</td>
+      {% endif %}
     </tr>
   {% endfor %}
   <!-- End Target Info -->
-
+</table>
+  <div><pdf:nextpage /></div>
+<table>
+  <COLGROUP span="100" width="1%">
+     </COLGROUP>
   <!-- Threats -->
   <tr bgcolor="darkgray">
     <th scope="row" colspan="100">THREAT INFO</th>
@@ -366,8 +371,9 @@
   </tbody>
 </table>
 <h4> Target Images</h4>
-{% for url in urls %}
-  <img width='400' src="{{ url }}"/>
+{% for key,value in urls.items %}
+  <p>{{ key }}</p>
+  <img width='400' src="{{ value }}"/>
   <br>
 {% endfor %}
 

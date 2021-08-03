@@ -41,11 +41,14 @@ def view_mission_card(request, mission_id, flight_id):
     threats = mission.threat_set.all()
     # threat_details = threats.threat_name.harm_code
 
-    target_urls = []
+    # target_urls = []
+    target_urls = {}
+
     if targets:
         for target in targets:
             if target.target_image:
-                target_urls.append(request.build_absolute_uri(target.target_image.url))
+                # target_urls.append(request.build_absolute_uri(target.target_image.url))
+                target_urls[target.name] = request.build_absolute_uri(target.target_image.url)
 
     data = {
         "mission_object": mission,
