@@ -1,0 +1,381 @@
+{% load static %}
+<!DOCTYPE html>
+<head>
+  <style>
+      @page {
+          size: a4 portrait;
+
+          @frame content_frame { /* Content Frame */
+            left: 2pt;
+            width: 590pt;
+            top: 2pt;
+            height: 810pt;
+            -pdf-frame-border: 1;    /* for debugging the layout */
+          }
+          @frame footer_frame {
+                /* Another static Frame */
+            -pdf-frame-content:footer_content;
+            left: 10pt; width: 512pt; top: 820pt; height: 20pt;
+            -pdf-frame-border: 1;    /* for debugging the layout */
+          }
+        }
+      table {
+        width: 100%;
+        table-layout: fixed;
+
+      }
+
+      html {
+          font-size: 18px;
+      }
+
+      td {
+          border: 1px solid black;
+          margin-left: 2;
+          padding-top: 1;
+          text-align: left;
+          background-color: beige;
+      }
+
+      th {
+          border: 1px solid black;
+          padding-top: 1;
+          text-align: left;
+          margin-left: 2;
+          background-color: lightgray;
+      }
+
+      .card_tr {
+          background-color: darkgray;
+      }
+
+      {#.page-break {#}
+      {#    page-break-before: always;#}
+      {#}#}
+
+      table {
+          -pdf-keep-in-frame-mode: overflow;
+      }
+  {#    https://xhtml2pdf.readthedocs.io/en/latest/reference.html#long-cells#}
+  </style>
+</head>
+
+<body>
+
+
+<!-- HTML Content -->
+<table>
+<COLGROUP span="100" width="1%">
+   </COLGROUP>
+  <thead>
+  <tr>
+    <th scope="col" colspan="100" align="left">{{ flight_object.callsign|upper }} FLIGHT - MISSION CARD</th>
+    </td>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <th scope="row" colspan="57">CALLSIGNS</th>
+    <th scope="row" colspan="43">MISSION</th>
+  </tr>
+
+  <tr>
+    <td colspan="57">
+      {% for aircraft in aircraft_object %}
+        {{ aircraft.pilot }}
+        {% if aircraft.flight_lead %}
+          =LEAD=
+        {% endif %}
+        {% if aircraft.rio_wso %}
+          ({{ aircraft.rio_wso }})
+        {% endif %}
+        /
+      {% endfor %}
+    </td>
+    <td colspan="43">{{ mission_object.name }}</td>
+  </tr>
+
+  <!-- Time Hacks -->
+  <tr bgcolor="darkgray">
+    <th colspan="57">TIME HACKS</th>
+    <th colspan="43">FUEL</th>
+  </tr>
+  <tr bgcolor="lightgray">
+    <th scope="row" colspan="15">Start</th>
+    <th scope="row" colspan="14">Take Off</th>
+    <th scope="row" colspan="14">RV 1</th>
+    <th scope="row" colspan="14">RV 2</th>
+    <th scope="row" colspan="14">F.O.B.</th>
+    <th scope="row" colspan="14">Joker</th>
+    <th scope="row" colspan="15">Bingo</th>
+
+  </tr>
+  <tr>
+    <td scope="row" colspan="15">{% if mission_object.mission_game_time == null %} - {% else %}
+      {{ mission_object.mission_game_time }} {% endif %}</td>
+    <td scope="row" colspan="14">{% if flight_object.timehack_start == null %} - {% else %}
+      {{ flight_object.timehack_start }} {% endif %}</td>
+    <td scope="row" colspan="14">{% if flight_object.timehack_rdv1 == null %} - {% else %}
+      {{ flight_object.timehack_rdv1 }} {% endif %}</td>
+    <td scope="row" colspan="14">{% if flight_object.timehack_rdv2 == null %} - {% else %}
+      {{ flight_object.timehack_rdv2 }} {% endif %}</td>
+    <td scope="row" colspan="14">{% if flight_object.fuel_fob == null %} - {% else %}
+      {{ flight_object.fuel_fob }} {% endif %}</td>
+    <td scope="row" colspan="14">{% if flight_object.fuel_joker == null %} - {% else %}
+      {{ flight_object.fuel_joker }} {% endif %}</td>
+    <td scope="row" colspan="15">{% if flight_object.fuel_bingo == null %} - {% else %}
+      {{ flight_object.fuel_bingo }} {% endif %}</td>
+
+  </tr>
+  <!-- End Time Hacks-->
+
+  <!-- Packages -->
+  <tr>
+    <th scope="row" colspan="100" bgcolor="darkgray">FLIGHTS</th>
+  </tr>
+  <tr bgcolor="lightgray">
+    <th scope="row" colspan="20">Callsign</th>
+    <th scope="row" colspan="18">Role</th>
+    <th scope="row" colspan="12">Freq</th>
+    <th scope="row" colspan="24">Aircraft</th>
+    <th scope="row" colspan="26">Package</th>
+  </tr>
+  {% for package in packages_object %}
+    {% for flight in package.flight_set.all %}
+      <tr {% if flight.callsign == flight_object.callsign %} bgcolor="yellow" {% endif %}>
+        <td colspan="20"><strong>{{ flight.callsign }}</strong></td>
+          <td colspan="18">{{ flight.task }}</td>
+        <td colspan="12" ><strong>{{ flight.radio_frequency }}</strong></td>
+        <td colspan="24">{{ flight.aircraft_set.count }} x {{ flight.aircraft_set.first.type }}</td>
+        <td colspan="26">{{ package.name }} {% if package.frequency %}({{ package.frequency }}){% endif %}</td>
+      </tr>
+    {% endfor %}
+  {% endfor %}
+  <!-- End Flights -->
+ <!-- Mission Support-->
+  <tr>
+    <th scope="row" colspan="100" bgcolor="darkgray">MISSION SUPPORT</th>
+  </tr>
+  <tr bgcolor="lightgray">
+    <th scope="row" colspan="20" rowspan="2">Type</th>
+    <th scope="row" colspan="20" rowspan="2">Callsign</th>
+    <th scope="row" colspan="20" rowspan="2">Player</th>
+    <th scope="row" colspan="13">Freq</th>
+    <th scope="row" colspan="13">TACAN</th>
+    <th scope="row" colspan="14">Alt.</th>
+  </tr>
+  <tr>
+    <th scope="row" colspan="13">Speed</th>
+    <th scope="row" colspan="13">BRC</th>
+    <th scope="row" colspan="14">ICLS</th>
+  </tr>
+
+  {% for support in support_object %}
+    <tr>
+      <td scope="row" colspan="20" rowspan="2">{{ support.support_type }}</td>
+      <td scope="row" colspan="20" rowspan="2">{{ support.callsign }}</td>
+      <td scope="row" colspan="20" rowspan="2">{{ support.player_name }}</td>
+      <td scope="row" colspan="13">{{ support.frequency }}</td>
+      <td scope="row" colspan="13">{{ support.tacan }}</td>
+      <td scope="row" colspan="14">{{ support.altitude }}</td>
+    </tr>
+    <tr>
+      <td scope="row" colspan="13">{{ support.speed }}</td>
+      <td scope="row" colspan="13">{{ support.brc }}</td>
+      <td scope="row" colspan="14">{{ support.icls }}</td>
+    </tr>
+    <tr>
+      <td scope="row" colspan="100">{{ support.notes|linebreaks }}</td>
+    </tr>
+  {% endfor %}
+  <!-- End Mission Support-->
+
+
+</table>
+<div>
+   <pdf:nextpage />
+</div>
+<table class="page-break">
+<COLGROUP span="100" width="1%">
+   </COLGROUP>
+<!-- Waypoints-->
+  <tr>
+    <th scope="row" colspan="100" bgcolor="darkgray">WAYPOINTS</th>
+  </tr>
+  <tr bgcolor="lightgray">
+    <th scope="row" colspan="5">#</th>
+    <th scope="row" colspan="20">Name</th>
+    <th scope="row" colspan="15">Type</th>
+    <th scope="row" colspan="10">Elev</th>
+    <th scope="row" colspan="20">Lat</th>
+    <th scope="row" colspan="20">Long</th>
+    <th scope="row" colspan="10">ToT</th>
+  </tr>
+
+  {% for waypoint in waypoints_object %}
+    <tr>
+      <td colspan="5">{{ waypoint.number }}</td>
+      <td colspan="20"><strong>{{ waypoint.name }}</strong></td>
+      <td colspan="15">{{ waypoint.waypoint_type }}</td>
+      <td colspan="10">{{ waypoint.elevation }}</td>
+      <td colspan="20">{{ waypoint.lat }}</td>
+      <td colspan="20">{{ waypoint.long }}</td>
+      <td colspan="10">{{ waypoint.tot }}</td>
+      {% if waypoint.notes %} </tr>
+        <td scope="row" colspan="100">{{ waypoint.notes|linebreaks }}</td>
+      {% endif %}
+    </tr>
+  {% endfor %}
+  <!-- End Waypoints-->
+
+
+
+  </tbody>
+</table>
+<div>
+   <pdf:nextpage />
+</div>
+<table style="truncate, keeptogether">
+<COLGROUP span="100" width="1%">
+   </COLGROUP>
+<!-- Tactical Mission Brief-->
+  <tr bgcolor="darkgray">
+    <th scope="row" colspan="100">TACTICAL MISSION BRIEF</th>
+  </tr>
+  <tr>
+    <td scope="row" colspan="100">{{ mission_object.brief|linebreaks }}</td>
+  </tr>
+  <!-- End Tactical Mission Brief -->
+{% if mission_object.brief|length > 1000 %}
+
+  </table>
+  <div>
+     <pdf:nextpage />
+  </div>
+  <table>
+  <COLGROUP span="100" width="1%">
+     </COLGROUP>
+{% endif %}
+
+
+  <!-- Weather -->
+  <tr bgcolor="darkgray">
+    <th scope="row" colspan="100">WEATHER</th>
+  </tr>
+  <tr bgcolor="lightgray">
+    <th scope="row" colspan="10">Vis</th>
+    <th scope="row" colspan="10">Cloud Base</th>
+    <th scope="row" colspan="10">Cloud Tops</th>
+    <th scope="row" colspan="10">Wind SL</th>
+    <th scope="row" colspan="10">Wind 7K</th>
+    <th scope="row" colspan="10">Wind 26K</th>
+    <th scope="row" colspan="10">QNH</th>
+    <th scope="row" colspan="10">QNE</th>
+    <th scope="row" colspan="10">Temp</th>
+    <th scope="row" colspan="10">SIGWX</th>
+  </tr>
+  <tr>
+    <td scope="row" colspan="10">{% if mission_object.visibility == null %} - {% else %}
+      {{ mission_object.visibility }} {% endif %}</td>
+    <td scope="row" colspan="10">{{ mission_object.cloud_base }}</td>
+    <td scope="row" colspan="10">{{ mission_object.cloud_top }}</td>
+    <td scope="row" colspan="10">{% if mission_object.wind_sl == null %} - {% else %}
+      {{ mission_object.wind_sl }} {% endif %}</td>
+    <td scope="row" colspan="10">{% if mission_object.wind_7k == null %} - {% else %}
+      {{ mission_object.wind_7k }} {% endif %}</td>
+    <td scope="row" colspan="10">{% if mission_object.wind_26k == null %} - {% else %}
+      {{ mission_object.wind_26k }} {% endif %}</td>
+    <td scope="row" colspan="10">{% if mission_object.qnh == null %} - {% else %}
+      {{ mission_object.qnh }} {% endif %}</td>
+    <td scope="row" colspan="10">{% if mission_object.qfe == null %} - {% else %}
+      {{ mission_object.qfe }} {% endif %}</td>
+    <td scope="row" colspan="10">{% if mission_object.temp == null %} - {% else %}
+      {{ mission_object.temp }} {% endif %}</td>
+    <td scope="row" colspan="10">{% if mission_object.sigwx == null %} - {% else %}
+      {{ mission_object.sigwx }} {% endif %}</td>
+  </tr>
+  <!-- End Weather -->
+
+
+
+  <!--  Tactical Info  -->
+  <tr bgcolor="darkgray">
+    <th scope="row" colspan="100">TARGET INFO</th>
+  </tr>
+
+  <tr bgcolor="lightgray">
+    <th scope="row" colspan="20">Name</th>
+    <th scope="row" colspan="20">Lat</th>
+    <th scope="row" colspan="20">Long</th>
+    <th scope="row" colspan="20">Elev.</th>
+    <th scope="row" colspan="20">Notes</th>
+  </tr>
+
+  {% for target in target_object %}
+    <tr>
+      <td colspan="20">{{ target.name }}</td>
+      <td colspan="20">{{ target.lat }}</td>
+      <td colspan="20">{{ target.long }}</td>
+      <td colspan="20">{{ target.elev }}</td>
+      <td colspan="20">{{ target.notes|linebreaks }}</td>
+    </tr>
+  {% endfor %}
+  <!-- End Target Info -->
+
+  <!-- Threats -->
+  <tr bgcolor="darkgray">
+    <th scope="row" colspan="100">THREAT INFO</th>
+  </tr>
+
+  {% for threat in threat_object %}
+    <tr bgcolor="lightgray">
+      <td colspan="10">{{ threat.threat_type }}</td>
+      <td colspan="10">{{ threat.name }}</td>
+      <td colspan="80">{{ threat.description|linebreaks }}</td>
+    </tr>
+
+    <tr bgcolor="lightgray">
+      <th scope="row" colspan="10">Class</th>
+      <th scope="row" colspan="10">Type</th>
+      <th scope="row" colspan="10">Msl. Ammo</th>
+      <th scope="row" colspan="10">Min Rng</th>
+      <th scope="row" colspan="10">Max Rng</th>
+      <th scope="row" colspan="10">Min Alt</th>
+      <th scope="row" colspan="10">Max Alt</th>
+      <th scope="row" colspan="10">Acq. Time</th>
+      <th scope="row" colspan="10">RWR</th>
+      <th scope="row" colspan="10">Harm Code</th>
+    </tr>
+
+    <tr>
+
+      <td colspan="10">{{ threat.threat_name.threat_class }}</td>
+      <td colspan="10">{{ threat.threat_name.threat_type }}</td>
+      <td colspan="10">{{ threat.threat_name.missile_ammo }}</td>
+      <td colspan="10">{{ threat.threat_name.range_min }} nm</td>
+      <td colspan="10">{{ threat.threat_name.range_max }} nm</td>
+      <td colspan="10">{{ threat.threat_name.alt_min }} ft</td>
+      <td colspan="10">{{ threat.threat_name.alt_max }} ft</td>
+      <td colspan="10">{{ threat.threat_name.acquire_time }} sec</td>
+      <td colspan="10">{{ threat.threat_name.harm_code }}</td>
+      <td colspan="10">{{ threat.threat_name.harm_code }}</td>
+
+    </tr>
+  {% endfor %}
+  <!-- End Threats -->
+  </tbody>
+</table>
+<h4> Target Images</h4>
+{% for url in urls %}
+  <img width='400' src="{{ url }}"/>
+  <br>
+{% endfor %}
+
+</body>
+
+<div id="footer_content"><p><strong>Created by O.P.T.I.C.S. - A campaign management tool by Tigershark.</strong></p>page
+  <pdf:pagenumber>
+    of
+    <pdf:pagecount>
+</div>
+</html>
