@@ -10,13 +10,14 @@
             width: 590pt;
             top: 2pt;
             height: 810pt;
-            -pdf-frame-border: 1;    /* for debugging the layout */
+            -pdf-frame-border: 0;    /* for debugging the layout */
+
           }
           @frame footer_frame {
                 /* Another static Frame */
             -pdf-frame-content:footer_content;
             left: 10pt; width: 512pt; top: 820pt; height: 20pt;
-            -pdf-frame-border: 1;    /* for debugging the layout */
+            -pdf-frame-border: 0;    /* for debugging the layout */
           }
         }
       table {
@@ -27,6 +28,7 @@
 
       html {
           font-size: 18px;
+          background-color: beige;
       }
 
       td {
@@ -49,9 +51,6 @@
           background-color: darkgray;
       }
 
-      {#.page-break {#}
-      {#    page-break-before: always;#}
-      {#}#}
 
       table {
           -pdf-keep-in-frame-mode: overflow;
