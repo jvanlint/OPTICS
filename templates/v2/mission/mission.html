@@ -96,7 +96,6 @@
 									<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#restrictions" role="tab" aria-controls="restrictions">Munitions Restrictions</a></li>
 									<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#weather" role="tab" aria-controls="weather">Weather</a></li>
 									<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#missionfiles" role="tab" aria-controls="missionfiles">Mission Files <span class="badge badge-pill badge-info ml-auto">{{mission_files.count}}</span></a></li>
-									<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#combatflite" role="tab" aria-controls="combatflite">Combat Flite Files <span class="badge badge-pill badge-info ml-auto">{{combat_files.count}}</span></a></li>
 								</ul>
 								<div class="tab-content">
 									<div class="tab-pane active" id="brief" role="tabpanel">{{mission_object.brief|linebreaks|urlize}}</div>
@@ -140,6 +139,7 @@
 													<thead>
 														<tr>
 															<th>File Name</th>
+															<th>File Type</th>
 															<th>Uploaded By</th>
 															<th>Date</th>
 															<th>Action</th>
@@ -149,6 +149,7 @@
 														{% for file in mission_files %}
 														<tr>
 															<td><a href="{{file.mission_file.url}}" download>{{ file.name }}</a></td>
+															<td>{{ file.get_file_type_display }}</td>
 															<td>{{ file.uploaded_by }}</td>
 															<td>{{ file.date_uploaded }}</td>
 															<td><a href="{% url 'mission_file_delete' file.id %}?returnUrl={{request.path}}" class="btn btn-sm btn-danger" role="button">Delete</a></td>
@@ -169,41 +170,6 @@
 												</button>
 												
 										</div>
-									</div>
-									<div class="tab-pane" id="combatflite" role="tabpanel">
-										<div class="table-responsive">
-											{% if combat_files %}
-												<table class="table table-striped">
-													<thead>
-														<tr>
-															<th>File Name</th>
-															<th>Uploaded By</th>
-															<th>Date</th>
-															<th>Action</th>
-														</tr>
-													</thead>
-													<tbody>
-														{% for file in combat_files %}
-														<tr>
-															<td><a href="{{file.mission_file.url}}" download>{{ file.name }}</a></td>
-															<td>{{ file.uploaded_by }}</td>
-															<td>{{ file.date_uploaded }}</td>
-															<td><a href="#" class="btn btn-sm btn-danger" role="button">Delete</a></td>
-														</tr>
-														{% endfor %}
-													</tbody>
-												</table>
-											
-											{% else %}
-													<p> No files have been uploaded yet.
-											{% endif %}
-												<a href="#" class="btn btn-sm btn-success float-right" role="button">
-													<svg class="c-icon">
-														<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
-													</svg>
-													Add File
-												</a>
-											</div>
 									</div>
 								</div>
 							</div>

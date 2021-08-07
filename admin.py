@@ -19,6 +19,7 @@ from .models import (
     Target,
     UserProfile,
     WebHook,
+    MissionFile
 )
 from .models import (
     Support,
@@ -216,6 +217,13 @@ class MissionImageryAdmin(admin.ModelAdmin):
 
 
 admin.site.register(MissionImagery, MissionImageryAdmin)
+
+class MissionFileAdmin(admin.ModelAdmin):
+    list_display = ('mission', 'name', 'mission_file',)
+
+
+admin.site.register(MissionFile, MissionFileAdmin)
+
 
 class WebHookAdmin(admin.ModelAdmin):
     list_display = ('service_name', 'url',)

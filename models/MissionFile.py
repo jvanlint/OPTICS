@@ -2,12 +2,24 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class MissionFile (models.Model):
+	
+	# Values
+	FILE_TYPES = (
+		("MIZ", "Mission"),
+		("LIB", "Liberation"),
+		("COM", "CombatFlite"),
+	)
 	mission = models.ForeignKey('Mission', 
 								 on_delete=models.CASCADE, 
 								 null=True)
 	name = models.CharField(
-		max_length=100, help_text='Enter Mission File Name', verbose_name="Misison File Name")
+		max_length=100, help_text='Enter a File Name', verbose_name="File Name")
 	mission_file = models.FileField(null=True)
+	file_type = models.CharField(
+		max_length=10, 
+		choices=FILE_TYPES, 
+		default="MIZ"
+	)
 	uploaded_by = models.ForeignKey(User, 
 								null=True, 
 								blank=True, 
