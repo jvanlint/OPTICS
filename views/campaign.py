@@ -15,7 +15,7 @@ def campaign(request):
 	if order_by:
 		campaigns = Campaign.objects.order_by(order_by)
 	else:
-		campaigns = Campaign.objects.order_by('mission__mission_date')
+		campaigns = Campaign.objects.order_by('id')
 	user_profile = UserProfile.objects.get(user=request.user)
 
 	context = {
