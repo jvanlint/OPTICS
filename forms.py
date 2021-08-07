@@ -5,6 +5,7 @@ from django.forms import ModelForm
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.conf import settings
 from . import utils
 
 # import GeeksModel from models.py
@@ -179,6 +180,7 @@ class ProfileForm(forms.ModelForm):
     timezone = forms.ChoiceField(
         required=True,
         choices=utils.get_timezones(),
+        initial=settings.TIME_ZONE,
     )
 
     class Meta:
