@@ -273,3 +273,52 @@ class Mission(models.Model):
 			self.save()
 		
 		return True
+	
+	def new(self, campaignObject):
+		new_mission_instance = Mission(
+			campaign = campaignObject,
+			number = self.number + 1,
+			name = self.name,
+			description = self.description,
+			brief = self.brief,
+			roe = self.roe,
+			munitions_restrictions = self.munitions_restrictions,
+			notify_discord = False,
+		)
+		
+		new_mission_instance.save()
+		
+		mission_packages = self.package_set.all()
+		if mission_packages:
+			for package in mission_packages:
+				package.copyToMission(new_mission_instance)
+		
+		mission_targets = self.target_set.all()
+		if mission_targets:
+			for target in mission_targets:
+				target.copyToMission(new_mission_instance)
+		
+		mission_threats = self.threat_set.all()
+		if mission_threats:
+			for threat in mission_threats:
+				threat.copyToMission(new_mission_instance)
+		
+		mission_supports = self.support_set.all()
+		if mission_supports:
+			for support in mission_supports:
+				support.copyToMission(new_mission_instance)
+		
+		
+		#missionImagery
+		
+		
+	def copy(self):
+		campaignID = self.campaign.id
+		self.new(self.campaign)
+		return campaignID
+		
+	def copyToCampaign(self, campaign):
+		campaignID = self.campaign.id
+		self.new(campaign)
+		return campaignID
+

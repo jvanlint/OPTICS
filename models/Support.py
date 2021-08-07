@@ -68,3 +68,30 @@ class Support(models.Model):
 		null=True, 
 		blank=True
 	)
+	
+	def new(self, missionObject):
+		new_support_instance = Support(
+			mission = missionObject,
+			callsign = self.callsign,
+			support_type = self.support_type,
+			player_name = self.player_name,
+			frequency = self.frequency,
+			tacan = self.tacan,
+			altitude = self.altitude,
+			speed = self.speed,
+			brc = self.brc,
+			icls = self.icls,
+			notes = self.notes,
+		)
+		
+		new_support_instance.save()
+	
+	def copy(self):
+		missionID = self.mission.id 
+		self.new(self.mission)
+		return missionID 
+	
+	def copyToMission(self, mission):
+		missionID = self.mission.id 
+		self.new(mission)
+		return missionID

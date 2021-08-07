@@ -59,3 +59,26 @@ class Target(models.Model):
 
 	def __str__(self):
 		return self.name
+		
+	def new(self, missionObject):
+		new_target_instance = Target(
+			mission = missionObject,
+			name = self.name,
+			lat = self.lat,
+			long = self.long,
+			elev = self.elev,
+			notes = self.notes,
+			target_image = self.target_image
+		)
+		
+		new_target_instance.save()
+	
+	def copy(self):
+		missionID = self.mission.id 
+		self.new(self.mission)
+		return missionID 
+	
+	def copyToMission(self, mission):
+		missionID = self.mission.id 
+		self.new(mission)
+		return missionID
