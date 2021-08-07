@@ -35,7 +35,7 @@ admin.site.site_url = '/'
 
 
 class CampaignAdmin(admin.ModelAdmin):
-    list_display = ("name", "start_date", "status")
+    list_display = ("name", "start_date", "status", "date_created")
     list_filter = ("start_date", "status")
 
 

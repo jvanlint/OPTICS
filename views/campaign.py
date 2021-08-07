@@ -10,7 +10,12 @@ from ..forms import CampaignForm
 
 @login_required(login_url="login")
 def campaign(request):
-	campaigns = Campaign.objects.order_by("id")
+	
+	order_by = request.GET.get("sort")
+	if order_by:
+		campaigns = Campaign.objects.order_by(order_by)
+	else:
+		campaigns = Campaign.objects.order_by('mission__mission_date')
 	user_profile = UserProfile.objects.get(user=request.user)
 
 	context = {
