@@ -25,6 +25,7 @@ urlpatterns = [
     path('package/add/<int:link_id>', views.package_create, name='package_add'),
     path('package/update/<int:link_id>', views.package_update, name='package_update'),
     path('package/delete/<int:link_id>', views.package_delete, name='package_delete'),
+    path('package/copy/<int:link_id>', views.package_copy, name='package_copy'),
 
     path('threat/add/<int:link_id>', views.threat_create, name='threat_add'),
     path('threat/update/<int:link_id>', views.threat_update, name='threat_update'),
@@ -35,6 +36,7 @@ urlpatterns = [
     path('flight/add/<int:link_id>', views.flight_create, name='flight_add'),
     path('flight/update/<int:link_id>', views.flight_update, name='flight_update'),
     path('flight/delete/<int:link_id>', views.flight_delete, name='flight_delete'),
+    path('flight/copy/<int:link_id>', views.flight_copy, name='flight_copy'),
 
     path('aircraft/<int:link_id>/', views.aircraft, name='aircraft'),
     path('aircraft/add/<int:link_id>', views.aircraft_create, name='aircraft_add'),
@@ -55,6 +57,7 @@ urlpatterns = [
     path('waypoint/add/<int:link_id>', views.waypoint_create, name='waypoint_add'),
     path('waypoint/update/<int:link_id>', views.waypoint_update, name='waypoint_update'),
     path('waypoint/delete/<int:link_id>', views.waypoint_delete, name='waypoint_delete'),
+    path('waypoint/copy/<int:link_id>', views.waypoint_copy, name='waypoint_copy'),
 
     path('mission_imagery/add/<int:link_id>', views.mission_imagery_create, name='mission_imagery_add'),
     path('mission_imagery/update/<int:link_id>', views.mission_imagery_update, name='mission_imagery_update'),

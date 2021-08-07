@@ -1,5 +1,6 @@
 from django.db import models
 from .Target import *
+#from .Aircraft import *
 
 class Flight(models.Model):
 	# Fields
@@ -94,3 +95,45 @@ class Flight(models.Model):
 
 	def __str__(self):
 		return self.callsign
+		
+	def new(self, packageObject):
+		new_flight_instance = Flight(
+			package = packageObject,
+			callsign = self.callsign,
+			task = self.task,
+			flight_coordination = self.flight_coordination,
+			radio_frequency = self.radio_frequency,
+			tacan = self.tacan,
+			timehack_start = self.timehack_start,
+			timehack_rdv1 = self.timehack_rdv1,
+			timehack_rdv2 = self.timehack_rdv2,
+			fuel_fob = self.fuel_fob,
+			fuel_joker = self.fuel_joker,
+			fuel_bingo = self.fuel_bingo,
+		)
+		
+		new_flight_instance.save()
+		
+		flight_aircraft = self.aircraft_set.all()
+		if flight_aircraft:
+			for aircraft in flight_aircraft:
+				aircraft.copyToFlight(new_flight_instance)
+		
+		flight_waypoints = self.waypoint_set.all()
+		if flight_waypoints:
+			for waypoint in flight_waypoints:
+				waypoint.copyToFlight(new_flight_instance)
+		
+	def copy(self):
+		packageID = self.package.id
+		
+		self.new(self.package)
+		
+		return packageID
+	
+	def copyToPackage(self, package):
+		packageID = self.package.id
+		
+		self.new(package)
+		
+		return packageID

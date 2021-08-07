@@ -52,3 +52,20 @@ class Aircraft(models.Model):
 
 	def multicrew(self):
 		return self.type.multicrew
+	
+	def new(self, flightObject):
+		new_aircraft_instance = Aircraft(
+			type = self.type,
+			flight = flightObject,
+		)
+		new_aircraft_instance.save()
+	
+	def copy(self):
+		flightID = self.flight.id
+	
+		self.new(self.flight)
+		
+		return flightID
+	
+	def copyToFlight(self, flight):
+		self.new(flight)

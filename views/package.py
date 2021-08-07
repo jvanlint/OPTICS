@@ -68,3 +68,11 @@ def package_delete(request, link_id):
 
 	context = {"item": package, "returnURL": returnURL}
 	return render(request, "package/package_delete.html", context=context)
+
+@login_required(login_url="login")
+@allowed_users(allowed_roles=["admin", "planner", "player"])
+def package_copy(request, link_id):
+	package = Package.objects.get(id=link_id)
+	missionID = package.copy()
+
+	return HttpResponseRedirect("/airops/mission/" + str(missionID))

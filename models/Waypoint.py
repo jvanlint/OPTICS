@@ -60,3 +60,28 @@ class Waypoint(models.Model):
 		null=True, 
 		blank=True
 	)
+	
+	def new(self, flightObject):
+		new_waypoint_instance = Waypoint(
+			flight = flightObject,
+			name = self.name,
+			number = self.number + 1,
+			waypoint_type = self.waypoint_type,
+			lat = self.lat,
+			long = self.long,
+			elevation = self.elevation,
+			tot = self.tot,
+			notes = self.notes
+		)
+		
+		new_waypoint_instance.save()
+	
+	def copy(self):
+		flightID = self.flight.id
+		
+		self.new(self.flight)
+		
+		return flightID
+		
+	def copyToFlight(self, flight):
+		self.new(flight)
