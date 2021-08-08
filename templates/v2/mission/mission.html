@@ -46,18 +46,33 @@
   <div class="modal-dialog" role="document">
 	<div class="modal-content">
 	  <div class="modal-header">
-		<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+		<h5 class="modal-title" id="exampleModalLabel">Add File</h5>
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		  <span aria-hidden="true">&times;</span>
 		</button>
 	  </div>
 	  <div class="modal-body">
-		...
+		<form action="{% url 'mission_file_add' %}?mission_id={{mission_object.id}}&returnUrl={{request.path}}" method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			{% for field in file_form %}
+				<div class="form-group row">
+					<label class="col-md-3 col-form-label" for="{{ form.campaign_name.id_for_label }}">{{ field.label }}</label>
+				<div class="col-md-9">
+					{{ field }}
+					<span class="help-block">{{ field.help_text }}</span>
+					<span class="help-block">{{ field.errors }}</span>
+				</div>
+			</div>
+			{% endfor %} {% for field in form %} {% for error in field.errors %}
+			<p style="color: red">{{ error }}</p>
+			{% endfor %} {% endfor %}
+		
 	  </div>
 	  <div class="modal-footer">
 		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-		<button type="button" class="btn btn-primary">Save changes</button>
+		<button type="submit" class="btn btn-primary">Add File</button>
 	  </div>
+	  </form>
 	</div>
   </div>
 </div>
@@ -256,7 +271,7 @@
 											<th>Package</th>
 											<th>Summary</th>
 											<th>Flights</th>
-											<th></th>
+											<th>Action</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -300,7 +315,7 @@
 						</div>
 						<div class="card-footer">
 						<h6>
-							<a href="#" class="btn btn-sm btn-success float-right" role="button">
+							<a href="{% url 'package_add_v2' mission_object.id %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
 								<svg class="c-icon">
 									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
 								</svg>
@@ -325,7 +340,7 @@
 											<th>Elev</th>
 											<th>Notes</th>
 											<th>Image</th>
-											<th></th>
+											<th>Action</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -397,7 +412,7 @@
 											<th>Type</th>
 											<th>Name</th>
 											<th>Description</th>
-											<th></th>
+											<th>Action</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -469,7 +484,7 @@
 											<th>ICLS</th>
 											<th>Player</th>
 											<th>Notes</th>
-											<th></th>
+											<th>Action</th>
 										</tr>
 									</thead>
 									<tbody>

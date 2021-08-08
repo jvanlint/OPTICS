@@ -20,6 +20,7 @@ from .models import (
     Waypoint,
     MissionImagery,
     UserProfile,
+    MissionFile,
 )
 
 
@@ -97,9 +98,24 @@ class MissionForm(ModelForm):
             )
 
 
-
+class MissionFileForm(ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(MissionFileForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+    # specify the name of model to use
+    class Meta:
+        model = MissionFile
+        fields = "__all__"
 
 class PackageForm(ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(PackageForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+    
     # specify the name of model to use
     class Meta:
         model = Package

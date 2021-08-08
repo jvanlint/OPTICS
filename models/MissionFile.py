@@ -13,7 +13,7 @@ class MissionFile (models.Model):
 								 on_delete=models.CASCADE, 
 								 null=True)
 	name = models.CharField(
-		max_length=100, help_text='Enter a File Name', verbose_name="File Name")
+		max_length=100, verbose_name="File Name")
 	mission_file = models.FileField(null=True)
 	file_type = models.CharField(
 		max_length=10, 
@@ -24,7 +24,7 @@ class MissionFile (models.Model):
 								null=True, 
 								blank=True, 
 								on_delete=models.SET_NULL, 
-								verbose_name='Mission File Uploader')
+								verbose_name='File Uploader')
 	date_uploaded = models.DateTimeField(auto_now_add=True)
 	
 	class Meta:
