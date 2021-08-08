@@ -85,6 +85,9 @@ class Flight(models.Model):
 		blank=True,
 		verbose_name="Fuel BINGO",
 	)
+	package_lead = models.BooleanField(
+		default=False
+	)
 
 	# Metadata
 
