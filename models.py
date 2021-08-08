@@ -13,6 +13,10 @@ from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelatio
 from django.contrib.contenttypes.models import ContentType
 
 
+# Set user email field to unique
+User._meta.get_field("email")._unique = True
+
+
 class Comment(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -822,7 +826,7 @@ class UserProfile(models.Model):
     timezone = models.CharField(
         max_length=256, blank=True, null=True, default=settings.TIME_ZONE
     )
-    callsign = models.CharField(max_length=256, blank=True, null=True)
+    callsign = models.CharField(max_length=256, blank=True, null=True, unique=True)
 
     def __str__(self):
         return self.user.username

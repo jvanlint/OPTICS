@@ -176,7 +176,6 @@ class NewUserForm(UserCreationForm):
 
 
 class ProfileForm(forms.ModelForm):
-    timezones = utils.get_timezones()
     timezone = forms.ChoiceField(
         required=True,
         choices=utils.get_timezones(),
