@@ -84,6 +84,7 @@
 				<div class="col-sm-12 col-md-5">
 					<div class="card">
 						<div class="card-header">
+							<h6 class="text-muted">Mission</h6>
 							<h2>{{mission_object.name}}</h2>
 							<h6 class="text-muted">Actual Date-Time</h6>
 							<h5>{{ mission_object.mission_date }} ({{ mission_object.mission_date|timeuntil }} from now)</h5>
@@ -201,7 +202,7 @@
 								&nbspMission
 							</button>
 							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-								<a class="dropdown-item" href="{% url 'mission_update' mission_object.id %}?returnUrl={{request.path}}">
+								<a class="dropdown-item" href="{% url 'mission_update_v2' mission_object.id %}?returnUrl={{request.path}}">
 									<svg class="c-icon">
 										<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
 									</svg>
@@ -278,7 +279,7 @@
 										{% if package_object %} 
 										{% for package in package_object %}
 										<tr>
-											<td><a href="#">{{ package.name }}</a></td>
+											<td><a href="{% url 'package_v2' package.id %}">{{ package.name }}</a></td>
 											<td>{{ package.summary }}</td>
 											<td>{{ package.flight_set.count }}</td>
 											<td>

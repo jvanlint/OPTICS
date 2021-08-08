@@ -8,6 +8,23 @@ from ..models import Package, Mission
 from ..forms import PackageForm
 
 @login_required(login_url='login')
+def package_v2(request, link_id):
+	package = Package.objects.get(id=link_id)
+	flights = package.flight_set.all()
+	
+	breadcrumbs = {'Home': reverse('campaigns'),  package.mission.campaign.name: reverse('campaign_detail_v2', args=(package.mission.campaign.id,)), package.mission.name: reverse('mission_v2', args=(package.mission.id,)), package.name:''}
+ 
+	context = {
+			   'package_object': package,
+			   'flight_object': flights,
+			   'breadcrumbs': breadcrumbs,
+			   }
+
+	return render(request, 
+				  'v2/package/package.html', 
+				  context=context)
+
+@login_required(login_url='login')
 def package_add_v2(request, link_id):
 	mission = Mission.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
