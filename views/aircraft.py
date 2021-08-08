@@ -77,12 +77,6 @@ def aircraft_delete(request, link_id):
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def aircraft_copy(request, link_id):
 	aircraft = Aircraft.objects.get(id=link_id)
-	flightID = aircraft.flight.id
-
-	new_aircraft_instance = Aircraft(
-		type=aircraft.type,
-		flight=aircraft.flight,
-	)
-	new_aircraft_instance.save()
+	flightID = aircraft.copy()
 
 	return HttpResponseRedirect("/airops/flight/" + str(flightID))

@@ -56,3 +56,11 @@ def waypoint_delete(request, link_id):
 
 	context = {"item": waypoint}
 	return render(request, "waypoint/waypoint_delete.html", context=context)
+	
+@login_required(login_url="login")
+@allowed_users(allowed_roles=["admin", "planner", "player"])
+def waypoint_copy(request, link_id):
+	waypoint = Waypoint.objects.get(id=link_id)
+	flightID = waypoint.copy()
+
+	return HttpResponseRedirect("/airops/flight/" + str(flightID))

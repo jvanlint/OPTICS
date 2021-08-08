@@ -174,3 +174,11 @@ def mission_signup_remove(request, link_id, seat_id):
 	aircraft.save()
 
 	return HttpResponseRedirect(returnURL)
+	
+@login_required(login_url="login")
+@allowed_users(allowed_roles=["admin", "planner", "player"])
+def mission_copy(request, link_id):
+	mission = Mission.objects.get(id=link_id)
+	campaignID = mission.copy()
+
+	return HttpResponseRedirect("/airops/campaign/" + str(campaignID))

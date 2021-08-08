@@ -114,6 +114,9 @@
 								<a class="dropdown-item" href="{% url 'mission_delete' mission.id %}?returnUrl={{request.path}}">
 									<i class="bi bi-trash"></i>&nbspDelete
 								</a>
+								<a class="dropdown-item" href="{% url 'mission_copy' mission.id %}?returnUrl={{request.path}}">
+									<i class="bi bi-plus"></i>&nbspCopy
+								</a>
 							</div>
 						</td>
 						{% endif %}

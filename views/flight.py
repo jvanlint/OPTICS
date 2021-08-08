@@ -82,3 +82,11 @@ def flight_delete(request, link_id):
 
 	context = {"item": flight, "returnURL": returnURL}
 	return render(request, "flight/flight_delete.html", context=context)
+	
+@login_required(login_url="login")
+@allowed_users(allowed_roles=["admin", "planner", "player"])
+def flight_copy(request, link_id):
+	flight = Flight.objects.get(id=link_id)
+	packageID = flight.copy()
+
+	return HttpResponseRedirect("/airops/package/" + str(packageID))

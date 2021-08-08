@@ -2,6 +2,10 @@ from django.contrib import admin
 
 # Register your models here.
 
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
+from django.contrib.auth.admin import UserAdmin
+
 from .models import (
     Campaign,
     Mission,
@@ -24,9 +28,6 @@ from .models import (
     ThreatReference,
     UserProfile,
 )
-from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import User
-from django.contrib.auth.admin import UserAdmin
 
 # Define the admin class
 
@@ -34,7 +35,7 @@ admin.site.site_url = '/'
 
 
 class CampaignAdmin(admin.ModelAdmin):
-    list_display = ("name", "start_date", "status")
+    list_display = ("name", "start_date", "status", "date_created")
     list_filter = ("start_date", "status")
 
 
