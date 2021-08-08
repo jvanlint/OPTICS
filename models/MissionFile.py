@@ -8,6 +8,7 @@ class MissionFile (models.Model):
 		("MIZ", "Mission"),
 		("LIB", "Liberation"),
 		("COM", "CombatFlite"),
+		("OTH", "Other"),
 	)
 	mission = models.ForeignKey('Mission', 
 								 on_delete=models.CASCADE, 

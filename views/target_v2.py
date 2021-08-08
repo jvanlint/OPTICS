@@ -4,20 +4,20 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 import requests
 
-from ..models import Package, Mission
-from ..forms import PackageForm
+from ..models import Target, Mission
+from ..forms import TargetForm
 
 @login_required(login_url='login')
-def package_add_v2(request, link_id):
+def target_add_v2(request, link_id):
 	mission = Mission.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
 
-	form_title = 'Package'
+	form_title = 'Target'
 
-	form = PackageForm(initial={'mission': mission})
+	form = TargetForm(initial={'mission': mission})
 
 	if request.method == "POST":
-		form = PackageForm(request.POST, request.FILES)
+		form = TargetForm(request.POST, request.FILES)
 		if form.is_valid():
 			form.save(commit=True)
 			return HttpResponseRedirect(returnURL)
@@ -27,16 +27,16 @@ def package_add_v2(request, link_id):
 	return render(request, 'v2/generic/data_entry_form.html', context=context)
 
 @login_required(login_url='login')
-def package_update_v2(request, link_id):
-	package = Package.objects.get(id=link_id)
+def target_update_v2(request, link_id):
+	target = Target.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
 	
-	form_title = 'Package'
+	form_title = 'Target'
 
-	form = PackageForm(instance=package)
+	form = TargetForm(instance=target)
 
 	if request.method == "POST":
-		form = PackageForm(request.POST, instance=package)
+		form = TargetForm(request.POST, instance=target)
 		print(request.path)
 		if form.is_valid():
 			form.save(commit=True)
@@ -45,12 +45,12 @@ def package_update_v2(request, link_id):
 	context = {'form': form, 'form_title': form_title,
 			   'link': link_id, 'returnURL': returnURL}
 	return render(request, 'v2/generic/data_entry_form.html', context=context)
-	
+
 @login_required(login_url='login')
-def package_delete_v2(request, link_id):
-	package = Package.objects.get(id=link_id)
+def target_delete_v2(request, link_id):
+	target = Target.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
 	
-	package.delete()
+	target.delete()
 	
 	return HttpResponseRedirect(returnURL)

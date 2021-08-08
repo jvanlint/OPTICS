@@ -4,20 +4,20 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 import requests
 
-from ..models import Package, Mission
-from ..forms import PackageForm
+from ..models import Support, Mission
+from ..forms import SupportForm
 
 @login_required(login_url='login')
-def package_add_v2(request, link_id):
-	mission = Mission.objects.get(id=link_id)
+def support_add_v2(request, link_id):
+	mission = Support.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
 
-	form_title = 'Package'
+	form_title = 'Support'
 
-	form = PackageForm(initial={'mission': mission})
+	form = SupportForm(initial={'mission': mission})
 
 	if request.method == "POST":
-		form = PackageForm(request.POST, request.FILES)
+		form = SupportForm(request.POST, request.FILES)
 		if form.is_valid():
 			form.save(commit=True)
 			return HttpResponseRedirect(returnURL)
@@ -27,16 +27,16 @@ def package_add_v2(request, link_id):
 	return render(request, 'v2/generic/data_entry_form.html', context=context)
 
 @login_required(login_url='login')
-def package_update_v2(request, link_id):
-	package = Package.objects.get(id=link_id)
+def support_update_v2(request, link_id):
+	support = Support.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
 	
-	form_title = 'Package'
+	form_title = 'Support'
 
-	form = PackageForm(instance=package)
+	form = SupportForm(instance=support)
 
 	if request.method == "POST":
-		form = PackageForm(request.POST, instance=package)
+		form = SupportForm(request.POST, instance=support)
 		print(request.path)
 		if form.is_valid():
 			form.save(commit=True)
@@ -45,12 +45,12 @@ def package_update_v2(request, link_id):
 	context = {'form': form, 'form_title': form_title,
 			   'link': link_id, 'returnURL': returnURL}
 	return render(request, 'v2/generic/data_entry_form.html', context=context)
-	
+
 @login_required(login_url='login')
-def package_delete_v2(request, link_id):
-	package = Package.objects.get(id=link_id)
+def support_delete_v2(request, link_id):
+	support = Support.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
 	
-	package.delete()
+	support.delete()
 	
 	return HttpResponseRedirect(returnURL)

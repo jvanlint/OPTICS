@@ -123,15 +123,31 @@ urlpatterns += [
 urlpatterns += [
     #path('v2/mission/<int:link_id>', views.mission_v2, name='mission_v2'),
     path('v2/package/add/<int:link_id>', views.package_add_v2, name='package_add_v2'),
-    #path('v2/mission/update/<int:link_id>',
-    #     views.mission_update_v2, name='mission_update_v2'),
-    #path("v2/mission/delete/<int:link_id>", views.mission_delete_v2,
-    #    name="mission_delete_v2"),
-    #path("v2/mission/comment/add", views.mission_add_comment,
-    #     name="mission_add_comment"),
-    #path("v2/mission/file/delete/<int:link_id>", views.mission_file_delete,
-    #     name="mission_file_delete"),
+    path('v2/package/update/<int:link_id>', views.package_update_v2, name='package_update_v2'),
+    path("v2/package/delete/<int:link_id>", views.package_delete_v2, name="package_delete_v2"),
 ]
+
+# Target URL Patterns - V2
+urlpatterns += [
+    path('v2/target/add/<int:link_id>', views.target_add_v2, name='target_add_v2'),
+    path('v2/target/update/<int:link_id>', views.target_update_v2, name='target_update_v2'),
+    path("v2/target/delete/<int:link_id>", views.target_delete_v2, name="target_delete_v2"),
+]
+
+# Threat URL Patterns - V2
+urlpatterns += [
+    path('v2/threat/add/<int:link_id>', views.threat_add_v2, name='threat_add_v2'),
+    path('v2/threat/update/<int:link_id>', views.threat_update_v2, name='threat_update_v2'),
+    path("v2/threat/delete/<int:link_id>", views.threat_delete_v2, name="threat_delete_v2"),
+]
+
+# Support URL Patterns - V2
+urlpatterns += [
+    path('v2/support/add/<int:link_id>', views.support_add_v2, name='support_add_v2'),
+    path('v2/support/update/<int:link_id>', views.support_update_v2, name='support_update_v2'),
+    path("v2/support/delete/<int:link_id>", views.support_delete_v2, name="support_delete_v2"),
+]
+
 
 # Profile URL Patterns - V2
 urlpatterns += [

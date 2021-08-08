@@ -123,6 +123,11 @@ class PackageForm(ModelForm):
 
 
 class ThreatForm(ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(ThreatForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
     # specify the name of model to use
     class Meta:
         model = Threat
@@ -130,6 +135,11 @@ class ThreatForm(ModelForm):
 
 
 class TargetForm(ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(TargetForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
     # specify the name of model to use
     class Meta:
         model = Target
@@ -162,6 +172,11 @@ class AircraftForm(ModelForm):
 
 
 class SupportForm(ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(SupportForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
     # specify the name of model to use
     class Meta:
         model = Support

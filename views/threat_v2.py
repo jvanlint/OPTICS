@@ -4,20 +4,20 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 import requests
 
-from ..models import Package, Mission
-from ..forms import PackageForm
+from ..models import Threat, Mission
+from ..forms import ThreatForm
 
 @login_required(login_url='login')
-def package_add_v2(request, link_id):
+def threat_add_v2(request, link_id):
 	mission = Mission.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
 
-	form_title = 'Package'
+	form_title = 'Threat'
 
-	form = PackageForm(initial={'mission': mission})
+	form = ThreatForm(initial={'mission': mission})
 
 	if request.method == "POST":
-		form = PackageForm(request.POST, request.FILES)
+		form = ThreatForm(request.POST, request.FILES)
 		if form.is_valid():
 			form.save(commit=True)
 			return HttpResponseRedirect(returnURL)
@@ -27,16 +27,16 @@ def package_add_v2(request, link_id):
 	return render(request, 'v2/generic/data_entry_form.html', context=context)
 
 @login_required(login_url='login')
-def package_update_v2(request, link_id):
-	package = Package.objects.get(id=link_id)
+def threat_update_v2(request, link_id):
+	threat = Threat.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
 	
-	form_title = 'Package'
+	form_title = 'Threat'
 
-	form = PackageForm(instance=package)
+	form = ThreatForm(instance=threat)
 
 	if request.method == "POST":
-		form = PackageForm(request.POST, instance=package)
+		form = ThreatForm(request.POST, instance=threat)
 		print(request.path)
 		if form.is_valid():
 			form.save(commit=True)
@@ -45,12 +45,12 @@ def package_update_v2(request, link_id):
 	context = {'form': form, 'form_title': form_title,
 			   'link': link_id, 'returnURL': returnURL}
 	return render(request, 'v2/generic/data_entry_form.html', context=context)
-	
+
 @login_required(login_url='login')
-def package_delete_v2(request, link_id):
-	package = Package.objects.get(id=link_id)
+def threat_delete_v2(request, link_id):
+	threat = Threat.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
 	
-	package.delete()
+	threat.delete()
 	
 	return HttpResponseRedirect(returnURL)
