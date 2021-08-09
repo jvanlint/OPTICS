@@ -195,7 +195,7 @@ class UserProfileAdmin(admin.ModelAdmin):
         "first_name",
         "last_name",
         "is_active",
-        "last_login",
+        "email",
         "group",
     ]
     ordering = ["username"]
