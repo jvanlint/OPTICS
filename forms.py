@@ -21,6 +21,7 @@ from .models import (
     Waypoint,
     MissionImagery,
     UserProfile,
+    MissionFile,
 )
 
 
@@ -33,7 +34,7 @@ class DateInput(forms.DateInput):
 
 class CampaignForm(ModelForm):
 
-    # specify the name of model to use
+   
     def __init__(self, *args, **kwargs):
         super(CampaignForm, self).__init__(*args, **kwargs)
         for field in self.fields:
@@ -67,11 +68,25 @@ class CampaignForm(ModelForm):
 
 
 class MissionForm(ModelForm):
-    # specify the name of model to use
+    def __init__(self, *args, **kwargs):
+        super(MissionForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+    
     class Meta:
         model = Mission
         fields = "__all__"
-        widgets = {"mission_date": DateInput(), "mission_game_date": DateInput()}
+        widgets = {
+            "mission_date": DateInput(
+                attrs={
+                    'style': 'width: 150px;'
+                    }
+            ), 
+            "mission_game_date": DateInput(attrs={
+                'style': 'width: 150px;'
+                }
+            )
+        }
         exclude = ("discord_msg_id",)
 
     def clean(self):
@@ -84,9 +99,24 @@ class MissionForm(ModelForm):
             )
 
 
-
+class MissionFileForm(ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(MissionFileForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+    # specify the name of model to use
+    class Meta:
+        model = MissionFile
+        fields = "__all__"
 
 class PackageForm(ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(PackageForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+    
     # specify the name of model to use
     class Meta:
         model = Package
@@ -94,6 +124,11 @@ class PackageForm(ModelForm):
 
 
 class ThreatForm(ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(ThreatForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
     # specify the name of model to use
     class Meta:
         model = Threat
@@ -101,6 +136,11 @@ class ThreatForm(ModelForm):
 
 
 class TargetForm(ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(TargetForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
     # specify the name of model to use
     class Meta:
         model = Target
@@ -133,6 +173,11 @@ class AircraftForm(ModelForm):
 
 
 class SupportForm(ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(SupportForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
     # specify the name of model to use
     class Meta:
         model = Support

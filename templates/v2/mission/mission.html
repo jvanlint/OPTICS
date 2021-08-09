@@ -46,18 +46,33 @@
   <div class="modal-dialog" role="document">
 	<div class="modal-content">
 	  <div class="modal-header">
-		<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+		<h5 class="modal-title" id="exampleModalLabel">Add File</h5>
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		  <span aria-hidden="true">&times;</span>
 		</button>
 	  </div>
 	  <div class="modal-body">
-		...
+		<form action="{% url 'mission_file_add' %}?mission_id={{mission_object.id}}&returnUrl={{request.path}}" method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			{% for field in file_form %}
+				<div class="form-group row">
+					<label class="col-md-3 col-form-label" for="{{ form.campaign_name.id_for_label }}">{{ field.label }}</label>
+				<div class="col-md-9">
+					{{ field }}
+					<span class="help-block">{{ field.help_text }}</span>
+					<span class="help-block">{{ field.errors }}</span>
+				</div>
+			</div>
+			{% endfor %} {% for field in form %} {% for error in field.errors %}
+			<p style="color: red">{{ error }}</p>
+			{% endfor %} {% endfor %}
+		
 	  </div>
 	  <div class="modal-footer">
 		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-		<button type="button" class="btn btn-primary">Save changes</button>
+		<button type="submit" class="btn btn-primary">Add File</button>
 	  </div>
+	  </form>
 	</div>
   </div>
 </div>
@@ -96,7 +111,6 @@
 									<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#restrictions" role="tab" aria-controls="restrictions">Munitions Restrictions</a></li>
 									<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#weather" role="tab" aria-controls="weather">Weather</a></li>
 									<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#missionfiles" role="tab" aria-controls="missionfiles">Mission Files <span class="badge badge-pill badge-info ml-auto">{{mission_files.count}}</span></a></li>
-									<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#combatflite" role="tab" aria-controls="combatflite">Combat Flite Files <span class="badge badge-pill badge-info ml-auto">{{combat_files.count}}</span></a></li>
 								</ul>
 								<div class="tab-content">
 									<div class="tab-pane active" id="brief" role="tabpanel">{{mission_object.brief|linebreaks|urlize}}</div>
@@ -140,6 +154,7 @@
 													<thead>
 														<tr>
 															<th>File Name</th>
+															<th>File Type</th>
 															<th>Uploaded By</th>
 															<th>Date</th>
 															<th>Action</th>
@@ -149,6 +164,7 @@
 														{% for file in mission_files %}
 														<tr>
 															<td><a href="{{file.mission_file.url}}" download>{{ file.name }}</a></td>
+															<td>{{ file.get_file_type_display }}</td>
 															<td>{{ file.uploaded_by }}</td>
 															<td>{{ file.date_uploaded }}</td>
 															<td><a href="{% url 'mission_file_delete' file.id %}?returnUrl={{request.path}}" class="btn btn-sm btn-danger" role="button">Delete</a></td>
@@ -169,41 +185,6 @@
 												</button>
 												
 										</div>
-									</div>
-									<div class="tab-pane" id="combatflite" role="tabpanel">
-										<div class="table-responsive">
-											{% if combat_files %}
-												<table class="table table-striped">
-													<thead>
-														<tr>
-															<th>File Name</th>
-															<th>Uploaded By</th>
-															<th>Date</th>
-															<th>Action</th>
-														</tr>
-													</thead>
-													<tbody>
-														{% for file in combat_files %}
-														<tr>
-															<td><a href="{{file.mission_file.url}}" download>{{ file.name }}</a></td>
-															<td>{{ file.uploaded_by }}</td>
-															<td>{{ file.date_uploaded }}</td>
-															<td><a href="#" class="btn btn-sm btn-danger" role="button">Delete</a></td>
-														</tr>
-														{% endfor %}
-													</tbody>
-												</table>
-											
-											{% else %}
-													<p> No files have been uploaded yet.
-											{% endif %}
-												<a href="#" class="btn btn-sm btn-success float-right" role="button">
-													<svg class="c-icon">
-														<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
-													</svg>
-													Add File
-												</a>
-											</div>
 									</div>
 								</div>
 							</div>
@@ -290,7 +271,7 @@
 											<th>Package</th>
 											<th>Summary</th>
 											<th>Flights</th>
-											<th></th>
+											<th>Action</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -308,13 +289,13 @@
 													&nbspPackage
 												</button>
 												<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-													<a class="dropdown-item" href="#">
+													<a class="dropdown-item" href="{% url 'package_update_v2' package.id %}?returnUrl={{request.path}}">
 														<svg class="c-icon">
 															<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
 														</svg>
 														&nbspEdit
 													</a>
-													<a class="dropdown-item" href="#">
+													<a class="dropdown-item" id="package_{{package.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the {{ package.callsign }} package will be deleted." data-buttontext="Delete" href="{% url 'package_delete_v2' package.id %}?returnUrl={{request.path}}">
 														<svg class="c-icon">
 															<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
 														</svg>
@@ -334,7 +315,7 @@
 						</div>
 						<div class="card-footer">
 						<h6>
-							<a href="#" class="btn btn-sm btn-success float-right" role="button">
+							<a href="{% url 'package_add_v2' mission_object.id %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
 								<svg class="c-icon">
 									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
 								</svg>
@@ -359,13 +340,13 @@
 											<th>Elev</th>
 											<th>Notes</th>
 											<th>Image</th>
-											<th></th>
+											<th>Action</th>
 										</tr>
 									</thead>
 									<tbody>
 										{% if target_object %} {% for target in target_object %}
 										<tr>
-											<td><a href="#">{{ target.name }}</a></td>
+											<td>{{ target.name }}</td>
 											<td>{{ target.lat }}</td>
 											<td>{{ target.long }}</td>
 											<td>{{ target.elev }}</td>
@@ -380,16 +361,16 @@
 													<svg class="c-icon">
 														<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
 													</svg>
-													&nbspPackage
+													&nbspTarget
 												</button>
 												<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-													<a class="dropdown-item" href="#">
+													<a class="dropdown-item" href="{% url 'target_update_v2' target.id %}?returnUrl={{request.path}}">
 														<svg class="c-icon">
 															<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
 														</svg>
 														&nbspEdit
 													</a>
-													<a class="dropdown-item" href="#">
+													<a class="dropdown-item" id="target_{{target.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the {{ target.name }} target will be deleted." data-buttontext="Delete" href="{% url 'target_delete_v2' target.id %}?returnUrl={{request.path}}">
 														<svg class="c-icon">
 															<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
 														</svg>
@@ -409,7 +390,7 @@
 						</div>
 						<div class="card-footer">
 						<h6>
-							<a href="#" class="btn btn-sm btn-success float-right" role="button">
+							<a href="{% url 'target_add_v2' mission_object.id %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
 								<svg class="c-icon">
 									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
 								</svg>
@@ -431,7 +412,7 @@
 											<th>Type</th>
 											<th>Name</th>
 											<th>Description</th>
-											<th></th>
+											<th>Action</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -445,16 +426,16 @@
 													<svg class="c-icon">
 														<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
 													</svg>
-													&nbspPackage
+													&nbspThreat
 												</button>
 												<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-													<a class="dropdown-item" href="#">
+													<a class="dropdown-item" href="{% url 'threat_update_v2' threat.id %}?returnUrl={{request.path}}">
 														<svg class="c-icon">
 															<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
 														</svg>
 														&nbspEdit
 													</a>
-													<a class="dropdown-item" href="#">
+													<a class="dropdown-item" id="threat_{{threat.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the {{ threat.name }} threat will be deleted." data-buttontext="Delete" href="{% url 'threat_delete_v2' threat.id %}?returnUrl={{request.path}}">
 														<svg class="c-icon">
 															<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
 														</svg>
@@ -474,7 +455,7 @@
 						</div>
 						<div class="card-footer">
 						<h6>
-							<a href="#" class="btn btn-sm btn-success float-right" role="button">
+							<a href="{% url 'threat_add_v2' mission_object.id %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
 								<svg class="c-icon">
 									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
 								</svg>
@@ -503,7 +484,7 @@
 											<th>ICLS</th>
 											<th>Player</th>
 											<th>Notes</th>
-											<th></th>
+											<th>Action</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -524,16 +505,16 @@
 													<svg class="c-icon">
 														<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
 													</svg>
-													&nbspPackage
+													&nbspSupport
 												</button>
 												<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-													<a class="dropdown-item" href="#">
+													<a class="dropdown-item" href="{% url 'support_update_v2' support.id %}?returnUrl={{request.path}}">
 														<svg class="c-icon">
 															<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
 														</svg>
 														&nbspEdit
 													</a>
-													<a class="dropdown-item" href="#">
+													<a class="dropdown-item" id="support_{{support.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the {{ support.callsign }} support will be deleted." data-buttontext="Delete" href="{% url 'support_delete_v2' support.id %}?returnUrl={{request.path}}">
 														<svg class="c-icon">
 															<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
 														</svg>
@@ -553,7 +534,7 @@
 						</div>
 						<div class="card-footer">
 						<h6>
-							<a href="#" class="btn btn-sm btn-success float-right" role="button">
+							<a href="{% url 'support_add_v2' mission_object.id %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
 								<svg class="c-icon">
 									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
 								</svg>
