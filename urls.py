@@ -21,6 +21,7 @@ urlpatterns = [
     path('mission/signup/<int:link_id>', views.mission_signup, name='mission_signup'),
     path('mission/signup/update/<int:link_id>/<int:seat_id>', views.mission_signup_update, name='mission_signup_update'),
     path('mission/signup/remove/<int:link_id>/<int:seat_id>', views.mission_signup_remove, name='mission_signup_remove'),
+    path('mission/add/file', views.mission_file_add, name='mission_file_add'),
 
     path('package/<int:link_id>/', views.package, name='package'),
     path('package/add/<int:link_id>', views.package_create, name='package_add'),
@@ -117,6 +118,37 @@ urlpatterns += [
     path("v2/mission/file/delete/<int:link_id>", views.mission_file_delete,
          name="mission_file_delete"),
 ]
+
+# Package URL Patterns - V2
+urlpatterns += [
+    #path('v2/mission/<int:link_id>', views.mission_v2, name='mission_v2'),
+    path('v2/package/add/<int:link_id>', views.package_add_v2, name='package_add_v2'),
+    path('v2/package/update/<int:link_id>', views.package_update_v2, name='package_update_v2'),
+    path("v2/package/delete/<int:link_id>", views.package_delete_v2, name="package_delete_v2"),
+]
+
+# Target URL Patterns - V2
+urlpatterns += [
+    path('v2/target/add/<int:link_id>', views.target_add_v2, name='target_add_v2'),
+    path('v2/target/update/<int:link_id>', views.target_update_v2, name='target_update_v2'),
+    path("v2/target/delete/<int:link_id>", views.target_delete_v2, name="target_delete_v2"),
+]
+
+# Threat URL Patterns - V2
+urlpatterns += [
+    path('v2/threat/add/<int:link_id>', views.threat_add_v2, name='threat_add_v2'),
+    path('v2/threat/update/<int:link_id>', views.threat_update_v2, name='threat_update_v2'),
+    path("v2/threat/delete/<int:link_id>", views.threat_delete_v2, name="threat_delete_v2"),
+]
+
+# Support URL Patterns - V2
+urlpatterns += [
+    path('v2/support/add/<int:link_id>', views.support_add_v2, name='support_add_v2'),
+    path('v2/support/update/<int:link_id>', views.support_update_v2, name='support_update_v2'),
+    path("v2/support/delete/<int:link_id>", views.support_delete_v2, name="support_delete_v2"),
+]
+
+
 # Profile URL Patterns - V2
 urlpatterns += [
     path("v2/profile/", views.own_profile_view, name="profile_v2"),

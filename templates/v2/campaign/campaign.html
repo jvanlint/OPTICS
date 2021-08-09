@@ -80,7 +80,7 @@
 									<div class="tab-pane active" id="situation" role="tabpanel">{{campaign_object.situation|linebreaks|urlize}}</div>
 									<div class="tab-pane" id="aoimage" role="tabpanel">
 										{% if campaign_object.aoImage %}
-										<a href="{{campaign_object.ao_image.url}}" target="_blank"><img class="img-fluid" src="{{campaign_object.aoImage.url}}" /></a>
+										<a href="{{campaign_object.aoImage.url}}" target="_blank"><img class="img-fluid" src="{{campaign_object.aoImage.url}}" /></a>
 										{% else %}
 										<p>No Area of Operation images available.</p>
 										{% endif %}
@@ -195,6 +195,12 @@
 															<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
 														</svg>
 														&nbspDelete
+													</a>
+													<a class="dropdown-item" href="{% url 'mission_copy' mission.id %}?returnUrl={{request.path}}">
+														<svg class="c-icon">
+															<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
+														</svg>
+														&nbspCopy
 													</a>
 												</div>
 											</td>

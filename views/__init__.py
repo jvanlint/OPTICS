@@ -6,7 +6,7 @@ from .campaign import *
 from .flight import *
 
 from .mission import *
-from .missionv2 import *
+from .mission_v2 import *
 
 from .package import *
 from .pdf_render import *
@@ -19,3 +19,8 @@ from .profile import *
 from .profilev2 import *
 from .mission_imagery import *
 from .user_management import *
+
+from .package_v2 import *
+from .target_v2 import *
+from .threat_v2 import *
+from .support_v2 import *
