@@ -77,7 +77,7 @@
 							</div>
 						</div>
 						<div class="card-footer">
-							{% if mission_object.creator.username == user.username or isAdmin == True %}
+							{% if user.userprofile.isAdmin %} 
 								<button class="btn-sm btn-primary dropdown-toggle float-right" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
 							{% else %}
 								<button class="btn-sm btn-primary dropdown-toggle float-right" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled="">
