@@ -1,9 +1,8 @@
 from django.test import TestCase
-from ..models import Campaign
-# Create your tests here.
+from airops.models import Campaign
+
 
 class CampaignModelTest(TestCase):
-	@classmethod
 	@classmethod
 	def setUpTestData(cls):
 		# Set up non-modified objects used by all test methods
