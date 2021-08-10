@@ -65,7 +65,7 @@
                                                         <div class="media text-muted pt-3">
                                                                 <div class="c-avatar"><img class="c-avatar-img" src="{% static campaign.creator.profile.profile_image %}" alt="" /></div>
                                                                 <p class="media-body pb-3 pl-2 mb-0  lh-125">
-                                                                        <a href="{% url 'user_profile' campaign.creator.id %}"><strong class="d-block text-gray-dark">{{ campaign.creator.username }}</strong></a>
+                                                                        <a href="{% url 'profile_v2'  %}"><strong class="d-block text-gray-dark">{{ campaign.creator.username }}</strong></a>
                                                                         {{ campaign.date_created }}
                                                                 </p>
                                                         </div>
