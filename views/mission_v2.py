@@ -9,7 +9,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 
 from ..models import Campaign, Mission, UserProfile, MissionFile
-from ..forms import MissionForm
+from ..forms import MissionForm, MissionFileForm
 
 
 # ---------------- Mission -------------------------
@@ -26,6 +26,8 @@ def mission_v2(request, link_id):
     threats = mission_queryset.threat_set.all()
     supports = mission_queryset.support_set.all()
     user_profile = UserProfile.objects.get(user=request.user)
+    
+    form = MissionFileForm(initial = {'mission': mission_queryset, 'uploaded_by': request.user.id})
 
     breadcrumbs = {
         "Home": reverse("campaigns"),
@@ -45,6 +47,7 @@ def mission_v2(request, link_id):
         "combat_files": combat_files_queryset,
         "isAdmin": user_profile.is_admin(),
         "comments": comments,
+        'file_form': form,
         "breadcrumbs": breadcrumbs,
     }
 
@@ -144,6 +147,20 @@ def mission_add_comment(request):
 
     return HttpResponseRedirect(returnURL)
 
+def mission_file_add(request):
+    # if this is a POST request we need to process the form data
+    returnURL = request.GET.get('returnUrl')
+    print('landed')
+    form = MissionFileForm(request.POST, request.FILES)
+    
+    if form.is_valid():
+        print('form valid')
+        form.save(commit=True)
+        return HttpResponseRedirect(returnURL)
+        print('success00')
+        
+    print('fail')
+    return HttpResponseRedirect(returnURL)
 
 @login_required(login_url="login")
 def mission_file_delete(request, link_id):
