@@ -18,7 +18,6 @@ def own_profile_view(request):
 	breadcrumbs = {'Home': reverse('campaigns'),  'Own Profile': ''}
 
 	context = {'comments': comments, 'breadcrumbs': breadcrumbs,}
-	# Render the HTML template index.html with the data in the context variable
 	return render(request, 'v2/profile/profile.html', context=context)
 
 def select_avatar(request):
