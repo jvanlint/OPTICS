@@ -6,10 +6,11 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.conf import settings
-from . import utils
+from crispy_forms.helper import FormHelper
+from airops import utils
 
 # import GeeksModel from models.py
-from .models import (
+from airops.models import (
     Campaign,
     Mission,
     Package,
@@ -33,37 +34,19 @@ class DateInput(forms.DateInput):
 
 
 class CampaignForm(ModelForm):
-
-   
     def __init__(self, *args, **kwargs):
         super(CampaignForm, self).__init__(*args, **kwargs)
         for field in self.fields:
-            self.fields[field].widget.attrs.update({'class': 'form-control'})
-    
+            self.fields[field].widget.attrs.update({"class": "form-control"})
+
     class Meta:
         model = Campaign
         fields = "__all__"
         widgets = {
-            "start_date": DateInput(
-                attrs={
-                    'style': 'width: 150px;'
-                    }
-            ),
-            'creator': forms.Select(
-                attrs={
-                    'style': 'width: 150px;'
-                    }
-            ),
-            'dcs_map': forms.Select(
-                attrs={
-                    'style': 'width: 150px;'
-                    }
-            ),
-            'status': forms.Select(
-                attrs={
-                    'style': 'width: 150px;'
-                    }
-            ),
+            "start_date": DateInput(attrs={"style": "width: 150px;"}),
+            "creator": forms.Select(attrs={"style": "width: 150px;"}),
+            "dcs_map": forms.Select(attrs={"style": "width: 150px;"}),
+            "status": forms.Select(attrs={"style": "width: 150px;"}),
         }
 
 
@@ -71,21 +54,14 @@ class MissionForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(MissionForm, self).__init__(*args, **kwargs)
         for field in self.fields:
-            self.fields[field].widget.attrs.update({'class': 'form-control'})
-    
+            self.fields[field].widget.attrs.update({"class": "form-control"})
+
     class Meta:
         model = Mission
         fields = "__all__"
         widgets = {
-            "mission_date": DateInput(
-                attrs={
-                    'style': 'width: 150px;'
-                    }
-            ), 
-            "mission_game_date": DateInput(attrs={
-                'style': 'width: 150px;'
-                }
-            )
+            "mission_date": DateInput(attrs={"style": "width: 150px;"}),
+            "mission_game_date": DateInput(attrs={"style": "width: 150px;"}),
         }
         exclude = ("discord_msg_id",)
 
@@ -100,23 +76,23 @@ class MissionForm(ModelForm):
 
 
 class MissionFileForm(ModelForm):
-    
     def __init__(self, *args, **kwargs):
         super(MissionFileForm, self).__init__(*args, **kwargs)
         for field in self.fields:
-            self.fields[field].widget.attrs.update({'class': 'form-control'})
+            self.fields[field].widget.attrs.update({"class": "form-control"})
+
     # specify the name of model to use
     class Meta:
         model = MissionFile
         fields = "__all__"
 
+
 class PackageForm(ModelForm):
-    
     def __init__(self, *args, **kwargs):
         super(PackageForm, self).__init__(*args, **kwargs)
         for field in self.fields:
-            self.fields[field].widget.attrs.update({'class': 'form-control'})
-    
+            self.fields[field].widget.attrs.update({"class": "form-control"})
+
     # specify the name of model to use
     class Meta:
         model = Package
@@ -124,11 +100,11 @@ class PackageForm(ModelForm):
 
 
 class ThreatForm(ModelForm):
-    
     def __init__(self, *args, **kwargs):
         super(ThreatForm, self).__init__(*args, **kwargs)
         for field in self.fields:
-            self.fields[field].widget.attrs.update({'class': 'form-control'})
+            self.fields[field].widget.attrs.update({"class": "form-control"})
+
     # specify the name of model to use
     class Meta:
         model = Threat
@@ -136,11 +112,11 @@ class ThreatForm(ModelForm):
 
 
 class TargetForm(ModelForm):
-    
     def __init__(self, *args, **kwargs):
         super(TargetForm, self).__init__(*args, **kwargs)
         for field in self.fields:
-            self.fields[field].widget.attrs.update({'class': 'form-control'})
+            self.fields[field].widget.attrs.update({"class": "form-control"})
+
     # specify the name of model to use
     class Meta:
         model = Target
@@ -173,11 +149,11 @@ class AircraftForm(ModelForm):
 
 
 class SupportForm(ModelForm):
-    
     def __init__(self, *args, **kwargs):
         super(SupportForm, self).__init__(*args, **kwargs)
         for field in self.fields:
-            self.fields[field].widget.attrs.update({'class': 'form-control'})
+            self.fields[field].widget.attrs.update({"class": "form-control"})
+
     # specify the name of model to use
     class Meta:
         model = Support
@@ -199,6 +175,7 @@ class MissionImageryForm(ModelForm):
 
 
 class NewUserForm(UserCreationForm):
+
     email = forms.EmailField(required=True)
 
     class Meta:
@@ -221,6 +198,7 @@ class NewUserForm(UserCreationForm):
 
 
 class ProfileForm(forms.ModelForm):
+
     timezone = forms.ChoiceField(
         required=True,
         choices=utils.get_timezones(),

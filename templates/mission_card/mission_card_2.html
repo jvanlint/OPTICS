@@ -5,30 +5,32 @@
       @page {
           size: a4 portrait;
 
+          background-image: url({% static 'images/Mission_card_background.png' %});
+
           @frame content_frame { /* Content Frame */
             left: 2pt;
             width: 590pt;
             top: 2pt;
-            height: 810pt;
+            height: 840pt;
             -pdf-frame-border: 0;    /* for debugging the layout */
 
           }
-          @frame footer_frame {
-                /* Another static Frame */
-            -pdf-frame-content:footer_content;
-            left: 10pt; width: 512pt; top: 820pt; height: 20pt;
-            -pdf-frame-border: 0;    /* for debugging the layout */
-          }
-        }
+      }
+      {#@frame footer_frame {#}
+      {#    /* Another static Frame */#}
+      {#pdf-frame-content:footer_content;#}
+      {#left: 2pt; width: 590pt; top: 800pt; height: 20pt;#}
+      {#pdf-frame-border: 1;    /* for debugging the layout */#}
+
+
       table {
-        width: 100%;
-        table-layout: fixed;
+          width: 100%;
+          table-layout: fixed;
 
       }
 
       html {
           font-size: 18px;
-          background-color: beige;
       }
 
       td {
@@ -55,7 +57,8 @@
       table {
           -pdf-keep-in-frame-mode: overflow;
       }
-  {#    https://xhtml2pdf.readthedocs.io/en/latest/reference.html#long-cells#}
+
+      {#    https://xhtml2pdf.readthedocs.io/en/latest/reference.html#long-cells#}
   </style>
 </head>
 
@@ -64,8 +67,8 @@
 
 <!-- HTML Content -->
 <table>
-<COLGROUP span="100" width="1%">
-   </COLGROUP>
+  <COLGROUP span="100" width="1%">
+  </COLGROUP>
   <thead>
   <tr>
     <th scope="col" colspan="100" align="left">{{ flight_object.callsign|upper }} FLIGHT - MISSION CARD</th>
@@ -143,15 +146,15 @@
     {% for flight in package.flight_set.all %}
       <tr {% if flight.callsign == flight_object.callsign %} bgcolor="yellow" {% endif %}>
         <td colspan="20"><strong>{{ flight.callsign }}</strong></td>
-          <td colspan="18">{{ flight.task }}</td>
-        <td colspan="12" ><strong>{{ flight.radio_frequency }}</strong></td>
+        <td colspan="18">{{ flight.task }}</td>
+        <td colspan="12"><strong>{{ flight.radio_frequency }}</strong></td>
         <td colspan="24">{{ flight.aircraft_set.count }} x {{ flight.aircraft_set.first.type }}</td>
         <td colspan="26">{{ package.name }} {% if package.frequency %}({{ package.frequency }}){% endif %}</td>
       </tr>
     {% endfor %}
   {% endfor %}
   <!-- End Flights -->
- <!-- Mission Support-->
+  <!-- Mission Support-->
   <tr>
     <th scope="row" colspan="100" bgcolor="darkgray">MISSION SUPPORT</th>
   </tr>
@@ -192,12 +195,12 @@
 
 </table>
 <div>
-   <pdf:nextpage />
+  <pdf:nextpage/>
 </div>
 <table class="page-break">
-<COLGROUP span="100" width="1%">
-   </COLGROUP>
-<!-- Waypoints-->
+  <COLGROUP span="100" width="1%">
+  </COLGROUP>
+  <!-- Waypoints-->
   <tr>
     <th scope="row" colspan="100" bgcolor="darkgray">WAYPOINTS</th>
   </tr>
@@ -228,16 +231,15 @@
   <!-- End Waypoints-->
 
 
-
   </tbody>
 </table>
 <div>
-   <pdf:nextpage />
+  <pdf:nextpage/>
 </div>
 <table style="truncate, keeptogether">
-<COLGROUP span="100" width="1%">
-   </COLGROUP>
-<!-- Tactical Mission Brief-->
+  <COLGROUP span="100" width="1%">
+  </COLGROUP>
+  <!-- Tactical Mission Brief-->
   <tr bgcolor="darkgray">
     <th scope="row" colspan="100">TACTICAL MISSION BRIEF</th>
   </tr>
@@ -245,16 +247,16 @@
     <td scope="row" colspan="100">{{ mission_object.brief|linebreaks }}</td>
   </tr>
   <!-- End Tactical Mission Brief -->
-{% if mission_object.brief|length > 1000 %}
+  {% if mission_object.brief|length > 1000 %}
 
-  </table>
-  <div>
-     <pdf:nextpage />
-  </div>
-  <table>
-  <COLGROUP span="100" width="1%">
-     </COLGROUP>
-{% endif %}
+    </table>
+    <div>
+      <pdf:nextpage/>
+    </div>
+    <table>
+    <COLGROUP span="100" width="1%">
+    </COLGROUP>
+  {% endif %}
 
 
   <!-- Weather -->
@@ -274,35 +276,34 @@
     <th scope="row" colspan="10">SIGWX</th>
   </tr>
   <tr>
-    <td scope="row" colspan="10">{% if mission_object.visibility == null %} - {% else %}
+    <td colspan="10">{% if mission_object.visibility == null %} - {% else %}
       {{ mission_object.visibility }} {% endif %}</td>
-    <td scope="row" colspan="10">{{ mission_object.cloud_base }}</td>
-    <td scope="row" colspan="10">{{ mission_object.cloud_top }}</td>
-    <td scope="row" colspan="10">{% if mission_object.wind_sl == null %} - {% else %}
+    <td colspan="10">{{ mission_object.cloud_base }}</td>
+    <td colspan="10">{{ mission_object.cloud_top }}</td>
+    <td colspan="10">{% if mission_object.wind_sl == null %} - {% else %}
       {{ mission_object.wind_sl }} {% endif %}</td>
-    <td scope="row" colspan="10">{% if mission_object.wind_7k == null %} - {% else %}
+    <td colspan="10">{% if mission_object.wind_7k == null %} - {% else %}
       {{ mission_object.wind_7k }} {% endif %}</td>
-    <td scope="row" colspan="10">{% if mission_object.wind_26k == null %} - {% else %}
+    <td colspan="10">{% if mission_object.wind_26k == null %} - {% else %}
       {{ mission_object.wind_26k }} {% endif %}</td>
-    <td scope="row" colspan="10">{% if mission_object.qnh == null %} - {% else %}
+    <td colspan="10">{% if mission_object.qnh == null %} - {% else %}
       {{ mission_object.qnh }} {% endif %}</td>
-    <td scope="row" colspan="10">{% if mission_object.qfe == null %} - {% else %}
+    <td colspan="10">{% if mission_object.qfe == null %} - {% else %}
       {{ mission_object.qfe }} {% endif %}</td>
-    <td scope="row" colspan="10">{% if mission_object.temp == null %} - {% else %}
+    <td colspan="10">{% if mission_object.temp == null %} - {% else %}
       {{ mission_object.temp }} {% endif %}</td>
-    <td scope="row" colspan="10">{% if mission_object.sigwx == null %} - {% else %}
+    <td colspan="10">{% if mission_object.sigwx == null %} - {% else %}
       {{ mission_object.sigwx }} {% endif %}</td>
   </tr>
   <!-- End Weather -->
 
 
-
   <!--  Tactical Info  -->
-  <tr bgcolor="darkgray">
+  <tr>
     <th scope="row" colspan="100">TARGET INFO</th>
   </tr>
 
-  <tr bgcolor="lightgray">
+  <tr>
     <th scope="row" colspan="40">Name</th>
     <th scope="row" colspan="25">Lat</th>
     <th scope="row" colspan="25">Long</th>
@@ -316,71 +317,77 @@
       <td colspan="25">{{ target.long }}</td>
       <td colspan="10">{{ target.elev }}</td>
       {% if target.notes %} </tr>
-        <td scope="row" colspan="100">{{ target.notes|linebreaks }}</td>
+        <td colspan="100">{{ target.notes|linebreaks }}</td>
       {% endif %}
     </tr>
   {% endfor %}
   <!-- End Target Info -->
-</table>
-  <div><pdf:nextpage /></div>
+  </table>
+<div>
+  <pdf:nextpage/>
+</div>
 <table>
   <COLGROUP span="100" width="1%">
-     </COLGROUP>
+  </COLGROUP>
   <!-- Threats -->
-  <tr bgcolor="darkgray">
+  <tr>
     <th scope="row" colspan="100">THREAT INFO</th>
+  </tr>
+  <tr>
+    <th scope="row" colspan="20">Class</th>
+    <th scope="row" colspan="20">Type</th>
+
+    <th scope="row" colspan="15">Rge-Min</th>
+    <th scope="row" colspan="15">Rge-Max</th>
+    <th scope="row" colspan="15">Alt-Min</th>
+    <th scope="row" colspan="15">Alt-Max</th>
+  </tr>
+  <tr>
+    <th scope="row" colspan="40">Description</th>
+    <th scope="row" colspan="15">#-Missiles</th>
+    <th scope="row" colspan="15">Acq sec</th>
+    <th scope="row" colspan="15">RWR</th>
+    <th scope="row" colspan="15">Harm Code</th>
   </tr>
 
   {% for threat in threat_object %}
-    <tr bgcolor="lightgray">
-      <td colspan="10">{{ threat.threat_type }}</td>
-      <td colspan="10">{{ threat.name }}</td>
-      <td colspan="80">{{ threat.description|linebreaks }}</td>
-    </tr>
-
-    <tr bgcolor="lightgray">
-      <th scope="row" colspan="10">Class</th>
-      <th scope="row" colspan="10">Type</th>
-      <th scope="row" colspan="10">Msl. Ammo</th>
-      <th scope="row" colspan="10">Min Rng</th>
-      <th scope="row" colspan="10">Max Rng</th>
-      <th scope="row" colspan="10">Min Alt</th>
-      <th scope="row" colspan="10">Max Alt</th>
-      <th scope="row" colspan="10">Acq. Time</th>
-      <th scope="row" colspan="10">RWR</th>
-      <th scope="row" colspan="10">Harm Code</th>
-    </tr>
-
     <tr>
-
-      <td colspan="10">{{ threat.threat_name.threat_class }}</td>
-      <td colspan="10">{{ threat.threat_name.threat_type }}</td>
-      <td colspan="10">{{ threat.threat_name.missile_ammo }}</td>
-      <td colspan="10">{{ threat.threat_name.range_min }} nm</td>
-      <td colspan="10">{{ threat.threat_name.range_max }} nm</td>
-      <td colspan="10">{{ threat.threat_name.alt_min }} ft</td>
-      <td colspan="10">{{ threat.threat_name.alt_max }} ft</td>
-      <td colspan="10">{{ threat.threat_name.acquire_time }} sec</td>
-      <td colspan="10">{{ threat.threat_name.harm_code }}</td>
-      <td colspan="10">{{ threat.threat_name.harm_code }}</td>
-
+      <td colspan="20">{{ threat.threat_type }}</td>
+      <td colspan="20">{{ threat.name }}</td>
+      <td colspan="15">{{ threat.threat_name.range_min }} nm</td>
+      <td colspan="15">{{ threat.threat_name.range_max }} nm</td>
+      <td colspan="15">{{ threat.threat_name.alt_min }} ft</td>
+      <td colspan="15">{{ threat.threat_name.alt_max }} ft</td>
     </tr>
+    <tr>
+      <td colspan="40">{{ threat.description|linebreaks }}</td>
+      <td colspan="15">{{ threat.threat_name.missile_ammo }}</td>
+      {#      <td colspan="15">{{ threat.threat_name.threat_class }}</td>#}
+      {#      <td colspan="15">{{ threat.threat_name.threat_type }}</td>#}
+      <td colspan="15">{{ threat.threat_name.acquire_time }} sec</td>
+      <td colspan="15">{{ threat.threat_name.harm_code }}</td>
+      <td colspan="15">{{ threat.threat_name.harm_code }}</td>
+    </tr>
+    <tr>
+      <td colspan="100"></td>
+    </tr>
+
   {% endfor %}
   <!-- End Threats -->
   </tbody>
 </table>
 <h4> Target Images</h4>
 {% for key,value in urls.items %}
-  <p>{{ key }}</p>
-  <img width='400' src="{{ value }}"/>
-  <br>
+  <p>{{ key }}
+    <img width='800' src="{{ value }}"/>
+    <br></p>
 {% endfor %}
-
+<p>Created by<strong> O.P.T.I.C.S.</strong> - A campaign management tool by Tigershark.</p>
 </body>
 
-<div id="footer_content"><p><strong>Created by O.P.T.I.C.S. - A campaign management tool by Tigershark.</strong></p>page
-  <pdf:pagenumber>
-    of
-    <pdf:pagecount>
-</div>
+{#<div id="footer_content"><p>Created by<strong> O.P.T.I.C.S.</strong> - A campaign management tool by Tigershark.</p>page#}
+{#  <pdf:pagenumber>#}
+{#    of#}
+{#    <pdf:pagecount>#}
+{#</div>#}
 </html>
