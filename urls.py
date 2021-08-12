@@ -21,7 +21,6 @@ urlpatterns = [
     path('mission/signup/<int:link_id>', views.mission_signup, name='mission_signup'),
     path('mission/signup/update/<int:link_id>/<int:seat_id>', views.mission_signup_update, name='mission_signup_update'),
     path('mission/signup/remove/<int:link_id>/<int:seat_id>', views.mission_signup_remove, name='mission_signup_remove'),
-    #path('mission/add/file', views.mission_file_add, name='mission_file_add'),
 
     path('package/<int:link_id>/', views.package, name='package'),
     path('package/add/<int:link_id>', views.package_create, name='package_add'),

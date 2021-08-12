@@ -545,6 +545,41 @@
 						</div>
 					</div>
 					<!-- /.card -->
+					
+					<!-- .card -->
+					<div class="card">
+						<div class="card-header">Image{{ imagery_object|pluralize }} <span class="badge badge-pill badge-info ml-auto">{{ imagery_object.count }}</span></div>
+						<div class="card-body">
+							<div class="row">
+							{% if imagery_object %} {% for imagery in imagery_object %}
+								<div class="col-sm-6 col-md-4">
+									<figure class="figure">
+										<a href="{{ imagery.image.url }}" add target="_blank"><img src="{{ imagery.image.url }}" class="figure-img img-fluid rounded" alt="{{imagery.caption}}" /></a>
+										<figcaption class="figure-caption">
+											{{ imagery.caption }} <br><a  href="#" role="button"><img src="{% static 'assets/icons/trash.svg' %}"/> </a>
+											<a href="#" role="button"><img src="{% static 'assets/icons/pencil.svg' %}"/></a>
+										</figcaption>
+									</figure>
+								</div>
+							{% endfor %} 
+							</div>
+							{% else %}
+							No imagery available.
+							{% endif %}
+						</div>
+						<div class="card-footer">
+						<h6>
+							<a href="{% url 'support_add_v2' mission_object.id %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
+								<svg class="c-icon">
+									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
+								</svg>
+								Add Imagery
+							</a>
+						</h6>
+						</div>
+					</div>
+					<!-- /.card -->
+					
 
 				</div>
 				<!-- /.col-->

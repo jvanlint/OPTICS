@@ -25,6 +25,7 @@ def mission_v2(request, link_id):
     targets = mission_queryset.target_set.all()
     threats = mission_queryset.threat_set.all()
     supports = mission_queryset.support_set.all()
+    imagery = mission_queryset.missionimagery_set.all()
     user_profile = UserProfile.objects.get(user=request.user)
     
     form = MissionFileForm(initial = {'mission': mission_queryset, 'uploaded_by': request.user.id})
@@ -43,6 +44,7 @@ def mission_v2(request, link_id):
         "target_object": targets,
         "threat_object": threats,
         "support_object": supports,
+        "imagery_object": imagery,
         "mission_files": mission_files_queryset,
         "combat_files": combat_files_queryset,
         "isAdmin": user_profile.is_admin(),
