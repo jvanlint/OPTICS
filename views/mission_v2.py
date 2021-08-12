@@ -61,6 +61,7 @@ def mission_add_v2(request, link_id):
     campaign = Campaign.objects.get(id=link_id)
     missionCount = campaign.mission_set.count() + 1
     returnURL = request.GET.get("returnUrl")
+    image_url = request.build_absolute_uri(campaign.campaignImage.url)
 
     form_title = "Mission"
 
@@ -78,6 +79,7 @@ def mission_add_v2(request, link_id):
             tmp = form.save(commit=False)
             tmp.creator = request.user
             tmp.save()
+            tmp.create_discord_event(image_url, request)
             return HttpResponseRedirect(returnURL)
 
     context = {
@@ -104,9 +106,11 @@ def mission_update_v2(request, link_id):
 
     if request.method == "POST":
         form = MissionForm(request.POST, request.FILES, instance=mission)
-        print(request.path)
+        
         if form.is_valid():
-            form.save(commit=True)
+            saved_obj = form.save(commit=True)
+            if saved_obj.notify_discord:
+                mission.create_discord_event(image_url, request)
             return HttpResponseRedirect(returnURL)
 
     context = {

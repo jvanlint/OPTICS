@@ -223,7 +223,10 @@ class Mission(models.Model):
 		thumbnail = image_url
 		mission_name = self.name
 		now = str(timezone.now())
-		date = self.mission_date.strftime("%b %d %Y")
+		if self.mission_date:
+			date = self.mission_date.strftime("%b %d %Y")
+		else:
+			date = None
 		description = (f'{self.name}\n**{date}, {self.mission_time} UTC**\n\n{self.description}')
 		register_url = request.build_absolute_uri(reverse('mission_signup', args=(self.id,)))
 		mission_page = request.build_absolute_uri(reverse('mission', args=(self.id,)))
