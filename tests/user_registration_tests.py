@@ -11,11 +11,11 @@ from pytest_django.asserts import (
     assertFormError,
 )
 
-from airops.forms import NewUserForm
+from airops.forms import NewUserForm, ProfileForm
+from airops.models import UserProfile
 
 """
-test_email_is_generated_for_account_creation
-test_error_shown_with_duplicated_call-sign
+todo: test_email_is_generated_for_account_creation
 """
 
 url = reverse("register")
@@ -153,7 +153,6 @@ class TestRegistration:
             "User with this Email address already exists.",
         )
 
-    @pytest.mark.skip
     def test_error_shown_with_duplicated_callsign(self, client, django_user_model):
         username = "thisisvalid "
         password = "password"
@@ -162,7 +161,12 @@ class TestRegistration:
         user_ = django_user_model.objects.create_user(
             username=username, password=password, email=email
         )
-        user_.profile.callsign = callsign
+        # make a profile opject, p[opluate and save
+        profile = UserProfile()
+        profile.user = user_
+        profile.callsign = callsign
+        profile.save()
+
         response = client.post(
             url,
             data={
@@ -178,7 +182,7 @@ class TestRegistration:
             response,
             "profile_form",
             "callsign",
-            "User with this Email address already exists.",
+            "User profile with this Callsign already exists.",
         )
 
     @pytest.mark.parametrize(

@@ -37,7 +37,7 @@ class UserProfile(models.Model):
     timezone = models.CharField(
         max_length=256, blank=True, null=True, default=settings.TIME_ZONE
     )
-    callsign = models.CharField(max_length=256, blank=True, null=True)
+    callsign = models.CharField(max_length=256, blank=True, null=True, unique=True)
 
     def __str__(self):
         return self.user.username
