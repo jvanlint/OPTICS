@@ -9,7 +9,7 @@ from django.core import serializers
 from ..models import Mission, Package, Campaign, Aircraft, UserProfile
 from ..forms import MissionForm
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @never_cache
 def mission(request, link_id):
 	mission = Mission.objects.get(id=link_id)
@@ -34,7 +34,7 @@ def mission(request, link_id):
 	return render(request, "mission/mission_detail.html", context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def mission_create(request, link_id):
 	campaign = Campaign.objects.get(id=link_id)
@@ -80,7 +80,7 @@ def mission_create(request, link_id):
 	return render(request, "mission/mission_form.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def mission_update(request, link_id):
 	mission = Mission.objects.get(id=link_id)
@@ -103,7 +103,7 @@ def mission_update(request, link_id):
 	return render(request, "mission/mission_form.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def mission_delete(request, link_id):
 	mission = Mission.objects.get(id=link_id)
@@ -119,7 +119,7 @@ def mission_delete(request, link_id):
 	context = {"item": mission, "returnURL": returnURL}
 	return render(request, "mission/mission_delete.html", context=context)
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 def mission_signup(request, link_id):  # link_id is the mission ID
 	mission = Mission.objects.get(id=link_id)
 	packages = mission.package_set.all()
@@ -148,7 +148,7 @@ def mission_signup(request, link_id):  # link_id is the mission ID
 
 	return render(request, "mission/mission_signup.html", context)
 	
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 def mission_signup_update(request, link_id, seat_id):
 	returnURL = request.GET.get("returnUrl")
 	aircraft = Aircraft.objects.get(pk=link_id)
@@ -162,7 +162,7 @@ def mission_signup_update(request, link_id, seat_id):
 	return HttpResponseRedirect(returnURL)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 def mission_signup_remove(request, link_id, seat_id):
 	returnURL = request.GET.get("returnUrl")
 	aircraft = Aircraft.objects.get(pk=link_id)
@@ -175,7 +175,7 @@ def mission_signup_remove(request, link_id, seat_id):
 
 	return HttpResponseRedirect(returnURL)
 	
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def mission_copy(request, link_id):
 	mission = Mission.objects.get(id=link_id)

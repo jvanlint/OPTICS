@@ -1,5 +1,5 @@
 from django.contrib.auth import views as auth_views
-from django.urls import path
+from django.urls import path, include
 
 from airops import views
 
@@ -7,7 +7,7 @@ urlpatterns = [
     path('', views.campaign, name='index'),
 
     path('campaign/<int:link_id>/', views.campaign_detail, name='campaign'),
-    path('campaign', views.campaign, name='campaign'), 
+    path('campaign', views.campaign, name='campaign'),
     path('campaign_detail/<int:link_id>/', views.campaign_detail, name='campaign_detail'),
     path('campaign/add', views.campaign_create, name='campaign_add'),
     path('campaign/update/<int:link_id>', views.campaign_update, name='campaign_update'),
@@ -72,33 +72,10 @@ urlpatterns = [
     path('flight_imagery/update/<int:link_id>', views.flight_imagery_update, name='flight_imagery_update'),
     path('flight_imagery/delete/<int:link_id>', views.flight_imagery_delete, name='flight_imagery_delete'),
 
-    path('register', views.register_request, name='register'),
-
-    path('login', views.login_request, name='login'),
-
-    path('logout', views.logout_request, name='logout'),
-
-    path('changepassword', views.change_password, name='changepassword'),
-
-    path('reset_password/', auth_views.PasswordResetView.as_view(template_name='auth/password_reset.html'),
-         name='reset_password'),
-    path('reset_password_sent/',
-         auth_views.PasswordResetDoneView.as_view(template_name='auth/password_reset_sent.html'),
-         name='password_reset_done'),
-    path('reset/<uidb64>/<token>',
-         auth_views.PasswordResetConfirmView.as_view(template_name='auth/password_reset_form.html'),
-         name='password_reset_confirm'),
-    path('reset_password_complete/', auth_views.PasswordResetCompleteView.as_view(
-        template_name='auth/password_reset_done.html'),
-         name='password_reset_complete'),
-
-    path('profile', views.update_profile, name='profile'),
 
 
     path('pdf_view/mission/<int:mission_id>/flight/<int:flight_id>', views.view_mission_card, name='pdf_view'),
-    path('pdf_download/mission/<int:mission_id>/flight/<int:flight_id>', views.download_mission_card,
-         name='pdf_download'),
-
+    path('pdf_download/mission/<int:mission_id>/flight/<int:flight_id>', views.download_mission_card, name='pdf_download'),
 ]
 
 # Campaign URL Patterns - V2
@@ -116,17 +93,11 @@ urlpatterns += [
 urlpatterns += [
     path('v2/mission/<int:link_id>', views.mission_v2, name='mission_v2'),
     path('v2/mission/add/<int:link_id>', views.mission_add_v2, name='mission_add_v2'),
-    path('v2/mission/update/<int:link_id>',
-         views.mission_update_v2, name='mission_update_v2'),
-    path("v2/mission/delete/<int:link_id>", views.mission_delete_v2,
-         name="mission_delete_v2"),
-    path("v2/mission/comment/add", views.mission_add_comment,
-         name="mission_add_comment"),
-     path("v2/mission/comment/delete/<int:link_id>", views.mission_delete_comment,
-          name="mission_delete_comment"),
+    path('v2/mission/update/<int:link_id>', views.mission_update_v2, name='mission_update_v2'),
+    path("v2/mission/delete/<int:link_id>", views.mission_delete_v2, name="mission_delete_v2"),
+    path("v2/mission/comment/add", views.mission_add_comment, name="mission_add_comment"),
     path('mission/add/file', views.mission_file_add, name='mission_file_add'),
-    path("v2/mission/file/delete/<int:link_id>", views.mission_file_delete,
-         name="mission_file_delete"),
+    path("v2/mission/file/delete/<int:link_id>", views.mission_file_delete, name="mission_file_delete"),
 ]
 
 # Package URL Patterns - V2
@@ -161,7 +132,7 @@ urlpatterns += [
 
 # Profile URL Patterns - V2
 urlpatterns += [
-    path("v2/profile/", views.own_profile_view, name="profile_v2"),
+    path("v2/profile/", views.own_profile_view, name="own_profile"),
     path("v2/profile/<int:link_id>", views.user_profile_view, name="user_profile"),
     path("v2/avatar_select", views.select_avatar, name="select_avatar"),
     path("v2/avatar_change", views.change_avatar, name="avatar_change"),

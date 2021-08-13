@@ -1,0 +1,103 @@
+.btn-google {
+    color: #fff;
+    background-color: #b00;
+    border-color: #b00;
+}
+
+@media (hover: hover),
+(-ms-high-contrast: none) {
+    .btn-google:hover {
+        color: #fff;
+        background-color: #950000;
+        border-color: #880000;
+    }
+}
+
+.btn-google:focus,
+.btn-google.focus {
+    color: #fff;
+    background-color: #950000;
+    border-color: #880000;
+    box-shadow: 0 0 0 0.2rem rgba(197, 38, 38, 0.5);
+}
+
+.btn-google.disabled,
+.btn-google:disabled {
+    color: #fff;
+    background-color: #b00;
+    border-color: #b00;
+}
+
+.btn-google:not(:disabled):not(.disabled):active,
+.show>.btn-google.dropdown-toggle {
+    color: #fff;
+    background-color: #880000;
+    border-color: #7b0000;
+}
+
+.btn-google:not(:disabled):not(.disabled):active:focus,
+.show>.btn-google.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem rgba(197, 38, 38, 0.5);
+}
+
+.show>.btn-google.dropdown-toggle {
+    color: #fff;
+    background-color: #880000;
+    border-color: #7b0000;
+}
+
+.show>.btn-google.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem rgba(197, 38, 38, 0.5);
+}
+
+.btn-discord {
+    color: #fff;
+    background-color: #7289DA;
+    border-color: #7289DA;
+}
+
+@media (hover: hover),
+(-ms-high-contrast: none) {
+    .btn-discord:hover {
+        color: #fff;
+        background-color: #3a5eab;
+        border-color: #3a5eab;
+    }
+}
+
+.btn-discord:focus,
+.btn-discord.focus {
+    color: #fff;
+    background-color: #3a5eab;
+    border-color: #3a5eab;
+    box-shadow: 0 0 0 0.2rem rgba(47, 78, 128, 0.5);
+}
+
+.btn-discord.disabled,
+.btn-discord:disabled {
+    color: #fff;
+    background-color: #7289DA;
+    border-color: #7289DA;
+}
+
+.btn-discord:not(:disabled):not(.disabled):active,
+.show>.btn-discord.dropdown-toggle {
+    color: #fff;
+    background-color: #314e80;
+    border-color: #314e80;
+}
+
+.btn-discord:not(:disabled):not(.disabled):active:focus,
+.show>.btn-discord.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem rgba(47, 78, 128, 0.5);
+}
+
+.show>.btn-discord.dropdown-toggle {
+    color: #fff;
+    background-color: #314e80;
+    border-color: #314e80;
+}
+
+.show>.btn-discord.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem rgba(47, 78, 128, 0.5);
+}

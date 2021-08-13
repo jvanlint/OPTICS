@@ -8,7 +8,7 @@ from django.views.decorators.cache import never_cache
 from ..models import Mission, MissionImagery, UserProfile
 from ..forms import MissionImageryForm
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def mission_imagery_create(request, link_id):
 	mission = Mission.objects.get(id=link_id)
@@ -25,7 +25,7 @@ def mission_imagery_create(request, link_id):
 	return render(request, "missionImagery/missionImagery_form.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def mission_imagery_update(request, link_id):
 	imagery = MissionImagery.objects.get(id=link_id)
@@ -45,7 +45,7 @@ def mission_imagery_update(request, link_id):
 	return render(request, "missionImagery/missionImagery_form.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def mission_imagery_delete(request, link_id):
 	imagery = MissionImagery.objects.get(id=link_id)

@@ -15,7 +15,7 @@ from ..forms import MissionForm, MissionFileForm
 # ---------------- Mission -------------------------
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 def mission_v2(request, link_id):
     mission_queryset = Mission.objects.get(id=link_id)
     mission_files_queryset = mission_queryset.missionfile_set.all()
@@ -31,7 +31,7 @@ def mission_v2(request, link_id):
     form = MissionFileForm(initial = {'mission': mission_queryset, 'uploaded_by': request.user.id})
 
     breadcrumbs = {
-        "Home": reverse("campaigns"),
+        "Campaigns": reverse("campaigns"),
         mission_queryset.campaign.name: reverse(
             "campaign_detail_v2", args=(mission_queryset.campaign.id,)
         ),
@@ -56,7 +56,7 @@ def mission_v2(request, link_id):
     return render(request, "v2/mission/mission.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 def mission_add_v2(request, link_id):
     campaign = Campaign.objects.get(id=link_id)
     missionCount = campaign.mission_set.count() + 1
@@ -92,7 +92,7 @@ def mission_add_v2(request, link_id):
     return render(request, "v2/generic/data_entry_form.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 def mission_update_v2(request, link_id):
     mission = Mission.objects.get(id=link_id)
     returnURL = request.GET.get("returnUrl")
@@ -123,7 +123,7 @@ def mission_update_v2(request, link_id):
     return render(request, "v2/generic/data_entry_form.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 def mission_delete_v2(request, link_id):
     mission = Mission.objects.get(id=link_id)
     returnURL = request.GET.get("returnUrl")
@@ -180,7 +180,7 @@ def mission_file_add(request):
     print('fail')
     return HttpResponseRedirect(returnURL)
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 def mission_file_delete(request, link_id):
     mission_file_obj = MissionFile.objects.get(id=link_id)
     returnURL = request.GET.get("returnUrl")

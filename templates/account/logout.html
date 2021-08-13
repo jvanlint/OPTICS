@@ -1,0 +1,22 @@
+{% extends "v2/profile/base_profile.html" %}
+{% block account_block %}
+   {% include "v2/profile/profile_nav.html" with active_tab='logout' %}
+  <div class="row">
+    <div class="col-md-12 mb-3">
+      <div class="card" id="user_info_card">
+        <div class="card-body d-flex flex-column ">
+        <p> 'Are you sure you want to sign out?' </p>
+        <form method="post" action="{% url 'account_logout' %}">
+          {% csrf_token %}
+          {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+          {% endif %}
+         <button class="btn-danger btn " type="submit" name="action_primary">Sign Out
+                  </button>
+
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock account_block %}

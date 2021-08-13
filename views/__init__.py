@@ -20,8 +20,6 @@ from .profilev2 import *
 from .mission_imagery import *
 from .package_imagery import *
 from .flight_imagery import *
-from .user_management import *
-
 from .package_v2 import *
 from .target_v2 import *
 from .threat_v2 import *

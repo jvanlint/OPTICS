@@ -8,7 +8,7 @@ from django.views.decorators.cache import never_cache
 from ..models import Aircraft, Flight, UserProfile
 from ..forms import AircraftForm
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 def aircraft(request, link_id):
 	aircraft = Aircraft.objects.get(id=link_id)
 
@@ -16,7 +16,7 @@ def aircraft(request, link_id):
 	return render(request, "aircraft/aircraft_detail.html", context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def aircraft_create(request, link_id):
 	flight = Flight.objects.get(id=link_id)
@@ -36,7 +36,7 @@ def aircraft_create(request, link_id):
 	return render(request, "aircraft/aircraft_form.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def aircraft_update(request, link_id):
 	aircraft = Aircraft.objects.get(id=link_id)
@@ -59,7 +59,7 @@ def aircraft_update(request, link_id):
 	return render(request, "aircraft/aircraft_form.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def aircraft_delete(request, link_id):
 	aircraft = Aircraft.objects.get(id=link_id)
@@ -73,7 +73,7 @@ def aircraft_delete(request, link_id):
 	return render(request, "aircraft/aircraft_delete.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def aircraft_copy(request, link_id):
 	aircraft = Aircraft.objects.get(id=link_id)

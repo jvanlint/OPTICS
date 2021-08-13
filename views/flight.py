@@ -8,7 +8,7 @@ from django.views.decorators.cache import never_cache
 from ..models import Flight, Package, Target, UserProfile
 from ..forms import FlightForm
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @never_cache
 def flight(request, link_id):
 	flight = Flight.objects.get(id=link_id)
@@ -27,7 +27,7 @@ def flight(request, link_id):
 	return render(request, "flight/flight_detail.html", context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def flight_create(request, link_id):
 	package = Package.objects.get(id=link_id)
@@ -47,7 +47,7 @@ def flight_create(request, link_id):
 	return render(request, "flight/flight_form.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def flight_update(request, link_id):
 	flight = Flight.objects.get(id=link_id)
@@ -71,7 +71,7 @@ def flight_update(request, link_id):
 	return render(request, "flight/flight_form.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def flight_delete(request, link_id):
 	flight = Flight.objects.get(id=link_id)
@@ -85,7 +85,7 @@ def flight_delete(request, link_id):
 	context = {"item": flight, "returnURL": returnURL}
 	return render(request, "flight/flight_delete.html", context=context)
 	
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def flight_copy(request, link_id):
 	flight = Flight.objects.get(id=link_id)

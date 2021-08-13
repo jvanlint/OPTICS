@@ -17,22 +17,20 @@ from .models import (
     Terrain,
     Threat,
     Target,
-    UserProfile,
     WebHook,
-    MissionFile
-)
-from .models import (
+    MissionFile,
     Support,
     Waypoint,
     Task,
     MissionImagery,
     ThreatReference,
+    Squadron,
     UserProfile,
 )
 
 # Define the admin class
 
-admin.site.site_url = '/'
+admin.site.site_url = "/"
 
 
 class CampaignAdmin(admin.ModelAdmin):
@@ -189,7 +187,9 @@ class UserProfileAdmin(admin.ModelAdmin):
         return " ".join(groups)
 
     group.short_description = "Groups"
-    inlines = [UserProfileInline, ]
+    inlines = [
+        UserProfileInline,
+    ]
     list_display = [
         "username",
         "first_name",
@@ -218,21 +218,43 @@ class MissionImageryAdmin(admin.ModelAdmin):
 
 admin.site.register(MissionImagery, MissionImageryAdmin)
 
+
 class MissionFileAdmin(admin.ModelAdmin):
-    list_display = ('mission', 'name', 'mission_file',)
+    list_display = (
+        "mission",
+        "name",
+        "mission_file",
+    )
 
 
 admin.site.register(MissionFile, MissionFileAdmin)
 
 
 class WebHookAdmin(admin.ModelAdmin):
-    list_display = ('service_name', 'url',)
-    ordering = ['-service_name']
+    list_display = (
+        "service_name",
+        "url",
+    )
+    ordering = ["-service_name"]
+
 
 admin.site.register(WebHook, WebHookAdmin)
 
+
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ("user", "callsign", "profile_image", "timezone",)
+    list_display = (
+        "user",
+        "squadron",
+        "profile_image",
+        "timezone",
+    )
 
 
 admin.site.register(UserProfile, UserProfileAdmin)
+
+
+class SquadronAdmin(admin.ModelAdmin):
+    list_display = ("squadron_name", "squadron_url")
+
+
+admin.site.register(Squadron, SquadronAdmin)

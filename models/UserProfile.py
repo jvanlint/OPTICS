@@ -1,20 +1,22 @@
-from django.db import models
-from django.utils import timezone
-from django_resized import ResizedImageField
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.urls import reverse
-from django.contrib.auth.models import User
 from django.conf import settings
+from django.contrib.auth.models import User
+from django.db import models
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
+from django_resized import ResizedImageField
+from django.core.files import File
+import os
+from airops.models import Squadron
 
 
-# Set the user email field to unique
-User._meta.get_field("email")._unique = True
+def user_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user/profile_images/<id>/<filename>
+    return "user/profile_images/{0}/{1}".format(instance.user.id, filename)
 
 
 class UserProfile(models.Model):
     """Profile data about a user.
-    Timezone info stored here
+    Timezone, Profile_image, Squadron info stored here
     https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html#onetoone
     """
 
@@ -28,16 +30,19 @@ class UserProfile(models.Model):
     profile_image = ResizedImageField(
         verbose_name="User profile image.",
         size=[200, 200],
-        upload_to="user/profilepics/",
+        upload_to=user_directory_path,
         help_text="User profile image file.",
-        null=True,
-        blank=True,
+        null=False,
+        blank=False,
         default="assets/img/avatars/pilot1.png",
     )
-    timezone = models.CharField(
-        max_length=256, blank=True, null=True, default=settings.TIME_ZONE
+    timezone = models.CharField(default=settings.TIME_ZONE, max_length=100)
+    squadron = models.ForeignKey(
+        Squadron,
+        on_delete=models.CASCADE,
+        verbose_name="Squadron",
+        null=True,
     )
-    callsign = models.CharField(max_length=256, blank=True, null=True, unique=True)
 
     def __str__(self):
         return self.user.username
@@ -58,6 +63,13 @@ class UserProfile(models.Model):
                 else:
                     return True
 
+    @property  # https://code.djangoproject.com/ticket/13327
+    def image_url(self):
+        if self.profile_image and hasattr(self.profile_image, "url"):
+            return self.profile_image.url
+        else:
+            self.profile_image = "assets/img/avatars/pilot1.png"
+
     class Meta:
         db_table = "user_profile"
 
@@ -71,3 +83,14 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+#
+# @receiver(post_delete, sender=User)
+# def clear_user_profile_picture(sender, instance, deleted, **kwargs):
+#     if deleted:
+#         pass
+#         # TODO: Delete the file after user is removed
+#         # if "avatars" not in UserProfile.image_url:
+#         #     with UserProfile.profile_image as f:
+#         #         picture_file = File(f)
+#         #         picture_file.delete()

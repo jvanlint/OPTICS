@@ -12,17 +12,17 @@
 			</li>
 			{% if user.is_authenticated %} 
 			<li class="nav-item">
-				<a class="nav-link" href="/airops/changepassword">Change Password</a>
+				<a class="nav-link" href="{% url 'account_change_password' %}changepassword">Change Password</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="/airops/profile">Edit Profile</a>
+				<a class="nav-link" href="{% url 'own_profile' %}">Edit Profile</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="/airops/logout">Sign Out</a>
+				<a class="nav-link" href="{% url 'account_logout' %}">Sign Out</a>
 			</li>
 			{% else %}
 			<li class="nav-item">
-				<a class="nav-link" href="/airops/login">Login</a>
+				<a class="nav-link" href="{% url 'account_login' %}">Login</a>
 			</li>
 			{% endif %}
 			{% if request.user|has_group:"admin" %}
@@ -37,7 +37,7 @@
 			<span class="navbar-text"> Hi, {{user.username}} </span>
 			{% else %}
 			<li class="nav-item">
-				<a class="nav-link" href="/airops/login">Login</a>
+				<a class="nav-link" href="{% url 'account_login' %}">Login</a>
 			</li>
 			{% endif %}
 		</ul>

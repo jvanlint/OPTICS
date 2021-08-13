@@ -8,7 +8,7 @@ from django.views.decorators.cache import never_cache
 from ..models import Campaign, UserProfile
 from ..forms import CampaignForm
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 def campaign(request):
 	
 	order_by = request.GET.get("sort")
@@ -26,7 +26,7 @@ def campaign(request):
 	return render(request, "campaign/campaign.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 def campaign_detail(request, link_id):
 	campaign = Campaign.objects.get(id=link_id)
 	missions = campaign.mission_set.all().order_by("number")
@@ -43,7 +43,7 @@ def campaign_detail(request, link_id):
 	return render(request, "campaign/campaign_detail.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def campaign_create(request):
 	form = CampaignForm(initial={"creator": request.user.id})
@@ -59,7 +59,7 @@ def campaign_create(request):
 	return render(request, "campaign/campaign_form.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def campaign_update(request, link_id):
 	campaign = Campaign.objects.get(id=link_id)
@@ -78,7 +78,7 @@ def campaign_update(request, link_id):
 	return render(request, "campaign/campaign_form.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def campaign_delete(request, link_id):
 	campaign = Campaign.objects.get(id=link_id)
