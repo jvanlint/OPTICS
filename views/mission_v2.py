@@ -8,7 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 from django.urls import reverse
 
-from ..models import Campaign, Mission, UserProfile, MissionFile
+from ..models import Campaign, Mission, UserProfile, MissionFile, Comment
 from ..forms import MissionForm, MissionFileForm
 
 
@@ -155,6 +155,15 @@ def mission_add_comment(request):
         mission_object.comments.create(comment=comment, user=request.user)
 
     return HttpResponseRedirect(returnURL)
+
+def mission_delete_comment(request, link_id):
+    comment = Comment.objects.get(id=link_id)
+    returnURL = request.GET.get("returnUrl")
+    
+    comment.delete()
+    
+    return HttpResponseRedirect(returnURL)
+    
 
 def mission_file_add(request):
     # if this is a POST request we need to process the form data

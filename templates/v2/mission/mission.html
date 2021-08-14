@@ -251,6 +251,14 @@
 											<strong class="d-block text-gray-dark"><a href="{% url 'user_profile' comment.user.id %}" class="text-decoration-none text-reset">{{ comment.user.username}}</a></strong>
 											
 											{{ comment.comment|urlize }}
+											{% if comment.user.username == user.username %}
+											<br>
+											<a id="comment_{{comment.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the comment will be deleted." data-buttontext="Delete" href="{% url 'mission_delete_comment' comment.id %}?returnUrl={{request.path}}">
+												<svg class="c-icon">
+													<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+												</svg>
+											</a>
+											{% endif %}
 											<p class="small">{{ comment.date_created | timesince}} ago.</p>
 										</p>
 								</div>

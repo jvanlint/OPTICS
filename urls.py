@@ -114,6 +114,8 @@ urlpatterns += [
          name="mission_delete_v2"),
     path("v2/mission/comment/add", views.mission_add_comment,
          name="mission_add_comment"),
+     path("v2/mission/comment/delete/<int:link_id>", views.mission_delete_comment,
+          name="mission_delete_comment"),
     path('mission/add/file', views.mission_file_add, name='mission_file_add'),
     path("v2/mission/file/delete/<int:link_id>", views.mission_file_delete,
          name="mission_file_delete"),
