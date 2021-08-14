@@ -79,7 +79,8 @@ def mission_add_v2(request, link_id):
             tmp = form.save(commit=False)
             tmp.creator = request.user
             tmp.save()
-            tmp.create_discord_event(image_url, request)
+            if tmp.notify_discord:
+                tmp.create_discord_event(image_url, request)
             return HttpResponseRedirect(returnURL)
 
     context = {
@@ -110,7 +111,7 @@ def mission_update_v2(request, link_id):
         if form.is_valid():
             saved_obj = form.save(commit=True)
             if saved_obj.notify_discord:
-                mission.create_discord_event(image_url, request)
+                saved_obj.create_discord_event(image_url, request)
             return HttpResponseRedirect(returnURL)
 
     context = {
@@ -133,7 +134,9 @@ def mission_delete_v2(request, link_id):
     if mission_files:
         for file in mission_files:
             os.remove(os.path.join(settings.MEDIA_ROOT, str(file.mission_file)))
-
+    
+    if mission.discord_msg_id:
+        mission.delete_discord_event()
     mission.delete()
 
     return HttpResponseRedirect(returnURL)
