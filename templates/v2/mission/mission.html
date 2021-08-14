@@ -86,7 +86,13 @@
 						<div class="card-header">
 							<h6 class="text-muted">Mission</h6>
 							<h2>{{mission_object.name}}</h2>
-							<h6 class="text-muted">Actual Date-Time</h6>
+							<h6 class="text-muted">Actual Date-Time
+								{% if mission_object.notify_discord %} 
+								<svg class="c-icon">
+									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/brand.svg#cib-discord"></use>
+								</svg> 
+								{% endif %}
+							</h6>
 							<h5>{{ mission_object.mission_date }} ({{ mission_object.mission_date|timeuntil }} from now)</h5>
 							<h6 class="text-muted">In Game Date-Time</h6>
 							<h5>{{ mission_object.mission_game_date }} - {{ mission_object.mission_game_time }}</h5>
