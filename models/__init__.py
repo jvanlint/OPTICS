@@ -18,3 +18,5 @@ from .UserProfile import *
 from .MissionFile import *
 from .CombatFliteFile import *
 from .WebHook import *
+from .FlightImagery import *
+from .PackageImagery import *
