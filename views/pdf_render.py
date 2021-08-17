@@ -22,7 +22,7 @@ def generate_pdf(request,mission_id, flight_id):
     flight = Flight.objects.get(id=flight_id)
     packages = mission.package_set.all()
     aircraft = flight.aircraft_set.all().order_by("-flight_lead")
-    waypoints = flight.waypoint_set.all()
+    waypoints = flight.waypoint_set.all().order_by('number')
     supports = mission.support_set.all()
     targets = flight.targets.all()
     threats = mission.threat_set.all()
