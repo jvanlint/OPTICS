@@ -63,6 +63,10 @@ urlpatterns = [
     path('mission_imagery/add/<int:link_id>', views.mission_imagery_create, name='mission_imagery_add'),
     path('mission_imagery/update/<int:link_id>', views.mission_imagery_update, name='mission_imagery_update'),
     path('mission_imagery/delete/<int:link_id>', views.mission_imagery_delete, name='mission_imagery_delete'),
+    
+    path('package_imagery/add/<int:link_id>', views.package_imagery_create, name='package_imagery_add'),
+    path('package_imagery/update/<int:link_id>', views.package_imagery_update, name='package_imagery_update'),
+    path('package_imagery/delete/<int:link_id>', views.package_imagery_delete, name='package_imagery_delete'),
 
     path('register', views.register_request, name='register'),
 

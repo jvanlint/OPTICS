@@ -21,6 +21,8 @@ from airops.models import (
     Support,
     Waypoint,
     MissionImagery,
+    PackageImagery,
+    FlightImagery,
     UserProfile,
     MissionFile,
 )
@@ -172,7 +174,18 @@ class MissionImageryForm(ModelForm):
     class Meta:
         model = MissionImagery
         fields = "__all__"
+        
+class PackageImageryForm(ModelForm):
+    # specify the name of model to use
+    class Meta:
+        model = PackageImagery
+        fields = "__all__"
 
+class FlightImageryForm(ModelForm):
+    # specify the name of model to use
+    class Meta:
+        model = FlightImagery
+        fields = "__all__"
 
 class NewUserForm(UserCreationForm):
 

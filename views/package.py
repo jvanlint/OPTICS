@@ -13,8 +13,13 @@ from ..forms import PackageForm
 def package(request, link_id):
 	package = Package.objects.get(id=link_id)
 	flights = package.flight_set.all()
+	imagery = package.packageimagery_set.all()
 
-	context = {"package_Object": package, "flight_Object": flights}
+	context = {
+		"package_Object": package, 
+		"flight_Object": flights,
+		"imagery_object": imagery
+	}
 	return render(request, "package/package_detail.html", context)
 
 
