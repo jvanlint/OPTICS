@@ -15,12 +15,14 @@ def flight(request, link_id):
 	aircraft = flight.aircraft_set.all().order_by("-flight_lead", "type", "pilot")
 	waypoints = flight.waypoint_set.all().order_by("number")
 	targets = flight.targets.all()
+	imagery = flight.flightimagery_set.all()
 
 	context = {
 		"flight_Object": flight,
 		"aircraft_Object": aircraft,
 		"waypoint_Object": waypoints,
 		"target_Object": targets,
+		"imagery_object": imagery
 	}
 	return render(request, "flight/flight_detail.html", context)
 

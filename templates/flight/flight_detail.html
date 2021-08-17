@@ -188,6 +188,39 @@
 			</tbody>
 		</table>
 	</div>
+	
+	<hr>
+	
+	<h2>Flight Imagery
+		 <a href="{% url 'flight_imagery_add' flight_Object.id %}?returnUrl={{request.path}}" role="button">
+			<button type="button" class="btn btn-sm btn-success float-right"><i class="bi bi-plus"></i> Add Image</button>
+		</a>
+	</h2>
+
+	<div class="row">
+		{% if imagery_object %} 
+			{% for imagery in imagery_object %}
+				<div class="col">
+					<figure class="figure">
+						<a href="{{ imagery.image.url }}" add target="_blank"><img src="{{ imagery.image.url }}" class="figure-img img-fluid rounded" alt="{{imagery.caption}}" /></a>
+						<figcaption class="figure-caption">
+							{{ imagery.caption }} <a style="padding-left: 25px" href="{% url 'flight_imagery_update' imagery.id %}?returnUrl={{request.path}}" role="button"><i class="bi bi-pencil"></i> </a>
+							<a style="padding-left: 25px" href="{% url 'flight_imagery_delete' imagery.id %}?returnUrl={{request.path}}" role="button"><i class="bi bi-trash"></i></a>
+						</figcaption>
+					</figure>
+				</div>
+				{% if forloop.counter|divisibleby:3 %}
+					</div>
+					<div class="row">
+				{% endif %}
+			 {% endfor %} 
+		 {% else %}
+			<div class="col">
+				<h5>No imagery available.</h5>
+			</div>
+		{% endif %}
+	</div>
+	
 </div>
 
 {% endblock %}

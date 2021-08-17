@@ -67,6 +67,10 @@ urlpatterns = [
     path('package_imagery/add/<int:link_id>', views.package_imagery_create, name='package_imagery_add'),
     path('package_imagery/update/<int:link_id>', views.package_imagery_update, name='package_imagery_update'),
     path('package_imagery/delete/<int:link_id>', views.package_imagery_delete, name='package_imagery_delete'),
+    
+    path('flight_imagery/add/<int:link_id>', views.flight_imagery_create, name='flight_imagery_add'),
+    path('flight_imagery/update/<int:link_id>', views.flight_imagery_update, name='flight_imagery_update'),
+    path('flight_imagery/delete/<int:link_id>', views.flight_imagery_delete, name='flight_imagery_delete'),
 
     path('register', views.register_request, name='register'),
 
