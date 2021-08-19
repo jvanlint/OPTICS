@@ -171,18 +171,31 @@ class WaypointForm(ModelForm):
 
 
 class MissionImageryForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(MissionImageryForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({"class": "form-control"})
+            
     # specify the name of model to use
     class Meta:
         model = MissionImagery
         fields = "__all__"
         
 class PackageImageryForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(PackageImageryForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({"class": "form-control"})
     # specify the name of model to use
     class Meta:
         model = PackageImagery
         fields = "__all__"
 
 class FlightImageryForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(FlightImageryForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({"class": "form-control"})
     # specify the name of model to use
     class Meta:
         model = FlightImagery

@@ -8,11 +8,12 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 from django.urls import reverse
 
-from ..models import Campaign, Mission, UserProfile, MissionFile, Comment
-from ..forms import MissionForm, MissionFileForm
+from ..models import Campaign, Mission, MissionImagery, UserProfile, MissionFile, Comment
+from ..forms import MissionForm, MissionFileForm, MissionImageryForm
 
 
 # ---------------- Mission -------------------------
+
 
 
 @login_required(login_url="account_login")
@@ -141,6 +142,7 @@ def mission_delete_v2(request, link_id):
 
     return HttpResponseRedirect(returnURL)
 
+# ---------------- Mission Comments -------------------------
 
 def mission_add_comment(request):
     # if this is a POST request we need to process the form data
@@ -164,6 +166,7 @@ def mission_delete_comment(request, link_id):
     
     return HttpResponseRedirect(returnURL)
     
+# ---------------- Mission File -------------------------
 
 def mission_file_add(request):
     # if this is a POST request we need to process the form data
@@ -191,4 +194,65 @@ def mission_file_delete(request, link_id):
 
     mission_file_obj.delete()
 
+    return HttpResponseRedirect(returnURL)
+
+# ---------------- Mission Imagery -------------------------
+    
+@login_required(login_url="login")
+def mission_imagery_create_v2(request, link_id):
+    mission = Mission.objects.get(id=link_id)
+    returnURL = request.GET.get("returnUrl")
+
+    form = MissionImageryForm(initial={"mission": mission})
+    form_title = "Mission Image"
+
+    if request.method == "POST":
+        form = MissionImageryForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save(commit=True)
+            return HttpResponseRedirect(returnURL)
+
+    context = {
+        "form": form,
+        "form_title": form_title,
+        "link": link_id,
+        "returnURL": returnURL,
+    }
+    return render(request, 'v2/generic/data_entry_form.html', context=context)
+
+
+@login_required(login_url="login")
+def mission_imagery_update_v2(request, link_id):
+    imagery = MissionImagery.objects.get(id=link_id)
+    returnURL = request.GET.get("returnUrl")
+
+    form_title = "Mission Image"
+    form = MissionImageryForm(instance=imagery)
+
+    if request.method == "POST":
+        form = MissionImageryForm(request.POST, request.FILES, instance=imagery)
+        print(request.path)
+        if form.is_valid():
+            form.save(commit=True)
+            return HttpResponseRedirect(returnURL)
+
+    context = {
+        "form": form,
+        "form_title": form_title,
+        "link": link_id,
+        "returnURL": returnURL,
+    }
+    return render(request, 'v2/generic/data_entry_form.html', context=context)
+
+
+@login_required(login_url="login")
+def mission_imagery_delete_v2(request, link_id):
+    imagery = MissionImagery.objects.get(id=link_id)
+    returnURL = request.GET.get("returnUrl")
+    
+    # Check to see if an AO Image exists.
+    if imagery:
+        os.remove(os.path.join(settings.MEDIA_ROOT, str(imagery.image)))
+        
+    imagery.delete()
     return HttpResponseRedirect(returnURL)

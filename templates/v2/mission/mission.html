@@ -570,8 +570,18 @@
 									<figure class="figure">
 										<a href="{{ imagery.image.url }}" add target="_blank"><img src="{{ imagery.image.url }}" class="figure-img img-fluid rounded" alt="{{imagery.caption}}" /></a>
 										<figcaption class="figure-caption">
-											{{ imagery.caption }} <br><a  href="#" role="button"><img src="{% static 'assets/icons/trash.svg' %}"/> </a>
-											<a href="#" role="button"><img src="{% static 'assets/icons/pencil.svg' %}"/></a>
+											{{ imagery.caption }}
+											<br>
+											<a id="imagery{{imagery.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the image will be deleted." data-buttontext="Delete" href="{% url 'mission_imagery_delete_v2' imagery.id %}?returnUrl={{request.path}}" role="button">
+												<svg class="c-icon">
+													<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+												</svg>
+											</a>
+											<a href="{% url 'mission_imagery_update_v2' imagery.id %}?returnUrl={{request.path}}" role="button">
+												<svg class="c-icon">
+													<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
+												</svg>
+											</a>
 										</figcaption>
 									</figure>
 								</div>
@@ -583,7 +593,7 @@
 						</div>
 						<div class="card-footer">
 						<h6>
-							<a href="{% url 'support_add_v2' mission_object.id %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
+							<a href="{% url 'mission_imagery_add_v2' mission_object.id %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
 								<svg class="c-icon">
 									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
 								</svg>
