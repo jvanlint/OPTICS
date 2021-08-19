@@ -1,16 +1,15 @@
-{% extends "layouts/base.html" %} {% load static%}{% block title %} Avatar Selection {% endblock %}
-
-<!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %} {% block content %}
-
-<main class="c-main">
-	<div class="container-fluid">
+{% extends "v2/profile/base_profile.html" %}
+{% block account_block %}
+  {% load static %}
+   {% include "v2/profile/profile_nav.html" with active_tab='avatar' %}
+      <div class="col-md-12 mb-3">
+	<div class="card-deck">
 		<div class="fade-in">
 			<div class="row">
 					{% for file in files %}
-					<div class="col-lg-3">		
+					<div class="col-lg-3 mb-5">
 						<div class="card">
-							<div class="card-header">{{file}}</div>
+{#							<div class="card-header">{{file}}</div>#}
 							<div class="card-body">
 								<div class="d-flex flex-column align-items-center text-center">
 									<img src="{% static file %}" alt="Admin" class="rounded-circle" width="150"/></p>
@@ -20,14 +19,11 @@
 								</div>
 							</div>
 						</div>
-					</div>		
-					{% endfor %}	
+					</div>
+					{% endfor %}
 			</div>
 		</div>
 	</div>
-</main>
+  </div>
+{% endblock account_block %}
 
-{% endblock content %}
-
-<!-- Specific Page JS goes HERE  -->
-{% block javascripts %}{% endblock javascripts %}

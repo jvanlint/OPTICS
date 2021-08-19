@@ -14,6 +14,7 @@ from .Task import *
 from .MissionImagery import *
 from .Threat import *
 from .ThreatReference import *
+from .Squadron import *
 from .UserProfile import *
 from .MissionFile import *
 from .CombatFliteFile import *

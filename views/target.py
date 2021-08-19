@@ -8,7 +8,7 @@ from django.views.decorators.cache import never_cache
 from ..models import Target, Mission, UserProfile
 from ..forms import TargetForm
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def target_create(request, link_id):
 	mission = Mission.objects.get(id=link_id)
@@ -25,7 +25,7 @@ def target_create(request, link_id):
 	return render(request, "target/target_form.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def target_update(request, link_id):
 	target = Target.objects.get(id=link_id)
@@ -45,7 +45,7 @@ def target_update(request, link_id):
 	return render(request, "target/target_form.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def target_delete(request, link_id):
 	target = Target.objects.get(id=link_id)
@@ -59,7 +59,7 @@ def target_delete(request, link_id):
 	return render(request, "target/target_delete.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def target_copy(request, link_id):
 	target = Target.objects.get(id=link_id)

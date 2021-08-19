@@ -1,0 +1,96 @@
+{% extends "layouts/../v2/base.html" %} {% load static%}{% block title %} Profile {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
+
+<main class="c-main">
+	<div class="container-fluid">
+		<div class="main-body">
+			<div class="row">
+				<div class="col-md-2 mb-3">
+					<div class="card">
+						<div class="card-body">
+							<div class="d-flex flex-column align-items-center text-center">
+								<img src="{% static profile_object.profile.profile_image %}" alt="Admin" class="rounded-circle" width="150" />
+								<div class="mt-3">
+									<h4>{{profile_object.username}}</h4>
+									<p class="text-dark mb-1">{% if profile_object.is_superuser %} superuser {% endif %}</p>
+									{% for group in user.groups.all %}
+									<p class="text-dark mb-1">{{ group }}</p>
+									{% endfor %}
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card">
+						<div class="card-body">
+							<div class="row">
+								<div class="col">
+									<h6 class="mb-0">Date Joined</h6>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col text-dark">{{profile_object.date_joined}}</div>
+							</div>
+							<hr />
+							<div class="row">
+								<div class="col">
+									<h6 class="mb-0">Last Login</h6>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col text-dark">{{profile_object.last_login}} <br />({{profile_object.last_login|timesince}} ago)</div>
+							</div>
+							<hr />
+						</div>
+					</div>
+				</div>
+				<div class="col-md-10">
+					<div class="card mb-3">
+						<!-- Start comment-->
+						<div class="card-header">Discussions</div>
+						<div class="card-body">
+							<div class="row">
+								<table class="table table-responsive-sm table-striped">
+									<thead>
+										<tr>
+											<th>Comment</th>
+											<th>Content Type</th>
+											<th>Name</th>
+											<th>Object</th>
+											<th>Date</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% for comment in comments %}
+										<tr>
+											<td>{{comment.comment}}</td>
+											<td>{{ comment.content_type.model}}</td>
+											<td>{{ comment.content_object}}</td>
+											{% if "campaign" in comment.content_type.name %}
+											<td><a href="{% url 'campaign_detail' comment.object_id%}">Link</a></td>
+
+											{% else %}
+											<td>{{ comment.content_object}} / {{comment.content_type.name}}</td>
+											{% endif %}
+
+											<td>{{ comment.date_created }}</td>
+										</tr>
+
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<!-- End comment-->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

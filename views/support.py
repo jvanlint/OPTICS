@@ -8,7 +8,7 @@ from django.views.decorators.cache import never_cache
 from ..models import Support, Mission, UserProfile
 from ..forms import SupportForm
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def support_create(request, link_id):
 	mission = Mission.objects.get(id=link_id)
@@ -25,7 +25,7 @@ def support_create(request, link_id):
 	return render(request, "support/support_form.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def support_update(request, link_id):
 	support = Support.objects.get(id=link_id)
@@ -45,7 +45,7 @@ def support_update(request, link_id):
 	return render(request, "support/support_form.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def support_delete(request, link_id):
 	support = Support.objects.get(id=link_id)
@@ -59,7 +59,7 @@ def support_delete(request, link_id):
 	return render(request, "support/support_delete.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def support_copy(request, link_id):
 	support = Support.objects.get(id=link_id)

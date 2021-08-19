@@ -25,6 +25,7 @@ from airops.models import (
     FlightImagery,
     UserProfile,
     MissionFile,
+    Squadron,
 )
 
 
@@ -234,8 +235,8 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = (
-            "callsign",
             "timezone",
+            "squadron",
         )
 
 
@@ -257,3 +258,24 @@ class UserForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
+
+class SignupForm(forms.ModelForm):  # Called by Allauth (see settings.py)
+    timezone = forms.ChoiceField(
+        required=True,
+        choices=utils.get_timezones(),
+        initial=settings.TIME_ZONE,
+    )
+
+    class Meta:
+        model = UserProfile
+        fields = (
+            "squadron",
+            "timezone",
+        )
+
+    def signup(self, request, user):  # Called by Allauth (see settings.py)
+        user.profile.squadron = Squadron.objects.get(pk=request.POST["squadron"])
+
+        user.profile.timezone = request.POST["timezone"]
+        user.save()

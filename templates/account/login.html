@@ -1,0 +1,64 @@
+{% extends "v2/base_fullscreen.html" %} {% block title %} Login {% endblock %}
+{% load static %}{% load crispy_forms_tags %}
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+  <link rel="stylesheet" href="{% static 'assets/vendors/@coreui/icons/css/free.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/vendors/@coreui/icons/css/brand.min.css' %}">
+{% endblock stylesheets %}
+{% block content %}
+{#{% include 'v2/includes/messages.html' %}#}
+  <body class="c-app flex-row align-items-center">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-7">
+        <div class="card mx-4">
+
+          <form class="login" id="account_login" method="post" action="{% url 'account_login' %}">
+            {% csrf_token %}
+            <div class="card-body p-4">
+              <div class="text-center">
+                <h1>Welcome to OPTICS</h1>
+              <h5>Operations Planning Tactical Information & Communications Site</h5>
+              </div>
+
+              <p>
+                The easiest way to sign in to OPTICS is via one of your existing third party
+                accounts.
+              </p>
+              <p> Or you can
+                <a href="{{ signup_url }}">sign up</a> for an account using a username/password
+              </p>
+              <p> If you have forgotten your password, you can <a href="{% url 'account_reset_password' %}">reset</a> it.</p>
+
+
+              <form method="POST" action="{% url 'account_login' %}" >
+                {% csrf_token %}
+                {{ form|crispy }}
+                <input class="btn btn-block btn-success" type="submit" name="action" value="Login"/>
+              </form>
+            </div>
+            <div class="card-footer d-flex p-4 justify-content-center">
+
+              <div class="row">
+                {% load account socialaccount %} {% get_providers as socialaccount_providers %}
+                {% if socialaccount_providers %}
+                  <div class="socialaccount_ballot">
+                    <p class="socialaccount_providers align-items-center">
+                      {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+                    </p>
+                  </div>
+
+                  {% include "socialaccount/snippets/login_extra.html" %} {% else %} {% endif %}
+              </div>
+            </div>
+            {% if redirect_field_value %}
+              <input type="hidden" name="{{ redirect_field_name }}"
+                     value="{{ redirect_field_value }}"/> {% endif %}
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock content %}

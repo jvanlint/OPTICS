@@ -8,7 +8,7 @@ from django.views.decorators.cache import never_cache
 from ..models import Package, Mission, UserProfile
 from ..forms import PackageForm
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @never_cache
 def package(request, link_id):
 	package = Package.objects.get(id=link_id)
@@ -23,7 +23,7 @@ def package(request, link_id):
 	return render(request, "package/package_detail.html", context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def package_create(request, link_id):
 	mission = Mission.objects.get(id=link_id)
@@ -40,7 +40,7 @@ def package_create(request, link_id):
 	return render(request, "package/package_form.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def package_update(request, link_id):
 	package = Package.objects.get(id=link_id)
@@ -60,7 +60,7 @@ def package_update(request, link_id):
 	return render(request, "package/package_form.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def package_delete(request, link_id):
 	package = Package.objects.get(id=link_id)
@@ -74,7 +74,7 @@ def package_delete(request, link_id):
 	context = {"item": package, "returnURL": returnURL}
 	return render(request, "package/package_delete.html", context=context)
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def package_copy(request, link_id):
 	package = Package.objects.get(id=link_id)

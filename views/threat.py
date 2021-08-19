@@ -8,7 +8,7 @@ from django.views.decorators.cache import never_cache
 from ..models import Threat, Mission, UserProfile
 from ..forms import ThreatForm
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def threat_create(request, link_id):
 	mission = Mission.objects.get(id=link_id)
@@ -25,7 +25,7 @@ def threat_create(request, link_id):
 	return render(request, "threat/threat_form.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def threat_update(request, link_id):
 	threat = Threat.objects.get(id=link_id)
@@ -45,7 +45,7 @@ def threat_update(request, link_id):
 	return render(request, "threat/threat_form.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def threat_delete(request, link_id):
 	threat = Threat.objects.get(id=link_id)
@@ -59,7 +59,7 @@ def threat_delete(request, link_id):
 	return render(request, "threat/threat_delete.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def threat_copy(request, link_id):
 	threat = Threat.objects.get(id=link_id)

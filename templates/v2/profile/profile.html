@@ -1,120 +1,19 @@
-{% extends "layouts/base.html" %} {% load static%}{% block title %} Profile {% endblock %}
+{% extends "v2/profile/base_profile.html" %}
+{% load crispy_forms_tags %}
 
-<!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %} {% block content %}
-
-<main class="c-main">
-	<div class="container-fluid">
-		<div class="main-body">
-			<div class="row">
-				<div class="col-md-2 mb-3">
-					<div class="card">
-						<div class="card-body">
-							<div class="d-flex flex-column align-items-center text-center">
-								<a href="{% url 'select_avatar' %}"><img src="{% static user.profile.profile_image %}" alt="Admin" class="rounded-circle" width="150" /></a>
-								<div class="mt-3">
-									<h4>{{user.username}}</h4>
-									<p class="text-dark mb-1">{% if user.is_superuser %} superuser {% endif %}</p>
-									{% for group in user.groups.all %}
-									<p class="text-dark mb-1">{{ group }}</p>
-									{% endfor %}
-									<a href="{% url 'change_password_v2' %}"><button class="btn btn-outline-primary">Change Password</button></a>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="card">
-						<div class="card-body">
-							<div class="row">
-								<div class="col-sm-3">
-									<h6 class="mb-0">First Name</h6>
-								</div>
-								<div class="col-sm-9 text-dark">{{user.first_name}}</div>
-							</div>
-							<hr />
-							<div class="row">
-								<div class="col-sm-3">
-									<h6 class="mb-0">Last Name</h6>
-								</div>
-								<div class="col-sm-9 text-dark">{{user.last_name}}</div>
-							</div>
-							<hr />
-							<div class="row">
-								<div class="col-sm-3">
-									<h6 class="mb-0">Email</h6>
-								</div>
-								<div class="col-sm-9 text-dark">{{user.email}}</div>
-							</div>
-							<hr />
-							<div class="row">
-								<div class="col-sm-3">
-									<h6 class="mb-0">Date Joined</h6>
-								</div>
-								<div class="col-sm-9 text-dark">{{user.date_joined}}</div>
-							</div>
-							<hr />
-							<div class="row">
-								<div class="col-sm-3">
-									<h6 class="mb-0">Last Login</h6>
-								</div>
-								<div class="col-sm-9 text-dark">{{user.last_login}} <br />({{user.last_login|timesince}} ago)</div>
-							</div>
-							<hr />
-							<div class="row">
-								<div class="col-sm-12">
-									<a class="btn btn-sm btn-info" href="#">Edit</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-10">
-					<div class="card mb-3">
-						<!-- Start comment-->
-						<div class="card-header">Discussions</div>
-						<div class="card-body">
-							<div class="row">
-								<table class="table table-responsive-sm table-striped">
-									<thead>
-										<tr>
-											<th>Comment</th>
-											<th>Content Type</th>
-											<th>Name</th>
-											<th>Object</th>
-											<th>Date</th>
-										</tr>
-									</thead>
-									<tbody>
-										{% for comment in comments %}
-										<tr>
-											<td>{{comment.comment}}</td>
-											<td>{{ comment.content_type.model}}</td>
-											<td>{{ comment.content_object}}</td>
-											{% if "campaign" in comment.content_type.name %}
-											<td><a href="{% url 'campaign_detail' comment.object_id%}">Link</a></td>
-
-											{% else %}
-											<td>{{ comment.content_object}} / {{comment.content_type.name}}</td>
-											
-											{% endif %}
-
-											<td>{{ comment.date_created }}</td>
-										</tr>
-
-										{% endfor %}
-									</tbody>
-								</table>
-							</div>
-						</div>
-						<!-- End comment-->
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</main>
-
-{% endblock content %}
-
-<!-- Specific Page JS goes HERE  -->
-{% block javascripts %}{% endblock javascripts %}
+{% block account_block %}
+  {% include "v2/profile/profile_nav.html" with active_tab='profile' %}
+  <div class="row">
+    <div class="col-md-12 mb-3">
+      <div class="card" id="user_info_card">
+        <div class="card-body d-flex flex-column ">
+          <form method="POST">
+            {% csrf_token %}
+            {{ profile_form|crispy }}
+            <button class="btn btn-primary" type="submit">Update</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock account_block %}

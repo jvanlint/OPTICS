@@ -8,59 +8,61 @@ from django.views.decorators.cache import never_cache
 from ..models import Waypoint, Flight, UserProfile
 from ..forms import WaypointForm
 
-@login_required(login_url="login")
+
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def waypoint_create(request, link_id):
-	flight = Flight.objects.get(id=link_id)
+    flight = Flight.objects.get(id=link_id)
 
-	form = WaypointForm(initial={"flight": flight})
+    form = WaypointForm(initial={"flight": flight})
 
-	if request.method == "POST":
-		form = WaypointForm(request.POST, request.FILES)
-		if form.is_valid():
-			form.save(commit=True)
-			return HttpResponseRedirect("/airops/flight/" + str(link_id))
+    if request.method == "POST":
+        form = WaypointForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save(commit=True)
+            return HttpResponseRedirect("/airops/flight/" + str(link_id))
 
-	context = {"form": form, "link": link_id}
-	return render(request, "waypoint/waypoint_form.html", context=context)
+    context = {"form": form, "link": link_id}
+    return render(request, "waypoint/waypoint_form.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def waypoint_update(request, link_id):
-	waypoint = Waypoint.objects.get(id=link_id)
-	flightID = waypoint.flight.id
-	form = WaypointForm(instance=waypoint)
+    waypoint = Waypoint.objects.get(id=link_id)
+    flightID = waypoint.flight.id
+    form = WaypointForm(instance=waypoint)
 
-	if request.method == "POST":
-		form = WaypointForm(request.POST, request.FILES, instance=waypoint)
-		print(request.path)
-		if form.is_valid():
-			form.save(commit=True)
-			print("Form Saved!")
-			return HttpResponseRedirect("/airops/flight/" + str(flightID))
+    if request.method == "POST":
+        form = WaypointForm(request.POST, request.FILES, instance=waypoint)
+        print(request.path)
+        if form.is_valid():
+            form.save(commit=True)
+            print("Form Saved!")
+            return HttpResponseRedirect("/airops/flight/" + str(flightID))
 
-	context = {"form": form, "link": flightID}
-	return render(request, "waypoint/waypoint_form.html", context=context)
+    context = {"form": form, "link": flightID}
+    return render(request, "waypoint/waypoint_form.html", context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def waypoint_delete(request, link_id):
-	waypoint = Waypoint.objects.get(id=link_id)
-	flightID = waypoint.flight.id
+    waypoint = Waypoint.objects.get(id=link_id)
+    flightID = waypoint.flight.id
 
-	if request.method == "POST":
-		waypoint.delete()
-		return HttpResponseRedirect("/airops/flight/" + str(flightID))
+    if request.method == "POST":
+        waypoint.delete()
+        return HttpResponseRedirect("/airops/flight/" + str(flightID))
 
-	context = {"item": waypoint}
-	return render(request, "waypoint/waypoint_delete.html", context=context)
-	
-@login_required(login_url="login")
+    context = {"item": waypoint}
+    return render(request, "waypoint/waypoint_delete.html", context=context)
+
+
+@login_required(login_url="account_login")
 @allowed_users(allowed_roles=["admin", "planner", "player"])
 def waypoint_copy(request, link_id):
-	waypoint = Waypoint.objects.get(id=link_id)
-	flightID = waypoint.copy()
+    waypoint = Waypoint.objects.get(id=link_id)
+    flightID = waypoint.copy()
 
-	return HttpResponseRedirect("/airops/flight/" + str(flightID))
+    return HttpResponseRedirect("/airops/flight/" + str(flightID))

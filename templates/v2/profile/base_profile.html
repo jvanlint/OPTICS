@@ -1,0 +1,61 @@
+{% extends "v2/base.html" %} {% load static %} {% block title %} Profile {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+{% block content %}
+  <main class="c-main">
+    <div class="container-fluid">
+      <div class="main-body">
+        <div class=" mb-3">
+          <div class="card d-flex flex-column " id="user_info_card">
+            <div class="card-body  ">
+              <div class="row justify-content-between">
+                <div class="col-3  text-center align-self-center ">
+                  <div class="c-avatar">
+                    <a href="{% url 'select_avatar' %}">
+                      <img src="{{ user.profile.image_url }}" alt="change" class="align-items-end rounded-circle"/>
+                    </a>
+                  </div>
+                </div>
+                <div class="col-3 align-self-center">
+                  <h4>{{ user.username }}</h4>
+                  <p class="text-dark mb-1">{% if user.is_superuser %} superuser {% endif %}</p>
+                  {% for group in user.groups.all %}
+                    <p class="text-dark mb-1">{{ group }}</p>
+                  {% endfor %}
+                </div>
+                <div class="col-6 align-self-end ">
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Primary Email</h6>
+                    </div>
+                    <div class="col-sm-9 text-dark">{{ user.email }}</div>
+                  </div>
+                  <hr/>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Date Joined</h6>
+                    </div>
+                    <div class="col-sm-9 text-dark">{{ user.date_joined }}</div>
+                  </div>
+                  <hr/>
+                  <div class="row align-self-end">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Last Login</h6>
+                    </div>
+                    <div class="col-sm-9 text-dark">{{ user.last_login }} <br/>({{ user.last_login|timesince }} ago)
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% block account_block %}
+          {% endblock account_block %}
+        </div>
+      </div>
+    </div>
+  </main>
+{% endblock content %}
+{% block javascripts %}
+{% endblock javascripts %}

@@ -1,0 +1,43 @@
+{% load user_tags %}
+<div class="col-md-12 card" id="nav-card">
+    <div class="card-body d-flex flex-column ">
+   <ul class="nav nav-pills">
+        <li class="nav-item">
+          <a class="nav-link {% if active_tab == 'profile' %} active{% endif %}"
+             href="{% url 'own_profile' %}">Profile</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if active_tab == 'email' %} active{% endif %}"
+             href="{% url 'account_email' %}">Email</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if active_tab == 'change_password' %} active{% endif %}"
+             href="{% url 'account_change_password' %}">Change Password</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if active_tab == 'reset_password' %} active{% endif %}"
+             href="{% url 'account_reset_password' %}">Reset Password</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if active_tab == 'social' %} active{% endif %}"
+             href="{% url 'socialaccount_connections' %}">Social Accounts</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if active_tab == 'avatar' %} active{% endif %}"
+             href="{% url 'select_avatar' %}">Change Avatar</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if active_tab == 'logout' %} active{% endif %}"
+             href="{% url 'account_logout' %}">Logout</a>
+        </li>
+        {% if request.user|has_group:"admin" %}
+          <li class="nav-item">
+            <a class="nav-link {% if active_tab == 'admin' %} active{% endif %}"
+            href="/admin">Admin</a>
+          </li>
+        {% endif %}
+      </ul>
+
+    </div>
+  </div>
+
