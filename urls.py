@@ -120,13 +120,19 @@ urlpatterns += [
          views.mission_update_v2, name='mission_update_v2'),
     path("v2/mission/delete/<int:link_id>", views.mission_delete_v2,
          name="mission_delete_v2"),
+         
     path("v2/mission/comment/add", views.mission_add_comment,
          name="mission_add_comment"),
      path("v2/mission/comment/delete/<int:link_id>", views.mission_delete_comment,
           name="mission_delete_comment"),
+          
     path('mission/add/file', views.mission_file_add, name='mission_file_add'),
     path("v2/mission/file/delete/<int:link_id>", views.mission_file_delete,
          name="mission_file_delete"),
+         
+    path('mission/add/image/<int:link_id>', views.mission_imagery_create_v2, name='mission_imagery_add_v2'),
+    path('mission/update/image/<int:link_id>', views.mission_imagery_update_v2, name='mission_imagery_update_v2'),
+    path('mission/delete/image/<int:link_id>', views.mission_imagery_delete_v2, name='mission_imagery_delete_v2'),
 ]
 
 # Package URL Patterns - V2
