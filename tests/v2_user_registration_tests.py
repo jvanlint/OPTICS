@@ -97,7 +97,7 @@ def test_redirects_to_correct_page_on_successful_signup(client, valid_squadron):
         "password1": "TheRightStuff!",
         "password2": "TheRightStuff!",
         "timezone": "US/Arizona",
-        "squadron": 1,
+        "squadron": 2,
     }
     response = client.post(url, data=valid_user)
     assertRedirects(response, reverse(settings.ACCOUNT_SIGNUP_REDIRECT_URL))
@@ -110,7 +110,7 @@ def test_valid_signup_creates_valid_user(client, valid_squadron):
         "password1": "TheRightStuff!",
         "password2": "TheRightStuff!",
         "timezone": "US/Arizona",
-        "squadron": 1,
+        "squadron": 3,
     }
     response = client.post(url, data=valid_signup)
     assert response.status_code == 302

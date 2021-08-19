@@ -1,11 +1,9 @@
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django_resized import ResizedImageField
-from django.core.files import File
-import os
 from airops.models import Squadron
 
 
@@ -30,7 +28,7 @@ class UserProfile(models.Model):
     profile_image = ResizedImageField(
         verbose_name="User profile image.",
         size=[200, 200],
-        upload_to=user_directory_path,
+        upload_to=f"user/profile_images/{User.pk}/",
         help_text="User profile image file.",
         null=False,
         blank=False,
@@ -39,9 +37,10 @@ class UserProfile(models.Model):
     timezone = models.CharField(default=settings.TIME_ZONE, max_length=100)
     squadron = models.ForeignKey(
         Squadron,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         verbose_name="Squadron",
-        null=True,
+        null=False,
+        default=Squadron.objects.get(pk=1),
     )
 
     def __str__(self):
