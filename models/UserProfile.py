@@ -7,11 +7,6 @@ from django_resized import ResizedImageField
 from airops.models import Squadron
 
 
-def user_directory_path(instance, filename):
-    # file will be uploaded to MEDIA_ROOT/user/profile_images/<id>/<filename>
-    return "user/profile_images/{0}/{1}".format(instance.user.id, filename)
-
-
 class UserProfile(models.Model):
     """Profile data about a user.
     Timezone, Profile_image, Squadron info stored here
@@ -65,6 +60,7 @@ class UserProfile(models.Model):
     @property  # https://code.djangoproject.com/ticket/13327
     def image_url(self):
         if self.profile_image and hasattr(self.profile_image, "url"):
+            self.profile_image.storage.base_url = settings.STATIC_URL
             return self.profile_image.url
         else:
             self.profile_image = "assets/img/avatars/pilot1.png"
@@ -82,6 +78,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
 
 #
 # @receiver(post_delete, sender=User)
