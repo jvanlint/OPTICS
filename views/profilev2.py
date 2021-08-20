@@ -53,7 +53,7 @@ def change_avatar(request):
 
     context = {"comments": comments}
 
-    return render(request, 'v2/profile/profile.html', context=context)
+    return render(request, "v2/profile/avatar_selection.html", context=context)
 
 
 @login_required(login_url="account_login")
@@ -70,4 +70,3 @@ def user_profile_view(request, link_id):
         "breadcrumbs": breadcrumbs,
     }
     return render(request, "v2/profile/user_profile.html", context=context)
-
