@@ -40,7 +40,7 @@ class UserProfile(models.Model):
         on_delete=models.PROTECT,
         verbose_name="Squadron",
         null=False,
-        #default=Squadron.objects.get(pk=1),
+        default=Squadron.objects.get(pk=1),
     )
 
     def __str__(self):
