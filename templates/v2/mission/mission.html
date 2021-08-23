@@ -95,7 +95,7 @@
 							</h6>
 							<h5>{{ mission_object.mission_date }} ({{ mission_object.mission_date|timeuntil }} from now)</h5>
 							<h6 class="text-muted">In Game Date-Time</h6>
-							<h5>{{ mission_object.mission_game_date }} - {{ mission_object.mission_game_time }}</h5>
+							<h5>{{ mission_object.mission_game_date|date:"DATE_FORMAT" }} - {{ mission_object.mission_game_time }}</h5>
 							<div class="media text-muted pt-3">
 								<div class="c-avatar"><img class="c-avatar-img" src="{{ user.profile.profile_image.url}}" alt="" /></div>
 								<p class="media-body pb-3 pl-2 mb-0  lh-125">
