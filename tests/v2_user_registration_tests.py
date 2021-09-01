@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate
 from django.db.utils import IntegrityError
 from django.urls import reverse
 from factoryman import create_populated_modelfactory
+from django.contrib.auth.models import User
 
 # https://medium.com/insightfulsolutions/elegant-and-dry-test-data-creation-for-django-be68373c69d4
 from pytest_django.asserts import (
@@ -15,16 +16,16 @@ from pytest_django.asserts import (
     assertFormError,
 )
 
-from airops.models import UserProfile, Squadron
+from airops.models import UserProfile, Campaign
 from model_bakery import (
     baker,
 )  # https://model-bakery.readthedocs.io/en/latest/index.html
+# Model-bakery _was_ model-mommy
 
-url = reverse("account_signup")
 
-SquadronFactory = create_populated_modelfactory(Squadron)
-pytestmark = pytest.mark.django_db
 
+UserFactory = create_populated_modelfactory(User)
+CampaignFactory = create_populated_modelfactory(Campaign, creator=UserFactory())
 
 @pytest.fixture
 def valid_squadron():

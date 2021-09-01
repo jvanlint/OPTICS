@@ -29,9 +29,8 @@ def create_user(db, django_user_model, test_password):
         kwargs["password"] = test_password
         if "username" not in kwargs:
             kwargs["username"] = str(uuid.uuid4())
-        user =django_user_model.objects.create_user(**kwargs)
+        user = django_user_model.objects.create_user(**kwargs)
         return user
-
 
     return make_user
 
@@ -57,6 +56,7 @@ def test_correct_template_shown(auto_login_user):
     response = client.get(url)
     assert response.status_code == 200
     assertTemplateUsed(response, "v2/profile/profile.html")
+
 
 @pytest.mark.skip
 def test_correct_forms_shown(client):
