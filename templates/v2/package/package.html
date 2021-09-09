@@ -77,7 +77,7 @@
 							</div>
 						</div>
 						<div class="card-footer">
-							{% if user.userprofile.isAdmin %} 
+							{% if package_object.creator.username == user.username or isAdmin == True %}
 								<button class="btn-sm btn-primary dropdown-toggle float-right" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
 							{% else %}
 								<button class="btn-sm btn-primary dropdown-toggle float-right" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled="">
@@ -88,13 +88,13 @@
 								&nbspPackage
 							</button>
 							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-								<a class="dropdown-item" href="#">
+								<a class="dropdown-item" href="{% url 'package_update_v2' package_object.id %}?returnUrl={{request.path}}">
 									<svg class="c-icon">
 										<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
 									</svg>
 									&nbspEdit
 								</a>
-								<a class="dropdown-item" id="generate_{{mission_object.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the {{ mission_object.name }} mission will be deleted." data-buttontext="Delete" href="#">
+								<a class="dropdown-item" id="generate_{{package_object.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the {{ package_object.name }} mission will be deleted." data-buttontext="Delete" href="{% url 'package_delete_v2' package_object.id %}?returnUrl={% url 'mission_v2' package_object.mission.id  %}">
 									<svg class="c-icon">
 										<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
 									</svg>
@@ -155,13 +155,13 @@
 								<table class="table table-striped">
 									<thead>
 										<tr>
-											<th>Callsign</th>
-											<th>Tasks</th>
-											<th>Radio</th>
-											<th>Tacan</th>
-											<th>A/C Type</th>
-											<th># A/C </th>
-											<th>Action</th>
+											<th style="width: 20%">Callsign</th>
+											<th style="width: 20%">Task</th>
+											<th style="width: 10%">Radio</th>
+											<th style="width: 10%">Tacan</th>
+											<th style="width: 20%">A/C Type</th>
+											<th style="width: 5%">#A/C</th>
+											<th style="width: 5%">Action</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -172,8 +172,8 @@
 											<td>{{ flight.task }}</td>
 											<td>{{ flight.radio_frequency }}</td>
 											<td>{{ flight.tacan }}</td>
-											<td>{{ flight.radio_frequency }}</td>
-											<td>{{ flight.radio_frequency }}</td>
+											<td>{{ flight.aircraft_set.first.type  }}</td>
+											<td>{{ flight.aircraft_set.count }}</td>
 											<td>
 												<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 													<svg class="c-icon">

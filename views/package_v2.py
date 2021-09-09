@@ -4,19 +4,21 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 import requests
 
-from ..models import Package, Mission
+from ..models import Package, Mission, UserProfile
 from ..forms import PackageForm
 
 @login_required(login_url='login')
 def package_v2(request, link_id):
 	package = Package.objects.get(id=link_id)
 	flights = package.flight_set.all()
+	user_profile = UserProfile.objects.get(user=request.user)
 	
 	breadcrumbs = {'Home': reverse('campaigns'),  package.mission.campaign.name: reverse('campaign_detail_v2', args=(package.mission.campaign.id,)), package.mission.name: reverse('mission_v2', args=(package.mission.id,)), package.name:''}
  
 	context = {
 			   'package_object': package,
 			   'flight_object': flights,
+			   "isAdmin": user_profile.is_admin(),
 			   'breadcrumbs': breadcrumbs,
 			   }
 

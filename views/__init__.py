@@ -1,6 +1,6 @@
 from .aircraft import *
 
-from .campaignv2 import *
+from .campaign_v2 import *
 from .campaign import *
 
 from .flight import *
