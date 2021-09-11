@@ -21,7 +21,8 @@ class Squadron(models.Model):
     @classmethod
     def get_default_pk(cls):
         squadron, created = cls.objects.get_or_create(
-            title='default Squadron', defaults=dict(description='this is not a squadron'))
+            pk=1, defaults=dict(squadron_name="None")
+        )
         return squadron.pk
 
     class Meta:
