@@ -1,3 +1,5 @@
+import uuid
+
 import pytest
 from allauth.account.forms import SignupForm
 from allauth.utils import get_user_model
@@ -16,16 +18,20 @@ from pytest_django.asserts import (
     assertFormError,
 )
 
-from airops.models import UserProfile, Campaign
+from airops.models import UserProfile, Campaign, Squadron
 from model_bakery import (
     baker,
 )  # https://model-bakery.readthedocs.io/en/latest/index.html
+
 # Model-bakery _was_ model-mommy
 
 
+# UserFactory = create_populated_modelfactory(User)
+# CampaignFactory = create_populated_modelfactory(Campaign, creator=UserFactory())
 
-UserFactory = create_populated_modelfactory(User)
-CampaignFactory = create_populated_modelfactory(Campaign, creator=UserFactory())
+
+url = reverse("account_signup")
+
 
 @pytest.fixture
 def valid_squadron():
@@ -64,13 +70,13 @@ def auto_login_user(db, client, create_user, test_password):
     return make_auto_login
 
 
-def test_correct_template_shown(client):
+def test_correct_template_shown(db, client):
     response = client.get(url)
     assert response.status_code == 200
     assertTemplateUsed(response, "account/signup.html")
 
 
-def test_correct_form_fields_shown():
+def test_correct_form_fields_shown(db):
     form = SignupForm()
     assert "username" in form.fields
     assert "email" in form.fields
@@ -86,25 +92,37 @@ def test_correct_default_timezone_shown(db, client):
     assert str(response.content).find(correct_selection)
 
 
-def test_csrf_is_present(client):
+def test_csrf_is_present(db, client):
     assertContains(client.get(url), "csrfmiddlewaretoken")
 
 
-def test_redirects_to_correct_page_on_successful_signup(client, valid_squadron):
-    sq_ = valid_squadron
+def test_redirects_to_correct_page_on_successful_signup(db, client, valid_squadron):
+    squadron= valid_squadron
     valid_user = {
         "username": "ChuckYeager",  # Note: Spaces in username is NOT allowed
         "email": "Chuck@NACA.gov.us",
         "password1": "TheRightStuff!",
         "password2": "TheRightStuff!",
         "timezone": "US/Arizona",
-        "squadron": 2,
+        "squadron": squadron.id,
+    }
+    response = client.post(url, data=valid_user)
+    assertRedirects(response, reverse(settings.ACCOUNT_SIGNUP_REDIRECT_URL))
+
+def test_signup_works_with_empty_squadron(db, client):
+    valid_user = {
+        "username": "ChuckYeager",  # Note: Spaces in username is NOT allowed
+        "email": "Chuck@NACA.gov.us",
+        "password1": "TheRightStuff!",
+        "password2": "TheRightStuff!",
+        "timezone": "US/Arizona",
+        "squadron":  1,
     }
     response = client.post(url, data=valid_user)
     assertRedirects(response, reverse(settings.ACCOUNT_SIGNUP_REDIRECT_URL))
 
 
-def test_valid_signup_creates_valid_user(client, valid_squadron):
+def test_valid_signup_creates_valid_user(db, client, valid_squadron):
     valid_signup = {
         "username": "Yeager",
         "email": "Chuck@NACA.gov.us",
