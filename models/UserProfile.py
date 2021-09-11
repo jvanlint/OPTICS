@@ -39,8 +39,9 @@ class UserProfile(models.Model):
         Squadron,
         on_delete=models.PROTECT,
         verbose_name="Squadron",
-        null=False,
-        default=Squadron.objects.get(pk=1),
+        null=True,
+        default=Squadron.get_default_pk,
+        blank=False,
     )
 
     def __str__(self):
@@ -82,6 +83,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
 
 #
 # @receiver(post_delete, sender=User)
