@@ -18,5 +18,11 @@ class Squadron(models.Model):
     def __str__(self):
         return self.squadron_name
 
+    @classmethod
+    def get_default_pk(cls):
+        squadron, created = cls.objects.get_or_create(
+            title='default Squadron', defaults=dict(description='this is not a squadron'))
+        return squadron.pk
+
     class Meta:
         db_table = "user_squadron"
