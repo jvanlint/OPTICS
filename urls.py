@@ -5,6 +5,8 @@ from airops import views
 
 urlpatterns = [
     path('', views.campaign, name='index'),
+    
+    path('dashboard/', views.mission_dashboard, name='mission_dashboard'),
 
     path('campaign/<int:link_id>/', views.campaign_detail, name='campaign'),
     path('campaign', views.campaign, name='campaign'),

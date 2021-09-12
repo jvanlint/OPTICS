@@ -24,3 +24,4 @@ from .package_v2 import *
 from .target_v2 import *
 from .threat_v2 import *
 from .support_v2 import *
+from .dashboard import *
