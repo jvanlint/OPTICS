@@ -153,6 +153,8 @@ urlpatterns += [
     path("v2/avatar_change", views.change_avatar, name="avatar_change"),
 ]
 
+
+
 # Commments URL Patterns - V2
 urlpatterns += [
     path('v2/campaign/comment/add', views.campaign_add_comment, name='campaign_add_comment'),
