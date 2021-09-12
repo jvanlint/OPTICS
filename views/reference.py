@@ -6,7 +6,7 @@ from django.utils import timezone
 
 from django.urls import reverse
 
-from ..models import  Terrain, Status, 
+from ..models import  Terrain, Status
 #  FlightTask, SupportType, WaypointType, ThreatType
 #from .forms import FlightTaskForm, SupportTypeForm, TerrainForm, StatusForm, WaypointTypeForm, ThreatTypeForm
 
