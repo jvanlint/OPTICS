@@ -1,0 +1,425 @@
+{% extends "v2/base.html" %} {% block title %} Campaign Stats {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
+
+<main class="c-main">
+	<div class="container-fluid">
+		<div class="fade-in">
+			<div class="row">
+				<div class="col-sm-6 col-lg-3">
+					<div class="card text-white bg-gradient-primary">
+						<div class="card-body card-body pb-0 d-flex justify-content-between align-items-start">
+							<div>
+								<div class="text-value-lg">22</div>
+								<div>A/A Targets Destroyed</div>
+							</div>
+							<div class="btn-group">
+								<button class="btn btn-transparent dropdown-toggle p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<svg class="c-icon">
+										<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
+									</svg>
+								</button>
+								<div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>
+							</div>
+						</div>
+						<div class="c-chart-wrapper mt-3 mx-3" style="height: 70px">
+							<canvas class="chart" id="card-chart1" height="70"></canvas>
+						</div>
+					</div>
+				</div>
+				<!-- /.col-->
+				<div class="col-sm-6 col-lg-3">
+					<div class="card text-white bg-gradient-info">
+						<div class="card-body card-body pb-0 d-flex justify-content-between align-items-start">
+							<div>
+								<div class="text-value-lg">124</div>
+								<div>A/G Targets Destroyed</div>
+							</div>
+							<div class="btn-group">
+								<button class="btn btn-transparent dropdown-toggle p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<svg class="c-icon">
+										<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
+									</svg>
+								</button>
+								<div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>
+							</div>
+						</div>
+						<div class="c-chart-wrapper mt-3 mx-3" style="height: 70px">
+							<canvas class="chart" id="card-chart2" height="70"></canvas>
+						</div>
+					</div>
+				</div>
+				<!-- /.col-->
+				<div class="col-sm-6 col-lg-3">
+					<div class="card text-white bg-gradient-warning">
+						<div class="card-body card-body pb-0 d-flex justify-content-between align-items-start">
+							<div>
+								<div class="text-value-lg">4</div>
+								<div>Deaths</div>
+							</div>
+							<div class="btn-group">
+								<button class="btn btn-transparent dropdown-toggle p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<svg class="c-icon">
+										<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
+									</svg>
+								</button>
+								<div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>
+							</div>
+						</div>
+						<div class="c-chart-wrapper mt-3" style="height: 70px">
+							<canvas class="chart" id="card-chart3" height="70"></canvas>
+						</div>
+					</div>
+				</div>
+				<!-- /.col-->
+				<div class="col-sm-6 col-lg-3">
+					<div class="card text-white bg-gradient-danger">
+						<div class="card-body card-body pb-0 d-flex justify-content-between align-items-start">
+							<div>
+								<div class="text-value-lg">2</div>
+								<div>Ejections</div>
+							</div>
+							<div class="btn-group">
+								<button class="btn btn-transparent dropdown-toggle p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<svg class="c-icon">
+										<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
+									</svg>
+								</button>
+								<div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>
+							</div>
+						</div>
+						<div class="c-chart-wrapper mt-3 mx-3" style="height: 70px">
+							<canvas class="chart" id="card-chart4" height="70"></canvas>
+						</div>
+					</div>
+				</div>
+				<!-- /.col-->
+			</div>
+			<!-- /.row-->
+			<div class="row">
+				<div class="col-sm-6 col-lg-3">
+					<div class="card text-white bg-gradient-primary">
+						<div class="card-body card-body pb-0 d-flex justify-content-between align-items-start">
+							<div>
+								<div class="text-value-lg">72%</div>
+								<div>A/A Kill Ratio</div>
+							</div>
+							<div class="btn-group">
+								<button class="btn btn-transparent dropdown-toggle p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<svg class="c-icon">
+										<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
+									</svg>
+								</button>
+								<div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>
+							</div>
+						</div>
+						<div class="c-chart-wrapper mt-3 mx-3" style="height: 70px">
+							<canvas class="chart" id="card-chart1" height="70"></canvas>
+						</div>
+					</div>
+				</div>
+				<!-- /.col-->
+				<div class="col-sm-6 col-lg-3">
+					<div class="card text-white bg-gradient-info">
+						<div class="card-body card-body pb-0 d-flex justify-content-between align-items-start">
+							<div>
+								<div class="text-value-lg">85%</div>
+								<div>A/G Kill Ratio</div>
+							</div>
+							<div class="btn-group">
+								<button class="btn btn-transparent dropdown-toggle p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<svg class="c-icon">
+										<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
+									</svg>
+								</button>
+								<div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>
+							</div>
+						</div>
+						<div class="c-chart-wrapper mt-3 mx-3" style="height: 70px">
+							<canvas class="chart" id="card-chart2" height="70"></canvas>
+						</div>
+					</div>
+				</div>
+				<!-- /.col-->
+				<div class="col-sm-6 col-lg-3">
+					<div class="card text-white bg-gradient-warning">
+						<div class="card-body card-body pb-0 d-flex justify-content-between align-items-start">
+							<div>
+								<div class="text-value-lg">6</div>
+								<div>Pilot Deaths</div>
+							</div>
+							<div class="btn-group">
+								<button class="btn btn-transparent dropdown-toggle p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<svg class="c-icon">
+										<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
+									</svg>
+								</button>
+								<div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>
+							</div>
+						</div>
+						<div class="c-chart-wrapper mt-3" style="height: 70px">
+							<canvas class="chart" id="card-chart3" height="70"></canvas>
+						</div>
+					</div>
+				</div>
+				<!-- /.col-->
+				<div class="col-sm-6 col-lg-3">
+					<div class="card text-white bg-gradient-danger">
+						<div class="card-body card-body pb-0 d-flex justify-content-between align-items-start">
+							<div>
+								<div class="text-value-lg">2</div>
+								<div>Pilot Ejections</div>
+							</div>
+							<div class="btn-group">
+								<button class="btn btn-transparent dropdown-toggle p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<svg class="c-icon">
+										<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
+									</svg>
+								</button>
+								<div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>
+							</div>
+						</div>
+						<div class="c-chart-wrapper mt-3 mx-3" style="height: 70px">
+							<canvas class="chart" id="card-chart4" height="70"></canvas>
+						</div>
+					</div>
+				</div>
+				<!-- /.col-->
+			</div>
+			<!-- /.row-->
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="card">
+						<div class="card-header"><i class="fa fa-align-justify"></i> Weapons Stats</div>
+						<div class="card-body">
+							<table class="table table-responsive-sm table-striped">
+								<thead>
+									<tr>
+										<th>Type</th>
+										<th>Name</th>
+										<th># Fired</th>
+										<th>Hits</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Missile</td>
+										<td>AGM-88</td>
+										<td>4</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td>Missile</td>
+										<td>AIM-120</td>
+										<td>20</td>
+										<td>17</td>
+									</tr>
+									<tr>
+										<td>Bomb</td>
+										<td>GBU-38</td>
+										<td>19</td>
+										<td>18</td>
+									</tr>
+									<tr>
+										<td>Bomb</td>
+										<td>MK-82</td>
+										<td>32</td>
+										<td>28</td>
+									</tr>
+									<tr>
+										<td>Missile</td>
+										<td>AIM-9X</td>
+										<td>2</td>
+										<td>2</td>
+									</tr>
+								</tbody>
+							</table>
+							<ul class="pagination">
+								<li class="page-item"><a class="page-link" href="#">Prev</a></li>
+								<li class="page-item active"><a class="page-link" href="#">1</a></li>
+								<li class="page-item"><a class="page-link" href="#">2</a></li>
+								<li class="page-item"><a class="page-link" href="#">3</a></li>
+								<li class="page-item"><a class="page-link" href="#">4</a></li>
+								<li class="page-item"><a class="page-link" href="#">Next</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- /.col-->
+				<div class="col-lg-6">
+					<div class="card">
+						<div class="card-header"><i class="fa fa-align-justify"></i>Airframes</div>
+						<div class="card-body">
+							<table class="table table-responsive-sm table-striped">
+								<thead>
+									<tr>
+										<th>Type</th>
+										<th>Name</th>
+										<th>Campaign Total</th>
+										<th>Current Inventory</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Fighter/Attack</td>
+										<td>F-16C Falcon</td>
+										<td>12</td>
+										<td>11</td>
+									</tr>
+									<tr>
+										<td>Fighter/Attack</td>
+										<td>F-18C Hornet</td>
+										<td>12</td>
+										<td>11</td>
+									</tr>
+									<tr>
+										<td>Attack</td>
+										<td>AV-8B Harrier</td>
+										<td>6</td>
+										<td>5</td>
+									</tr>
+									<tr>
+										<td>Attack</td>
+										<td>A-10C Lightning II</td>
+										<td>6</td>
+										<td>6</td>
+									</tr>
+									<tr>
+										<td>Helo</td>
+										<td>UH-1H Huey</td>
+										<td>6</td>
+										<td>6</td>
+									</tr>
+								</tbody>
+							</table>
+							<ul class="pagination">
+								<li class="page-item"><a class="page-link" href="#">Prev</a></li>
+								<li class="page-item active"><a class="page-link" href="#">1</a></li>
+								<li class="page-item"><a class="page-link" href="#">2</a></li>
+								<li class="page-item"><a class="page-link" href="#">3</a></li>
+								<li class="page-item"><a class="page-link" href="#">4</a></li>
+								<li class="page-item"><a class="page-link" href="#">Next</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- /.col-->
+			</div>
+			<!-- /.row-->
+			<!-- /.row-->
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="card">
+						<div class="card-header"><i class="fa fa-align-justify"></i> A/G Target Summary</div>
+						<div class="card-body">
+							<table class="table table-responsive-sm table-striped">
+								<thead>
+									<tr>
+										<th>Type</th>
+										<th>Name</th>
+										<th># Destroyed</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Car</td>
+										<td>UAZ</td>
+										<td>10</td>
+									</tr>
+									<tr>
+										<td>Infantry</td>
+										<td>SA-18</td>
+										<td>10</td>
+									</tr>
+									<tr>
+										<td>Infantry</td>
+										<td>Soldier</td>
+										<td>10</td>
+									</tr>
+									<tr>
+										<td>Car</td>
+										<td>BRDM</td>
+										<td>10</td>
+									</tr>
+									<tr>
+										<td>Tank</td>
+										<td>T-72</td>
+										<td>10</td>
+									</tr>
+								</tbody>
+							</table>
+							<ul class="pagination">
+								<li class="page-item"><a class="page-link" href="#">Prev</a></li>
+								<li class="page-item active"><a class="page-link" href="#">1</a></li>
+								<li class="page-item"><a class="page-link" href="#">2</a></li>
+								<li class="page-item"><a class="page-link" href="#">3</a></li>
+								<li class="page-item"><a class="page-link" href="#">4</a></li>
+								<li class="page-item"><a class="page-link" href="#">Next</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- /.col-->
+				<div class="col-lg-6">
+					<div class="card">
+						<div class="card-header"><i class="fa fa-align-justify"></i>A/A Target Summary</div>
+						<div class="card-body">
+							<table class="table table-responsive-sm table-striped">
+								<thead>
+									<tr>
+										<th>Type</th>
+										<th>Name</th>
+										<th># Destroyed</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Fighter</td>
+										<td>MIG-29</td>
+										<td>6</td>
+									</tr>
+									<tr>
+										<td>Fighter</td>
+										<td>MIG021</td>
+										<td>3</td>
+									</tr>
+									<tr>
+										<td>Attack</td>
+										<td>SU-25</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td>Helo</td>
+										<td>KA-50</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td>Support</td>
+										<td>>Awacs</td>
+										<td>1</td>
+									</tr>
+								</tbody>
+							</table>
+							<ul class="pagination">
+								<li class="page-item"><a class="page-link" href="#">Prev</a></li>
+								<li class="page-item active"><a class="page-link" href="#">1</a></li>
+								<li class="page-item"><a class="page-link" href="#">2</a></li>
+								<li class="page-item"><a class="page-link" href="#">3</a></li>
+								<li class="page-item"><a class="page-link" href="#">4</a></li>
+								<li class="page-item"><a class="page-link" href="#">Next</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- /.col-->
+			</div>
+			<!-- /.row-->
+		</div>
+	</div>
+</main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
