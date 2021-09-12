@@ -26,6 +26,12 @@ from airops.models import (
     UserProfile,
     MissionFile,
     Squadron,
+    Terrain,
+    Status,
+    WaypointType,
+    SupportType,
+    FlightTask,
+    ThreatType
 )
 
 
@@ -200,6 +206,96 @@ class FlightImageryForm(ModelForm):
     class Meta:
         model = FlightImagery
         fields = "__all__"
+
+class TerrainForm(ModelForm):
+
+    class Meta:
+        model = Terrain
+        fields = ('name',)
+        widgets = {
+            'name': forms.TextInput(
+                attrs={
+                    "placeholder": "DCS terrain name.", 
+                    "class": "form-control",
+                    "autofocus": "autofocus"
+                    }
+                ),
+        }
+
+class StatusForm(ModelForm):
+
+    class Meta:
+        model = Status
+        fields = ('name',)
+        widgets = {
+            'name': forms.TextInput(
+                attrs={
+                    "placeholder": "Campaign status.", 
+                    "class": "form-control",
+                    "autofocus": "autofocus"
+                    }
+                ),
+        }
+
+class WaypointTypeForm(ModelForm):
+
+    class Meta:
+        model = WaypointType
+        fields = ('name',)
+        widgets = {
+            'name': forms.TextInput(
+                attrs={
+                    "placeholder": "Waypoint type.", 
+                    "class": "form-control",
+                    "autofocus": "autofocus"
+                    }
+                ),
+        }
+
+class SupportTypeForm(ModelForm):
+
+    class Meta:
+        model = SupportType
+        fields = ('name',)
+        widgets = {
+            'name': forms.TextInput(
+                attrs={
+                    "placeholder": "Support type.", 
+                    "class": "form-control",
+                    "autofocus": "autofocus"
+                    }
+                ),
+        }
+
+class FlightTaskForm(ModelForm):
+
+    class Meta:
+        model = FlightTask
+        fields = ('name',)
+        widgets = {
+            'name': forms.TextInput(
+                attrs={
+                    "placeholder": "Flight task.", 
+                    "class": "form-control",
+                    "autofocus": "autofocus"
+                    }
+                ),
+        }
+        
+class ThreatTypeForm(ModelForm):
+
+    class Meta:
+        model = ThreatType
+        fields = ('name',)
+        widgets = {
+            'name': forms.TextInput(
+                attrs={
+                    "placeholder": "Threat type.", 
+                    "class": "form-control",
+                    "autofocus": "autofocus"
+                    }
+                ),
+        }
 
 class NewUserForm(UserCreationForm):
 

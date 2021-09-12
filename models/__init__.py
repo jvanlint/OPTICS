@@ -21,3 +21,8 @@ from .CombatFliteFile import *
 from .WebHook import *
 from .FlightImagery import *
 from .PackageImagery import *
+
+from .FlightTask import *
+from .WaypointType import *
+from .SupportType import *
+from .ThreatType import *
