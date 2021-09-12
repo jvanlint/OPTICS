@@ -9,6 +9,9 @@ from .mission import *
 from .mission_v2 import *
 
 from .package import *
+from .package_v2 import *
+from .package_imagery import *
+
 from .pdf_render import *
 from .support import *
 from .target import *
@@ -18,10 +21,11 @@ from .comments import *
 from .profile import *
 from .profilev2 import *
 from .mission_imagery import *
-from .package_imagery import *
+
 from .flight_imagery import *
-from .package_v2 import *
+
 from .target_v2 import *
 from .threat_v2 import *
 from .support_v2 import *
-from reference import *
+
+from ref_tables import *
