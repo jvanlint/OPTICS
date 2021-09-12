@@ -9,7 +9,7 @@ from ..forms import SupportForm
 
 @login_required(login_url='login')
 def support_add_v2(request, link_id):
-	mission = Support.objects.get(id=link_id)
+	mission = Mission.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
 
 	form_title = 'Support'

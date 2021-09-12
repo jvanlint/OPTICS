@@ -6,15 +6,15 @@ from django.utils import timezone
 
 from django.urls import reverse
 
-from ..models import  Terrain, Status, FlightTask, SupportType, WaypointType, ThreatType
-from ..forms import  TerrainForm, StatusForm, FlightTaskForm, SupportTypeForm, WaypointTypeForm, ThreatTypeForm
+from ..models import  Terrain, Status, Task, SupportType, WaypointType, ThreatType
+from ..forms import  TerrainForm, StatusForm, TaskForm, SupportTypeForm, WaypointTypeForm, ThreatTypeForm
 
 @login_required(login_url='login')
 def reference_tables(request):
 	terrain = Terrain.objects.order_by('name')
 	status = Status.objects.order_by('name')
 	waypoint_type = WaypointType.objects.order_by('name')
-	flight_task = FlightTask.objects.order_by('name')
+	flight_task = Task.objects.order_by('name')
 	support_type = SupportType.objects.order_by('name')
 	threat_type = ThreatType.objects.order_by('name')
 	breadcrumbs = {'Home': reverse('home'), 'Reference Tables':''}
@@ -38,7 +38,7 @@ def evaluate_reference_object(table, link_id):
 	elif table == 'waypoint_type':
 		return WaypointType
 	elif table == 'flight_task':
-		return FlightTask
+		return Task
 	elif table == 'support_type':
 		return SupportType
 	elif table == 'threat_type':
@@ -52,7 +52,7 @@ def evaluate_reference_form(table):
 	elif table == 'waypoint_type':
 		return WaypointTypeForm
 	elif table == 'flight_task':
-		return FlightTaskForm
+		return TaskForm
 	elif table == 'support_type':
 		return SupportTypeForm
 	elif table == 'threat_type':

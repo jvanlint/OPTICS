@@ -142,6 +142,15 @@ def mission_delete_v2(request, link_id):
 
     return HttpResponseRedirect(returnURL)
 
+@login_required(login_url="account_login")
+def mission_copy_v2(request, link_id):
+    mission = Mission.objects.get(id=link_id)
+    campaignID = mission.copy()
+    
+    returnURL = request.GET.get("returnUrl")
+
+    return HttpResponseRedirect(returnURL)
+
 # ---------------- Mission Comments -------------------------
 
 def mission_add_comment(request):

@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from ..decorators import allowed_users
 from django.views.decorators.cache import never_cache
 
-from ..models import Campaign
+from ..models import Campaign, Comment
 
 def campaign_add_comment(request):
 	# if this is a POST request we need to process the form data
@@ -21,3 +21,11 @@ def campaign_add_comment(request):
 								 user=request.user)
 
 		return HttpResponseRedirect(returnURL)
+
+def campaign_delete_comment(request, link_id):
+	comment = Comment.objects.get(id=link_id)
+	returnURL = request.GET.get("returnUrl")
+	
+	comment.delete()
+	
+	return HttpResponseRedirect(returnURL)

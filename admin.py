@@ -146,7 +146,7 @@ admin.site.register(Threat, ThreatAdmin)
 
 
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ("task_name",)
+    list_display = ("name",)
 
 
 admin.site.register(Task, TaskAdmin)

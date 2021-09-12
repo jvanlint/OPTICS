@@ -30,7 +30,7 @@ from airops.models import (
     Status,
     WaypointType,
     SupportType,
-    FlightTask,
+    Task,
     ThreatType
 )
 
@@ -267,10 +267,10 @@ class SupportTypeForm(ModelForm):
                 ),
         }
 
-class FlightTaskForm(ModelForm):
+class TaskForm(ModelForm):
 
     class Meta:
-        model = FlightTask
+        model = Task
         fields = ('name',)
         widgets = {
             'name': forms.TextInput(
