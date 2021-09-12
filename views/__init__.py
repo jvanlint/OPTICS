@@ -4,6 +4,7 @@ from .campaign_v2 import *
 from .campaign import *
 
 from .flight import *
+from .flight_v2 import *
 
 from .mission import *
 from .mission_v2 import *

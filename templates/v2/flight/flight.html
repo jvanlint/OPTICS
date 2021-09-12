@@ -48,22 +48,22 @@
 				<div class="col-sm-12 col-md-5">
 					<div class="card">
 						<div class="card-header">
-							<h6 class="text-muted">Package</h6>
-							<h2>{{package_object.name}}</h2>
+							<h6 class="text-muted">Flight</h6>
+							<h2>{{flight_object.callsign}}</h2>
 							<div class="media text-muted pt-3">
-								<div class="c-avatar"><img class="c-avatar-img" src="{{ mission_object.creator.profile.profile_image.url }}" alt="" /></div>
+								<div class="c-avatar"><img class="c-avatar-img" src="{{ flight_object.creator.profile.profile_image.url }}" alt="" /></div>
 								<p class="media-body pb-3 pl-2 mb-0  lh-125">
 								<strong class="d-block text-gray-dark">
-									{% if package_object.creator.username %}
-									<a href="{% url 'user_profile' mission_object.creator.id %}" class="text-decoration-none text-reset">{{ mission_object.creator.username }}</a>
+									{% if flight_object.creator.username %}
+									<a href="{% url 'user_profile' mission_object.creator.id %}" class="text-decoration-none text-reset">{{ flight_object.creator.username }}</a>
 									{% endif %}
 								</strong>
-								{{ package_object.date_created }}
+								{{ flight_object.date_created }}
 								</p>
 							</div>
 						</div>
 						<div class="card-body">
-							{{package_object.summary|linebreaks|urlize}}
+							{{flight_object.summary|linebreaks|urlize}}
 							<div class="nav-tabs-boxed">
 								<ul class="nav nav-tabs" role="tablist">
 									
@@ -88,13 +88,13 @@
 								&nbspPackage
 							</button>
 							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-								<a class="dropdown-item" href="{% url 'package_update_v2' package_object.id %}?returnUrl={{request.path}}">
+								<a class="dropdown-item" href="#">
 									<svg class="c-icon">
 										<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
 									</svg>
 									&nbspEdit
 								</a>
-								<a class="dropdown-item" id="generate_{{package_object.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the {{ package_object.name }} mission will be deleted." data-buttontext="Delete" href="{% url 'package_delete_v2' package_object.id %}?returnUrl={% url 'mission_v2' package_object.mission.id  %}">
+								<a class="dropdown-item" id="generate_{{package_object.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the {{ package_object.name }} mission will be deleted." data-buttontext="Delete" href="#">
 									<svg class="c-icon">
 										<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
 									</svg>
@@ -111,7 +111,7 @@
 							Comments <span class="badge badge-pill badge-info ml-auto">{{comments.count}}</span>
 						</div>
 						<div class="card-body">
-								<form action="{% url 'package_add_comment' %}?package_id={{package_object.id}}&returnUrl={{request.path}}" method="post">
+								<form action="#" method="post">
 									{% csrf_token %}
 									<div class="d-flex flex-row align-items-start">
 										<img class="rounded-circle" src="{{user.profile.profile_image.url}}" width="40">
@@ -133,7 +133,7 @@
 											{{ comment.comment|urlize }}
 											{% if comment.user.username == user.username %}
 											<br>
-											<a id="comment_{{comment.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the comment will be deleted." data-buttontext="Delete" href="{% url 'package_delete_comment' comment.id %}?returnUrl={{request.path}}">
+											<a id="comment_{{comment.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the comment will be deleted." data-buttontext="Delete" href="#">
 												<svg class="c-icon">
 													<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
 												</svg>
@@ -155,7 +155,7 @@
 
 					<!-- .card -->
 					<div class="card">
-						<div class="card-header">Flight{{ flight_object|pluralize }} <span class="badge badge-pill badge-info ml-auto">{{ flight_object.count }}</span></div>
+						<div class="card-header">Aircraft{{ aircraft_object|pluralize }} <span class="badge badge-pill badge-info ml-auto">{{ aircraft_object.count }}</span></div>
 						<div class="card-body">
 							<div class="table-responsive">
 								<table class="table table-striped">
@@ -171,15 +171,15 @@
 										</tr>
 									</thead>
 									<tbody>
-										{% if flight_object %} 
-										{% for flight in flight_object %}
+										{% if aircraft_object %} 
+										{% for aircraft in aircraft_object %}
 										<tr>
-											<td><a href="{% url 'flight_v2' flight.id %}">{{ flight.callsign }}</a></td>
-											<td>{{ flight.task }}</td>
-											<td>{{ flight.radio_frequency }}</td>
-											<td>{{ flight.tacan }}</td>
-											<td>{{ flight.aircraft_set.first.type  }}</td>
-											<td>{{ flight.aircraft_set.count }}</td>
+											<td><a href="#">{{ flight.callsign }}</a></td>
+											<td>{{ aircraft.callsign }}</td>
+											<td>{{ aircraft.radio_frequency }}</td>
+											<td>{{ aircraft.tacan }}</td>
+											<td>{{ aircraft.aircraft_set.first.type  }}</td>
+											<td>{{ aircraft.aircraft_set.count }}</td>
 											<td>
 												<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 													<svg class="c-icon">
@@ -227,7 +227,79 @@
 					
 					<!-- .card -->
 					<div class="card">
-						<div class="card-header">Package Image{{ imagery_object|pluralize }} <span class="badge badge-pill badge-info ml-auto">{{ imagery_object.count }}</span></div>
+						<div class="card-header">Waypoint{{ aircraft_object|pluralize }} <span class="badge badge-pill badge-info ml-auto">{{ aircraft_object.count }}</span></div>
+						<div class="card-body">
+							<div class="table-responsive">
+								<table class="table table-striped">
+									<thead>
+										<tr>
+											<th style="width: 20%">Callsign</th>
+											<th style="width: 20%">Task</th>
+											<th style="width: 10%">Radio</th>
+											<th style="width: 10%">Tacan</th>
+											<th style="width: 20%">A/C Type</th>
+											<th style="width: 5%">#A/C</th>
+											<th style="width: 5%">Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% if aircraft_object %} 
+										{% for aircraft in aircraft_object %}
+										<tr>
+											<td><a href="#">{{ flight.callsign }}</a></td>
+											<td>{{ aircraft.callsign }}</td>
+											<td>{{ aircraft.radio_frequency }}</td>
+											<td>{{ aircraft.tacan }}</td>
+											<td>{{ aircraft.aircraft_set.first.type  }}</td>
+											<td>{{ aircraft.aircraft_set.count }}</td>
+											<td>
+												<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+													<svg class="c-icon">
+														<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
+													</svg>
+													&nbspFlight
+												</button>
+												<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+													<a class="dropdown-item" href="#">
+														<svg class="c-icon">
+															<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
+														</svg>
+														&nbspEdit
+													</a>
+													<a class="dropdown-item" id="package_{{package.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the {{ package.callsign }} package will be deleted." data-buttontext="Delete" href="#">
+														<svg class="c-icon">
+															<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+														</svg>
+														&nbspDelete
+													</a>
+												</div>
+											</td>
+										</tr>
+										{% endfor %} {% else %}
+										<tr>
+											<td colspan="5">No flights available.</td>
+										</tr>
+										{% endif %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="card-footer">
+						<h6>
+							<a href="#" class="btn btn-sm btn-success float-right" role="button">
+								<svg class="c-icon">
+									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
+								</svg>
+								Add Flight
+							</a>
+						</h6>
+						</div>
+					</div>
+					<!-- /.card -->
+					
+					<!-- .card -->
+					<div class="card">
+						<div class="card-header">Flight Image{{ imagery_object|pluralize }} <span class="badge badge-pill badge-info ml-auto">{{ imagery_object.count }}</span></div>
 						<div class="card-body">
 							<div class="row">
 							{% if imagery_object %} {% for imagery in imagery_object %}
@@ -237,12 +309,12 @@
 										<figcaption class="figure-caption">
 											{{ imagery.caption }}
 											<br>
-											<a id="imagery{{imagery.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the image will be deleted." data-buttontext="Delete" href="{% url 'package_imagery_delete_v2' imagery.id %}?returnUrl={{request.path}}" role="button">
+											<a id="imagery{{imagery.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the image will be deleted." data-buttontext="Delete" href="#" role="button">
 												<svg class="c-icon">
 													<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
 												</svg>
 											</a>
-											<a href="{% url 'package_imagery_update_v2' imagery.id %}?returnUrl={{request.path}}" role="button">
+											<a href="#" role="button">
 												<svg class="c-icon">
 													<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
 												</svg>
@@ -258,7 +330,7 @@
 						</div>
 						<div class="card-footer">
 						<h6>
-							<a href="{% url 'package_imagery_add_v2' package_object.id %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
+							<a href="#" class="btn btn-sm btn-success float-right" role="button">
 								<svg class="c-icon">
 									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
 								</svg>

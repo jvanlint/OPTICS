@@ -1,6 +1,7 @@
 from django.db import models
 from .Target import *
-#from .Aircraft import *
+from django.contrib.contenttypes.fields import GenericRelation
+from .Comment import *
 
 class Flight(models.Model):
 	# Fields
@@ -85,6 +86,7 @@ class Flight(models.Model):
 		blank=True,
 		verbose_name="Fuel BINGO",
 	)
+	comments = GenericRelation(Comment)
 
 	# Metadata
 

@@ -132,6 +132,12 @@ urlpatterns += [
     path('package/delete/image/<int:link_id>', views.package_imagery_delete_v2, name='package_imagery_delete_v2'),
 ]
 
+# Flight URL Patterns - V2
+urlpatterns += [
+    path('v2/flight/<int:link_id>', views.flight_v2, name='flight_v2'),
+]
+
+
 # Target URL Patterns - V2
 urlpatterns += [
     path('v2/target/add/<int:link_id>', views.target_add_v2, name='target_add_v2'),
