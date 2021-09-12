@@ -76,6 +76,12 @@
 										<a class="nav-link" data-toggle="tab" href="#tacan" role="tab" aria-controls="comms">TACAN</a>
 									</li>
 									<li class="nav-item">
+										<a class="nav-link" data-toggle="tab" href="#hacks" role="tab" aria-controls="comms">Time Hacks</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" data-toggle="tab" href="#fuel" role="tab" aria-controls="comms">Fuel</a>
+									</li>
+									<li class="nav-item">
 										<a class="nav-link" data-toggle="tab" href="#notes" role="tab" aria-controls="notes">Coordination Notes</a>
 									</li>
 								</ul>
@@ -85,6 +91,47 @@
 									</div>
 									<div class="tab-pane" id="tacan" role="tabpanel">
 										{{flight_object.tacan}}
+									</div>
+									<div class="tab-pane" id="hacks" role="tabpanel">
+										<div class="table-responsive">
+											<table class="table table-striped">
+												<thead>
+													<tr>
+														<th>Take Off</th>
+														<th>RDV 1</th>
+														<th>RDV 2</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>{{flight_object.timehack_start}}</td>
+														<td>{{flight_object.timehack_rdv1}}</td>
+														<td>{{flight_object.timehack_rdv2}}</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+									<div class="tab-pane" id="fuel" role="tabpanel">
+										<div class="table-responsive">
+											<table class="table table-striped">
+												<thead>
+													<tr>
+														
+														<th>Fuel FOB</th>
+														<th>Fuel Joker</th>
+														<th>Fuel Bingo</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>{{flight_object.fuel_fob}}</td>
+														<td>{{flight_object.fuel_joker}}</td>
+														<td>{{flight_object.fuel_bingo}}</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
 									</div>
 									<div class="tab-pane" id="notes" role="tabpanel">
 										{{flight_object.flight_coordination|linebreaks|urlize}}
@@ -199,7 +246,7 @@
 													<svg class="c-icon">
 														<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
 													</svg>
-													&nbspFlight
+													&nbspAircraft
 												</button>
 												<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 													<a class="dropdown-item" href="#">
@@ -273,7 +320,7 @@
 													<svg class="c-icon">
 														<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
 													</svg>
-													&nbspFlight
+													&nbspWaypoint
 												</button>
 												<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 													<a class="dropdown-item" href="#">
