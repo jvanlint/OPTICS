@@ -138,6 +138,9 @@ urlpatterns += [
     path('v2/flight/add/<int:link_id>', views.flight_add_v2, name='flight_add_v2'),
     path('v2/flight/update/<int:link_id>', views.flight_update_v2, name='flight_update_v2'),
     path("v2/flight/delete/<int:link_id>", views.flight_delete_v2, name="flight_delete_v2"),
+    
+    path("v2/flight/comment/add", views.flight_add_comment, name="flight_add_comment"),
+    path("v2/flight/comment/delete/<int:link_id>", views.flight_delete_comment, name="flight_delete_comment"),
 ]
 
 

@@ -98,3 +98,27 @@ def flight_copy(request, link_id):
 	packageID = flight.copy()
 
 	return HttpResponseRedirect("/airops/package/" + str(packageID))
+	
+# ---------------- Flight Comments -------------------------
+
+def flight_add_comment(request):
+	# if this is a POST request we need to process the form data
+	flight_id = request.GET.get("flight_id")
+	returnURL = request.GET.get("returnUrl")
+
+	if request.method == "POST":
+		comment_data = request.POST.dict()
+		comment = comment_data.get("comment_text")
+		# Get the post object
+		flight_object = Flight.objects.get(pk=flight_id)
+		flight_object.comments.create(comment=comment, user=request.user)
+
+	return HttpResponseRedirect(returnURL)
+
+def flight_delete_comment(request, link_id):
+	comment = Comment.objects.get(id=link_id)
+	returnURL = request.GET.get("returnUrl")
+	
+	comment.delete()
+	
+	return HttpResponseRedirect(returnURL)

@@ -127,7 +127,7 @@
 							Comments <span class="badge badge-pill badge-info ml-auto">{{comments.count}}</span>
 						</div>
 						<div class="card-body">
-								<form action="#" method="post">
+								<form action="{% url 'flight_add_comment' %}?flight_id={{flight_object.id}}&returnUrl={{request.path}}" method="post">
 									{% csrf_token %}
 									<div class="d-flex flex-row align-items-start">
 										<img class="rounded-circle" src="{{user.profile.profile_image.url}}" width="40">
@@ -149,7 +149,7 @@
 											{{ comment.comment|urlize }}
 											{% if comment.user.username == user.username %}
 											<br>
-											<a id="comment_{{comment.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the comment will be deleted." data-buttontext="Delete" href="#">
+											<a id="comment_{{comment.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the comment will be deleted." data-buttontext="Delete" href="{% url 'flight_delete_comment' comment.id %}?returnUrl={{request.path}}">
 												<svg class="c-icon">
 													<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
 												</svg>
