@@ -133,10 +133,13 @@ class TargetForm(ModelForm):
 
 
 class FlightForm(ModelForm):
+       
     # specify the name of model to use
     def __init__(self, target, *args, **kwargs):
         super(FlightForm, self).__init__(*args, **kwargs)
         self.fields["targets"].queryset = target
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({"class": "form-control"})
 
     class Meta:
         model = Flight

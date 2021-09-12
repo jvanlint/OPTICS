@@ -188,13 +188,13 @@
 													&nbspFlight
 												</button>
 												<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-													<a class="dropdown-item" href="#">
+													<a class="dropdown-item" href="{% url 'flight_update_v2' flight.id %}?returnUrl={{request.path}}">
 														<svg class="c-icon">
 															<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
 														</svg>
 														&nbspEdit
 													</a>
-													<a class="dropdown-item" id="package_{{package.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the {{ package.callsign }} package will be deleted." data-buttontext="Delete" href="#">
+													<a class="dropdown-item" id="flight{{flight.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the {{ flight.callsign }} package will be deleted." data-buttontext="Delete" href="{% url 'flight_delete_v2' flight.id %}?returnUrl={{request.path}}">
 														<svg class="c-icon">
 															<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
 														</svg>
@@ -214,7 +214,7 @@
 						</div>
 						<div class="card-footer">
 						<h6>
-							<a href="#" class="btn btn-sm btn-success float-right" role="button">
+							<a href="{% url 'flight_add_v2' package_object.id %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
 								<svg class="c-icon">
 									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
 								</svg>

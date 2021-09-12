@@ -135,6 +135,9 @@ urlpatterns += [
 # Flight URL Patterns - V2
 urlpatterns += [
     path('v2/flight/<int:link_id>', views.flight_v2, name='flight_v2'),
+    path('v2/flight/add/<int:link_id>', views.flight_add_v2, name='flight_add_v2'),
+    path('v2/flight/update/<int:link_id>', views.flight_update_v2, name='flight_update_v2'),
+    path("v2/flight/delete/<int:link_id>", views.flight_delete_v2, name="flight_delete_v2"),
 ]
 
 
