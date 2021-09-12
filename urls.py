@@ -4,7 +4,7 @@ from django.urls import path, include
 from airops import views
 
 urlpatterns = [
-    path('', views.campaign, name='index'),
+    #path('', views.campaign, name='index'),
     
     path('dashboard/', views.mission_dashboard, name='mission_dashboard'),
 
@@ -73,8 +73,6 @@ urlpatterns = [
     path('flight_imagery/add/<int:link_id>', views.flight_imagery_create, name='flight_imagery_add'),
     path('flight_imagery/update/<int:link_id>', views.flight_imagery_update, name='flight_imagery_update'),
     path('flight_imagery/delete/<int:link_id>', views.flight_imagery_delete, name='flight_imagery_delete'),
-
-
 
     path('pdf_view/mission/<int:mission_id>/flight/<int:flight_id>', views.view_mission_card, name='pdf_view'),
     path('pdf_download/mission/<int:mission_id>/flight/<int:flight_id>', views.download_mission_card, name='pdf_download'),
@@ -152,8 +150,6 @@ urlpatterns += [
     path("v2/avatar_select", views.select_avatar, name="select_avatar"),
     path("v2/avatar_change", views.change_avatar, name="avatar_change"),
 ]
-
-
 
 # Commments URL Patterns - V2
 urlpatterns += [
