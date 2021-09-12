@@ -123,6 +123,13 @@ urlpatterns += [
     path('v2/package/add/<int:link_id>', views.package_add_v2, name='package_add_v2'),
     path('v2/package/update/<int:link_id>', views.package_update_v2, name='package_update_v2'),
     path("v2/package/delete/<int:link_id>", views.package_delete_v2, name="package_delete_v2"),
+    
+    path("v2/package/comment/add", views.package_add_comment, name="package_add_comment"),
+    path("v2/package/comment/delete/<int:link_id>", views.package_delete_comment, name="package_delete_comment"),
+    
+    path('package/add/image/<int:link_id>', views.package_imagery_create_v2, name='package_imagery_add_v2'),
+    path('package/update/image/<int:link_id>', views.package_imagery_update_v2, name='package_imagery_update_v2'),
+    path('package/delete/image/<int:link_id>', views.package_imagery_delete_v2, name='package_imagery_delete_v2'),
 ]
 
 # Target URL Patterns - V2

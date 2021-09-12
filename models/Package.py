@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.contenttypes.fields import GenericRelation
+from .Comment import *
 
 class Package(models.Model):
 	# Fields
@@ -33,6 +35,7 @@ class Package(models.Model):
 		blank=True,
 		verbose_name="Notes for package co-ordination",
 	)
+	comments = GenericRelation(Comment)
 
 	# Metadata
 

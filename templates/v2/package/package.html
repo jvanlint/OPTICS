@@ -111,7 +111,7 @@
 							Comments <span class="badge badge-pill badge-info ml-auto">{{comments.count}}</span>
 						</div>
 						<div class="card-body">
-								<form action="#" method="post">
+								<form action="{% url 'package_add_comment' %}?package_id={{package_object.id}}&returnUrl={{request.path}}" method="post">
 									{% csrf_token %}
 									<div class="d-flex flex-row align-items-start">
 										<img class="rounded-circle" src="{{user.profile.profile_image.url}}" width="40">
@@ -126,11 +126,19 @@
 							{% for comment in comments %}
 								<!-- Start Comment-->
 								<div class="media text-muted pt-3">
-									<div class="c-avatar"><img class="c-avatar-img" src="{% static comment.user.profile.profile_image.url %}" alt="" /></div>
+									<div class="c-avatar"><img class="c-avatar-img" src="{{ user.profile.profile_image.url }}" alt="" /></div>
 										<p class="media-body pb-3 pl-2 mb-0  lh-125 border-bottom border-gray">
 											<strong class="d-block text-gray-dark"><a href="{% url 'user_profile' comment.user.id %}" class="text-decoration-none text-reset">{{ comment.user.username}}</a></strong>
 											
 											{{ comment.comment|urlize }}
+											{% if comment.user.username == user.username %}
+											<br>
+											<a id="comment_{{comment.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the comment will be deleted." data-buttontext="Delete" href="{% url 'package_delete_comment' comment.id %}?returnUrl={{request.path}}">
+												<svg class="c-icon">
+													<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+												</svg>
+											</a>
+											{% endif %}
 											<p class="small">{{ comment.date_created | timesince}} ago.</p>
 										</p>
 								</div>
@@ -139,8 +147,6 @@
 						</div>
 						
 					</div>
-
-
 					<!--.card -->
 
 				</div>
@@ -213,6 +219,50 @@
 									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
 								</svg>
 								Add Flight
+							</a>
+						</h6>
+						</div>
+					</div>
+					<!-- /.card -->
+					
+					<!-- .card -->
+					<div class="card">
+						<div class="card-header">Package Image{{ imagery_object|pluralize }} <span class="badge badge-pill badge-info ml-auto">{{ imagery_object.count }}</span></div>
+						<div class="card-body">
+							<div class="row">
+							{% if imagery_object %} {% for imagery in imagery_object %}
+								<div class="col-sm-6 col-md-4">
+									<figure class="figure">
+										<a href="{{ imagery.image.url }}" add target="_blank"><img src="{{ imagery.image.url }}" class="figure-img img-fluid rounded" alt="{{imagery.caption}}" /></a>
+										<figcaption class="figure-caption">
+											{{ imagery.caption }}
+											<br>
+											<a id="imagery{{imagery.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the image will be deleted." data-buttontext="Delete" href="{% url 'package_imagery_delete_v2' imagery.id %}?returnUrl={{request.path}}" role="button">
+												<svg class="c-icon">
+													<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+												</svg>
+											</a>
+											<a href="{% url 'package_imagery_update_v2' imagery.id %}?returnUrl={{request.path}}" role="button">
+												<svg class="c-icon">
+													<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
+												</svg>
+											</a>
+										</figcaption>
+									</figure>
+								</div>
+							{% endfor %} 
+							</div>
+							{% else %}
+							No imagery available.
+							{% endif %}
+						</div>
+						<div class="card-footer">
+						<h6>
+							<a href="{% url 'package_imagery_add_v2' package_object.id %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
+								<svg class="c-icon">
+									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
+								</svg>
+								Add Imagery
 							</a>
 						</h6>
 						</div>
