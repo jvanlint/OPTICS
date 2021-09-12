@@ -5,8 +5,6 @@ from airops import views
 
 urlpatterns = [
     path('', views.campaign, name='index'),
-    
-    path('dashboard/', views.mission_dashboard, name='mission_dashboard'),
 
     path('campaign/<int:link_id>/', views.campaign_detail, name='campaign'),
     path('campaign', views.campaign, name='campaign'),
@@ -78,6 +76,12 @@ urlpatterns = [
     path('pdf_download/mission/<int:mission_id>/flight/<int:flight_id>', views.download_mission_card, name='pdf_download'),
 ]
 
+# Dashboard URL Patterns - V2
+
+urlpatterns += [
+    path('dashboard/', views.mission_dashboard, name='mission_dashboard'),
+]
+
 # Campaign URL Patterns - V2
 urlpatterns += [
     path('v2/', views.campaigns_all, name='home'),
@@ -142,6 +146,13 @@ urlpatterns += [
     path("v2/support/delete/<int:link_id>", views.support_delete_v2, name="support_delete_v2"),
 ]
 
+# Reference URL Patterns - V2
+urlpatterns += [
+    path('reference/', views.reference_tables, name='reference_tables'),
+    path('referenceobject/add/<str:table>', views.reference_object_add, name='reference_object_add'),
+    path('referenceobject/update/<int:link_id>/<str:table>', views.reference_object_update, name='reference_object_update'),
+    path('referenceobject/delete/<int:link_id>/<str:table>', views.reference_object_delete, name='reference_object_delete'),
+]
 
 # Profile URL Patterns - V2
 urlpatterns += [

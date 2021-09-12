@@ -28,4 +28,5 @@ from .target_v2 import *
 from .threat_v2 import *
 from .support_v2 import *
 
-from ref_tables import *
+from .ref_tables import *
+from .dashboard import *
