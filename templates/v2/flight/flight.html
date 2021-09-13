@@ -236,7 +236,7 @@
 										{% if aircraft_object %} 
 										{% for aircraft in aircraft_object %}
 										<tr>
-											<td>{{ aircraft.type }}</td>
+											<td><a href="#" data-toggle="tooltip" title="Some text">Hover over me</a>{{ aircraft.type }}</td>
 											<td>{{ aircraft.pilot }}</td>
 											<td>{{ aircraft.rio_wso }}</td>
 											<td>{{ aircraft.flight_lead }}</td>
@@ -418,4 +418,5 @@
 {% block javascripts %}
 <!-- Confirm Delete JS -->
 <script src="{% get_static_prefix %}assets/js/confirm_delete.js"></script>
+<script>$("[data-toggle=tooltip").tooltip();</script>
  {% endblock javascripts %}

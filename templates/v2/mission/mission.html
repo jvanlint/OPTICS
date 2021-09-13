@@ -88,7 +88,7 @@
 							<h2>{{mission_object.name}}</h2><a class="btn btn-sm btn-success float-right" href="{% url 'mission_signup' mission_object.id %}?returnUrl={{request.path}}" role="button">Mission Sign Up</a>
 							<h6 class="text-muted">Actual Date-Time
 								{% if mission_object.notify_discord %} 
-								<svg class="c-icon">
+								<svg class="c-icon" data-toggle="tooltip" title="Indicates this mission has been sent to Discord">
 									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/brand.svg#cib-discord"></use>
 								</svg> 
 								{% endif %}
