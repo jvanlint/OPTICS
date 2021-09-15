@@ -33,7 +33,7 @@ def populate_threat_types(apps, schema_editor):
     create_entries(apps, threat_type_model, values)
 
 
-def populate_support_types(apps):
+def populate_support_types(apps, schema_editor):
     values = (
         "AWACS",
         "TANKER",
