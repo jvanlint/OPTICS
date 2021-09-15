@@ -23,9 +23,9 @@ class Support(models.Model):
 	callsign = models.CharField(
 		max_length=50
 	)
-	support_type = models.CharField(
-		max_length=10, 
-		choices=SUPPORT_TYPES,
+	support_type = models.ForeignKey(
+		'SupportType',
+		on_delete=models.SET_NULL,
 		null=True
 	)
 	player_name = models.CharField(
@@ -68,7 +68,8 @@ class Support(models.Model):
 		null=True, 
 		blank=True
 	)
-	
+
+
 	def new(self, missionObject):
 		new_support_instance = Support(
 			mission = missionObject,

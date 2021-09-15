@@ -26,16 +26,17 @@ class Threat(models.Model):
 	name = models.CharField(
 		max_length=60
 	)
-	threat_type = models.CharField(
-		max_length=10, 
-		choices=THREAT_TYPES, 
+	threat_type = models.ForeignKey(
+		"ThreatType",
+		on_delete=models.SET_NULL,
 		null=True
 	)
 	description = models.TextField(
 		help_text="Enter Threat Description/Situation.",
 		default="Threat description to be added here.",
 	)
-	
+
+
 	def new(self, missionObject):
 		new_threat_instance = Threat(
 			mission = missionObject,
