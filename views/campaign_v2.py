@@ -67,7 +67,10 @@ def campaign_add_v2(request):
     if request.method == "POST":
         form = CampaignForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save(commit=True)
+            obj=form.save(commit=False)
+            obj.modified_by = request.user
+            obj.created_by = request.user
+            obj.save()
             # messages.success(request, "Campaign successfully created.")
             return HttpResponseRedirect(reverse_lazy("campaigns"))
     else:
@@ -98,7 +101,9 @@ def campaign_update_v2(request, link_id):
         form = CampaignForm(request.POST, request.FILES, instance=campaign)
         print(request.path)
         if form.is_valid():
-            form.save(commit=True)
+            obj=form.save(commit=False)
+            obj.modified_by = request.user
+            obj.save()
             # messages.success(request, "Campaign successfully updated.")
             return HttpResponseRedirect(return_url)
 

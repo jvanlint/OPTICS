@@ -51,11 +51,11 @@
 							<h6 class="text-muted">Package</h6>
 							<h2>{{package_object.name}}</h2>
 							<div class="media text-muted pt-3">
-								<div class="c-avatar"><img class="c-avatar-img" src="{{ mission_object.creator.profile.profile_image.url }}" alt="" /></div>
+								<div class="c-avatar"><img class="c-avatar-img" src="{{ package_object.created_by.profile.profile_image.url }}" alt="" /></div>
 								<p class="media-body pb-3 pl-2 mb-0  lh-125">
 								<strong class="d-block text-gray-dark">
-									{% if package_object.creator.username %}
-									<a href="{% url 'user_profile' mission_object.creator.id %}" class="text-decoration-none text-reset">{{ mission_object.creator.username }}</a>
+									{% if package_object.created_by.username %}
+									<a href="{% url 'user_profile' package_object.created_by.id %}" class="text-decoration-none text-reset">{{ package_object.created_by.username }}</a>
 									{% endif %}
 								</strong>
 								{{ package_object.date_created }}
@@ -101,6 +101,11 @@
 									&nbspDelete
 								</a>
 							</div>
+							<h6 class="media-body pb-3 pl-2 mb-0 lh-125">Last modified on {{ package_object.date_modified }}
+								{% if package_object.modified_by %}
+								<br>by <a href="{% url 'user_profile' package_object.modified_by.id %}">{{ package_object.modified_by.username }} </a>
+								{% endif %}
+							</h6> 
 						</div>
 					</div>
 					<!-- /.card -->

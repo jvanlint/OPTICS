@@ -44,12 +44,6 @@ class Campaign(models.Model):
         on_delete=models.CASCADE, 
         null=True
     )
-    creator = models.ForeignKey(
-        User, 
-        null=True, 
-        blank=True, 
-        on_delete=models.SET_NULL
-    )
     situation = models.TextField(
         help_text="A detailed overview of the background and situation for the campaign.",
         null=True,
@@ -63,7 +57,25 @@ class Campaign(models.Model):
         null=True,
         blank=True,
     )
-    date_created = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(
+        User, 
+        related_name='campaign_created_by', 
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
+    date_created = models.DateTimeField(
+        auto_now_add=True, 
+        null=True
+    )
+    date_modified = models.DateTimeField(auto_now=True)
+    modified_by = models.ForeignKey(
+        User, 
+        on_delete=models.SET_NULL, 
+        null=True,
+        blank=True,
+        related_name = 'campaign_modified_by'
+    )
     
     comments = GenericRelation(Comment)
 

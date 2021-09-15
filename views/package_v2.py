@@ -44,7 +44,10 @@ def package_add_v2(request, link_id):
 	if request.method == "POST":
 		form = PackageForm(request.POST, request.FILES)
 		if form.is_valid():
-			form.save(commit=True)
+			obj=form.save(commit=False)
+			obj.modified_by = request.user
+			obj.created_by = request.user
+			obj.save()
 			return HttpResponseRedirect(returnURL)
 
 	context = {'form': form, 'form_title': form_title,
@@ -64,7 +67,9 @@ def package_update_v2(request, link_id):
 		form = PackageForm(request.POST, instance=package)
 		print(request.path)
 		if form.is_valid():
-			form.save(commit=True)
+			obj=form.save(commit=False)
+			obj.modified_by = request.user
+			obj.save()
 			return HttpResponseRedirect(returnURL)
 
 	context = {'form': form, 'form_title': form_title,

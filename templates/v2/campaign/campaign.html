@@ -60,13 +60,19 @@
 								{% endif %}
 								{{ campaign_object.status }}</span>
 							</h3>
+							{% if campaign_object.created_by %}
 							<div class="media text-muted pt-3">
-								<div class="c-avatar"><img class="c-avatar-img" src="{{campaign_object.creator.profile.profile_image.url}}" alt="" /></div>
+								<div class="c-avatar"><img class="c-avatar-img" src="{{campaign_object.created_by.profile.profile_image.url}}" alt="" /></div>
 								<p class="media-body pb-3 pl-2 mb-0  lh-125">
-								<strong class="d-block text-gray-dark"><a href="{% url 'user_profile' campaign_object.creator.id %}" class="text-decoration-none text-reset">{{ campaign_object.creator.username }}</a></strong>
+								<strong class="d-block text-gray-dark">
+									{% if campaign_object.created_by.username %}
+									<a href="{% url 'user_profile' campaign_object.created_by.id %}" class="text-decoration-none text-reset">{{ campaign_object.created_by.username }}</a>
+									{% endif %}
+								</strong>
 								{{ campaign_object.date_created }}
 								</p>
 							</div>
+							{% endif %}
 						</div>
 						<div class="card-body">
 							{{campaign_object.description|linebreaks|urlize}}
@@ -89,7 +95,7 @@
 							</div>
 						</div>
 						<div class="card-footer">
-							{% if campaign_object.creator.username == user.username or isAdmin == True %}
+							{% if campaign_object.created_by.username == user.username or isAdmin == True %}
 								<button class="btn-sm btn-primary dropdown-toggle float-right" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
 							{% else %}
 								<button class="btn-sm btn-primary dropdown-toggle float-right" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled="">
@@ -113,6 +119,11 @@
 									&nbspDelete
 								</a>
 							</div>
+							<h6 class="media-body pb-3 pl-2 mb-0 lh-125">Last modified on {{ campaign_object.date_modified }}
+								{% if campaign_object.modified_by %}
+								<br>by <a href="{% url 'user_profile' campaign_object.modified_by.id %}">{{ campaign_object.modified_by.username }} </a>
+								{% endif %}
+							</h6> 
 						</div>
 					</div>
 					<!-- /.card -->

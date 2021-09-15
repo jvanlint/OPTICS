@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.contenttypes.fields import GenericRelation
+from django.contrib.auth.models import User
 from .Comment import *
 
 class Package(models.Model):
@@ -36,6 +37,26 @@ class Package(models.Model):
 		verbose_name="Notes for package co-ordination",
 	)
 	comments = GenericRelation(Comment)
+	created_by = models.ForeignKey(
+		User, 
+		related_name='package_created_by', 
+		null=True,
+		blank=True,
+		on_delete=models.SET_NULL
+	)
+	date_created = models.DateTimeField(
+		auto_now_add=True, 
+		null=True
+	)
+	date_modified = models.DateTimeField(auto_now=True)
+	modified_by = models.ForeignKey(
+		User, 
+		on_delete=models.SET_NULL, 
+		null=True,
+		blank=True,
+		related_name = 'package_modified_by'
+	)
+
 
 	# Metadata
 

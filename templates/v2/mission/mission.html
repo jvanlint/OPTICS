@@ -88,7 +88,7 @@
 							<h2>{{mission_object.name}}</h2><a class="btn btn-sm btn-success float-right" href="{% url 'mission_signup' mission_object.id %}?returnUrl={{request.path}}" role="button">Mission Sign Up</a>
 							<h6 class="text-muted">Actual Date-Time
 								{% if mission_object.notify_discord %} 
-								<svg class="c-icon" data-toggle="tooltip" title="Indicates this mission has been sent to Discord">
+								<svg class="c-icon">
 									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/brand.svg#cib-discord"></use>
 								</svg> 
 								{% endif %}
@@ -97,11 +97,11 @@
 							<h6 class="text-muted">In Game Date-Time</h6>
 							<h5>{{ mission_object.mission_game_date|date:"DATE_FORMAT" }} - {{ mission_object.mission_game_time }}</h5>
 							<div class="media text-muted pt-3">
-								<div class="c-avatar"><img class="c-avatar-img" src="{{ user.profile.profile_image.url}}" alt="" /></div>
+								<div class="c-avatar"><img class="c-avatar-img" src="{{ mission_object.created_by.profile.profile_image.url}}" alt="" /></div>
 								<p class="media-body pb-3 pl-2 mb-0  lh-125">
 								<strong class="d-block text-gray-dark">
-									{% if mission_object.creator.username %}
-									<a href="{% url 'user_profile' mission_object.creator.id %}" class="text-decoration-none text-reset">{{ mission_object.creator.username }}</a>
+									{% if mission_object.created_by.username %}
+									<a href="{% url 'user_profile' mission_object.created_by.id %}" class="text-decoration-none text-reset">{{ mission_object.created_by.username }}</a>
 									{% endif %}
 								</strong>
 								{{ mission_object.date_created }}
@@ -197,7 +197,7 @@
 							</div>
 						</div>
 						<div class="card-footer">
-							{% if mission_object.creator.username == user.username or isAdmin == True %}
+							{% if mission_object.created_by.username == user.username or isAdmin == True %}
 								<button class="btn-sm btn-primary dropdown-toggle float-right" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
 							{% else %}
 								<button class="btn-sm btn-primary dropdown-toggle float-right" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled="">
@@ -221,6 +221,11 @@
 									&nbspDelete
 								</a>
 							</div>
+							<h6 class="media-body pb-3 pl-2 mb-0 lh-125">Last modified on {{ mission_object.date_modified }}
+								{% if mission_object.modified_by %}
+								<br>by <a href="{% url 'user_profile' mission_object.modified_by.id %}">{{ mission_object.modified_by.username }} </a>
+								{% endif %}
+							</h6> 
 						</div>
 					</div>
 					<!-- /.card -->

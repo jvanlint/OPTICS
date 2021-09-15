@@ -57,6 +57,7 @@ class CampaignForm(ModelForm):
             "dcs_map": forms.Select(attrs={"style": "width: 150px;"}),
             "status": forms.Select(attrs={"style": "width: 150px;"}),
         }
+        exclude = ("modified_by","created_by",)
 
 
 class MissionForm(ModelForm):
@@ -72,7 +73,7 @@ class MissionForm(ModelForm):
             "mission_date": DateInput(attrs={"style": "width: 150px;"}),
             "mission_game_date": DateInput(attrs={"style": "width: 150px;"}),
         }
-        exclude = ("discord_msg_id",)
+        exclude = ("discord_msg_id","modified_by","created_by",)
 
     def clean(self):
         # Combine the Mission date and time and set to UTC
@@ -106,6 +107,7 @@ class PackageForm(ModelForm):
     class Meta:
         model = Package
         fields = "__all__"
+        exclude = ("modified_by","created_by",)
 
 
 class ThreatForm(ModelForm):
