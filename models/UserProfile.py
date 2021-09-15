@@ -28,7 +28,7 @@ class UserProfile(models.Model):
     profile_image = ResizedImageField(
         verbose_name="User profile image.",
         size=[200, 200],
-        upload_to=f"user/profile_images/{User.pk}/",
+        upload_to=f"user/profile_images/",
         help_text="User profile image file.",
         null=False,
         blank=False,

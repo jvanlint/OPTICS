@@ -31,10 +31,11 @@ class Waypoint(models.Model):
 		help_text="A number representing the waypoint order.",
 		verbose_name="waypoint number",
 	)
-	waypoint_type = models.CharField(
-		max_length=10, 
-		choices=WAYPOINT_TYPES, 
-		null=True)
+	waypoint_type = models.ForeignKey(
+		"WaypointType",
+		on_delete=models.SET_NULL,
+		null=True
+	)
 	lat = models.CharField(
 		max_length=15, 
 		null=True, 
@@ -60,6 +61,7 @@ class Waypoint(models.Model):
 		null=True, 
 		blank=True
 	)
+
 	
 	def new(self, flightObject):
 		new_waypoint_instance = Waypoint(
