@@ -19,6 +19,6 @@ from ..forms import WaypointForm
         "DIVERT",
     ],
 )
-def test_waypoint_type_has_correct_values(values):
+def test_waypoint_type_has_correct_values(db, values):
     form = WaypointForm()
     assert [tup for tup in form.fields["waypoint_type"].choices if tup[1] == values]

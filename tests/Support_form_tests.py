@@ -15,6 +15,6 @@ from ..forms import SupportForm
         "AIRFIELD",
     ],
 )
-def test_support_type_has_correct_values(values):
+def test_support_type_has_correct_values(db, values):
     form = SupportForm()
     assert [tup for tup in form.fields["support_type"].choices if tup[1] == values]
