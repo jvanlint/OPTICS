@@ -1,4 +1,5 @@
 from .aircraft import *
+from .aircraft_v2 import *
 
 from .campaign_v2 import *
 from .campaign import *
@@ -17,7 +18,10 @@ from .pdf_render import *
 from .support import *
 from .target import *
 from .threat import *
+
 from .waypoint import *
+from .waypoint_v2 import *
+
 from .comments import *
 from .profile import *
 from .profilev2 import *

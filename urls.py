@@ -143,6 +143,21 @@ urlpatterns += [
     path("v2/flight/comment/delete/<int:link_id>", views.flight_delete_comment, name="flight_delete_comment"),
 ]
 
+# Aircraft URL Patterns - V2
+urlpatterns += [
+    path('v2/aircraft/add/<int:link_id>', views.aircraft_add_v2, name='aircraft_add_v2'),
+    path('v2/aircraft/update/<int:link_id>', views.aircraft_update_v2, name='aircraft_update_v2'),
+    path("v2/aircraft/delete/<int:link_id>", views.aircraft_delete_v2, name="aircraft_delete_v2"),
+    path('v2/aircraft/copy/<int:link_id>', views.aircraft_copy_v2, name='aircraft_copy_v2'),
+]
+
+# Waypoint URL Patterns - V2
+urlpatterns += [
+    path('v2/waypoint/add/<int:link_id>', views.waypoint_add_v2, name='waypoint_add_v2'),
+    path('v2/waypoint/update/<int:link_id>', views.waypoint_update_v2, name='waypoint_update_v2'),
+    path("v2/waypoint/delete/<int:link_id>", views.waypoint_delete_v2, name="waypoint_delete_v2"),
+    path('v2/waypoint/copy/<int:link_id>', views.waypoint_copy_v2, name='waypoint_copy_v2'),
+]
 
 # Target URL Patterns - V2
 urlpatterns += [

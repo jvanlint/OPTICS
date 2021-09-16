@@ -154,6 +154,8 @@ class AircraftForm(ModelForm):
         self.fields["flight"].queryset = flights
         self.fields["pilot"].queryset = User.objects.order_by("username")
         self.fields["rio_wso"].queryset = User.objects.order_by("username")
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({"class": "form-control"})
 
     # specify the name of model to use
 
@@ -175,6 +177,10 @@ class SupportForm(ModelForm):
 
 
 class WaypointForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(WaypointForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({"class": "form-control"})
     # specify the name of model to use
     class Meta:
         model = Waypoint
