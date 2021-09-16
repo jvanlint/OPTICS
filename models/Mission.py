@@ -235,7 +235,7 @@ class Mission(models.Model):
 			date = None
 		description = (f'{self.name}\n**{date}, {self.mission_time} UTC**\n\n{self.description}')
 		register_url = request.build_absolute_uri(reverse('mission_signup', args=(self.id,)))
-		mission_page = request.build_absolute_uri(reverse('mission', args=(self.id,)))
+		mission_page = request.build_absolute_uri(reverse('mission_v2', args=(self.id,)))
 		
 		print(register_url)
 		

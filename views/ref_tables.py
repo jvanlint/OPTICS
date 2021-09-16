@@ -6,8 +6,8 @@ from django.utils import timezone
 
 from django.urls import reverse
 
-from ..models import  Terrain, Status, Task, SupportType, WaypointType, ThreatType
-from ..forms import  TerrainForm, StatusForm, TaskForm, SupportTypeForm, WaypointTypeForm, ThreatTypeForm
+from ..models import  Terrain, Status, Task, SupportType, WaypointType, ThreatType, Airframe
+from ..forms import  TerrainForm, StatusForm, TaskForm, SupportTypeForm, WaypointTypeForm, ThreatTypeForm, AirframeForm
 
 @login_required(login_url='login')
 def reference_tables(request):
@@ -17,6 +17,8 @@ def reference_tables(request):
 	flight_task = Task.objects.order_by('name')
 	support_type = SupportType.objects.order_by('name')
 	threat_type = ThreatType.objects.order_by('name')
+	airframe = Airframe.objects.order_by('name')
+	
 	breadcrumbs = {'Home': reverse('home'), 'Reference Tables':''}
 	
 	context = {'terrain_object': terrain, 
@@ -25,6 +27,7 @@ def reference_tables(request):
 			   'flight_task_object': flight_task,
 			   'support_type_object': support_type,
 			   'threat_type_object': threat_type,
+			   'airframe_object': airframe,
 			   'breadcrumbs': breadcrumbs,
 			   }
 	# Render the HTML template index.html with the data in the context variable
@@ -43,6 +46,8 @@ def evaluate_reference_object(table, link_id):
 		return SupportType
 	elif table == 'threat_type':
 		return ThreatType
+	elif table == 'airframe':
+		return Airframe
 
 def evaluate_reference_form(table):
 	if table == 'status':
@@ -57,6 +62,8 @@ def evaluate_reference_form(table):
 		return SupportTypeForm
 	elif table == 'threat_type':
 		return ThreatTypeForm
+	elif table == 'airframe':
+		return AirframeForm
 
 @login_required(login_url='login')
 def reference_object_add(request, table):

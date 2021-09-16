@@ -31,7 +31,8 @@ from airops.models import (
     WaypointType,
     SupportType,
     Task,
-    ThreatType
+    ThreatType,
+    Airframe
 )
 
 
@@ -307,6 +308,18 @@ class ThreatTypeForm(ModelForm):
                     }
                 ),
         }
+
+class AirframeForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(AirframeForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({"class": "form-control"})
+    
+    class Meta:
+        model = Airframe
+        fields = ("__all__")
+        exclude = ("user",)
+       
 
 class NewUserForm(UserCreationForm):
 
