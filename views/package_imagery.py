@@ -8,8 +8,7 @@ from django.views.decorators.cache import never_cache
 from ..models import Package, PackageImagery, UserProfile
 from ..forms import PackageImageryForm
 
-@login_required(login_url="login")
-@allowed_users(allowed_roles=["admin", "planner", "player"])
+@login_required(login_url="account_login")
 def package_imagery_create(request, link_id):
 	package = Package.objects.get(id=link_id)
 
@@ -25,8 +24,7 @@ def package_imagery_create(request, link_id):
 	return render(request, "packageImagery/packageImagery_form.html", context=context)
 
 
-@login_required(login_url="login")
-@allowed_users(allowed_roles=["admin", "planner", "player"])
+@login_required(login_url="account_login")
 def package_imagery_update(request, link_id):
 	imagery = PackageImagery.objects.get(id=link_id)
 
@@ -45,8 +43,7 @@ def package_imagery_update(request, link_id):
 	return render(request, "packageImagery/packageImagery_form.html", context=context)
 
 
-@login_required(login_url="login")
-@allowed_users(allowed_roles=["admin", "planner", "player"])
+@login_required(login_url="account_login")
 def package_imagery_delete(request, link_id):
 	imagery = PackageImagery.objects.get(id=link_id)
 	packageID = imagery.package.id

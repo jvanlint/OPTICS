@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.utils import timezone
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from django.urls import reverse
 
@@ -17,7 +18,16 @@ def reference_tables(request):
 	flight_task = Task.objects.order_by('name')
 	support_type = SupportType.objects.order_by('name')
 	threat_type = ThreatType.objects.order_by('name')
+	
 	airframe = Airframe.objects.order_by('name')
+	page=request.GET.get('page', 1)
+	paginator = Paginator(airframe, 5)
+	try:
+		airframes = paginator.page(page)
+	except PageNotAnInteger:
+		airframes = paginator.page(1)
+	except EmptyPage:
+		airframes = paginator.page(paginator.num_pages)
 	
 	breadcrumbs = {'Home': reverse('home'), 'Reference Tables':''}
 	
@@ -27,7 +37,7 @@ def reference_tables(request):
 			   'flight_task_object': flight_task,
 			   'support_type_object': support_type,
 			   'threat_type_object': threat_type,
-			   'airframe_object': airframe,
+			   'airframe_object': airframes,
 			   'breadcrumbs': breadcrumbs,
 			   }
 	# Render the HTML template index.html with the data in the context variable

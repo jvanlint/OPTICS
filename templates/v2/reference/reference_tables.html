@@ -445,6 +445,31 @@
 							</table>
 						</div>
 						<div class="card-footer">
+							{% if airframe_object.has_other_pages %}
+							  	<nav aria-label="Page navigation example">
+									<ul class="pagination">
+									{% if airframe_object.has_previous %}
+										<li class="page-item"><a class="page-link" href="?page={{ airframe_object.previous_page_number}}">Previous</a></li>
+									{% else %}
+										<li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Previous</a></li>
+									{% endif %}
+								
+									{% for i in airframe_object.paginator.page_range %}
+								    	{% if airframe_object.number == i %}
+											<li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
+								  		{% else %}
+										  	<li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+								    	{% endif %}
+									{% endfor %}
+								
+									{% if airframe_object.has_next %}
+										<li class="page-item"><a class="page-link" href="?page={{ users.next_page_number }}">Next</a></li>
+									{% else %}
+								    	<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+									{% endif %}
+							 	   </ul>
+								  </nav>
+							{% endif %}
 						<h6>
 							<a href="{% url 'reference_object_add' 'airframe' %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
 								<svg class="c-icon">

@@ -7,7 +7,7 @@ import requests
 from ..models import Threat, Mission
 from ..forms import ThreatForm
 
-@login_required(login_url='login')
+@login_required(login_url="account_login")
 def threat_add_v2(request, link_id):
 	mission = Mission.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
@@ -26,7 +26,7 @@ def threat_add_v2(request, link_id):
 			   'link': link_id, 'returnURL': returnURL}
 	return render(request, 'v2/generic/data_entry_form.html', context=context)
 
-@login_required(login_url='login')
+@login_required(login_url="account_login")
 def threat_update_v2(request, link_id):
 	threat = Threat.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
@@ -46,7 +46,7 @@ def threat_update_v2(request, link_id):
 			   'link': link_id, 'returnURL': returnURL}
 	return render(request, 'v2/generic/data_entry_form.html', context=context)
 
-@login_required(login_url='login')
+@login_required(login_url="account_login")
 def threat_delete_v2(request, link_id):
 	threat = Threat.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')

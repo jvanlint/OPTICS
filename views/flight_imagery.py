@@ -8,8 +8,7 @@ from django.views.decorators.cache import never_cache
 from ..models import Flight, FlightImagery, UserProfile
 from ..forms import FlightImageryForm
 
-@login_required(login_url="login")
-@allowed_users(allowed_roles=["admin", "planner", "player"])
+@login_required(login_url="account_login")
 def flight_imagery_create(request, link_id):
 	flight = Flight.objects.get(id=link_id)
 
@@ -25,8 +24,7 @@ def flight_imagery_create(request, link_id):
 	return render(request, "flightImagery/flightImagery_form.html", context=context)
 
 
-@login_required(login_url="login")
-@allowed_users(allowed_roles=["admin", "planner", "player"])
+@login_required(login_url="account_login")
 def flight_imagery_update(request, link_id):
 	imagery = FlightImagery.objects.get(id=link_id)
 
@@ -45,8 +43,7 @@ def flight_imagery_update(request, link_id):
 	return render(request, "flightImagery/flightImagery_form.html", context=context)
 
 
-@login_required(login_url="login")
-@allowed_users(allowed_roles=["admin", "planner", "player"])
+@login_required(login_url="account_login")
 def flight_imagery_delete(request, link_id):
 	imagery = FlightImagery.objects.get(id=link_id)
 	flightID = imagery.flight.id

@@ -9,7 +9,6 @@ from ..models import Mission, MissionImagery, UserProfile
 from ..forms import MissionImageryForm
 
 @login_required(login_url="account_login")
-@allowed_users(allowed_roles=["admin", "planner", "player"])
 def mission_imagery_create(request, link_id):
 	mission = Mission.objects.get(id=link_id)
 
@@ -26,7 +25,6 @@ def mission_imagery_create(request, link_id):
 
 
 @login_required(login_url="account_login")
-@allowed_users(allowed_roles=["admin", "planner", "player"])
 def mission_imagery_update(request, link_id):
 	imagery = MissionImagery.objects.get(id=link_id)
 
@@ -46,7 +44,6 @@ def mission_imagery_update(request, link_id):
 
 
 @login_required(login_url="account_login")
-@allowed_users(allowed_roles=["admin", "planner", "player"])
 def mission_imagery_delete(request, link_id):
 	imagery = MissionImagery.objects.get(id=link_id)
 	missionID = imagery.mission.id

@@ -9,7 +9,7 @@ import requests
 from ..models import Package, Mission, PackageImagery, UserProfile, Comment
 from ..forms import PackageForm, PackageImageryForm
 
-@login_required(login_url='login')
+@login_required(login_url="account_login")
 def package_v2(request, link_id):
 	package = Package.objects.get(id=link_id)
 	flights = package.flight_set.all()
@@ -32,7 +32,7 @@ def package_v2(request, link_id):
 				  'v2/package/package.html', 
 				  context=context)
 
-@login_required(login_url='login')
+@login_required(login_url="account_login")
 def package_add_v2(request, link_id):
 	mission = Mission.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
@@ -54,7 +54,7 @@ def package_add_v2(request, link_id):
 			   'link': link_id, 'returnURL': returnURL}
 	return render(request, 'v2/generic/data_entry_form.html', context=context)
 
-@login_required(login_url='login')
+@login_required(login_url="account_login")
 def package_update_v2(request, link_id):
 	package = Package.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
@@ -76,7 +76,7 @@ def package_update_v2(request, link_id):
 			   'link': link_id, 'returnURL': returnURL}
 	return render(request, 'v2/generic/data_entry_form.html', context=context)
 	
-@login_required(login_url='login')
+@login_required(login_url="account_login")
 def package_delete_v2(request, link_id):
 	package = Package.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
@@ -111,7 +111,7 @@ def package_delete_comment(request, link_id):
 	
 # ---------------- Package Imagery -------------------------
 	
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 def package_imagery_create_v2(request, link_id):
 	package = Package.objects.get(id=link_id)
 	returnURL = request.GET.get("returnUrl")
@@ -133,8 +133,7 @@ def package_imagery_create_v2(request, link_id):
 	}
 	return render(request, 'v2/generic/data_entry_form.html', context=context)
 
-
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 def package_imagery_update_v2(request, link_id):
 	imagery = PackageImagery.objects.get(id=link_id)
 	returnURL = request.GET.get("returnUrl")
@@ -158,7 +157,7 @@ def package_imagery_update_v2(request, link_id):
 	return render(request, 'v2/generic/data_entry_form.html', context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 def package_imagery_delete_v2(request, link_id):
 	imagery = PackageImagery.objects.get(id=link_id)
 	returnURL = request.GET.get("returnUrl")

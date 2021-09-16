@@ -37,7 +37,7 @@ def flight_v2(request, link_id):
 
 	return render(request, "v2/flight/flight.html", context=context)
 
-@login_required(login_url='login')
+@login_required(login_url="account_login")
 def flight_add_v2(request, link_id):
 	package = Package.objects.get(id=link_id)
 	
@@ -63,7 +63,7 @@ def flight_add_v2(request, link_id):
 			   'link': link_id, 'returnURL': returnURL}
 	return render(request, 'v2/generic/data_entry_form.html', context=context)
 
-@login_required(login_url='login')
+@login_required(login_url="account_login")
 def flight_update_v2(request, link_id):
 	flight = Flight.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
@@ -88,7 +88,7 @@ def flight_update_v2(request, link_id):
 			   'link': link_id, 'returnURL': returnURL}
 	return render(request, 'v2/generic/data_entry_form.html', context=context)
 	
-@login_required(login_url='login')
+@login_required(login_url="account_login")
 def flight_delete_v2(request, link_id):
 	flight = Flight.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
@@ -105,7 +105,7 @@ def flight_copy(request, link_id):
 	return HttpResponseRedirect("/airops/package/" + str(packageID))
 	
 # ---------------- Flight Comments -------------------------
-
+@login_required(login_url="account_login")
 def flight_add_comment(request):
 	# if this is a POST request we need to process the form data
 	flight_id = request.GET.get("flight_id")
@@ -120,6 +120,7 @@ def flight_add_comment(request):
 
 	return HttpResponseRedirect(returnURL)
 
+@login_required(login_url="account_login")
 def flight_delete_comment(request, link_id):
 	comment = Comment.objects.get(id=link_id)
 	returnURL = request.GET.get("returnUrl")

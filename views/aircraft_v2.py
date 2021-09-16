@@ -11,7 +11,7 @@ from django.urls import reverse
 from ..models import Flight, Aircraft
 from ..forms import AircraftForm
 
-@login_required(login_url='login')
+@login_required(login_url="account_login")
 def aircraft_add_v2(request, link_id):
 	flight = Flight.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
@@ -33,7 +33,7 @@ def aircraft_add_v2(request, link_id):
 			   'link': link_id, 'returnURL': returnURL}
 	return render(request, 'v2/generic/data_entry_form.html', context=context)
 
-@login_required(login_url='login')
+@login_required(login_url="account_login")
 def aircraft_update_v2(request, link_id):
 	aircraft = Aircraft.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
@@ -56,7 +56,7 @@ def aircraft_update_v2(request, link_id):
 			   'link': link_id, 'returnURL': returnURL}
 	return render(request, 'v2/generic/data_entry_form.html', context=context)
 
-@login_required(login_url='login')
+@login_required(login_url="account_login")
 def aircraft_delete_v2(request, link_id):
 	aircraft = Aircraft.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
@@ -65,7 +65,7 @@ def aircraft_delete_v2(request, link_id):
 	
 	return HttpResponseRedirect(returnURL)
 	
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 def aircraft_copy_v2(request, link_id):
 	aircraft = Aircraft.objects.get(id=link_id)
 	flightID = aircraft.copy()

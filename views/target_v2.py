@@ -7,7 +7,7 @@ import requests
 from ..models import Target, Mission
 from ..forms import TargetForm
 
-@login_required(login_url='login')
+@login_required(login_url="account_login")
 def target_add_v2(request, link_id):
 	mission = Mission.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
@@ -26,7 +26,7 @@ def target_add_v2(request, link_id):
 			   'link': link_id, 'returnURL': returnURL}
 	return render(request, 'v2/generic/data_entry_form.html', context=context)
 
-@login_required(login_url='login')
+@login_required(login_url="account_login")
 def target_update_v2(request, link_id):
 	target = Target.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
@@ -46,7 +46,7 @@ def target_update_v2(request, link_id):
 			   'link': link_id, 'returnURL': returnURL}
 	return render(request, 'v2/generic/data_entry_form.html', context=context)
 
-@login_required(login_url='login')
+@login_required(login_url="account_login")
 def target_delete_v2(request, link_id):
 	target = Target.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')

@@ -152,7 +152,7 @@ def mission_copy_v2(request, link_id):
     return HttpResponseRedirect(returnURL)
 
 # ---------------- Mission Comments -------------------------
-
+@login_required(login_url="account_login")
 def mission_add_comment(request):
     # if this is a POST request we need to process the form data
     mission_id = request.GET.get("mission_id")
@@ -167,6 +167,7 @@ def mission_add_comment(request):
 
     return HttpResponseRedirect(returnURL)
 
+@login_required(login_url="account_login")
 def mission_delete_comment(request, link_id):
     comment = Comment.objects.get(id=link_id)
     returnURL = request.GET.get("returnUrl")
@@ -177,6 +178,7 @@ def mission_delete_comment(request, link_id):
     
 # ---------------- Mission File -------------------------
 
+@login_required(login_url="account_login")
 def mission_file_add(request):
     # if this is a POST request we need to process the form data
     returnURL = request.GET.get('returnUrl')
@@ -207,7 +209,7 @@ def mission_file_delete(request, link_id):
 
 # ---------------- Mission Imagery -------------------------
     
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 def mission_imagery_create_v2(request, link_id):
     mission = Mission.objects.get(id=link_id)
     returnURL = request.GET.get("returnUrl")
@@ -230,7 +232,7 @@ def mission_imagery_create_v2(request, link_id):
     return render(request, 'v2/generic/data_entry_form.html', context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 def mission_imagery_update_v2(request, link_id):
     imagery = MissionImagery.objects.get(id=link_id)
     returnURL = request.GET.get("returnUrl")
@@ -254,7 +256,7 @@ def mission_imagery_update_v2(request, link_id):
     return render(request, 'v2/generic/data_entry_form.html', context=context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 def mission_imagery_delete_v2(request, link_id):
     imagery = MissionImagery.objects.get(id=link_id)
     returnURL = request.GET.get("returnUrl")

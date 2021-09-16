@@ -31,7 +31,7 @@ def own_profile_view(request):
             messages.error(request, "Please correct the error below.")
     return render(request, "v2/profile/profile.html", context=context)
 
-
+@login_required(login_url="account_login")
 def select_avatar(request):
     context = {}
     new_file = []
@@ -42,7 +42,7 @@ def select_avatar(request):
     context = {"files": new_file}
     return render(request, "v2/profile/avatar_selection.html", context=context)
 
-
+@login_required(login_url="account_login")
 def change_avatar(request):
     avatar_image = request.GET.get("avatar")
     profile = UserProfile.objects.get(user=request.user)

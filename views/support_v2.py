@@ -7,7 +7,7 @@ import requests
 from ..models import Support, Mission
 from ..forms import SupportForm
 
-@login_required(login_url='login')
+@login_required(login_url="account_login")
 def support_add_v2(request, link_id):
 	mission = Mission.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
@@ -26,7 +26,7 @@ def support_add_v2(request, link_id):
 			   'link': link_id, 'returnURL': returnURL}
 	return render(request, 'v2/generic/data_entry_form.html', context=context)
 
-@login_required(login_url='login')
+@login_required(login_url="account_login")
 def support_update_v2(request, link_id):
 	support = Support.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
@@ -46,7 +46,7 @@ def support_update_v2(request, link_id):
 			   'link': link_id, 'returnURL': returnURL}
 	return render(request, 'v2/generic/data_entry_form.html', context=context)
 
-@login_required(login_url='login')
+@login_required(login_url="account_login")
 def support_delete_v2(request, link_id):
 	support = Support.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')

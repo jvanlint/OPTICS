@@ -11,7 +11,7 @@ from django.urls import reverse
 from ..models import Flight, Waypoint
 from ..forms import WaypointForm
 
-@login_required(login_url='login')
+@login_required(login_url="account_login")
 def waypoint_add_v2(request, link_id):
 	flight = Flight.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
@@ -30,7 +30,7 @@ def waypoint_add_v2(request, link_id):
 			   'link': link_id, 'returnURL': returnURL}
 	return render(request, 'v2/generic/data_entry_form.html', context=context)
 
-@login_required(login_url='login')
+@login_required(login_url="account_login")
 def waypoint_update_v2(request, link_id):
 	waypoint = Waypoint.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
@@ -50,7 +50,7 @@ def waypoint_update_v2(request, link_id):
 			   'link': link_id, 'returnURL': returnURL}
 	return render(request, 'v2/generic/data_entry_form.html', context=context)
 
-@login_required(login_url='login')
+@login_required(login_url="account_login")
 def waypoint_delete_v2(request, link_id):
 	waypoint = Waypoint.objects.get(id=link_id)
 	returnURL = request.GET.get('returnUrl')
@@ -59,7 +59,7 @@ def waypoint_delete_v2(request, link_id):
 	
 	return HttpResponseRedirect(returnURL)
 	
-@login_required(login_url="login")
+@login_required(login_url="account_login")
 def waypoint_copy_v2(request, link_id):
 	waypoint = Waypoint.objects.get(id=link_id)
 	flightID = waypoint.copy()
