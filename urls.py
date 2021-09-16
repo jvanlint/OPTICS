@@ -4,7 +4,7 @@ from django.urls import path, include
 from airops import views
 
 urlpatterns = [
-    path('', views.campaign, name='index'),
+    path('', views.campaigns_all, name='index'),
 
     path('campaign/<int:link_id>/', views.campaign_detail, name='campaign'),
     path('campaign', views.campaign, name='campaign'),
