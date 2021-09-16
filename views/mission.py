@@ -138,7 +138,7 @@ def mission_signup(request, link_id):  # link_id is the mission ID
 			.count()
 		)
 	campaign = Campaign.objects.get(mission=mission)
-	is_owner = campaign.creator == request.user
+	is_owner = campaign.created_by == request.user
 	context = {
 		"mission_object": mission,
 		"package_object": packages,
