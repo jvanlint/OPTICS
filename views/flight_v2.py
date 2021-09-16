@@ -53,7 +53,10 @@ def flight_add_v2(request, link_id):
 	if request.method == "POST":
 		form = FlightForm(target, request.POST)
 		if form.is_valid():
-			form.save(commit=True)
+			obj=form.save(commit=False)
+			obj.modified_by = request.user
+			obj.created_by = request.user
+			obj.save()
 			return HttpResponseRedirect(returnURL)
 
 	context = {'form': form, 'form_title': form_title,
@@ -76,7 +79,9 @@ def flight_update_v2(request, link_id):
 		form = FlightForm(target, request.POST, instance=flight)
 		print(request.path)
 		if form.is_valid():
-			form.save(commit=True)
+			obj=form.save(commit=False)
+			obj.modified_by = request.user
+			obj.save()
 			return HttpResponseRedirect(returnURL)
 
 	context = {'form': form, 'form_title': form_title,

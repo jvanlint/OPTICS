@@ -87,7 +87,25 @@ class Flight(models.Model):
 		verbose_name="Fuel BINGO",
 	)
 	comments = GenericRelation(Comment)
-
+	created_by = models.ForeignKey(
+		User, 
+		related_name='flight_created_by', 
+		null=True,
+		blank=True,
+		on_delete=models.SET_NULL
+	)
+	date_created = models.DateTimeField(
+		auto_now_add=True, 
+		null=True
+	)
+	date_modified = models.DateTimeField(auto_now=True)
+	modified_by = models.ForeignKey(
+		User, 
+		on_delete=models.SET_NULL, 
+		null=True,
+		blank=True,
+		related_name = 'flight_modified_by'
+	)
 	# Metadata
 
 	class Meta:

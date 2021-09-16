@@ -53,11 +53,11 @@
 							<h6 class="text-muted">Task</h6>
 							<h4>{{flight_object.task}}</h4>
 							<div class="media text-muted pt-3">
-								<div class="c-avatar"><img class="c-avatar-img" src="{{ flight_object.creator.profile.profile_image.url }}" alt="" /></div>
+								<div class="c-avatar"><img class="c-avatar-img" src="{{ flight_object.created_by.profile.profile_image.url }}" alt="" /></div>
 								<p class="media-body pb-3 pl-2 mb-0  lh-125">
 								<strong class="d-block text-gray-dark">
-									{% if flight_object.creator.username %}
-									<a href="{% url 'user_profile' mission_object.creator.id %}" class="text-decoration-none text-reset">{{ flight_object.creator.username }}</a>
+									{% if flight_object.created_by.username %}
+									<a href="{% url 'user_profile' flight_object.created_by.id %}" class="text-decoration-none text-reset">{{ flight_object.created_by.username }}</a>
 									{% endif %}
 								</strong>
 								{{ flight_object.date_created }} Date Last Edited Here
@@ -164,6 +164,11 @@
 									&nbspDelete
 								</a>
 							</div>
+							<h6 class="media-body pb-3 pl-2 mb-0 lh-125">Last modified on {{ flight_object.date_modified }}
+								{% if flight_object.modified_by %}
+								<br>by <a href="{% url 'user_profile' flight_object.modified_by.id %}">{{ flight_object.modified_by.username }} </a>
+								{% endif %}
+							</h6> 
 						</div>
 					</div>
 					<!-- /.card -->
@@ -236,7 +241,7 @@
 										{% if aircraft_object %} 
 										{% for aircraft in aircraft_object %}
 										<tr>
-											<td><a href="#" data-toggle="tooltip" title="Some text">Hover over me</a>{{ aircraft.type }}</td>
+											<td>{{ aircraft.type }}</td>
 											<td>{{ aircraft.pilot }}</td>
 											<td>{{ aircraft.rio_wso }}</td>
 											<td>{{ aircraft.flight_lead }}</td>

@@ -146,7 +146,7 @@ class FlightForm(ModelForm):
     class Meta:
         model = Flight
         fields = "__all__"
-
+        exclude = ("modified_by","created_by",)
 
 class AircraftForm(ModelForm):
     def __init__(self, flights, *args, **kwargs):
