@@ -82,6 +82,13 @@ urlpatterns += [
     path('dashboard/', views.mission_dashboard, name='mission_dashboard'),
 ]
 
+# About URL Patterns - V2
+
+urlpatterns += [
+    path('about/', views.about, name='about'),
+]
+
+
 # Campaign URL Patterns - V2
 urlpatterns += [
     path('v2/', views.campaigns_all, name='home'),

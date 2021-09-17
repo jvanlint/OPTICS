@@ -35,3 +35,5 @@ from .support_v2 import *
 
 from .ref_tables import *
 from .dashboard import *
+
+from .about import *
