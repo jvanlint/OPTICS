@@ -30,9 +30,8 @@ from ..forms import (
 @login_required(login_url="login")
 def reference_tables(request):
     airframe = Airframe.objects.order_by("name")  # Always update the airframe context
-    if request.htmx:
-        pass
-    else:   # only update the other tables on initial non-htmx GET
+    if not request.htmx:
+        # only update the other tables on initial non-htmx GET
         terrain = Terrain.objects.order_by("name")
         status = Status.objects.order_by("name")
         waypoint_type = WaypointType.objects.order_by("name")

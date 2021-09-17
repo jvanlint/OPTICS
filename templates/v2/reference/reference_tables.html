@@ -1,5 +1,5 @@
 {% extends "v2/base.html" %} {% block title %} Page Blank {% endblock %}
-{% load django_htmx %}
+{% load django_htmx %} {% load static %}
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %} {% block content %}
 
@@ -20,9 +20,9 @@
 								<thead>
 									<tr>
 										<th>Status</th>
-										<th>Date Added</th>
-										<th>Last Modified</th>
-										<th>User</th>
+{#										<th>Date Added</th>#}
+{#										<th>Last Modified</th>#}
+{#										<th>User</th>#}
 										<th></th>
 									</tr>
 								</thead>
@@ -30,9 +30,9 @@
 									{% for status in status_object %}
 									<tr>
 										<td>{{status.name}}</td>
-										<td>{{status.date_created}}</td>
-										<td>{{status.date_modified}}</td>
-										<td>{{status.user}}</td>
+{#										<td>{{status.date_created}}</td>#}
+{#										<td>{{status.date_modified}}</td>#}
+{#										<td>{{status.user}}</td>#}
 										<td>
 											<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 												&nbspAction
@@ -83,9 +83,9 @@
 								<thead>
 									<tr>
 										<th>Terrain</th>
-										<th>Date Added</th>
-										<th>Last Modified</th>
-										<th>User</th>
+{#										<th>Date Added</th>#}
+{#										<th>Last Modified</th>#}
+{#										<th>User</th>#}
 										<th></th>
 									</tr>
 								</thead>
@@ -93,9 +93,9 @@
 									{% for terrain in terrain_object %}
 									<tr>
 										<td>{{terrain.name}}</td>
-										<td>{{terrain.date_created}}</td>
-										<td>{{terrain.date_modified}}</td>
-										<td>{{terrain.user}}</td>
+{#										<td>{{terrain.date_created}}</td>#}
+{#										<td>{{terrain.date_modified}}</td>#}
+{#										<td>{{terrain.user}}</td>#}
 										<td>
 											<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 												&nbspAction
@@ -149,9 +149,9 @@
 								<thead>
 									<tr>
 										<th>Type</th>
-										<th>Date Added</th>
-										<th>Last Modified</th>
-										<th>User</th>
+{#										<th>Date Added</th>#}
+{#										<th>Last Modified</th>#}
+{#										<th>User</th>#}
 										<th></th>
 									</tr>
 								</thead>
@@ -159,9 +159,9 @@
 									{% for waypoint_type in waypoint_type_object %}
 									<tr>
 										<td>{{waypoint_type.name}}</td>
-										<td>{{waypoint_type.date_created}}</td>
-										<td>{{waypoint_type.date_modified}}</td>
-										<td>{{waypoint_type.user}}</td>
+{#										<td>{{waypoint_type.date_created}}</td>#}
+{#										<td>{{waypoint_type.date_modified}}</td>#}
+{#										<td>{{waypoint_type.user}}</td>#}
 										<td>
 											<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 												&nbspAction
@@ -212,9 +212,9 @@
 								<thead>
 									<tr>
 										<th>Task</th>
-										<th>Date Added</th>
-										<th>Last Modified</th>
-										<th>User</th>
+{#										<th>Date Added</th>#}
+{#										<th>Last Modified</th>#}
+{#										<th>User</th>#}
 										<th></th>
 									</tr>
 								</thead>
@@ -222,9 +222,9 @@
 									{% for flight_task in flight_task_object %}
 									<tr>
 										<td>{{flight_task.name}}</td>
-										<td>{{flight_task.date_created}}</td>
-										<td>{{flight_task.date_modified}}</td>
-										<td>{{flight_task.user}}</td>
+{#										<td>{{flight_task.date_created}}</td>#}
+{#										<td>{{flight_task.date_modified}}</td>#}
+{#										<td>{{flight_task.user}}</td>#}
 										<td>
 											<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 												&nbspAction
@@ -278,9 +278,9 @@
 								<thead>
 									<tr>
 										<th>Type</th>
-										<th>Date Added</th>
-										<th>Last Modified</th>
-										<th>User</th>
+{#										<th>Date Added</th>#}
+{#										<th>Last Modified</th>#}
+{#										<th>User</th>#}
 										<th></th>
 									</tr>
 								</thead>
@@ -288,9 +288,9 @@
 									{% for support_type in support_type_object %}
 									<tr>
 										<td>{{support_type.name}}</td>
-										<td>{{support_type.date_created}}</td>
-										<td>{{support_type.date_modified}}</td>
-										<td>{{support_type.user}}</td>
+{#										<td>{{support_type.date_created}}</td>#}
+{#										<td>{{support_type.date_modified}}</td>#}
+{#										<td>{{support_type.user}}</td>#}
 										<td>
 											<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 												&nbspAction
@@ -341,9 +341,9 @@
 								<thead>
 									<tr>
 										<th>Task</th>
-										<th>Date Added</th>
-										<th>Last Modified</th>
-										<th>User</th>
+{#										<th>Date Added</th>#}
+{#										<th>Last Modified</th>#}
+{#										<th>User</th>#}
 										<th></th>
 									</tr>
 								</thead>
@@ -351,9 +351,9 @@
 									{% for threat_type in threat_type_object %}
 									<tr>
 										<td>{{threat_type.name}}</td>
-										<td>{{threat_type.date_created}}</td>
-										<td>{{threat_type.date_modified}}</td>
-										<td>{{threat_type.user}}</td>
+{#										<td>{{threat_type.date_created}}</td>#}
+{#										<td>{{threat_type.date_modified}}</td>#}
+{#										<td>{{threat_type.user}}</td>#}
 										<td>
 											<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 												&nbspAction
@@ -411,4 +411,9 @@
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
-{% block javascripts %}{% endblock javascripts %}
+{% block javascripts %}
+<script src="{% static 'js/htmx/htmx.min.js' %}"></script>
+<script src="{% static 'js/htmx/ext/debug.js' %}"></script>
+<script src="{% static 'js/htmx/ext/event-header.js' %}"></script>
+{% django_htmx_script %}
+{% endblock javascripts %}
