@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseBadRequest
 from django.shortcuts import render
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.utils import timezone
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -44,24 +44,24 @@ def reference_tables(request):
     breadcrumbs = {"Home": reverse("home"), "Reference Tables": ""}
 
     if request.htmx:
-        template = "v2/reference/partials/airframes_partial.html"
+        template = "v2/partials/airframes_partial.html"
         context = {"airframe_object": airframes}
     else:
         template = "v2/reference/reference_tables.html"
         context = {
-            "terrain_object": terrain,
-            "status_object": status,
-            "waypoint_type_object": waypoint_type,
-            "flight_task_object": flight_task,
-            "support_type_object": support_type,
-            "threat_type_object": threat_type,
-            "airframe_object": airframes,
+            # "terrain_object": terrain,
+            "status_objects": status,
+            # "waypoint_type_object": waypoint_type,
+            # "flight_task_object": flight_task,
+            # "support_type_object": support_type,
+            # "threat_type_object": threat_type,
+            # "airframe_object": airframes,
             "breadcrumbs": breadcrumbs,
         }
     return render(request, template_name=template, context=context)
 
 
-def evaluate_reference_object(table, link_id):
+def evaluate_reference_object(table):
     if table == "status":
         return Status
     elif table == "terrain":
@@ -129,41 +129,83 @@ def reference_object_add(request, table):
 
 
 @login_required(login_url="login")
-def reference_object_update(request, link_id, table):
-    refobj = evaluate_reference_object(table, link_id)
-    obj = refobj.objects.get(id=link_id)
-    formobj = evaluate_reference_form(table)
-    form = formobj(instance=obj)
-    returnURL = request.GET.get("returnUrl")
-    breadcrumbs = {
-        "Home": reverse("home"),
-        "Reference Tables": reverse("reference_tables"),
-        "Edit": "",
-    }
+def reference_object_update(request, item_id=None, table=None):
+    """
+    GET -> return a form with an object instance
+        check item_id and table not none
+        get object instance
+        get form for object
+
+        if hx
+            then a form partial,
+        otherwise
+            the full form page
+
+    POST -> check valid and save the data
+        if hx,
+            return a detail view of the changed data
+        otherwise,
+            return redirect to "reference_tables"
+
+    """
+    if request.method == "GET" and (not item_id and table):
+        return HttpResponseBadRequest("no object id or table id")
+    if item_id and table:
+        reference_object = evaluate_reference_object(table)
+        obj = reference_object.objects.get(id=item_id)
+        form_object = evaluate_reference_form(table)
+        form = form_object(request.POST or None, instance=obj)
+        return_url = request.GET.get("returnUrl")
+        url = reverse("reference_object_update", kwargs={"item_id": item_id, "table": table})
+        breadcrumbs = {
+            "Home": reverse("home"),
+            "Reference Tables": reverse("reference_tables"),
+            "Edit": "",
+        }
+        context = {
+            "form": form,
+            "action": "Edit",
+            "returnURL": return_url,
+            "breadcrumbs": breadcrumbs,
+            "post_url": url,
+        }
 
     if request.method == "POST":
-        form = formobj(request.POST, instance=obj)
+        form = form_object(request.POST, instance=obj)
         if form.is_valid():
             form_obj = form.save(commit=False)
             form_obj.date_modified = timezone.now()
             form_obj.user = request.user
             form_obj.save()
-            # messages.success(request, "Campaign successfully created.")
-            return redirect("reference_tables")
+            if request.htmx:
+                context = {
+                    "updated_item": obj,
+                    "edit_url": url,
+                }
+                template = "V2/partials/data_entry_form_detail.html"
+                return render(request=request, template_name=template, context=context)
+            else:
+                return redirect("reference_tables")
 
-    context = {
-        "form": form,
-        "action": "Edit",
-        "returnURL": returnURL,
-        "breadcrumbs": breadcrumbs,
-    }
-    return render(request, "v2/generic/data_entry_form.html", context=context)
+    if request.htmx:
+        template = "v2/partials/data_entry_form_partial.html"
+    else:
+        template = "v2/generic/data_entry_form.html"
+
+    return render(request=request, template_name=template, context=context)
+
+
+
+
+
+
+
 
 
 @login_required(login_url="login")
-def reference_object_delete(request, link_id, table):
-    refobj = evaluate_reference_object(table, link_id)
-    obj = refobj.objects.get(id=link_id)
+def reference_object_delete(request, item_id, table):
+    refobj = evaluate_reference_object(table, item_id)
+    obj = refobj.objects.get(id=item_id)
     obj.delete()
     # messages.success(request, "Campaign successfully deleted.")
     return redirect("reference_tables")

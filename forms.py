@@ -242,12 +242,13 @@ class StatusForm(ModelForm):
         widgets = {
             'name': forms.TextInput(
                 attrs={
-                    "placeholder": "Campaign status.", 
+                    "placeholder": "Campaign status.",
                     "class": "form-control",
                     "autofocus": "autofocus"
                     }
                 ),
         }
+
 
 class WaypointTypeForm(ModelForm):
 

@@ -24,23 +24,7 @@
 {#                  <td>{{airframe.date_modified}}</td>#}
 {#                  <td>{{airframe.user}}</td>#}
                   <td>
-                      <button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          &nbspAction
-                      </button>
-                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <a class="dropdown-item" href="{% url 'reference_object_update' airframe.id 'airframe' %}?returnUrl={{request.path}}">
-                              <svg class="c-icon">
-                                  <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
-                              </svg>
-                              &nbspEdit
-                          </a>
-                          <a class="dropdown-item" href="{% url 'reference_object_delete' airframe.id 'airframe' %}?returnUrl={{request.path}}">
-                              <svg class="c-icon">
-                                  <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
-                              </svg>
-                              &nbspDelete
-                          </a>
-                      </div>
+                     {% include "v2/partials/item_edit_button.html" with item_id=airframe.id parent_id='airframe' edit_url='reference_object_update' %}
                   </td>
               </tr>
               {% endfor %}

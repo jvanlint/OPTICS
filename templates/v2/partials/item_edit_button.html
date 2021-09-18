@@ -1,0 +1,19 @@
+{#  todo: put a check in here for user is alowed to edit #}
+<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownEditButton" type="button" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+    &nbspAction
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownEditButton">
+    <a class="dropdown-item" href="{{edit_url }}?returnUrl={{ request.path }}">
+      <svg class="c-icon">
+        <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
+      </svg>
+      &nbspEdit
+    </a>
+    <a class="dropdown-item" href="{{edit_url }}?returnUrl={{ request.path }}">
+      <svg class="c-icon">
+        <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+      </svg>
+      &nbspDelete
+    </a>
+  </div>

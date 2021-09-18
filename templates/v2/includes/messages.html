@@ -9,9 +9,13 @@
 </div>
 {% endfor %}
 
+{# todo: This is j-query script for removing the alerts. change to coreui-javascript version.#}
+{# https://coreui.io/docs/components/bootstrap/alerts/#dismissing #}
 <script type="text/javascript">
-	setTimeout(function () {
-		// Closing the alert
-		$('.alert').alert('close');
-	}, 2000);
+	$(document).ready(function() {
+    // show the alert
+    setTimeout(function() {
+        $(".alert").alert('close');
+    }, 2000);
+});
 </script>

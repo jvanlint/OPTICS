@@ -183,9 +183,9 @@ urlpatterns += [
 # Reference URL Patterns - V2
 urlpatterns += [
     path('reference/', views.reference_tables, name='reference_tables'),
-    path('referenceobject/add/<str:table>', views.reference_object_add, name='reference_object_add'),
-    path('referenceobject/update/<int:link_id>/<str:table>', views.reference_object_update, name='reference_object_update'),
-    path('referenceobject/delete/<int:link_id>/<str:table>', views.reference_object_delete, name='reference_object_delete'),
+    path('reference/add/<str:table>', views.reference_object_add, name='reference_object_add'),
+    path('reference/update/<str:table>/<int:item_id>', views.reference_object_update, name='reference_object_update'),
+    path('reference/delete/<str:table>/<int:item_id>', views.reference_object_delete, name='reference_object_delete'),
 ]
 
 # Profile URL Patterns - V2
