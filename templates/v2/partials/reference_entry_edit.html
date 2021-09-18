@@ -1,0 +1,22 @@
+<div class="row pb-3" id="{{ table_name }}_{{ form.instance.id }}" hx-target="this">
+  <form class="form-inline" action="{{ post_url }}" method="POST" enctype="multipart/form-data">
+    <div class="col">
+      {{ form.name }}
+      {{ form.errors }}  {# need a better place to show form errors #}
+    </div>
+    {% if table_name == "airframe" %}
+        <div class="col">
+          {{ form.stations }}
+        </div>
+        <div class="col">
+          {{ form.multicrew }}
+        </div>
+    {% endif %}
+
+    <div class="col text-right float-right">
+      <button class="btn btn-sm btn-primary" type="submit" hx-indicator="#{{ table_name }}_indicator" hx-trigger="click" >Save</button>
+{#      <a href="{% url 'reference_tables' %}" class="btn btn-sm btn-danger" role="button">Cancel</a> {# **This doesnt work- gives htmx target error**???  #}
+      <button class="btn btn-sm btn-danger" type="button" onclick="location.href='{% url "reference_tables" %}'">Cancel</button>
+    </div>
+  </form>
+</div>

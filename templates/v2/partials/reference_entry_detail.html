@@ -1,0 +1,16 @@
+<div class="row pb-3" id=id="{{ table_name }}_{{ updated_item.id }}" hx-target="this" >
+  <div class="col">
+  {{ updated_item.name }}
+  </div>
+  {% if table_name == "airframe" %}
+    <div class="col">
+    {{ updated_item.stations }}
+    </div>
+      <div class="col">
+    {{ updated_item.multicrew }}
+    </div>
+  {% endif %}
+  <div class="col text-right">
+    {% include "v2/partials/item_edit_button.html" with item=updated_item %}
+  </div>
+</div>

@@ -4,16 +4,28 @@
     &nbspAction
   </button>
   <div class="dropdown-menu" aria-labelledby="dropdownEditButton">
-    <a class="dropdown-item" href="{{edit_url }}?returnUrl={{ request.path }}">
+    <a class="dropdown-item"
+       href="{{ item.edit_url }}?returnUrl={% url 'reference_tables' %}"
+       hx-trigger="click"
+       hx-indicator="#{{ table_name }}_indicator"
+    >
       <svg class="c-icon">
         <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
       </svg>
       &nbspEdit
     </a>
-    <a class="dropdown-item" href="{{edit_url }}?returnUrl={{ request.path }}">
+    <a class="dropdown-item"
+        href="{% url 'reference_object_delete' table_name item.id %}?returnUrl={% url 'reference_tables' %}"
+        hx-indicator="#{{ table_name }}_indicator"
+        hx-confirm="Are you sure you want to delete {{ item.name }}?"
+        hx-swap="outerHTML swap:1s"
+        hx-trigger="click"
+
+    >
       <svg class="c-icon">
         <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
       </svg>
       &nbspDelete
     </a>
   </div>
+{#hx-target="#{{ table_name }}_{{ item.id }}"#}

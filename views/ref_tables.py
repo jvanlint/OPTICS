@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+from typing import Any
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseBadRequest
 from django.shortcuts import render
@@ -27,17 +29,69 @@ from ..forms import (
 )
 
 
+@dataclass(repr=False)
+class Card:
+    table_name: str
+    heading_text: str
+    heading_description: str
+    data: Any
+
+
+def get_cards():
+    cards = [
+        Card(
+            table_name="status",
+            heading_text="Campaign Status",
+            heading_description="Used to describe the status of the campaign.",
+            data=Status.objects.order_by("name")
+        ),
+        Card(
+            table_name="terrain",
+            heading_text="Terrain",
+            heading_description="The list of available DCS Terrain for a campaign.",
+            data=Terrain.objects.order_by("name")
+        ),
+        Card(
+            table_name="waypoint_type",
+            heading_text="Waypoint Types",
+            heading_description="Types of actions performed at a given waypoint.",
+            data=WaypointType.objects.order_by("name"),
+        ),
+        Card(
+            table_name="flight_task",
+            heading_text="Flight Tasks",
+            heading_description="Tasks that can be performed by flights.",
+            data=Task.objects.order_by("name"),
+        ),
+        Card(
+            table_name="support_type",
+            heading_text="Support Types",
+            heading_description="The various support assets available in the mission.",
+            data=SupportType.objects.order_by("name"),
+        ),
+        Card(
+            table_name="threat_type",
+            heading_text="Threat Types",
+            heading_description="Classes that be assigned to a ground threat.",
+            data=ThreatType.objects.order_by("name"),
+        ),
+        ]
+    return cards
+
+
 @login_required(login_url="login")
 def reference_tables(request):
     airframe = Airframe.objects.order_by("name")  # Always update the airframe context
     if not request.htmx:
         # only update the other tables on initial non-htmx GET
-        terrain = Terrain.objects.order_by("name")
-        status = Status.objects.order_by("name")
-        waypoint_type = WaypointType.objects.order_by("name")
-        flight_task = Task.objects.order_by("name")
-        support_type = SupportType.objects.order_by("name")
-        threat_type = ThreatType.objects.order_by("name")
+        # terrain = Terrain.objects.order_by("name")
+        # status = Status.objects.order_by("name")
+        # waypoint_type = WaypointType.objects.order_by("name")
+        # flight_task = Task.objects.order_by("name")
+        # support_type = SupportType.objects.order_by("name")
+        # threat_type = ThreatType.objects.order_by("name")
+
+        cards = get_cards()
 
     page_num = request.GET.get("page", 1)
     airframes = Paginator(object_list=airframe, per_page=5).get_page(page_num)
@@ -49,14 +103,9 @@ def reference_tables(request):
     else:
         template = "v2/reference/reference_tables.html"
         context = {
-            # "terrain_object": terrain,
-            "status_objects": status,
-            # "waypoint_type_object": waypoint_type,
-            # "flight_task_object": flight_task,
-            # "support_type_object": support_type,
-            # "threat_type_object": threat_type,
-            # "airframe_object": airframes,
+            "airframe_object": airframes,
             "breadcrumbs": breadcrumbs,
+            "cards": cards
         }
     return render(request, template_name=template, context=context)
 
@@ -113,7 +162,7 @@ def reference_object_add(request, table):
             obj.user = request.user
             obj.save()
             # messages.success(request, "Campaign successfully created.")
-            return redirect("reference_tables")
+            return redirect(returnURL or "reference_tables")
     else:
         form = evaluate_reference_form(table)
 
@@ -130,24 +179,6 @@ def reference_object_add(request, table):
 
 @login_required(login_url="login")
 def reference_object_update(request, item_id=None, table=None):
-    """
-    GET -> return a form with an object instance
-        check item_id and table not none
-        get object instance
-        get form for object
-
-        if hx
-            then a form partial,
-        otherwise
-            the full form page
-
-    POST -> check valid and save the data
-        if hx,
-            return a detail view of the changed data
-        otherwise,
-            return redirect to "reference_tables"
-
-    """
     if request.method == "GET" and (not item_id and table):
         return HttpResponseBadRequest("no object id or table id")
     if item_id and table:
@@ -168,6 +199,7 @@ def reference_object_update(request, item_id=None, table=None):
             "returnURL": return_url,
             "breadcrumbs": breadcrumbs,
             "post_url": url,
+            "table_name": table,
         }
 
     if request.method == "POST":
@@ -181,31 +213,27 @@ def reference_object_update(request, item_id=None, table=None):
                 context = {
                     "updated_item": obj,
                     "edit_url": url,
+                    "table_name": table,
                 }
-                template = "V2/partials/data_entry_form_detail.html"
+                template = "V2/partials/reference_entry_detail.html"
                 return render(request=request, template_name=template, context=context)
             else:
                 return redirect("reference_tables")
 
     if request.htmx:
-        template = "v2/partials/data_entry_form_partial.html"
+        template = "v2/partials/reference_entry_edit.html"
     else:
         template = "v2/generic/data_entry_form.html"
 
     return render(request=request, template_name=template, context=context)
 
 
-
-
-
-
-
-
-
 @login_required(login_url="login")
 def reference_object_delete(request, item_id, table):
-    refobj = evaluate_reference_object(table, item_id)
-    obj = refobj.objects.get(id=item_id)
-    obj.delete()
+    reference_obj = evaluate_reference_object(table)
+    obj = reference_obj.objects.get(id=item_id)
+    # obj.delete()
     # messages.success(request, "Campaign successfully deleted.")
+    if request.htmx:
+        return HttpResponse("")
     return redirect("reference_tables")

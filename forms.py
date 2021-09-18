@@ -7,6 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.conf import settings
 from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
 from airops import utils
 
 # import GeeksModel from models.py
@@ -229,12 +230,14 @@ class TerrainForm(ModelForm):
                 attrs={
                     "placeholder": "DCS terrain name.", 
                     "class": "form-control",
-                    "autofocus": "autofocus"
+                    "autofocus": None
                     }
                 ),
         }
 
+
 class StatusForm(ModelForm):
+
 
     class Meta:
         model = Status
@@ -244,7 +247,7 @@ class StatusForm(ModelForm):
                 attrs={
                     "placeholder": "Campaign status.",
                     "class": "form-control",
-                    "autofocus": "autofocus"
+                    "autofocus": None
                     }
                 ),
         }
@@ -260,7 +263,7 @@ class WaypointTypeForm(ModelForm):
                 attrs={
                     "placeholder": "Waypoint type.", 
                     "class": "form-control",
-                    "autofocus": "autofocus"
+                    "autofocus": None
                     }
                 ),
         }
@@ -275,7 +278,7 @@ class SupportTypeForm(ModelForm):
                 attrs={
                     "placeholder": "Support type.", 
                     "class": "form-control",
-                    "autofocus": "autofocus"
+                    "autofocus": None
                     }
                 ),
         }
@@ -290,7 +293,7 @@ class TaskForm(ModelForm):
                 attrs={
                     "placeholder": "Flight task.", 
                     "class": "form-control",
-                    "autofocus": "autofocus"
+                    "autofocus": None
                     }
                 ),
         }
@@ -306,7 +309,7 @@ class ThreatTypeForm(ModelForm):
                 attrs={
                     "placeholder": "Threat type.", 
                     "class": "form-control",
-                    "autofocus": "autofocus"
+                    "autofocus": None
                     }
                 ),
         }

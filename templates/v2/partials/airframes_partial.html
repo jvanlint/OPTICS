@@ -1,70 +1,60 @@
 {% load static %}
 <div id="aircraft">
-    <div class="card-body" >
+  <div class="card-body">
+     {% for airframe in airframe_object %}
+        <div class="row pb-3"  id="airframe_{{ airframe.id }}" hx-target="this">
+          <div class="col">
+            {{ airframe.name }}
+          </div>
+          <div class="col">
+            {{ airframe.stations }}
+          </div>
+          <div class="col">
+            {{ airframe.multicrew }}
+          </div>
+          <div class="col">
+            {% include "v2/partials/item_edit_button.html" with table_name="airframe" item=airframe %}
+          </div>
+        </div>
+       <div class='htmx-indicator' id="airframe_indicator">Working...</div>
+    {% endfor %}
+  </div>
+  <div class="card-footer">
+    {% if airframe_object.has_other_pages %}
+      <nav aria-label="Page navigation" hx-boost="true" hx-target="#aircraft" hx-swap="outerHTML" hx-push-url="true">
+        <ul class="pagination">
+          {% if airframe_object.has_previous %}
+            <li class="page-item"><a class="page-link"
+                                     href="?page={{ airframe_object.previous_page_number }}">Previous</a></li>
+          {% else %}
+            <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Previous</a></li>
+          {% endif %}
 
-      <table class="table table-responsive-sm table-striped" >
-          <thead>
-              <tr>
-                  <th>Name</th>
-                  <th>Stations</th>
-                  <th>Multicrew</th>
-{#                  <th>Date Added</th>#}
-{#                  <th>Last Modified</th>#}
-{#                  <th>User</th>#}
-                  <th></th>
-              </tr>
-          </thead>
-          <tbody>
-              {% for airframe in airframe_object %}
-              <tr>
-                  <td>{{airframe.name}}</td>
-                  <td>{{airframe.stations}}</td>
-                  <td>{{airframe.multicrew}}</td>
-{#                  <td>{{airframe.date_created}}</td>#}
-{#                  <td>{{airframe.date_modified}}</td>#}
-{#                  <td>{{airframe.user}}</td>#}
-                  <td>
-                     {% include "v2/partials/item_edit_button.html" with item_id=airframe.id parent_id='airframe' edit_url='reference_object_update' %}
-                  </td>
-              </tr>
-              {% endfor %}
-          </tbody>
-      </table>
-    </div>
-    <div class="card-footer">
-      {% if airframe_object.has_other_pages %}
-          <nav aria-label="Page navigation" hx-boost="true" hx-target="#aircraft" hx-swap="outerHTML" hx-push-url="true">
-              <ul class="pagination">
-                {% if airframe_object.has_previous %}
-                    <li class="page-item"><a class="page-link" href="?page={{ airframe_object.previous_page_number}}">Previous</a></li>
-                {% else %}
-                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Previous</a></li>
-                {% endif %}
+          {% for i in airframe_object.paginator.page_range %}
+            {% if airframe_object.number == i %}
+              <li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
+            {% else %}
+              <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+          {% endfor %}
 
-                {% for i in airframe_object.paginator.page_range %}
-                    {% if airframe_object.number == i %}
-                        <li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
-                    {% else %}
-                        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
-                    {% endif %}
-                {% endfor %}
+          {% if airframe_object.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ airframe_object.next_page_number }}">Next</a></li>
+          {% else %}
+            <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+          {% endif %}
 
-                {% if airframe_object.has_next %}
-                    <li class="page-item"><a class="page-link" href="?page={{ airframe_object.next_page_number }}">Next</a></li>
-                {% else %}
-                    <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
-                {% endif %}
+        </ul>
+      </nav>
+    {% endif %}
 
-             </ul>
-            </nav>
-      {% endif %}
-      <h6>
-          <a href="{% url 'reference_object_add' 'airframe' %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
-              <svg class="c-icon">
-                  <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
-              </svg>
-              Add
-          </a>
-      </h6>
-    </div>
-</div>
+    <h6>
+      <a href="{% url 'reference_object_add' 'airframe' %}?returnUrl={{ request.path }}"
+         class="btn btn-sm btn-success float-right" role="button">
+        <svg class="c-icon">
+          <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
+        </svg>
+        Add
+      </a>
+    </h6>
+  </div>

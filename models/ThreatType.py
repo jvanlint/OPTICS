@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 
 class ThreatType(models.Model):
@@ -14,3 +15,6 @@ class ThreatType(models.Model):
     def __str__(self):
         """String for representing the ThreatType object (in Admin site etc.)."""
         return self.name
+
+    def edit_url(self):
+        return reverse("reference_object_update", kwargs={"item_id": self.id, "table": "threat_type"})

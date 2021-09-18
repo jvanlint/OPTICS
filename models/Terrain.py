@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
+
 
 class Terrain(models.Model):
 	# Fields
@@ -23,7 +25,10 @@ class Terrain(models.Model):
 	
 	def __str__(self):
 		return self.name
-		
+
+	def edit_url(self):
+		return reverse("reference_object_update", kwargs={"item_id": self.id, "table": "terrain"})
+
 	# Metadata
 
 	class Meta:
