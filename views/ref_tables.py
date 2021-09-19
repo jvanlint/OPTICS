@@ -237,3 +237,13 @@ def reference_object_delete(request, item_id, table):
     if request.htmx:
         return HttpResponse("")
     return redirect("reference_tables")
+
+
+def reference_object_sortorder(request):
+    if not request.htmx:
+        raise Http404
+    if request.method == "POST":
+        print(request.POST)
+        pass
+        # will need to return the card values
+

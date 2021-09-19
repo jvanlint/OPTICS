@@ -186,6 +186,8 @@ urlpatterns += [
     path('reference/add/<str:table>', views.reference_object_add, name='reference_object_add'),
     path('reference/update/<str:table>/<int:item_id>', views.reference_object_update, name='reference_object_update'),
     path('reference/delete/<str:table>/<int:item_id>', views.reference_object_delete, name='reference_object_delete'),
+    path('reference/hx/sortorder', views.reference_object_sortorder, name='sort_order_changed'),
+
 ]
 
 # Profile URL Patterns - V2

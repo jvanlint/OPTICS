@@ -29,7 +29,7 @@ def flight(request, link_id):
 
 
 @login_required(login_url="account_login")
-@allowed_users(allowed_roles=["admin", "planner", "player"])
+# @allowed_users(allowed_roles=["admin", "planner", "player"])
 def flight_create(request, link_id):
     package = Package.objects.get(id=link_id)
 
@@ -50,7 +50,7 @@ def flight_create(request, link_id):
 
 # noinspection PyPep8Naming
 @login_required(login_url="account_login")
-@allowed_users(allowed_roles=["admin", "planner", "player"])
+# @allowed_users(allowed_roles=["admin", "planner", "player"])
 def flight_update(request, link_id):
     flight = Flight.objects.get(id=link_id)
     packageID = flight.package.id
@@ -74,7 +74,7 @@ def flight_update(request, link_id):
 
 
 @login_required(login_url="account_login")
-@allowed_users(allowed_roles=["admin", "planner", "player"])
+# @allowed_users(allowed_roles=["admin", "planner", "player"])
 def flight_delete(request, link_id):
     flight = Flight.objects.get(id=link_id)
     packageID = flight.package.id
@@ -89,7 +89,7 @@ def flight_delete(request, link_id):
 
 
 @login_required(login_url="account_login")
-@allowed_users(allowed_roles=["admin", "planner", "player"])
+# @allowed_users(allowed_roles=["admin", "planner", "player"])
 def flight_copy(request, link_id):
     flight = Flight.objects.get(id=link_id)
     packageID = flight.copy()

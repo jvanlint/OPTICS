@@ -137,8 +137,6 @@ class TargetForm(ModelForm):
 
 
 class FlightForm(ModelForm):
-       
-    # specify the name of model to use
     def __init__(self, target, *args, **kwargs):
         super(FlightForm, self).__init__(*args, **kwargs)
         self.fields["targets"].queryset = target
@@ -148,7 +146,8 @@ class FlightForm(ModelForm):
     class Meta:
         model = Flight
         fields = "__all__"
-        exclude = ("modified_by","created_by",)
+        exclude = ("modified_by", "created_by",)
+
 
 class AircraftForm(ModelForm):
     def __init__(self, flights, *args, **kwargs):
