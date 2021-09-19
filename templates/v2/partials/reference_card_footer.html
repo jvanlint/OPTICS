@@ -1,0 +1,45 @@
+<div class="card-footer" hx-target="#{{ card.model_name }}" hx-swap="outerHTML">
+    {% if card.user_can_add %}
+        <h6>
+            <a href="{% url 'reference_object_add' card.model_name %}?returnUrl={{ request.path }}"
+               class="btn btn-sm btn-success float-right" role="button">
+                <svg class="c-icon">
+                    <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
+                </svg>
+                Add
+            </a>
+        </h6>
+    {% endif %}
+    {% if card.has_paginator and card.data.has_other_pages %}
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                {% if card.data.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?model={{ card.model_name }}&page={{ card.data.previous_page_number }}">Previous</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Previous</a></li>
+                {% endif %}
+
+                {% for i in card.data.paginator.page_range %}
+                    {% if card.data.number == i %}
+                        <li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link"
+                                                 href="?model={{ card.model_name }}&page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if card.data.has_next %}
+                    <li class="page-item"><a class="page-link"
+                                             href="?model={{ card.model_name }}&page={{ card.data.next_page_number }}">Next</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+                {% endif %}
+
+            </ul>
+        </nav>
+    {% endif %}
+</div>

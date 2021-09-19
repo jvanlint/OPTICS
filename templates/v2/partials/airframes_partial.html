@@ -2,8 +2,9 @@
 <div id="aircraft">
     <div class="card-body">
         <ul class="list-group list-group-flush">
-            <form class="sortable" hx-post="{% url 'sort_order_changed' %}" hx-trigger="end">
-
+            {% if True %}
+                <form class="sortable" hx-post="{% url 'sort_order_changed' %}" hx-trigger="end">
+            {% endif %}
                 {% for airframe in airframe_object %}
                     <li class="list-group-item d-flex justify-content-between" hx-target="this">
                         <div class="col">
@@ -25,6 +26,8 @@
         </ul>
     </div>
     <div class="card-footer" hx-target="#aircraft">
+
+
         {% if airframe_object.has_other_pages %}
             <nav aria-label="Page navigation" >
                 <ul class="pagination">

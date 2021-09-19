@@ -28,6 +28,9 @@ class Status(models.Model):
 	def edit_url(self):
 		return reverse("reference_object_update", kwargs={"item_id": self.id, "table": "status"})
 
+	def get_fields(self):  # https://stackoverflow.com/a/59237767/16148276
+		return [(field.verbose_name, field.value_from_object(self)) for field in self.__class__._meta.fields]
+
 	# Metadata
 	
 	class Meta:

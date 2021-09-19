@@ -1,0 +1,4 @@
+<div id="{{ card.model_name }}"> {# Target for htmx paginator swap #}
+{% include 'v2/partials/reference_card_body.html' with card=cards|first %}
+{% include 'v2/partials/reference_card_footer.html' with card=cards|first %}
+</div>

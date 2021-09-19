@@ -29,7 +29,7 @@ def flight(request, link_id):
 
 
 @login_required(login_url="account_login")
-# @allowed_users(allowed_roles=["admin", "planner", "player"])
+@allowed_users(allowed_roles=["admin", "planner", "player"])
 def flight_create(request, link_id):
     package = Package.objects.get(id=link_id)
 

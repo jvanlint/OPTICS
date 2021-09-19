@@ -2,8 +2,8 @@
 {% load django_htmx %}
 {% load static %}
 {% django_htmx_script %}
-<!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+{% endblock stylesheets %}
 {% block content %}
 
 <main class="c-main">
@@ -11,69 +11,30 @@
         <div class="fade-in">
             <div class="row">
                 {% for card in cards %}
-                    <div class="card col-lg-3 mr-4">
+                    <div class="card {{ card.css_class }}">
                         <div class="card-header">
                         <i class="fa fa-align-justify"></i>
                         <h5>{{ card.heading_text }}</h5>
                         <div class="media text-muted">{{ card.heading_description }}</div>
+                            {% if card.field_header_text %}
+                                <div class="row">&nbsp;</div>
+                                {% for header_text in card.field_header_text %}
+                                    <div class="row">
+                                        <div class="col">
+                                            {{ header_text }}  {# todo: Formatting of header text #}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                                <div class="col"> {# &nbsp for empty column for "Action" button #}
+                                    &nbsp;
+                                </div>
+                            {% endif %}
                         </div>
-                            <div class="card-body px-0">
-                                <ul class="list-group list-group-flush">
-                                    <form class="sortable" hx-post="{% url 'sort_order_changed' %}" hx-trigger="end">
-                                        {% for item in card.data %}
-                                            <input type='hidden' name='item_ordinal' value='{{ forloop.counter }}'/>
-                                            <li class="list-group-item d-flex justify-content-between" hx-target="this">
-                                                <div class="col">
-                                                    {{ item.name }}
-                                                </div>
-                                                <div class="col text-right">
-                                                    {% include "v2/partials/item_edit_button.html" with table_name=card.table_name %}
-                                                </div>
-                                            </li>
-                                        {% endfor %}
-                                    </form>
-                                </ul>
-                                <div class='htmx-indicator' id="{{ card.table_name }}_indicator">Working...</div>
-                            </div>
-                        <div class="card-footer">
-                            <h6>
-                                <a href="{% url 'reference_object_add' card.table_name %}?returnUrl={{ request.path }}"
-                                 class="btn btn-sm btn-success float-right" role="button">
-                                <svg class="c-icon">
-                                  <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
-                                </svg>
-                                Add
-                                </a>
-                            </h6>
-                        </div>
-
+                        {% include 'v2/partials/reference_card_body_and_footer.html'%}
+{#                        {% include 'v2/partials/reference_card_body.html' %}#}
+{#                        {% include 'v2/partials/reference_card_footer.html' %}#}
                     </div>
                 {% endfor %}
-<!-- end for card in cards -->
-<!-- Start Airframes Card -->
-                <div class="card col-lg-5 mr-4">
-                    <div class="card-header">
-                        <i class="fa fa-align-justify"></i>
-                        <h5>Airframes</h5>
-                        <div class="media text-muted">The airframes that can be assigned as aircraft in flights.</div>
-                        <div class="row">&nbsp;</div>
-                        <div class="row">
-                            <div class="col">
-                                Name
-                            </div>
-                            <div class="col">
-                                Stations
-                            </div>
-                            <div class="col">
-                                Multicrew
-                            </div>
-                            <div class="col">
-                                &nbsp;
-                            </div>
-                        </div>
-                    </div>
-                    {% include "v2/reference/../partials/airframes_partial.html" %}
-                </div>
             </div>
         </div>
     </div>
@@ -102,7 +63,7 @@
         }
     })
   </script>
-  <!-- Latest Sortable -->
+  <!-- Latest Sortable.js -->
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 
 

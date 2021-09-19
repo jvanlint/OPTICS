@@ -1,0 +1,27 @@
+<div class="card-body" >
+    <ul class="list-group list-group-flush">
+        {% if card.user_can_edit %}       {# Only editors get to play with dragdrop :( #}
+            <form class="sortable" hx-post="{% url 'sort_order_changed' %}" hx-trigger="end">
+        {% endif %}
+        {% for item in card.data %}
+            <input type='hidden' name='item_ordinal' value='{{ forloop.counter }}'/>
+            {# Input field is for sortable.functionality https://htmx.org/examples/sortable/#}
+            <li class="list-group-item d-flex justify-content-between" hx-target="this">
+                {% for key, value in item.items %}
+                    {% if key in card.display_fields %}
+                        <div class="col">
+                            {{ value }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                <div class="col text-right">
+                    {% include "v2/partials/item_edit_button.html" %}
+                </div>
+            </li>
+        {% endfor %}
+        {% if card.user_can_edit %}  {# Close off the <form> if opened above #}
+            </form>
+        {% endif %}
+    </ul>
+    <div class='htmx-indicator' id="{{ card.model_name }}_indicator">Working...</div>
+</div>
