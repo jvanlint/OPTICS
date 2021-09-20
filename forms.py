@@ -7,7 +7,19 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.conf import settings
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
+from crispy_forms.layout import (
+    Layout,
+    Fieldset,
+    Submit,
+    Button,
+    Reset,
+    Column,
+    Field,
+    Row,
+    Div,
+    HTML,
+)
+from crispy_forms.bootstrap import InlineField, FormActions, StrictButton
 from airops import utils
 
 # import GeeksModel from models.py
@@ -33,7 +45,7 @@ from airops.models import (
     SupportType,
     Task,
     ThreatType,
-    Airframe
+    Airframe,
 )
 
 
@@ -59,7 +71,10 @@ class CampaignForm(ModelForm):
             "dcs_map": forms.Select(attrs={"style": "width: 150px;"}),
             "status": forms.Select(attrs={"style": "width: 150px;"}),
         }
-        exclude = ("modified_by","created_by",)
+        exclude = (
+            "modified_by",
+            "created_by",
+        )
 
 
 class MissionForm(ModelForm):
@@ -75,7 +90,11 @@ class MissionForm(ModelForm):
             "mission_date": DateInput(attrs={"style": "width: 150px;"}),
             "mission_game_date": DateInput(attrs={"style": "width: 150px;"}),
         }
-        exclude = ("discord_msg_id","modified_by","created_by",)
+        exclude = (
+            "discord_msg_id",
+            "modified_by",
+            "created_by",
+        )
 
     def clean(self):
         # Combine the Mission date and time and set to UTC
@@ -109,7 +128,10 @@ class PackageForm(ModelForm):
     class Meta:
         model = Package
         fields = "__all__"
-        exclude = ("modified_by","created_by",)
+        exclude = (
+            "modified_by",
+            "created_by",
+        )
 
 
 class ThreatForm(ModelForm):
@@ -146,7 +168,10 @@ class FlightForm(ModelForm):
     class Meta:
         model = Flight
         fields = "__all__"
-        exclude = ("modified_by", "created_by",)
+        exclude = (
+            "modified_by",
+            "created_by",
+        )
 
 
 class AircraftForm(ModelForm):
@@ -182,6 +207,7 @@ class WaypointForm(ModelForm):
         super(WaypointForm, self).__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs.update({"class": "form-control"})
+
     # specify the name of model to use
     class Meta:
         model = Waypoint
@@ -193,124 +219,201 @@ class MissionImageryForm(ModelForm):
         super(MissionImageryForm, self).__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs.update({"class": "form-control"})
-            
+
     # specify the name of model to use
     class Meta:
         model = MissionImagery
         fields = "__all__"
-        
+
+
 class PackageImageryForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(PackageImageryForm, self).__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs.update({"class": "form-control"})
+
     # specify the name of model to use
     class Meta:
         model = PackageImagery
         fields = "__all__"
+
 
 class FlightImageryForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(FlightImageryForm, self).__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs.update({"class": "form-control"})
+
     # specify the name of model to use
     class Meta:
         model = FlightImagery
         fields = "__all__"
 
-class TerrainForm(ModelForm):
 
+class TerrainForm(ModelForm):
     class Meta:
         model = Terrain
-        fields = ('name',)
+        fields = ("name",)
         widgets = {
-            'name': forms.TextInput(
+            "name": forms.TextInput(
                 attrs={
-                    "placeholder": "DCS terrain name.", 
+                    "placeholder": "DCS terrain name.",
                     "class": "form-control",
-                    "autofocus": None
-                    }
-                ),
+                    "autofocus": None,
+                }
+            ),
         }
 
 
-class StatusForm(ModelForm):
+name_layout = Layout(
+    InlineField(
+        "name",
+    )
+)
 
+
+class HxTerrainForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = name_layout
+
+    class Meta:
+        model = Terrain
+        fields = ["name"]
+
+
+class HxStatusForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_class = "form-inline"
+        self.helper.layout = name_layout
 
     class Meta:
         model = Status
-        fields = ('name',)
+        fields = ["name"]
+
+
+class HxAirframeForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        # self.helper.form_class = "row g-3"
+        # self.helper.form_tag = True
+        # self.helper.form_action = "action={{ post_url }}"
+        self.helper.layout = Layout(
+            InlineField(
+                "name",
+                "stations",
+                "multicrew",
+            ),
+            FormActions(
+                Submit("Save", "Save", css_class="btn btn-sm btn-primary"),
+                Button("cancel","Cancel", css_class="btn-sm btn-danger"),
+                Reset("reset_name", "Reset", css_class="btn btn-sm btn-warning"),
+            ),
+        )
+
+    class Meta:
+        model = Airframe
+        fields = [
+            "name",
+            "stations",
+            "multicrew",
+        ]
+
+
+'''
+<form class="row g-3">
+  <div class="col-auto">
+    <label for="staticEmail2" class="visually-hidden">Email</label>
+    <input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="email@example.com">
+  </div>
+  <div class="col-auto">
+    <label for="inputPassword2" class="visually-hidden">Password</label>
+    <input type="password" class="form-control" id="inputPassword2" placeholder="Password">
+  </div>
+  <div class="col-auto">
+    <button type="submit" class="btn btn-primary mb-3">Confirm identity</button>
+  </div>
+</form>
+'''
+
+
+
+class StatusForm(ModelForm):
+    class Meta:
+        model = Status
+        fields = ("name",)
         widgets = {
-            'name': forms.TextInput(
+            "name": forms.TextInput(
                 attrs={
                     "placeholder": "Campaign status.",
                     "class": "form-control",
-                    "autofocus": None
-                    }
-                ),
+                    "autofocus": None,
+                }
+            ),
         }
 
 
 class WaypointTypeForm(ModelForm):
-
     class Meta:
         model = WaypointType
-        fields = ('name',)
+        fields = ("name",)
         widgets = {
-            'name': forms.TextInput(
+            "name": forms.TextInput(
                 attrs={
-                    "placeholder": "Waypoint type.", 
+                    "placeholder": "Waypoint type.",
                     "class": "form-control",
-                    "autofocus": None
-                    }
-                ),
+                    "autofocus": None,
+                }
+            ),
         }
+
 
 class SupportTypeForm(ModelForm):
-
     class Meta:
         model = SupportType
-        fields = ('name',)
+        fields = ("name",)
         widgets = {
-            'name': forms.TextInput(
+            "name": forms.TextInput(
                 attrs={
-                    "placeholder": "Support type.", 
+                    "placeholder": "Support type.",
                     "class": "form-control",
-                    "autofocus": None
-                    }
-                ),
+                    "autofocus": None,
+                }
+            ),
         }
 
-class TaskForm(ModelForm):
 
+class TaskForm(ModelForm):
     class Meta:
         model = Task
-        fields = ('name',)
+        fields = ("name",)
         widgets = {
-            'name': forms.TextInput(
+            "name": forms.TextInput(
                 attrs={
-                    "placeholder": "Flight task.", 
+                    "placeholder": "Flight task.",
                     "class": "form-control",
-                    "autofocus": None
-                    }
-                ),
+                    "autofocus": None,
+                }
+            ),
         }
 
 
 class ThreatTypeForm(ModelForm):
-
     class Meta:
         model = ThreatType
-        fields = ('name',)
+        fields = ("name",)
         widgets = {
-            'name': forms.TextInput(
+            "name": forms.TextInput(
                 attrs={
-                    "placeholder": "Threat type.", 
+                    "placeholder": "Threat type.",
                     "class": "form-control",
-                    "autofocus": None
-                    }
-                ),
+                    "autofocus": None,
+                }
+            ),
         }
 
 
@@ -319,7 +422,7 @@ class AirframeForm(ModelForm):
         super(AirframeForm, self).__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs.update({"class": "form-control"})
-    
+
     class Meta:
         model = Airframe
         # fields = ("__all__")
@@ -329,7 +432,7 @@ class AirframeForm(ModelForm):
             "multicrew",
         )
         exclude = ("user",)
-       
+
 
 class NewUserForm(UserCreationForm):
 

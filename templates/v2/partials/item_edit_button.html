@@ -5,29 +5,35 @@
         &nbspAction
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownEditButton">
-        <a class="dropdown-item"
-           href="{{ item.edit_url }}?returnUrl={% url 'reference_tables' %}"
-           hx-trigger="click"
-           hx-indicator="#{{ card.model_name }}_indicator"
-        >
-          <svg class="c-icon">
-            <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
-          </svg>
-          &nbspEdit
-        </a>
-        {% if card.user_can_delete %}
+    {% if card.user_can_edit %}
+
             <a class="dropdown-item"
-                href="{% url 'reference_object_delete' table_name item.id %}?returnUrl={% url 'reference_tables' %}"
-                hx-indicator="#{{ card.model_name }}_indicator"
-                hx-confirm="Are you sure you want to delete {{ item.name }}?"
-                hx-swap="outerHTML swap:1s"
-                hx-trigger="click"
+               href="{% url 'reference_object_update' card.model_name item.id %}?returnUrl={% url 'reference_tables' %}"
+               hx-trigger="click"
+               hx-indicator="#{{ card.model_name }}_indicator"
+               hx-include="[name='item_ordinal']"
+               hx-vals='{"zebra":"{% cycle 'bg-light' '' %}}"'
+               hx-params="*"
             >
               <svg class="c-icon">
-                <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+                <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
               </svg>
-              &nbspDelete
+              &nbspEdit
             </a>
-        {% endif %}
+    {% endif %}
+    {% if card.user_can_delete %}
+        <a class="dropdown-item"
+            href="{% url 'reference_object_delete' card.model_name item.id %}?returnUrl={% url 'reference_tables' %}"
+            hx-indicator="#{{ card.model_name }}_indicator"
+            hx-confirm="Are you sure you want to delete {{ item.name }}?"
+            hx-swap="outerHTML swap:1s"
+            hx-trigger="click"
+        >
+          <svg class="c-icon">
+            <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+          </svg>
+          &nbspDelete
+        </a>
+    {% endif %}
     </div>
 {% endif %}

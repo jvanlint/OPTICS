@@ -1,0 +1,28 @@
+<li class="list-group-item d-flex justify-content-between border-0 {{ item_zebra_css }}" hx-target="this" >
+{% load crispy_forms_tags %}
+<form id="edit-form" class="" action="{{ post_url }}" method="POST" enctype="multipart/form-data">
+    <div class="form-row">
+        {% csrf_token %}
+        <div class="col-auto">
+            {{ form.name }}
+        </div>
+        <div class="col-2">
+            {{ form.stations }}
+        </div>
+        <div class="col-1 mr-5">
+            {{ form.multicrew }}
+        </div>
+        <div class="form-group form-actions col-auto">
+                <button class="btn btn btn-primary" type="submit" hx-indicator="#htmx_indicator"
+                        hx-trigger="click">Save
+                </button>
+                <button class="btn btn-danger " type="button" onclick="location.href='{% url "reference_tables" %}'">
+                    Cancel
+                </button>
+        </div>
+    </div>
+    <input type='hidden' name='item_ordinal' value='{{ item_ordinal }}' />
+    <input type='hidden' name='item_zebra_css' value='{{ item_zebra_css }}' />
+    <input type='hidden' name='display_fields' value='{{ display_fields }}' />
+</form>
+</li>
