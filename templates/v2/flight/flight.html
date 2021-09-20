@@ -379,6 +379,59 @@
 					
 					<!-- .card -->
 					<div class="card">
+						<div class="card-header">Assigned Target{{ target_object|pluralize }} <span class="badge badge-pill badge-info ml-auto">{{ target_object.count }}</span></div>
+						<div class="card-body">
+							<div class="table-responsive">
+								<table class="table table-striped">
+									<thead>
+										<tr>
+											<th>Name</th>
+											<th>Lat</th>
+											<th>Long</th>
+											<th>Elev</th>
+											<th>Notes</th>
+											<th>Image</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% if target_object %} 
+										{% for target in target_object %}
+										<tr>
+											<td>{{ target.name }}</td>
+											<td>{{ target.lat }}</td>
+											<td>{{ target.long }}</td>
+											<td>{{ target.elev }}</td>
+											<td>{{ target.notes|linebreaks }}</td>
+											{% if target.target_image %}
+											<td><a href="{{ target.target_image.url }}" add target="_blank">View</a></td>
+											{% else %}
+											<td>None</td>
+											{% endif %}
+										</tr>
+										{% endfor %} {% else %}
+										<tr>
+											<td colspan="8">No waypoints available.</td>
+										</tr>
+										{% endif %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="card-footer">
+						<h6>
+							<a href="{% url 'waypoint_add_v2' flight_object.id %}?returnUrl={{ request.path }}" class="btn btn-sm btn-success float-right" role="button">
+								<svg class="c-icon">
+									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
+								</svg>
+								Add Waypoint
+							</a>
+						</h6>
+						</div>
+					</div>
+					<!-- /.card -->
+					
+					<!-- .card -->
+					<div class="card">
 						<div class="card-header">Flight Image{{ imagery_object|pluralize }} <span class="badge badge-pill badge-info ml-auto">{{ imagery_object.count }}</span></div>
 						<div class="card-body">
 							<div class="row">
