@@ -1,29 +1,19 @@
 from dataclasses import dataclass
 from typing import Any
+
+from django.apps import apps
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.http import (
     HttpResponse,
-    HttpResponseRedirect,
     Http404,
     HttpResponseBadRequest,
 )
+from django.shortcuts import redirect
 from django.shortcuts import render
-from django.shortcuts import redirect, get_object_or_404
-from django.utils import timezone
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db import models
 from django.urls import reverse
-from django.apps import apps
+from django.utils import timezone
 
-from ..models import (
-    Terrain,
-    Status,
-    Task,
-    SupportType,
-    WaypointType,
-    ThreatType,
-    Airframe,
-)
 from ..forms import (
     TerrainForm,
     StatusForm,
@@ -32,6 +22,9 @@ from ..forms import (
     WaypointTypeForm,
     ThreatTypeForm,
     AirframeForm,
+)
+from ..models import (
+    Status,
 )
 
 DEFAULT_ITEMS_PER_PAGE = 5
@@ -73,7 +66,7 @@ CARD_LIST = [
         has_paginator=False,
     ),
     Card(
-        model_name="StatusWithDate",
+        model_name="StatusWithDate",  # DEMO card only!
         heading_text="Campaign Status + date",
         heading_description="Used to describe the status of the campaign.",
         css_class="col-lg-4 mx-4",
@@ -84,30 +77,26 @@ CARD_LIST = [
         heading_text="Terrain",
         heading_description="The list of available DCS Terrain for a campaign.",
     ),
-    # Card(
-    #     model_name="waypoint_type",
-    #     heading_text="Waypoint Types",
-    #     heading_description="Types of actions performed at a given waypoint.",
-    #     data=WaypointType.objects.order_by("name"),
-    # ),
-    # Card(
-    #     model_name="flight_task",
-    #     heading_text="Flight Tasks",
-    #     heading_description="Tasks that can be performed by flights.",
-    #     data=Task.objects.order_by("name"),
-    # ),
-    # Card(
-    #     model_name="support_type",
-    #     heading_text="Support Types",
-    #     heading_description="The various support assets available in the mission.",
-    #     data=SupportType.objects.order_by("name"),
-    # ),
-    # Card(
-    #     model_name="threat_type",
-    #     heading_text="Threat Types",
-    #     heading_description="Classes that be assigned to a ground threat.",
-    #     data=ThreatType.objects.order_by("name"),
-    # ),
+    Card(
+        model_name="waypoint_type",
+        heading_text="Waypoint Types",
+        heading_description="Types of actions performed at a given waypoint.",
+    ),
+    Card(
+        model_name="flight_task",
+        heading_text="Flight Tasks",
+        heading_description="Tasks that can be performed by flights.",
+    ),
+    Card(
+        model_name="support_type",
+        heading_text="Support Types",
+        heading_description="The various support assets available in the mission.",
+    ),
+    Card(
+        model_name="threat_type",
+        heading_text="Threat Types",
+        heading_description="Classes that be assigned to a ground threat.",
+    ),
     Card(
         model_name="Airframe",
         heading_text="Aircraft Types",
@@ -118,11 +107,9 @@ CARD_LIST = [
     ),
 ]
 
-# put over-ride class here, or in the model file with added import here?
-# https://docs.djangoproject.com/en/3.2/topics/db/models/#proxy-models
-
 
 class StatusWithDate(Status):
+    # https://docs.djangoproject.com/en/3.2/topics/db/models/#proxy-models
     def display_data(self):
         return [self.name, self.date_modified]
 
@@ -151,8 +138,6 @@ def build_initial_paginators(cards):
 
 def populate_card_data(card):
     model = apps.get_model("airops", card.model_name)
-    # model = evaluate_reference_object(card.model_name)
-    # .values() is to convert query data to dict for template rendering
     # todo: replace "name" with ordinal_field for ordering
     queryset_data = model.objects.order_by("name")
 
@@ -217,7 +202,8 @@ def reference_tables(request):
 
 
 def evaluate_reference_object(table):
-    return NotImplementedError("evaluate_reference_object")
+    return NotImplementedError()  # debugging
+    # apps.get_model("airops", model_name) does the same thing
     # return {
     #     "status": Status,
     #     "terrain": Terrain,
@@ -244,7 +230,7 @@ def evaluate_reference_form(table):  # Capitalisation important!
 
 
 @login_required(login_url="login")
-def reference_object_add(request, table):
+def reference_object_add(request, table):  # todo: Update Add to new inline forms.
     breadcrumbs = {
         "Home": reverse("home"),
         "Reference Tables": reverse("reference_tables"),
@@ -273,15 +259,6 @@ def reference_object_add(request, table):
 
     # Render the HTML template index.html with the data in the context variable
     return render(request, "v2/generic/data_entry_form.html", context)
-
-
-"""
-ordinal stuff will work itself out when an ordinal field is in the model as it 
-will be bound and follow the context around.
-
-zebra not working right now, check in html
-
-"""
 
 
 @login_required(login_url="login")
@@ -330,7 +307,9 @@ def reference_object_update(request, item_id=None, table=None):
             form_obj.save()
             if request.htmx:
                 return_card = EditReturnCard(model_name=table)
-                return_card.user_can_delete = request.user.has_perm(f"airops.delete_{table}")
+                return_card.user_can_delete = request.user.has_perm(
+                    f"airops.delete_{table}"
+                )
                 context = {
                     "item": form_obj,  # s
                     "edit_url": url,  # todo: check context for un-used items
@@ -374,25 +353,3 @@ def reference_object_sort_order(request):
         pass
         # will need to return the card values
 
-
-#
-# if card.display_fields:  # local over-rides
-#     for entry in queryset_data:
-#
-#         print(entry.display_data(card.display_fields))
-#         # entry.display_data = ({k: v for k, v in entry.items() if k in card.display_fields})
-#         # entry.display_data = card.display_fields
-# if card.field_header_text:
-#     for entry in queryset_data:
-#         entry.field_headers = card.field_header_text
-#
-# display_data = []
-# for entry in queryset_data.values():  # list of Dicts
-#     display_data.append({k: v for k, v in entry.items() if k in card.display_fields or k == "id"})
-
-
-#
-# def filter_display_fields(queryset, display_fields):
-#     display_data = []
-#     for entry in queryset.values():  # list of Dicts
-#         display_data.append({k: v for k, v in entry.items() if k in display_fields or k == "id"})
