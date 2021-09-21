@@ -7,16 +7,22 @@
                   hx-indicator="#htmx_indicator">
         {% endif %}
         {% for item in card.data %}
-            <input type='hidden' name='item_ordinal' value='{{ forloop.counter }}'  />
+            <input type='hidden' name='item_ordinal' value='{{ forloop.counter }}'  /> {# may need to rename this #}
             {# Input field is for sortable.functionality https://htmx.org/examples/sortable/#}
             <li id="list_zebra" class="list-group-item d-flex justify-content-between border-0 {% cycle 'bg-light' '' %}" hx-target="this" hx-include="this">
-                {% for key, value in item.items %}
-                    {% if key in card.display_fields %}
-                        <div class="col">
+                {% for value in item.display_data %}
+                     <div class="col">
                             {{ value }}
                         </div>
-                    {% endif %}
                 {% endfor %}
+
+{#                {% for key, value in item.items %}#}
+{#                    {% if key in card.display_fields %}#}
+{#                        <div class="col">#}
+{#                            {{ value }}#}
+{#                        </div>#}
+{#                    {% endif %}#}
+{#                {% endfor %}#}
                 <div class="col text-right">
                     {% include "v2/partials/item_edit_button.html" %}
                 </div>

@@ -33,3 +33,14 @@ class Airframe(models.Model):
 
 	def edit_url(self):
 		return reverse("reference_object_update", kwargs={"item_id": self.id, "table": "airframe"})
+
+	def display_data(self):
+		return {
+			"name": self.name,
+			"stations": self.stations,
+			"multicrew": self.multicrew,
+		}
+
+	@staticmethod
+	def field_headers():
+		return ["Name", "Wp Stations", "2 Seater"]

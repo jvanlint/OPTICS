@@ -32,25 +32,29 @@ from ..forms import (
     WaypointTypeForm,
     ThreatTypeForm,
     AirframeForm,
-    HxAirframeForm,
-    HxStatusForm,
-    HxTerrainForm,
 )
+
+DEFAULT_ITEMS_PER_PAGE = 5
 
 
 @dataclass(repr=False)
 class Card:
-    model_name: str
-    heading_text: str
-    heading_description: str
-    display_fields: list[str]
-    data: Any = None
-    field_header_text: list[str] = None
-    user_can_edit: bool = False
+    model_name: str  # Name of the model to display on this card
+    heading_text: str  # The large heading text (normally the model name)
+    heading_description: str  # The smaller model description text
+    data: Any = None  # Will be populated by view
+    display_fields: list[
+        str
+    ] = None  # List of the FieldNames to display (overrides the ones defined in model)
+    field_header_text: list[
+        str
+    ] = None  # List of text for field headers (overrides the ones defined in model)
+    user_can_edit: bool = False  # Permission flags
     user_can_add: bool = False
     user_can_delete: bool = False
-    has_paginator: bool = False
-    css_class: str = "col-lg-3 mx-4"
+    has_paginator: bool = False  # Include a paginator on this card
+    paginator_items: int = DEFAULT_ITEMS_PER_PAGE  # Number of items per page
+    css_class: str = "col-lg-3 mx-4"  # raw css appended to <card class=
 
 
 CARD_LIST = [
@@ -58,16 +62,20 @@ CARD_LIST = [
         model_name="status",
         heading_text="Campaign Status",
         heading_description="Used to describe the status of the campaign.",
-        display_fields=["name", "date_modified"],
         css_class="col-lg-4 mx-4",
-        field_header_text=["Name", "Last Modified"],
-        has_paginator=True,
+        has_paginator=False,
+    ),
+    Card(
+        model_name="status_with_date",
+        heading_text="Campaign Status + date",
+        heading_description="Used to describe the status of the campaign.",
+        css_class="col-lg-4 mx-4",
+        has_paginator=False,
     ),
     Card(
         model_name="terrain",
         heading_text="Terrain",
         heading_description="The list of available DCS Terrain for a campaign.",
-        display_fields=["name"],
     ),
     # Card(
     #     model_name="waypoint_type",
@@ -97,12 +105,24 @@ CARD_LIST = [
         model_name="airframe",
         heading_text="Aircraft Types",
         heading_description="The airframes that can be assigned as aircraft in flights.",
-        display_fields=["name", "stations", "multicrew"],
+        # display_fields=["name", "stations", "multicrew"],
         css_class="col-lg-6 mx-4",
         has_paginator=True,
-        field_header_text=["Type", "Wp Stations", "Multi-crew"],
+        field_header_text=["OVType", "OVWp Stations", "OVMulti-crew"],
     ),
 ]
+
+
+class StatusWithDate(Status):  # put over-ride class here, or in the model file with added import here?
+    def display_data(self):
+        return {
+            "name": self.name,
+            "date_modified": self.date_modified,
+        }
+
+    @staticmethod
+    def field_headers():
+        return ["Name", "Last Modified"]
 
 
 def check_permissions(cards, user):
@@ -113,13 +133,10 @@ def check_permissions(cards, user):
     return cards
 
 
-ITEMS_PER_PAGE = 5
-
-
 def build_initial_paginators(cards):
     for card in cards:
         if card.has_paginator:
-            paginator = Paginator(card.data, per_page=ITEMS_PER_PAGE)
+            paginator = Paginator(card.data, per_page=card.paginator_items)
             card.data = paginator.get_page(1)
 
 
@@ -127,7 +144,29 @@ def populate_card_data(card):
     model = apps.get_model("airops", card.model_name)
     # .values() is to convert query data to dict for template rendering
     # todo: replace "name" with ordinal_field for ordering
-    card.data = model.objects.order_by("name").values()
+    queryset_data = model.objects.order_by("name")
+
+    if card.display_fields:  # local over-rides
+        for entry in queryset_data:
+
+            print(entry.display_data(card.display_fields))
+            # entry.display_data = ({k: v for k, v in entry.items() if k in card.display_fields})
+            # entry.display_data = card.display_fields
+    if card.field_header_text:
+        for entry in queryset_data:
+            entry.field_headers = card.field_header_text
+    #
+    # display_data = []
+    # for entry in queryset_data.values():  # list of Dicts
+    #     display_data.append({k: v for k, v in entry.items() if k in card.display_fields or k == "id"})
+    return queryset_data
+
+
+#
+# def filter_display_fields(queryset, display_fields):
+#     display_data = []
+#     for entry in queryset.values():  # list of Dicts
+#         display_data.append({k: v for k, v in entry.items() if k in display_fields or k == "id"})
 
 
 @login_required(login_url="login")
@@ -144,9 +183,9 @@ def reference_tables(request):
     breadcrumbs = {"Home": reverse("home"), "Reference Tables": ""}
     cards = CARD_LIST
     cards = check_permissions(cards, request.user)
-    if not request.htmx:
+    if not request.htmx:  # full page refresh, update all cards.
         for card in cards:
-            populate_card_data(card)  # full page refresh, update all cards.
+            card.data = populate_card_data(card)
         build_initial_paginators(cards)
     context = {
         "breadcrumbs": breadcrumbs,
@@ -157,10 +196,10 @@ def reference_tables(request):
     if page_model_name:  # A paginator has been triggered.
         # Get the card with the changing paginator
         paged_card = [card for card in cards if card.model_name == page_model_name][0]
-        populate_card_data(paged_card)
-        paged_card.data = Paginator(paged_card.data, per_page=ITEMS_PER_PAGE).get_page(
-            page_num
-        )
+        paged_card.data = populate_card_data(paged_card)
+        paged_card.data = Paginator(
+            paged_card.data, per_page=paged_card.paginator_items
+        ).get_page(page_num)
 
         if request.htmx:
             context = {
@@ -256,7 +295,7 @@ def reference_object_add(request, table):
     return render(request, "v2/generic/data_entry_form.html", context)
 
 
-'''
+"""
 ordinal stuff will work itself out when an ordinal field is in the model as it 
 will be bound and follow the context around.
 
@@ -264,7 +303,8 @@ zebra not working right now, check in html
 
 entry detail partial template needs to know what fields 
 
-'''
+"""
+
 
 @login_required(login_url="login")
 def reference_object_update(request, item_id=None, table=None):
@@ -304,17 +344,19 @@ def reference_object_update(request, item_id=None, table=None):
     if request.method == "POST":
         form = form_object(request.POST, instance=obj)
         if form.is_valid():
-            form_obj = form.save(commit=False)  # initial form.save populates the form_obj with the new instance
+            form_obj = form.save(
+                commit=False
+            )  # initial form.save populates the form_obj with the new instance
             form_obj.date_modified = timezone.now()
             form_obj.user = request.user
             form_obj.save()
             if request.htmx:
                 context = {
-                    "item": obj,  #form.base_fields.keys() gives a list of the keys
-# dont think the changed model instance is being loaded or displayed?
-                    #from django.forms.models import model_to_dict
-# model_to_dict(form_obj,fields=form.base_fields.keys())
-                    #{'name': 'F-14B', 'stations': 8, 'multicrew': True}
+                    "item": obj,  # form.base_fields.keys() gives a list of the keys
+                    # dont think the changed model instance is being loaded or displayed?
+                    # from django.forms.models import model_to_dict
+                    # model_to_dict(form_obj,fields=form.base_fields.keys())
+                    # {'name': 'F-14B', 'stations': 8, 'multicrew': True}
                     # no need to check for what fields to show!
                     "edit_url": url,
                     "table_name": table,
