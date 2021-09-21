@@ -450,12 +450,12 @@
 										<figcaption class="figure-caption">
 											{{ imagery.caption }}
 											<br>
-											<a id="imagery{{imagery.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the image will be deleted." data-buttontext="Delete" href="#" role="button">
+											<a id="imagery{{imagery.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the image will be deleted." data-buttontext="Delete" href="{% url 'flight_imagery_delete_v2' imagery.id %}?returnUrl={{request.path}}" role="button">
 												<svg class="c-icon">
 													<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
 												</svg>
 											</a>
-											<a href="#" role="button">
+											<a href="{% url 'flight_imagery_update_v2' imagery.id %}?returnUrl={{request.path}}" role="button">
 												<svg class="c-icon">
 													<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
 												</svg>
@@ -471,7 +471,7 @@
 						</div>
 						<div class="card-footer">
 						<h6>
-							<a href="#" class="btn btn-sm btn-success float-right" role="button">
+							<a href="{% url 'flight_imagery_add_v2' flight_object.id %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
 								<svg class="c-icon">
 									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
 								</svg>

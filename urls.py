@@ -148,6 +148,10 @@ urlpatterns += [
     
     path("v2/flight/comment/add", views.flight_add_comment, name="flight_add_comment"),
     path("v2/flight/comment/delete/<int:link_id>", views.flight_delete_comment, name="flight_delete_comment"),
+    
+    path('flight/add/image/<int:link_id>', views.flight_imagery_create_v2, name='flight_imagery_add_v2'),
+    path('flight/update/image/<int:link_id>', views.flight_imagery_update_v2, name='flight_imagery_update_v2'),
+    path('flight/delete/image/<int:link_id>', views.flight_imagery_delete_v2, name='flight_imagery_delete_v2'),
 ]
 
 # Aircraft URL Patterns - V2

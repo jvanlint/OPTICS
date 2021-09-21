@@ -128,3 +128,64 @@ def flight_delete_comment(request, link_id):
 	comment.delete()
 	
 	return HttpResponseRedirect(returnURL)
+	
+# ---------------- Flight Imagery -------------------------
+	
+@login_required(login_url="account_login")
+def flight_imagery_create_v2(request, link_id):
+	flight = Flight.objects.get(id=link_id)
+	returnURL = request.GET.get("returnUrl")
+
+	form = FlightImageryForm(initial={"flight": flight})
+	form_title = "Flight Image"
+
+	if request.method == "POST":
+		form = FlightImageryForm(request.POST, request.FILES)
+		if form.is_valid():
+			form.save(commit=True)
+			return HttpResponseRedirect(returnURL)
+
+	context = {
+		"form": form,
+		"form_title": form_title,
+		"link": link_id,
+		"returnURL": returnURL,
+	}
+	return render(request, 'v2/generic/data_entry_form.html', context=context)
+
+
+@login_required(login_url="account_login")
+def flight_imagery_update_v2(request, link_id):
+	imagery = FlightImagery.objects.get(id=link_id)
+	returnURL = request.GET.get("returnUrl")
+
+	form_title = "Flight Image"
+	form = FlightImageryForm(instance=imagery)
+
+	if request.method == "POST":
+		form = FlightImageryForm(request.POST, request.FILES, instance=imagery)
+		print(request.path)
+		if form.is_valid():
+			form.save(commit=True)
+			return HttpResponseRedirect(returnURL)
+
+	context = {
+		"form": form,
+		"form_title": form_title,
+		"link": link_id,
+		"returnURL": returnURL,
+	}
+	return render(request, 'v2/generic/data_entry_form.html', context=context)
+
+
+@login_required(login_url="account_login")
+def flight_imagery_delete_v2(request, link_id):
+	imagery = FlightImagery.objects.get(id=link_id)
+	returnURL = request.GET.get("returnUrl")
+	
+	# Check to see if an AO Image exists.
+	if imagery:
+		os.remove(os.path.join(settings.MEDIA_ROOT, str(imagery.image)))
+		
+	imagery.delete()
+	return HttpResponseRedirect(returnURL)
