@@ -20,13 +20,6 @@ class Status(models.Model):
         )
 
     def display_data(self):
-        # data = {}
-        # if fields_to_display:
-        #     for field_name in fields_to_display:
-        #         value = self._meta.get_field(field_name).value_from_object(self)
-        #         data.update({field_name: value})
-        #     return data
-        # else:
         return [self.name]
 
     @staticmethod

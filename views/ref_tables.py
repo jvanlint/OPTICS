@@ -63,14 +63,12 @@ CARD_LIST = [
         heading_text="Campaign Status",
         heading_description="Used to describe the status of the campaign.",
         css_class="col-lg-4 mx-4",
-        has_paginator=False,
     ),
     Card(
         model_name="StatusWithDate",  # DEMO card only!
         heading_text="Campaign Status + date",
         heading_description="Used to describe the status of the campaign.",
         css_class="col-lg-4 mx-4",
-        has_paginator=False,
     ),
     Card(
         model_name="Terrain",
@@ -78,22 +76,24 @@ CARD_LIST = [
         heading_description="The list of available DCS Terrain for a campaign.",
     ),
     Card(
-        model_name="waypoint_type",
+        model_name="WaypointType",
         heading_text="Waypoint Types",
         heading_description="Types of actions performed at a given waypoint.",
+        has_paginator=True,
+        paginator_items=6,
     ),
     Card(
-        model_name="flight_task",
+        model_name="Task",
         heading_text="Flight Tasks",
         heading_description="Tasks that can be performed by flights.",
     ),
     Card(
-        model_name="support_type",
+        model_name="SupportType",
         heading_text="Support Types",
         heading_description="The various support assets available in the mission.",
     ),
     Card(
-        model_name="threat_type",
+        model_name="ThreatType",
         heading_text="Threat Types",
         heading_description="Classes that be assigned to a ground threat.",
     ),

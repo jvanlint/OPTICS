@@ -20,3 +20,12 @@ class Task(models.Model):
 
 	def edit_url(self):
 		return reverse("reference_object_update", kwargs={"item_id": self.id, "table": "flight_task"})
+
+
+	def display_data(self):
+		return [self.name]
+
+
+	@staticmethod
+	def field_headers():
+		return None
