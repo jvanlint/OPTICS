@@ -293,7 +293,8 @@ class TaskForm(ModelForm):
                     }
                 ),
         }
-        
+
+
 class ThreatTypeForm(ModelForm):
 
     class Meta:
@@ -309,6 +310,7 @@ class ThreatTypeForm(ModelForm):
                 ),
         }
 
+
 class AirframeForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(AirframeForm, self).__init__(*args, **kwargs)
@@ -317,7 +319,12 @@ class AirframeForm(ModelForm):
     
     class Meta:
         model = Airframe
-        fields = ("__all__")
+        # fields = ("__all__")
+        fields = (
+            "name",
+            "stations",
+            "multicrew",
+        )
         exclude = ("user",)
        
 

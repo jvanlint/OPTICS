@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Airframe(models.Model):
 	# Fields
 
@@ -15,6 +16,7 @@ class Airframe(models.Model):
 		default=False
 	)
 	date_created = models.DateTimeField(auto_now_add=True, null=True)
+	date_created.hidden = True
 	date_modified = models.DateTimeField(auto_now=True)
 	user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 

@@ -99,7 +99,7 @@ urlpatterns += [
     path('v2/campaign/<int:link_id>/', views.campaign_detail_v2, name='campaign_detail_v2'),
     path("v2/campaign/delete/<int:link_id>", views.campaign_delete_v2, name="campaign_delete_v2"),
     
-    #Comments
+    # Comments
     path('v2/campaign/comment/add', views.campaign_add_comment, name='campaign_add_comment'),
     path("v2/campaign/comment/delete/<int:link_id>", views.campaign_delete_comment,
       name="campaign_delete_comment"),
