@@ -4,43 +4,38 @@ from django.urls import reverse
 
 
 class Airframe(models.Model):
-	# Fields
+    # Fields
 
-	name = models.CharField(
-		max_length=200, 
-		help_text="Enter Airframe Name"
-	)
-	stations = models.IntegerField(
-		default=2
-	)
-	multicrew = models.BooleanField(
-		default=False
-	)
-	date_created = models.DateTimeField(auto_now_add=True, null=True)
-	date_created.hidden = True
-	date_modified = models.DateTimeField(auto_now=True)
-	user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    name = models.CharField(max_length=200, help_text="Enter Airframe Name")
+    stations = models.IntegerField(default=2)
+    multicrew = models.BooleanField(default=False)
+    date_created = models.DateTimeField(auto_now_add=True, null=True)
+    date_created.hidden = True
+    date_modified = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
-	# Metadata
+    # Metadata
 
-	class Meta:
-		ordering = ["name"]
+    class Meta:
+        ordering = ["name"]
 
-	# Methods
+    # Methods
 
-	def __str__(self):
-		return self.name
+    def __str__(self):
+        return self.name
 
-	def edit_url(self):
-		return reverse("reference_object_update", kwargs={"item_id": self.id, "table": "airframe"})
+    def edit_url(self):
+        return reverse(
+            "reference_object_update", kwargs={"item_id": self.id, "table": "airframe"}
+        )
 
-	def display_data(self):
-		return {
-			"name": self.name,
-			"stations": self.stations,
-			"multicrew": self.multicrew,
-		}
+    def display_data(self):
+        return [
+            self.name,
+            self.stations,
+            self.multicrew,
+        ]
 
-	@staticmethod
-	def field_headers():
-		return ["Name", "Wp Stations", "2 Seater"]
+    @staticmethod
+    def field_headers():
+        return ["Name", "Wp Stations", "Multi-Crew"]

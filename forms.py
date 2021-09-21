@@ -19,7 +19,9 @@ from crispy_forms.layout import (
     Div,
     HTML,
 )
-from crispy_forms.bootstrap import InlineField, FormActions, StrictButton
+from crispy_forms import bootstrap, layout
+
+# from django.urls import reverse
 from airops import utils
 
 # import GeeksModel from models.py
@@ -250,7 +252,31 @@ class FlightImageryForm(ModelForm):
         fields = "__all__"
 
 
+# Default layout for forms that display a single 'name' field.
+generic_name_only_helper = FormHelper()
+generic_name_only_helper.form_class = "form-inline"
+generic_name_only_helper.form_class = "form-inline"
+generic_name_only_helper.form_show_labels = False
+generic_name_only_helper.form_tag = False
+generic_name_only_helper.field_template = "bootstrap3/layout/inline_field.html"
+generic_name_only_helper.layout = Layout(
+    Row(
+        bootstrap.InlineField("name", css_class="form-control-sm col-auto"),
+        bootstrap.FormActions(
+            Submit("Save", "Save", css_class="btn btn-sm btn-primary"),
+            Button("cancel", "Cancel", css_class="btn-sm btn-danger"),
+            Reset("reset_name", "Reset", css_class="btn btn-sm btn-warning"),
+        ),
+        css_class="form-row",
+    ),
+)
+
+
 class TerrainForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = generic_name_only_helper
+
     class Meta:
         model = Terrain
         fields = ("name",)
@@ -265,84 +291,11 @@ class TerrainForm(ModelForm):
         }
 
 
-name_layout = Layout(
-    InlineField(
-        "name",
-    )
-)
-
-
-class HxTerrainForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.layout = name_layout
-
-    class Meta:
-        model = Terrain
-        fields = ["name"]
-
-
-class HxStatusForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_class = "form-inline"
-        self.helper.layout = name_layout
-
-    class Meta:
-        model = Status
-        fields = ["name"]
-
-
-class HxAirframeForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        # self.helper.form_class = "row g-3"
-        # self.helper.form_tag = True
-        # self.helper.form_action = "action={{ post_url }}"
-        self.helper.layout = Layout(
-            InlineField(
-                "name",
-                "stations",
-                "multicrew",
-            ),
-            FormActions(
-                Submit("Save", "Save", css_class="btn btn-sm btn-primary"),
-                Button("cancel","Cancel", css_class="btn-sm btn-danger"),
-                Reset("reset_name", "Reset", css_class="btn btn-sm btn-warning"),
-            ),
-        )
-
-    class Meta:
-        model = Airframe
-        fields = [
-            "name",
-            "stations",
-            "multicrew",
-        ]
-
-
-'''
-<form class="row g-3">
-  <div class="col-auto">
-    <label for="staticEmail2" class="visually-hidden">Email</label>
-    <input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="email@example.com">
-  </div>
-  <div class="col-auto">
-    <label for="inputPassword2" class="visually-hidden">Password</label>
-    <input type="password" class="form-control" id="inputPassword2" placeholder="Password">
-  </div>
-  <div class="col-auto">
-    <button type="submit" class="btn btn-primary mb-3">Confirm identity</button>
-  </div>
-</form>
-'''
-
-
-
 class StatusForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = generic_name_only_helper
+
     class Meta:
         model = Status
         fields = ("name",)
@@ -358,6 +311,10 @@ class StatusForm(ModelForm):
 
 
 class WaypointTypeForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = generic_name_only_helper
+
     class Meta:
         model = WaypointType
         fields = ("name",)
@@ -373,6 +330,10 @@ class WaypointTypeForm(ModelForm):
 
 
 class SupportTypeForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = generic_name_only_helper
+
     class Meta:
         model = SupportType
         fields = ("name",)
@@ -388,6 +349,10 @@ class SupportTypeForm(ModelForm):
 
 
 class TaskForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = generic_name_only_helper
+
     class Meta:
         model = Task
         fields = ("name",)
@@ -403,6 +368,10 @@ class TaskForm(ModelForm):
 
 
 class ThreatTypeForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = generic_name_only_helper
+
     class Meta:
         model = ThreatType
         fields = ("name",)
@@ -422,6 +391,24 @@ class AirframeForm(ModelForm):
         super(AirframeForm, self).__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs.update({"class": "form-control"})
+        self.helper = generic_name_only_helper
+        self.helper.layout = Layout(  # Layout overridden to provide multiple fields.
+            Row(
+                bootstrap.InlineField("name", css_class="form-control-sm col-auto"),
+                bootstrap.InlineField(
+                    "stations", css_class="form-control-sm col-auto mx-2"
+                ),
+                bootstrap.InlineField(
+                    "multicrew", css_class="form-control-sm col-auto mx-2"
+                ),
+                bootstrap.FormActions(
+                    Submit("Save", "Save", css_class="btn btn-sm btn-primary"),
+                    Button("cancel", "Cancel", css_class="btn-sm btn-danger"),
+                    Reset("reset_name", "Reset", css_class="btn btn-sm btn-warning"),
+                ),
+                css_class="form-row",
+            ),
+        )
 
     class Meta:
         model = Airframe

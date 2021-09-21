@@ -1,30 +1,10 @@
-{#<li class="list-group-item d-flex justify-content-between" hx-target="this">#}
-{#    <div class="col">#}
-{#        {{ updated_item.name }}#}
-{#    </div>#}
-{#    {% if table_name == "airframe" %}#}
-{#        <div class="col">#}
-{#            {{ updated_item.stations }}#}
-{#        </div>#}
-{#        <div class="col">#}
-{#            {{ updated_item.multicrew }}#}
-{#        </div>#}
-{#    {% endif %}#}
-{#    <div class="col text-right">#}
-{#        {% include "v2/partials/item_edit_button.html" with item=updated_item %}#}
-{#    </div>#}
-{#</li>#}
- <input type='hidden' name='item_ordinal' value='{{ item_ordinal }}'  />
-            {# Input field is for sortable.functionality https://htmx.org/examples/sortable/#}
-            <li id="list_zebra" class="list-group-item d-flex justify-content-between border-0 {{ item_zebra_css }}" hx-target="this" hx-include="this">
-                {% for key, value in item.items %}
-                    {% if key in display_fields %}
-                        <div class="col">
-                            {{ value }}
-                        </div>
-                    {% endif %}
-                {% endfor %}
-                <div class="col text-right">
-                    {% include "v2/partials/item_edit_button.html" %}
-                </div>
-            </li>
+<li id="list_zebra" class="list-group-item d-flex justify-content-between border-0 {{ zebra }}">
+    {% for value in item.display_data %}
+        <div class="col">
+            {{ value }}
+        </div>
+    {% endfor %}
+    <div class="col text-right">
+        {% include "v2/partials/item_edit_button.html" %}
+    </div>
+</li>

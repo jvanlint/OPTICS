@@ -1,0 +1,18 @@
+<div class="card-header border-bottom-0">
+    {#                        <i class="fa fa-align-justify"></i>#}
+    <h5>{{ card.heading_text }}</h5>
+    <div class="media text-muted">{{ card.heading_description }}</div>
+    {% if card.field_header_text %}
+        <div class="row">&nbsp;</div>
+        <div class="row">
+            {% for header_text_entry in card.field_header_text %}
+                <div class="col">
+                    {{ header_text_entry }}
+                </div>
+            {% endfor %}
+            <div class="col"> {# &nbsp for empty column for "Action" button #}
+                &nbsp;
+            </div>
+        </div>
+    {% endif %}
+</div>

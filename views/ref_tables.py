@@ -39,7 +39,7 @@ DEFAULT_ITEMS_PER_PAGE = 5
 
 @dataclass(repr=False)
 class Card:
-    model_name: str  # Name of the model to display on this card
+    model_name: str  # Class Name of the model to display on this card Capitalisation important
     heading_text: str  # The large heading text (normally the model name)
     heading_description: str  # The smaller model description text
     data: Any = None  # Will be populated by view
@@ -57,23 +57,30 @@ class Card:
     css_class: str = "col-lg-3 mx-4"  # raw css appended to <card class=
 
 
+@dataclass
+class EditReturnCard:
+    model_name: str = None
+    user_can_edit: bool = True
+    user_can_delete: bool = False
+
+
 CARD_LIST = [
     Card(
-        model_name="status",
+        model_name="Status",
         heading_text="Campaign Status",
         heading_description="Used to describe the status of the campaign.",
         css_class="col-lg-4 mx-4",
         has_paginator=False,
     ),
     Card(
-        model_name="status_with_date",
+        model_name="StatusWithDate",
         heading_text="Campaign Status + date",
         heading_description="Used to describe the status of the campaign.",
         css_class="col-lg-4 mx-4",
         has_paginator=False,
     ),
     Card(
-        model_name="terrain",
+        model_name="Terrain",
         heading_text="Terrain",
         heading_description="The list of available DCS Terrain for a campaign.",
     ),
@@ -102,27 +109,29 @@ CARD_LIST = [
     #     data=ThreatType.objects.order_by("name"),
     # ),
     Card(
-        model_name="airframe",
+        model_name="Airframe",
         heading_text="Aircraft Types",
         heading_description="The airframes that can be assigned as aircraft in flights.",
-        # display_fields=["name", "stations", "multicrew"],
         css_class="col-lg-6 mx-4",
         has_paginator=True,
         field_header_text=["OVType", "OVWp Stations", "OVMulti-crew"],
     ),
 ]
 
+# put over-ride class here, or in the model file with added import here?
+# https://docs.djangoproject.com/en/3.2/topics/db/models/#proxy-models
 
-class StatusWithDate(Status):  # put over-ride class here, or in the model file with added import here?
+
+class StatusWithDate(Status):
     def display_data(self):
-        return {
-            "name": self.name,
-            "date_modified": self.date_modified,
-        }
+        return [self.name, self.date_modified]
 
     @staticmethod
     def field_headers():
         return ["Name", "Last Modified"]
+
+    class Meta:
+        proxy = True
 
 
 def check_permissions(cards, user):
@@ -142,31 +151,20 @@ def build_initial_paginators(cards):
 
 def populate_card_data(card):
     model = apps.get_model("airops", card.model_name)
+    # model = evaluate_reference_object(card.model_name)
     # .values() is to convert query data to dict for template rendering
     # todo: replace "name" with ordinal_field for ordering
     queryset_data = model.objects.order_by("name")
 
-    if card.display_fields:  # local over-rides
-        for entry in queryset_data:
-
-            print(entry.display_data(card.display_fields))
-            # entry.display_data = ({k: v for k, v in entry.items() if k in card.display_fields})
-            # entry.display_data = card.display_fields
-    if card.field_header_text:
-        for entry in queryset_data:
-            entry.field_headers = card.field_header_text
-    #
-    # display_data = []
-    # for entry in queryset_data.values():  # list of Dicts
-    #     display_data.append({k: v for k, v in entry.items() if k in card.display_fields or k == "id"})
     return queryset_data
 
 
-#
-# def filter_display_fields(queryset, display_fields):
-#     display_data = []
-#     for entry in queryset.values():  # list of Dicts
-#         display_data.append({k: v for k, v in entry.items() if k in display_fields or k == "id"})
+def populate_card_field_headers(card):
+    if not card.field_header_text:
+        model = apps.get_model("airops", card.model_name)
+        return model.field_headers()
+    else:
+        return card.field_header_text
 
 
 @login_required(login_url="login")
@@ -186,11 +184,12 @@ def reference_tables(request):
     if not request.htmx:  # full page refresh, update all cards.
         for card in cards:
             card.data = populate_card_data(card)
+            card.field_header_text = populate_card_field_headers(card)
         build_initial_paginators(cards)
-    context = {
-        "breadcrumbs": breadcrumbs,
-        "cards": cards,
-    }  # base non-htmx context - All cards
+        context = {
+            "breadcrumbs": breadcrumbs,
+            "cards": cards,  # base non-htmx context - All cards
+        }
     page_num = request.GET.get("page", 1)
     page_model_name = request.GET.get("model")
     if page_model_name:  # A paginator has been triggered.
@@ -218,48 +217,29 @@ def reference_tables(request):
 
 
 def evaluate_reference_object(table):
-    if table == "status":
-        return Status
-    elif table == "terrain":
-        return Terrain
-    elif table == "waypoint_type":
-        return WaypointType
-    elif table == "flight_task":
-        return Task
-    elif table == "support_type":
-        return SupportType
-    elif table == "threat_type":
-        return ThreatType
-    elif table == "airframe":
-        return Airframe
+    return NotImplementedError("evaluate_reference_object")
+    # return {
+    #     "status": Status,
+    #     "terrain": Terrain,
+    #     "waypoint_type": WaypointType,
+    #     "flight_task": Task,
+    #     "support_type": SupportType,
+    #     "threat_type": ThreatType,
+    #     "airframe": Airframe,
+    #     "status_with_date": StatusWithDate,
+    # }[table]
 
 
-def efr_1(table):  # Using dict method below, "Swap" coming in python 9.10
-    if table == "status":
-        return StatusForm
-    elif table == "terrain":
-        return TerrainForm
-    elif table == "waypoint_type":
-        return WaypointTypeForm
-    elif table == "flight_task":
-        return TaskForm
-    elif table == "support_type":
-        return SupportTypeForm
-    elif table == "threat_type":
-        return ThreatTypeForm
-    elif table == "airframe":
-        return AirframeForm
-
-
-def evaluate_reference_form(table):
+def evaluate_reference_form(table):  # Capitalisation important!
     return {
-        "status": StatusForm,
-        "terrain": TerrainForm,
-        "waypoint_type": WaypointTypeForm,
-        "flight_task": TaskForm,
-        "support_type": SupportTypeForm,
-        "threat_type": ThreatTypeForm,
-        "airframe": AirframeForm,
+        "Status": StatusForm,
+        "Terrain": TerrainForm,
+        "WaypointType": WaypointTypeForm,
+        "Task": TaskForm,
+        "SupportType": SupportTypeForm,
+        "ThreatType": ThreatTypeForm,
+        "Airframe": AirframeForm,
+        "StatusWithDate": StatusForm,  # Must include any Model Proxy's and assign a form
     }[table]
 
 
@@ -270,23 +250,23 @@ def reference_object_add(request, table):
         "Reference Tables": reverse("reference_tables"),
         "Add": "",
     }
-    returnURL = request.GET.get("returnUrl")
+    return_url = request.GET.get("returnUrl")
 
     if request.method == "POST":
-        formobj = evaluate_reference_form(table)
-        form = formobj(request.POST, request.FILES)
+        form_object = evaluate_reference_form(table)
+        form = form_object(request.POST, request.FILES)
         if form.is_valid():
             obj = form.save(commit=False)
             obj.date_modified = timezone.now()
             obj.user = request.user
             obj.save()
-            return redirect(returnURL or "reference_tables")
+            return redirect(return_url or "reference_tables")
     else:
         form = evaluate_reference_form(table)
 
     context = {
         "form": form,
-        "returnURL": returnURL,
+        "returnURL": return_url,
         "action": "Add",
         "breadcrumbs": breadcrumbs,
     }
@@ -301,8 +281,6 @@ will be bound and follow the context around.
 
 zebra not working right now, check in html
 
-entry detail partial template needs to know what fields 
-
 """
 
 
@@ -310,13 +288,12 @@ entry detail partial template needs to know what fields
 def reference_object_update(request, item_id=None, table=None):
     if request.method == "GET" and (not item_id and table):
         return HttpResponseBadRequest("no object id or table id")
-    reference_object = evaluate_reference_object(table)
-    obj = reference_object.objects.get(id=item_id)
+    reference_object = apps.get_model("airops", table)
+    object_to_update = reference_object.objects.get(id=item_id)
     form_table = table
     form_object = evaluate_reference_form(form_table)
-    form = form_object(request.POST or None, instance=obj)
+    form = form_object(request.POST or None, instance=object_to_update)
     return_url = request.GET.get("returnUrl")
-
     url = reverse(
         "reference_object_update", kwargs={"item_id": item_id, "table": table}
     )
@@ -336,13 +313,14 @@ def reference_object_update(request, item_id=None, table=None):
     if request.htmx and request.method == "GET":
         context.update(
             {
-                "item_ordinal": request.GET.get("item_ordinal"),
+                # "item_ordinal": request.GET.get("item_ordinal"),
                 "item_zebra_css": request.GET.get("zebra"),
             }
         )
+        print(f"GET Zebra: {request.GET.get('zebra')}")
 
     if request.method == "POST":
-        form = form_object(request.POST, instance=obj)
+        form = form_object(request.POST, instance=object_to_update)
         if form.is_valid():
             form_obj = form.save(
                 commit=False
@@ -351,28 +329,26 @@ def reference_object_update(request, item_id=None, table=None):
             form_obj.user = request.user
             form_obj.save()
             if request.htmx:
+                return_card = EditReturnCard(model_name=table)
+                return_card.user_can_delete = request.user.has_perm(f"airops.delete_{table}")
                 context = {
-                    "item": obj,  # form.base_fields.keys() gives a list of the keys
-                    # dont think the changed model instance is being loaded or displayed?
-                    # from django.forms.models import model_to_dict
-                    # model_to_dict(form_obj,fields=form.base_fields.keys())
-                    # {'name': 'F-14B', 'stations': 8, 'multicrew': True}
-                    # no need to check for what fields to show!
-                    "edit_url": url,
+                    "item": form_obj,  # s
+                    "edit_url": url,  # todo: check context for un-used items
                     "table_name": table,
-                    "item_ordinal": form.data["item_ordinal"],
-                    "item_zebra_css": form.data["item_zebra_css"],
+                    # "item_ordinal": form.data["item_ordinal"],
+                    "zebra": form.data["item_zebra_css"],
+                    "item.id": item_id,
+                    "item.name": form_obj.name,
+                    "card": return_card,  # need this to enable "action" button(s)
                 }
+                print(f"POST Zebra: {context['zebra']}")
                 template = "V2/partials/reference_entry_detail.html"
                 return render(request=request, template_name=template, context=context)
             else:
                 return redirect("reference_tables")
 
     if request.htmx:
-        if table == "airframe":
-            template = "v2/partials/airframe_entry_edit.html"
-        else:
-            template = "v2/partials/reference_entry_edit.html"
+        template = "v2/partials/reference_entry_edit.html"
     else:
         template = "v2/generic/data_entry_form.html"
 
@@ -381,9 +357,9 @@ def reference_object_update(request, item_id=None, table=None):
 
 @login_required(login_url="login")
 def reference_object_delete(request, item_id, table):
-    reference_obj = evaluate_reference_object(table)
+    reference_obj = apps.get_model("airops", table)
     obj = reference_obj.objects.get(id=item_id)
-    # obj.delete()
+    obj.delete()
     # messages.success(request, "Campaign successfully deleted.")
     if request.htmx:
         return HttpResponse("")
@@ -397,3 +373,26 @@ def reference_object_sort_order(request):
         print(request.POST)
         pass
         # will need to return the card values
+
+
+#
+# if card.display_fields:  # local over-rides
+#     for entry in queryset_data:
+#
+#         print(entry.display_data(card.display_fields))
+#         # entry.display_data = ({k: v for k, v in entry.items() if k in card.display_fields})
+#         # entry.display_data = card.display_fields
+# if card.field_header_text:
+#     for entry in queryset_data:
+#         entry.field_headers = card.field_header_text
+#
+# display_data = []
+# for entry in queryset_data.values():  # list of Dicts
+#     display_data.append({k: v for k, v in entry.items() if k in card.display_fields or k == "id"})
+
+
+#
+# def filter_display_fields(queryset, display_fields):
+#     display_data = []
+#     for entry in queryset.values():  # list of Dicts
+#         display_data.append({k: v for k, v in entry.items() if k in display_fields or k == "id"})

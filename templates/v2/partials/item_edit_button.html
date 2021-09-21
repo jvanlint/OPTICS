@@ -10,10 +10,11 @@
             <a class="dropdown-item"
                href="{% url 'reference_object_update' card.model_name item.id %}?returnUrl={% url 'reference_tables' %}"
                hx-trigger="click"
-               hx-indicator="#{{ card.model_name }}_indicator"
-               hx-include="[name='item_ordinal']"
-               hx-vals='{"zebra":"{% cycle 'bg-light' '' %}}"'
+               hx-indicator="#hx_indicator"
+{#               hx-include="[name='item_ordinal']"#}
+               hx-vals='{"zebra": "{{ zebra }}"}'  {# must be valid JSON  - todo: fix this and ordinal#}
                hx-params="*"
+               hx-swap="innerHTML"
             >
               <svg class="c-icon">
                 <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
@@ -24,7 +25,7 @@
     {% if card.user_can_delete %}
         <a class="dropdown-item"
             href="{% url 'reference_object_delete' card.model_name item.id %}?returnUrl={% url 'reference_tables' %}"
-            hx-indicator="#{{ card.model_name }}_indicator"
+            hx-indicator="#hx_indicator"
             hx-confirm="Are you sure you want to delete {{ item.name }}?"
             hx-swap="outerHTML swap:1s"
             hx-trigger="click"

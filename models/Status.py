@@ -27,11 +27,11 @@ class Status(models.Model):
         #         data.update({field_name: value})
         #     return data
         # else:
-        return {"name": self.name}
+        return [self.name]
 
     @staticmethod
     def field_headers():
-        return ["Name"]
+        return None
 
     class Meta:
         verbose_name = "Campaign Status"

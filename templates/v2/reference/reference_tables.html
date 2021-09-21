@@ -12,27 +12,9 @@
             <div class="row">
                 {% for card in cards %}
                     <div class="card {{ card.css_class }}">
-                        <div class="card-header border-bottom-0">
-{#                        <i class="fa fa-align-justify"></i>#}
-                        <h5>{{ card.heading_text }}</h5>
-                        <div class="media text-muted">{{ card.heading_description }}</div>
-                            {% if card.field_header_text %}
-                                <div class="row">&nbsp;</div>
-                                <div class="row">
-                                    {% for header_text in card.field_header_text %}
-                                            <div class="col">
-                                                {{ header_text }}
-                                            </div>
-                                    {% endfor %}
-                                    <div class="col"> {# &nbsp for empty column for "Action" button #}
-                                        &nbsp;
-                                    </div>
-                                </div>
-                            {% endif %}
-                        </div>
+                        {% include 'v2/partials/reference_card_header.html' %}
                         {% include 'v2/partials/reference_card_body_and_footer.html'%}
-{#                        {% include 'v2/partials/reference_card_body.html' %}#}
-{#                        {% include 'v2/partials/reference_card_footer.html' %}#}
+                        {# ^^ wraps body and footer in htmx-target for the paginator ^^ #}
                     </div>
                 {% endfor %}
             </div>
@@ -58,7 +40,7 @@
           var sortable = sortables[i];
           new Sortable(sortable, {
               animation: 150,
-              ghostClass: 'list-group-item-info'
+              ghostClass: 'list-group-item-info',
           });
         }
     })
