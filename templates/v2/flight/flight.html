@@ -49,6 +49,21 @@
 					<div class="card">
 						<div class="card-header">
 							<h6 class="text-muted">Flight</h6>
+							
+							
+							
+							<button class="btn btn-success btn-sm dropdown-toggle float-right" id="cardDropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Mission Card
+							</button>
+							<div class="dropdown-menu" aria-labelledby="cardDropdownMenuButton">
+								<a class="dropdown-item" href="{% url 'pdf_view' flight_object.package.mission.id flight_object.id %}?returnUrl={{request.path}}">
+									View PDF
+								</a>
+								<a class="dropdown-item" href="{% url 'pdf_download' flight_object.package.mission.id flight_object.id %}?returnUrl={{request.path}}">
+									Download
+								</a>
+							</div>
+							
 							<h2>{{flight_object.callsign}}</h2>
 							<h6 class="text-muted">Task</h6>
 							<h4>{{flight_object.task}}</h4>
