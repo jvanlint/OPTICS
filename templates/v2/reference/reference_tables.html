@@ -1,110 +1,468 @@
 {% extends "v2/base.html" %} {% block title %} Page Blank {% endblock %}
-{% load django_htmx %}
-{% load static %}
-{% django_htmx_script %}
+
 <!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
-{% block content %}
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
 
 <main class="c-main">
-    <div class="container-fluid" hx-boost="true" hx-swap="outerHTML">
-        <div class="fade-in">
-            <div class="row">
-                {% for card in cards %}
-                    <div class="card col-lg-3 mr-4">
-                        <div class="card-header">
-                        <i class="fa fa-align-justify"></i>
-                        <h5>{{ card.heading_text }}</h5>
-                        <div class="media text-muted">{{ card.heading_description }}</div>
-                        </div>
-                            <div class="card-body px-0">
-                                <ul class="list-group list-group-flush">
-                                    <form class="sortable" hx-post="{% url 'sort_order_changed' %}" hx-trigger="end">
-                                        {% for item in card.data %}
-                                            <input type='hidden' name='item_ordinal' value='{{ forloop.counter }}'/>
-                                            <li class="list-group-item d-flex justify-content-between" hx-target="this">
-                                                <div class="col">
-                                                    {{ item.name }}
-                                                </div>
-                                                <div class="col text-right">
-                                                    {% include "v2/partials/item_edit_button.html" with table_name=card.table_name %}
-                                                </div>
-                                            </li>
-                                        {% endfor %}
-                                    </form>
-                                </ul>
-                                <div class='htmx-indicator' id="{{ card.table_name }}_indicator">Working...</div>
-                            </div>
-                        <div class="card-footer">
-                            <h6>
-                                <a href="{% url 'reference_object_add' card.table_name %}?returnUrl={{ request.path }}"
-                                 class="btn btn-sm btn-success float-right" role="button">
-                                <svg class="c-icon">
-                                  <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
-                                </svg>
-                                Add
-                                </a>
-                            </h6>
-                        </div>
+	<div class="container-fluid">
+		<div class="fade-in">
+			<!-- .row -->
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="card">
+						<div class="card-header">
+							<i class="fa fa-align-justify"></i>
+							<h5>Campaign Status</h5>
+							<div class="media text-muted">Used to describe the status of the campaign.</div>
+						</div>
+						<div class="card-body">
+							<table class="table table-responsive-sm table-striped">
+								<thead>
+									<tr>
+										<th>Status</th>
+										<th>Date Added</th>
+										<th>Last Modified</th>
+										<th>User</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for status in status_object %}
+									<tr>
+										<td>{{status.name}}</td>
+										<td>{{status.date_created}}</td>
+										<td>{{status.date_modified}}</td>
+										<td>{{status.user}}</td>
+										<td>
+											<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+												&nbspAction
+											</button>
+											<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+												<a class="dropdown-item" href="{% url 'reference_object_update' status.id 'status' %}?returnUrl={{request.path}}">
+													<svg class="c-icon">
+														<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
+													</svg>
+													&nbspEdit
+												</a>
+												<a class="dropdown-item" href="{% url 'reference_object_delete' status.id 'status' %}?returnUrl={{request.path}}">
+													<svg class="c-icon">
+														<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+													</svg>
+													&nbspDelete
+												</a>
+											</div>
+										</td>
+									</tr>
+									{% endfor %}
+									
+								</tbody>
+							</table>
+						</div>
+						<div class="card-footer">
+						<h6>
+							<a href="{% url 'reference_object_add' 'status' %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
+								<svg class="c-icon">
+									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
+								</svg>
+								Add 
+							</a>
+						</h6>
+						</div>
+					</div>
+				</div>
 
-                    </div>
-                {% endfor %}
-<!-- end for card in cards -->
-<!-- Start Airframes Card -->
-                <div class="card col-lg-5 mr-4">
-                    <div class="card-header">
-                        <i class="fa fa-align-justify"></i>
-                        <h5>Airframes</h5>
-                        <div class="media text-muted">The airframes that can be assigned as aircraft in flights.</div>
-                        <div class="row">&nbsp;</div>
-                        <div class="row">
-                            <div class="col">
-                                Name
-                            </div>
-                            <div class="col">
-                                Stations
-                            </div>
-                            <div class="col">
-                                Multicrew
-                            </div>
-                            <div class="col">
-                                &nbsp;
-                            </div>
-                        </div>
-                    </div>
-                    {% include "v2/reference/../partials/airframes_partial.html" %}
-                </div>
-            </div>
-        </div>
-    </div>
+				<div class="col-lg-6">
+					<div class="card">
+						<div class="card-header">
+							<i class="fa fa-align-justify"></i>
+							<h5>Terrain</h5>
+							<div class="media text-muted">The list of available DCS Terrain for a campaign.</div>
+						</div>
+						<div class="card-body">
+							<table class="table table-responsive-sm table-striped">
+								<thead>
+									<tr>
+										<th>Terrain</th>
+										<th>Date Added</th>
+										<th>Last Modified</th>
+										<th>User</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for terrain in terrain_object %}
+									<tr>
+										<td>{{terrain.name}}</td>
+										<td>{{terrain.date_created}}</td>
+										<td>{{terrain.date_modified}}</td>
+										<td>{{terrain.user}}</td>
+										<td>
+											<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+												&nbspAction
+											</button>
+											<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+												<a class="dropdown-item" href="{% url 'reference_object_update' terrain.id 'terrain' %}?returnUrl={{request.path}}">
+													<svg class="c-icon">
+														<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
+													</svg>
+													&nbspEdit
+												</a>
+												<a class="dropdown-item" href="{% url 'reference_object_delete' terrain.id 'terrain' %}?returnUrl={{request.path}}">
+													<svg class="c-icon">
+														<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+													</svg>
+													&nbspDelete
+												</a>
+											</div>
+										</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+						<div class="card-footer">
+						<h6>
+							<a href="{% url 'reference_object_add' 'terrain' %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
+								<svg class="c-icon">
+									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
+								</svg>
+								Add
+							</a>
+						</h6>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /.row -->
+
+			<!-- .row -->
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="card">
+						<div class="card-header">
+							<i class="fa fa-align-justify"></i>
+							<h5>Waypoint Types</h5>
+							<div class="media text-muted">Types of actions performed at a given waypoint.</div>
+						</div>
+						<div class="card-body">
+							<table class="table table-responsive-sm table-striped">
+								<thead>
+									<tr>
+										<th>Type</th>
+										<th>Date Added</th>
+										<th>Last Modified</th>
+										<th>User</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for waypoint_type in waypoint_type_object %}
+									<tr>
+										<td>{{waypoint_type.name}}</td>
+										<td>{{waypoint_type.date_created}}</td>
+										<td>{{waypoint_type.date_modified}}</td>
+										<td>{{waypoint_type.user}}</td>
+										<td>
+											<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+												&nbspAction
+											</button>
+											<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+												<a class="dropdown-item" href="{% url 'reference_object_update' waypoint_type.id 'waypoint_type' %}?returnUrl={{request.path}}">
+													<svg class="c-icon">
+														<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
+													</svg>
+													&nbspEdit
+												</a>
+												<a class="dropdown-item" href="{% url 'reference_object_delete' waypoint_type.id 'waypoint_type' %}?returnUrl={{request.path}}">
+													<svg class="c-icon">
+														<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+													</svg>
+													&nbspDelete
+												</a>
+											</div>
+										</td>
+									</tr>
+									{% endfor %}
+									
+								</tbody>
+							</table>
+						</div>
+						<div class="card-footer">
+						<h6>
+							<a href="{% url 'reference_object_add' 'waypoint_type' %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
+								<svg class="c-icon">
+									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
+								</svg>
+								Add
+							</a>
+						</h6>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-lg-6">
+					<div class="card">
+						<div class="card-header">
+							<i class="fa fa-align-justify"></i>
+							<h5>Flight Tasks</h5>
+							<div class="media text-muted">Tasks that can be performed by flights.</div>
+						</div>
+						<div class="card-body">
+							<table class="table table-responsive-sm table-striped">
+								<thead>
+									<tr>
+										<th>Task</th>
+										<th>Date Added</th>
+										<th>Last Modified</th>
+										<th>User</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for flight_task in flight_task_object %}
+									<tr>
+										<td>{{flight_task.name}}</td>
+										<td>{{flight_task.date_created}}</td>
+										<td>{{flight_task.date_modified}}</td>
+										<td>{{flight_task.user}}</td>
+										<td>
+											<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+												&nbspAction
+											</button>
+											<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+												<a class="dropdown-item" href="{% url 'reference_object_update' flight_task.id 'flight_task' %}?returnUrl={{request.path}}">
+													<svg class="c-icon">
+														<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
+													</svg>
+													&nbspEdit
+												</a>
+												<a class="dropdown-item" href="{% url 'reference_object_delete' flight_task.id 'flight_task' %}?returnUrl={{request.path}}">
+													<svg class="c-icon">
+														<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+													</svg>
+													&nbspDelete
+												</a>
+											</div>
+										</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+						<div class="card-footer">
+						<h6>
+							<a href="{% url 'reference_object_add' 'flight_task' %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
+								<svg class="c-icon">
+									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
+								</svg>
+								Add
+							</a>
+						</h6>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /.row -->
+
+			<!-- .row -->
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="card">
+						<div class="card-header">
+							<i class="fa fa-align-justify"></i>
+							<h5>Support Types</h5>
+							<div class="media text-muted">The various support assets available in the mission.</div>
+						</div>
+						<div class="card-body">
+							<table class="table table-responsive-sm table-striped">
+								<thead>
+									<tr>
+										<th>Type</th>
+										<th>Date Added</th>
+										<th>Last Modified</th>
+										<th>User</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for support_type in support_type_object %}
+									<tr>
+										<td>{{support_type.name}}</td>
+										<td>{{support_type.date_created}}</td>
+										<td>{{support_type.date_modified}}</td>
+										<td>{{support_type.user}}</td>
+										<td>
+											<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+												&nbspAction
+											</button>
+											<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+												<a class="dropdown-item" href="{% url 'reference_object_update' support_type.id 'support_type' %}?returnUrl={{request.path}}">
+													<svg class="c-icon">
+														<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
+													</svg>
+													&nbspEdit
+												</a>
+												<a class="dropdown-item" href="{% url 'reference_object_delete' support_type.id 'support_type' %}?returnUrl={{request.path}}">
+													<svg class="c-icon">
+														<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+													</svg>
+													&nbspDelete
+												</a>
+											</div>
+										</td>
+									</tr>
+									{% endfor %}
+									
+								</tbody>
+							</table>
+						</div>
+						<div class="card-footer">
+						<h6>
+							<a href="{% url 'reference_object_add' 'support_type' %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
+								<svg class="c-icon">
+									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
+								</svg>
+								Add
+							</a>
+						</h6>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-lg-6">
+					<div class="card">
+						<div class="card-header">
+							<i class="fa fa-align-justify"></i>
+							<h5>Threat Types</h5>
+							<div class="media text-muted">The ground threat classes that be assigned to a gorund threat.</div>
+						</div>
+						<div class="card-body">
+							<table class="table table-responsive-sm table-striped">
+								<thead>
+									<tr>
+										<th>Task</th>
+										<th>Date Added</th>
+										<th>Last Modified</th>
+										<th>User</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for threat_type in threat_type_object %}
+									<tr>
+										<td>{{threat_type.name}}</td>
+										<td>{{threat_type.date_created}}</td>
+										<td>{{threat_type.date_modified}}</td>
+										<td>{{threat_type.user}}</td>
+										<td>
+											<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+												&nbspAction
+											</button>
+											<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+												<a class="dropdown-item" href="{% url 'reference_object_update' threat_type.id 'threat_type' %}?returnUrl={{request.path}}">
+													<svg class="c-icon">
+														<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
+													</svg>
+													&nbspEdit
+												</a>
+												<a class="dropdown-item" href="{% url 'reference_object_delete' threat_type.id 'threat_type' %}?returnUrl={{request.path}}">
+													<svg class="c-icon">
+														<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+													</svg>
+													&nbspDelete
+												</a>
+											</div>
+										</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+						<div class="card-footer">
+						<h6>
+							<a href="{% url 'reference_object_add' 'threat_type' %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
+								<svg class="c-icon">
+									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
+								</svg>
+								Add
+							</a>
+						</h6>
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-lg-6">
+					<div class="card">
+						<div class="card-header">
+							<i class="fa fa-align-justify"></i>
+							<h5>Airframes</h5>
+							<div class="media text-muted">The airframes that can be assigned as aircraft in flights.</div>
+						</div>
+						<div class="card-body">
+							<table class="table table-responsive-sm table-striped">
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>Stations</th>
+										<th>Multicrew</th>
+										<th>Date Added</th>
+										<th>Last Modified</th>
+										<th>User</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for airframe in airframe_object %}
+									<tr>
+										<td>{{airframe.name}}</td>
+										<td>{{airframe.stations}}</td>
+										<td>{{airframe.multicrew}}</td>
+										<td>{{airframe.date_created}}</td>
+										<td>{{airframe.date_modified}}</td>
+										<td>{{airframe.user}}</td>
+										<td>
+											<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+												&nbspAction
+											</button>
+											<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+												<a class="dropdown-item" href="{% url 'reference_object_update' airframe.id 'airframe' %}?returnUrl={{request.path}}">
+													<svg class="c-icon">
+														<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
+													</svg>
+													&nbspEdit
+												</a>
+												<a class="dropdown-item" href="{% url 'reference_object_delete' airframe.id 'airframe' %}?returnUrl={{request.path}}">
+													<svg class="c-icon">
+														<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+													</svg>
+													&nbspDelete
+												</a>
+											</div>
+										</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+						<div class="card-footer">
+						<h6>
+							<a href="{% url 'reference_object_add' 'airframe' %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
+								<svg class="c-icon">
+									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
+								</svg>
+								Add
+							</a>
+						</h6>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /.row -->
+		</div>
+	</div>
 </main>
 
 {% endblock content %}
 
-{% block javascripts %}
-  <script src="{% static 'js/htmx/htmx.min.js' %}"></script>
-  <script src="{% static 'js/htmx/ext/debug.js' %}"></script>
-  <script src="{% static 'js/htmx/ext/event-header.js' %}"></script>
-  <script>
-      document.body.addEventListener("htmx:configRequest", (event) => {
-          event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}'
-      })
-  </script>
-  <script>
-      htmx.onLoad(function(content) {
-        var sortables = content.querySelectorAll(".sortable");
-        for (var i = 0; i < sortables.length; i++) {
-          var sortable = sortables[i];
-          new Sortable(sortable, {
-              animation: 150,
-              ghostClass: 'list-group-item-info'
-          });
-        }
-    })
-  </script>
-  <!-- Latest Sortable -->
-  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-
-
-  {{ django_htmx_script }}
-{% endblock javascripts %}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
