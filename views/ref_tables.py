@@ -47,7 +47,7 @@ class Card:
     user_can_delete: bool = False
     has_paginator: bool = False  # Include a paginator on this card
     paginator_items: int = DEFAULT_ITEMS_PER_PAGE  # Number of items per page
-    css_class: str = "col-lg-3 mx-4"  # raw css appended to <card class=
+    css_class: str = "col-lg-4 mx-3"  # raw css appended to <card class=
 
 
 @dataclass
@@ -109,7 +109,6 @@ CARD_LIST = [
 
 
 class StatusWithDate(Status):
-    # https://docs.djangoproject.com/en/3.2/topics/db/models/#proxy-models
     def display_data(self):
         return [self.name, self.date_modified]
 
@@ -118,7 +117,7 @@ class StatusWithDate(Status):
         return ["Name", "Last Modified"]
 
     class Meta:
-        proxy = True
+        proxy = True  # https://docs.djangoproject.com/en/3.2/topics/db/models/#proxy-models
 
 
 def check_permissions(cards, user):
@@ -194,7 +193,7 @@ def reference_tables(request):
             # Swap the paged card into the cards
             cards = [paged_card for card in cards if card.model_name == page_model_name]
     if request.htmx:
-        template = "v2/partials/reference_card_body_and_footer.html"
+        template = "v2/reference/partials/reference_card_body_and_footer.html"
     else:
         template = "v2/reference/reference_tables.html"
 
@@ -216,31 +215,31 @@ def evaluate_reference_object(table):
     # }[table]
 
 
-def evaluate_reference_form(table):  # Capitalisation important!
+def evaluate_reference_form(card_name):  # Capitalisation important! card (table) names are .lower()
     return {
-        "Status": StatusForm,
-        "Terrain": TerrainForm,
-        "WaypointType": WaypointTypeForm,
-        "Task": TaskForm,
-        "SupportType": SupportTypeForm,
-        "ThreatType": ThreatTypeForm,
-        "Airframe": AirframeForm,
-        "StatusWithDate": StatusForm,  # Must include any Model Proxy's and assign a form
-    }[table]
+        "status": StatusForm,
+        "terrain": TerrainForm,
+        "waypointtype": WaypointTypeForm,
+        "task": TaskForm,
+        "supporttype": SupportTypeForm,
+        "threattype": ThreatTypeForm,
+        "airframe": AirframeForm,
+        "statuswithdate": StatusForm,  # Must include any Model Proxy's and assign a form
+    }[card_name]
+    # could possibly use django's modelform_factory() with data from the card to generate forms on the fly
 
 
 @login_required(login_url="login")
-def reference_object_add(request, table):  # todo: Update Add to new inline forms.
+def reference_object_add(request, card_name):  # todo: Update Add to new inline forms.
     breadcrumbs = {
         "Home": reverse("home"),
         "Reference Tables": reverse("reference_tables"),
         "Add": "",
     }
     return_url = request.GET.get("returnUrl")
-
+    modelform_object = evaluate_reference_form(card_name)
     if request.method == "POST":
-        form_object = evaluate_reference_form(table)
-        form = form_object(request.POST, request.FILES)
+        form = modelform_object(request.POST, request.FILES)
         if form.is_valid():
             obj = form.save(commit=False)
             obj.date_modified = timezone.now()
@@ -248,7 +247,7 @@ def reference_object_add(request, table):  # todo: Update Add to new inline form
             obj.save()
             return redirect(return_url or "reference_tables")
     else:
-        form = evaluate_reference_form(table)
+        form = modelform_object
 
     context = {
         "form": form,
@@ -256,24 +255,20 @@ def reference_object_add(request, table):  # todo: Update Add to new inline form
         "action": "Add",
         "breadcrumbs": breadcrumbs,
     }
-
-    # Render the HTML template index.html with the data in the context variable
     return render(request, "v2/generic/data_entry_form.html", context)
 
 
 @login_required(login_url="login")
-def reference_object_update(request, item_id=None, table=None):
-    if request.method == "GET" and (not item_id and table):
-        return HttpResponseBadRequest("no object id or table id")
-    reference_object = apps.get_model("airops", table)
-    object_to_update = reference_object.objects.get(id=item_id)
-    form_table = table
-    form_object = evaluate_reference_form(form_table)
-    form = form_object(request.POST or None, instance=object_to_update)
+def reference_object_update(request, item_id=None, card_name=None):
+    if request.method == "GET" and (not item_id and card_name):
+        return HttpResponseBadRequest("no object id or card_name id")
+    object_model = apps.get_model("airops", card_name)
+    object_to_update = object_model.objects.get(id=item_id)
+    form_table = card_name.lower()
+    modelform_object = evaluate_reference_form(form_table)
+    form = modelform_object(request.POST or None, instance=object_to_update)
     return_url = request.GET.get("returnUrl")
-    url = reverse(
-        "reference_object_update", kwargs={"item_id": item_id, "table": table}
-    )
+    url = reverse("reference_object_update", kwargs={"item_id": item_id, "card_name": card_name})
     breadcrumbs = {
         "Home": reverse("home"),
         "Reference Tables": reverse("reference_tables"),
@@ -285,49 +280,43 @@ def reference_object_update(request, item_id=None, table=None):
         "returnURL": return_url,
         "breadcrumbs": breadcrumbs,
         "post_url": url,
-        "table_name": table,
+        "card_name": card_name,
     }
     if request.htmx and request.method == "GET":
         context.update(
             {
-                # "item_ordinal": request.GET.get("item_ordinal"),
                 "item_zebra_css": request.GET.get("zebra"),
             }
         )
-        print(f"GET Zebra: {request.GET.get('zebra')}")
 
     if request.method == "POST":
-        form = form_object(request.POST, instance=object_to_update)
+        form_obj = ""
+        # form = form_object(request.POST, instance=object_to_update)
         if form.is_valid():
-            form_obj = form.save(
-                commit=False
-            )  # initial form.save populates the form_obj with the new instance
+            form_obj = form.save(commit=False)
             form_obj.date_modified = timezone.now()
             form_obj.user = request.user
             form_obj.save()
-            if request.htmx:
-                return_card = EditReturnCard(model_name=table)
-                return_card.user_can_delete = request.user.has_perm(
-                    f"airops.delete_{table}"
-                )
-                context = {
-                    "item": form_obj,  # s
-                    "edit_url": url,  # todo: check context for un-used items
-                    "table_name": table,
-                    # "item_ordinal": form.data["item_ordinal"],
-                    "zebra": form.data["item_zebra_css"],
-                    "item.id": item_id,
-                    "item.name": form_obj.name,
-                    "card": return_card,  # need this to enable "action" button(s)
-                }
-                print(f"POST Zebra: {context['zebra']}")
-                template = "V2/partials/reference_entry_detail.html"
-                return render(request=request, template_name=template, context=context)
-            else:
-                return redirect("reference_tables")
+
+        if request.htmx:
+            return_card = EditReturnCard(model_name=card_name)
+            return_card.user_can_delete = request.user.has_perm(f"airops.delete_{card_name}")
+            context = {
+                "item": form_obj,
+                "edit_url": url,
+                "table_name": card_name,
+                "zebra": form.data["item_zebra_css"],
+                "item.id": item_id,
+                "item.name": form_obj.name,
+                "card": return_card,  # need this to enable "action" button(s)
+            }
+            template = "V2/reference/partials/reference_entry_detail.html"
+            return render(request=request, template_name=template, context=context)
+        else:
+            return redirect("reference_tables")
 
     if request.htmx:
-        template = "v2/partials/reference_entry_edit.html"
+        template = "v2/reference/partials/reference_entry_edit.html"
     else:
         template = "v2/generic/data_entry_form.html"
 
@@ -335,8 +324,8 @@ def reference_object_update(request, item_id=None, table=None):
 
 
 @login_required(login_url="login")
-def reference_object_delete(request, item_id, table):
-    reference_obj = apps.get_model("airops", table)
+def reference_object_delete(request, item_id, card_name):
+    reference_obj = apps.get_model("airops", card_name)
     obj = reference_obj.objects.get(id=item_id)
     obj.delete()
     # messages.success(request, "Campaign successfully deleted.")
@@ -351,5 +340,4 @@ def reference_object_sort_order(request):
     if request.method == "POST":
         print(request.POST)
         pass
-        # will need to return the card values
-
+        # todo: Add ordinal field to tables and work out how to implement this

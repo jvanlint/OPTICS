@@ -21,7 +21,7 @@ from crispy_forms.layout import (
 )
 from crispy_forms import bootstrap, layout
 
-# from django.urls import reverse
+from django.urls import reverse
 from airops import utils
 
 # import GeeksModel from models.py
@@ -252,30 +252,39 @@ class FlightImageryForm(ModelForm):
         fields = "__all__"
 
 
-# Default layout for forms that display a single 'name' field.
-generic_name_only_helper = FormHelper()
-generic_name_only_helper.form_class = "form-inline"
-generic_name_only_helper.form_class = "form-inline"
-generic_name_only_helper.form_show_labels = False
-generic_name_only_helper.form_tag = False
-generic_name_only_helper.field_template = "bootstrap3/layout/inline_field.html"
-generic_name_only_helper.layout = Layout(
-    Row(
-        bootstrap.InlineField("name", css_class="form-control-sm col-auto"),
-        bootstrap.FormActions(
-            Submit("Save", "Save", css_class="btn btn-sm btn-primary"),
-            Button("cancel", "Cancel", css_class="btn-sm btn-danger"),
-            Reset("reset_name", "Reset", css_class="btn btn-sm btn-warning"),
+def get_form_buttons():
+    return bootstrap.FormActions(
+        Submit("Save", "Save", css_class="btn-sm ml-2"),
+        HTML(
+            "<a href='{% url \"reference_tables\" %}' hx-disable class='btn btn-sm btn-danger ml-2'>Cancel</a>"
         ),
-        css_class="form-row",
-    ),
-)
+        Reset("reset_name", "Reset", css_class="btn-sm btn-warning ml-2 text-light"),
+        css_class="col-auto",
+    )
+
+
+def form_helper_factory():
+    # Default layout for forms that display a single 'name' field.
+    helper = FormHelper()
+    helper.form_class = "form-inline"
+    helper.form_class = "form-inline"
+    helper.form_show_labels = False
+    helper.form_tag = False
+    helper.field_template = "bootstrap3/layout/inline_field.html"
+    helper.layout = Layout(
+        Row(
+            bootstrap.InlineField("name", css_class="form-control-sm col-auto mb-2"),
+            get_form_buttons(),
+            css_class="form-row",
+        ),
+    )
+    return helper
 
 
 class TerrainForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.helper = generic_name_only_helper
+        self.helper = form_helper_factory()
 
     class Meta:
         model = Terrain
@@ -294,7 +303,7 @@ class TerrainForm(ModelForm):
 class StatusForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.helper = generic_name_only_helper
+        self.helper = form_helper_factory()
 
     class Meta:
         model = Status
@@ -304,7 +313,7 @@ class StatusForm(ModelForm):
                 attrs={
                     "placeholder": "Campaign status.",
                     "class": "form-control",
-                    "autofocus": None,
+                    "autofocus": True,
                 }
             ),
         }
@@ -313,7 +322,7 @@ class StatusForm(ModelForm):
 class WaypointTypeForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.helper = generic_name_only_helper
+        self.helper = form_helper_factory()
 
     class Meta:
         model = WaypointType
@@ -332,7 +341,7 @@ class WaypointTypeForm(ModelForm):
 class SupportTypeForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.helper = generic_name_only_helper
+        self.helper = form_helper_factory()
 
     class Meta:
         model = SupportType
@@ -351,7 +360,7 @@ class SupportTypeForm(ModelForm):
 class TaskForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.helper = generic_name_only_helper
+        self.helper = form_helper_factory()
 
     class Meta:
         model = Task
@@ -370,7 +379,7 @@ class TaskForm(ModelForm):
 class ThreatTypeForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.helper = generic_name_only_helper
+        self.helper = form_helper_factory()
 
     class Meta:
         model = ThreatType
@@ -380,7 +389,7 @@ class ThreatTypeForm(ModelForm):
                 attrs={
                     "placeholder": "Threat type.",
                     "class": "form-control",
-                    "autofocus": None,
+                    "autofocus": True,
                 }
             ),
         }
@@ -391,21 +400,17 @@ class AirframeForm(ModelForm):
         super(AirframeForm, self).__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs.update({"class": "form-control"})
-        self.helper = generic_name_only_helper
+        self.helper = form_helper_factory()
         self.helper.layout = Layout(  # Layout overridden to provide multiple fields.
             Row(
-                bootstrap.InlineField("name", css_class="form-control-sm col-auto"),
+                bootstrap.InlineField("name", css_class="form-control-sm"),
                 bootstrap.InlineField(
-                    "stations", css_class="form-control-sm col-auto mx-2"
+                    "stations", css_class="form-control-sm mx-2"
                 ),
                 bootstrap.InlineField(
-                    "multicrew", css_class="form-control-sm col-auto mx-2"
+                    "multicrew", css_class="form-control-sm  mx-2"
                 ),
-                bootstrap.FormActions(
-                    Submit("Save", "Save", css_class="btn btn-sm btn-primary"),
-                    Button("cancel", "Cancel", css_class="btn-sm btn-danger"),
-                    Reset("reset_name", "Reset", css_class="btn btn-sm btn-warning"),
-                ),
+                get_form_buttons(),
                 css_class="form-row",
             ),
         )

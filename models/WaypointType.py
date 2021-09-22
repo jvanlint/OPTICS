@@ -18,7 +18,7 @@ class WaypointType(models.Model):
         return self.name
 
     def edit_url(self):
-        return reverse("reference_object_update", kwargs={"item_id": self.id, "table": "waypoint_type"})
+        return reverse("reference_object_update", kwargs={"item_id": self.id, "card_name": "waypoint_type"})
 
     def display_data(self):
         return [self.name]

@@ -18,7 +18,7 @@ class Terrain(models.Model):
 
     def edit_url(self):
         return reverse(
-            "reference_object_update", kwargs={"item_id": self.id, "table": "terrain"}
+            "reference_object_update", kwargs={"item_id": self.id, "card_name": "terrain"}
         )
 
     def display_data(self):

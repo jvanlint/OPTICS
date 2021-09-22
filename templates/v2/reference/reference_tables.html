@@ -5,15 +5,15 @@
 {% block stylesheets %}
 {% endblock stylesheets %}
 {% block content %}
-
+<div class='htmx-indicator alert alert-warning' role="alert" id="htmx-indicator">Working...</div>
 <main class="c-main">
-    <div class="container-fluid" hx-boost="true" hx-swap="outerHTML">
+    <div class="container-fluid flex" hx-boost="true" hx-swap="outerHTML" hx-indicator="#htmx-indicator">
         <div class="fade-in">
             <div class="row">
                 {% for card in cards %}
                     <div class="card {{ card.css_class }}">
-                        {% include 'v2/partials/reference_card_header.html' %}
-                        {% include 'v2/partials/reference_card_body_and_footer.html'%}
+                        {% include 'v2/reference/partials/reference_card_header.html' %}
+                        {% include 'v2/reference/partials/reference_card_body_and_footer.html' %}
                         {# ^^ wraps body and footer in htmx-target for the paginator ^^ #}
                     </div>
                 {% endfor %}

@@ -183,9 +183,9 @@ urlpatterns += [
 # Reference URL Patterns - V2
 urlpatterns += [
     path('reference/', views.reference_tables, name='reference_tables'),
-    path('reference/add/<str:table>', views.reference_object_add, name='reference_object_add'),
-    path('reference/update/<str:table>/<int:item_id>', views.reference_object_update, name='reference_object_update'),
-    path('reference/delete/<str:table>/<int:item_id>', views.reference_object_delete, name='reference_object_delete'),
+    path('reference/add/<str:card_name>', views.reference_object_add, name='reference_object_add'),
+    path('reference/update/<str:card_name>/<int:item_id>', views.reference_object_update, name='reference_object_update'),
+    path('reference/delete/<str:card_name>/<int:item_id>', views.reference_object_delete, name='reference_object_delete'),
     path('reference/hx/sortorder', views.reference_object_sort_order, name='sort_order_changed'),
 
 ]
@@ -197,15 +197,6 @@ urlpatterns += [
     path("v2/avatar_select", views.select_avatar, name="select_avatar"),
     path("v2/avatar_change", views.change_avatar, name="avatar_change"),
 ]
-
-# User Password and Access Management URL Patterns
-
-urlpatterns += [
-    
-    path("change_password/", auth_views.PasswordChangeView.as_view(
-        template_name="authentication/change_password.html"), name="change_password_v2"),
-]
-
 
 
 

@@ -17,7 +17,7 @@ class SupportType(models.Model):
         return self.name
 
     def edit_url(self):
-        return reverse("reference_object_update", kwargs={"item_id": self.id, "table": "support_type"})
+        return reverse("reference_object_update", kwargs={"item_id": self.id, "card_name": "support_type"})
 
     def display_data(self):
         return [self.name]

@@ -1,9 +1,9 @@
 
-<li class="list-group-item d-flex justify-content-between border-0 {{ item_zebra_css }} static " hx-target="this" hx-indicator="#htmx_indicator">
+<li class="list-group-item d-flex justify-content-between border-0 {{ item_zebra_css }} static " hx-target="this" hx-indicator="#htmx-indicator">
 {% load crispy_forms_tags %}
     <form id="edit-form" class="form-inline" action="{{ post_url }}" method="POST" enctype="multipart/form-data">
          {% crispy form %}
-{#        <input type='hidden' name='item_ordinal' value='{{ item_ordinal }}' />#}
+        <input type='hidden' name='item_ordinal' value='{{ item_ordinal }}' />
         <input type='hidden' name='item_zebra_css' value='{{ item_zebra_css }}' />
     </form>
 </li>

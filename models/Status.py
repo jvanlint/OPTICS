@@ -16,7 +16,7 @@ class Status(models.Model):
 
     def edit_url(self):
         return reverse(
-            "reference_object_update", kwargs={"item_id": self.id, "table": "status"}
+            "reference_object_update", kwargs={"item_id": self.id, "card_name": "status"}
         )
 
     def display_data(self):

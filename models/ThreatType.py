@@ -17,7 +17,7 @@ class ThreatType(models.Model):
         return self.name
 
     def edit_url(self):
-        return reverse("reference_object_update", kwargs={"item_id": self.id, "table": "threat_type"})
+        return reverse("reference_object_update", kwargs={"item_id": self.id, "card_name": "threat_type"})
 
     def display_data(self):
         return [self.name]

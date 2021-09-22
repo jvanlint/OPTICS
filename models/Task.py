@@ -19,7 +19,7 @@ class Task(models.Model):
 		return self.name
 
 	def edit_url(self):
-		return reverse("reference_object_update", kwargs={"item_id": self.id, "table": "flight_task"})
+		return reverse("reference_object_update", kwargs={"item_id": self.id, "card_name": "flight_task"})
 
 
 	def display_data(self):

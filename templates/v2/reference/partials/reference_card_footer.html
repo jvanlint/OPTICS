@@ -1,4 +1,4 @@
-<div class="card-footer border-top-0" hx-target="#{{ card.model_name }}" hx-swap="outerHTML" hx-indicator="#htmx_indicator">
+<div class="card-footer border-top-0" hx-target="#{{ card.model_name }}" hx-swap="outerHTML" hx-indicator="#htmx-indicator">
     {% if card.user_can_add %}
         <h6>
             <a href="{% url 'reference_object_add' card.model_name %}?returnUrl={{ request.path }}"
