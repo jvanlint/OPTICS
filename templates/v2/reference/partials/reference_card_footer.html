@@ -2,7 +2,7 @@
     {% if card.user_can_add %}
         <h6>
             <a href="{% url 'reference_object_add' card.model_name %}?returnUrl={{ request.path }}"
-               class="btn btn-sm btn-success float-right" role="button">
+               class="btn btn-sm btn-success float-right" hx-disable="True" role="button">
                 <svg class="c-icon">
                     <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
                 </svg>

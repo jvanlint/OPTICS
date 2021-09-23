@@ -237,7 +237,7 @@ def reference_object_add(request, card_name):  # todo: Update Add to new inline 
         "Add": "",
     }
     return_url = request.GET.get("returnUrl")
-    modelform_object = evaluate_reference_form(card_name)
+    modelform_object = evaluate_reference_form(card_name.lower())
     if request.method == "POST":
         form = modelform_object(request.POST, request.FILES)
         if form.is_valid():
