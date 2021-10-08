@@ -4,7 +4,7 @@ import os
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 
 from ..forms import CampaignForm
@@ -82,7 +82,6 @@ def campaign_add_v2(request):
         "breadcrumbs": breadcrumbs,
     }
 
-    # Render the HTML template index.html with the data in the context variable
     return render(request, "v2/campaign/campaign_form.html", context)
 
 
@@ -136,4 +135,6 @@ def campaign_delete_v2(request, link_id):
     return HttpResponseRedirect(return_url)
 
 
-# **** End Campaigns Code *****
+@login_required(login_url="account_login")
+def campaign_redirect(request):
+    return redirect('campaigns')

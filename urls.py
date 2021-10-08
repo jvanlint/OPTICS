@@ -85,6 +85,7 @@ urlpatterns += [
 # Campaign URL Patterns - V2
 urlpatterns += [
     path('v2/', views.campaigns_all, name='home'),
+    path('v2/campaign/', views.campaign_redirect),
     path('v2/campaigns/', views.campaigns_all, name='campaigns'),
     path('v2/campaign/<int:link_id>/', views.campaign_detail_v2, name='campaign_detail_v2'),
     path("v2/campaign/add", views.campaign_add_v2, name="campaign_add_v2"),
