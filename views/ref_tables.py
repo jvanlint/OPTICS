@@ -43,6 +43,7 @@ def reference_tables(request):
     waypoint_paginated = Paginator(object_list=waypoint_type, per_page=5).get_page(page_num)
     airframe_paginated = Paginator(object_list=airframe, per_page=5).get_page(page_num)
     flight_task_paginated = Paginator(object_list=flight_task, per_page=5).get_page(page_num)
+    campaign_status_paginated = Paginator(object_list=status, per_page=5).get_page(page_num)
     
     breadcrumbs = {"Home": reverse("home"), "Reference Tables": ""}
 
@@ -53,7 +54,7 @@ def reference_tables(request):
         template = "v2/reference/reference_tables.html"
         context = {
             "terrain_object": terrain,
-            "status_object": status,
+            "status_object": campaign_status_paginated,
             "waypoint_type_object": waypoint_paginated,
             "flight_task_object": flight_task_paginated,
             "support_type_object": support_type,
@@ -90,6 +91,16 @@ def flight_task_page_manager(request):
     
     template = "v2/reference/includes/flight_tasks.html"
     context = {"flight_task_object": flight_task_paginated}
+    
+    return render(request, template_name=template, context=context)
+    
+def campaign_status_page_manager(request):
+    campaign_status = Status.objects.order_by("name")
+    page_num = request.GET.get("page", 1)
+    campaign_status_paginated = Paginator(object_list=campaign_status, per_page=5).get_page(page_num)
+    
+    template = "v2/reference/includes/campaign_status.html"
+    context = {"status_object": campaign_status_paginated}
     
     return render(request, template_name=template, context=context)
 

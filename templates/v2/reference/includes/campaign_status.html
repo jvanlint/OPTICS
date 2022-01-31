@@ -1,60 +1,86 @@
-<div class="card">
-	<div class="card-header">
-		<i class="fa fa-align-justify"></i>
-		<h5>Campaign Status</h5>
-		<div class="media text-muted">Used to describe the status of the campaign.</div>
-	</div>
-	<div class="card-body">
-		<table class="table table-responsive-sm table-striped">
-			<thead>
-				<tr>
-					<th>Status</th>
-					<th>Date Added</th>
-					<th>Last Modified</th>
-					<th>User</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for status in status_object %}
-				<tr>
-					<td>{{status.name}}</td>
-					<td>{{status.date_created}}</td>
-					<td>{{status.date_modified}}</td>
-					<td>{{status.user}}</td>
-					<td>
-						<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							&nbspAction
-						</button>
-						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<a class="dropdown-item" href="{% url 'reference_object_update' status.id 'status' %}?returnUrl={{request.path}}">
-								<svg class="c-icon">
-									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
-								</svg>
-								&nbspEdit
-							</a>
-							<a class="dropdown-item" href="{% url 'reference_object_delete' status.id 'status' %}?returnUrl={{request.path}}">
-								<svg class="c-icon">
-									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
-								</svg>
-								&nbspDelete
-							</a>
-						</div>
-					</td>
-				</tr>
+<div id="campaign-status">
+	<div class="card">
+		<div class="card-header">
+			<i class="fa fa-align-justify"></i>
+			<h5>Campaign Status</h5>
+			<div class="media text-muted">Used to describe the status of the campaign.</div>
+		</div>
+		<div class="card-body">
+			<table class="table table-responsive-sm table-striped">
+				<thead>
+					<tr>
+						<th>Status</th>
+						<th>Date Added</th>
+						<th>Last Modified</th>
+						<th>User</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for status in status_object %}
+					<tr>
+						<td>{{status.name}}</td>
+						<td>{{status.date_created}}</td>
+						<td>{{status.date_modified}}</td>
+						<td>{{status.user}}</td>
+						<td>
+							<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								&nbspAction
+							</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<a class="dropdown-item" href="{% url 'reference_object_update' status.id 'status' %}?returnUrl={{request.path}}">
+									<svg class="c-icon">
+										<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
+									</svg>
+									&nbspEdit
+								</a>
+								<a class="dropdown-item" href="{% url 'reference_object_delete' status.id 'status' %}?returnUrl={{request.path}}">
+									<svg class="c-icon">
+										<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+									</svg>
+									&nbspDelete
+								</a>
+							</div>
+						</td>
+					</tr>
+					{% endfor %}
+					
+				</tbody>
+			</table>
+			<div class="media text-muted">Showing {{ status_object.start_index }} to {{ status_object.end_index }} of {{ status_object.paginator.count }} records.</div>
+		</div>
+		<div class="card-footer">
+		{% if status_object.has_other_pages %}
+			<div class="btn-group float-left" role="group" aria-label="Basic outlined example">
+				{% if status_object.has_previous %}
+					<button class="btn btn-outline-primary" type="button" hx-get="{% url 'campaign_status_page_manager' %}?page={{ status_object.previous_page_number}}" hx-target="#campaign-status" hx-swap="outerHTML">Previous</button>
+				{% else %}
+					<button class="btn btn-outline-primary" type="button" disabled="">Previous</button>
+				{% endif %}
+				
+				{% for i in status_object.paginator.page_range %}
+					{% if status_object.number == i %}
+						<button class="btn btn-outline-primary active" type="button" >{{ i }}</button>
+					{% else %}
+						<button class="btn btn-outline-primary" type="button" hx-get="{% url 'campaign_status_page_manager' %}?page={{ i }}" hx-target="#campaign-status" hx-swap="outerHTML">{{ i }}</button>
+					{% endif %}
 				{% endfor %}
 				
-			</tbody>
-		</table>
-	</div>
-	<div class="card-footer">
-	<h6>
-		<a href="{% url 'reference_object_add' 'status' %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
-			<svg class="c-icon">
-				<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
-			</svg>
-			Add 
-		</a>
-	</h6>
+				{% if status_object.has_next %}
+					<button class="btn btn-outline-primary" type="button" hx-get="{% url 'campaign_status_page_manager' %}?page={{ status_object.next_page_number }}" hx-target="#campaign-status" hx-swap="outerHTML">Next</button>
+				{% else %}
+					<button class="btn btn-outline-primary" type="button" disabled="">Next</button>
+				{% endif %}
+			</div>
+		{% endif %}
+		<h6>
+			<a href="{% url 'reference_object_add' 'status' %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
+				<svg class="c-icon">
+					<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
+				</svg>
+				Add 
+			</a>
+		</h6>
+		</div>
 	</div>
 </div>
