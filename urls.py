@@ -199,6 +199,7 @@ urlpatterns += [
     path('referenceobject/delete/<int:link_id>/<str:table>', views.reference_object_delete, name='reference_object_delete'),
     path('reference/waypoint_type_page', views.waypoint_type_page_manager, name='waypoint_type_page_manager'),
     path('reference/airframe_page', views.airframe_page_manager, name='airframe_page_manager'),
+    path('reference/flight_task_page', views.flight_task_page_manager, name='flight_task_page_manager'),
 ]
 
 # Profile URL Patterns - V2
