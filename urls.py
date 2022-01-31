@@ -201,6 +201,9 @@ urlpatterns += [
     path('reference/airframe_page', views.airframe_page_manager, name='airframe_page_manager'),
     path('reference/flight_task_page', views.flight_task_page_manager, name='flight_task_page_manager'),
     path('reference/campaign_status_page', views.campaign_status_page_manager, name='campaign_status_page_manager'),
+    path('reference/terrain_page', views.terrain_page_manager, name='terrain_page_manager'),
+    path('reference/support_type_page', views.support_type_page_manager, name='support_type_page_manager'),
+    path('reference/threat_type_page', views.threat_type_page_manager, name='threat_type_page_manager'),
 ]
 
 # Profile URL Patterns - V2

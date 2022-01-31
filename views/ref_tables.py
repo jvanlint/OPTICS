@@ -29,39 +29,38 @@ from ..forms import (
 
 @login_required(login_url="login")
 def reference_tables(request):
+    
     airframe = Airframe.objects.order_by("name")  # Always update the airframe context
-    if not request.htmx:
-        # only update the other tables on initial non-htmx GET
-        terrain = Terrain.objects.order_by("name")
-        status = Status.objects.order_by("name")
-        waypoint_type = WaypointType.objects.order_by("name")
-        flight_task = Task.objects.order_by("name")
-        support_type = SupportType.objects.order_by("name")
-        threat_type = ThreatType.objects.order_by("name")
+    terrain = Terrain.objects.order_by("name")
+    status = Status.objects.order_by("name")
+    waypoint_type = WaypointType.objects.order_by("name")
+    flight_task = Task.objects.order_by("name")
+    support_type = SupportType.objects.order_by("name")
+    threat_type = ThreatType.objects.order_by("name")
 
     page_num = request.GET.get("page", 1)
     waypoint_paginated = Paginator(object_list=waypoint_type, per_page=5).get_page(page_num)
     airframe_paginated = Paginator(object_list=airframe, per_page=5).get_page(page_num)
     flight_task_paginated = Paginator(object_list=flight_task, per_page=5).get_page(page_num)
     campaign_status_paginated = Paginator(object_list=status, per_page=5).get_page(page_num)
+    terrain_paginated = Paginator(object_list=terrain, per_page=5).get_page(page_num)
+    support_type_paginated = Paginator(object_list=support_type, per_page=5).get_page(page_num)
+    threat_type_paginated = Paginator(object_list=threat_type, per_page=5).get_page(page_num)
     
     breadcrumbs = {"Home": reverse("home"), "Reference Tables": ""}
 
-    if request.htmx:
-        template = "v2/reference/partials/airframes_partial.html"
-        context = {"airframe_object": airframes}
-    else:
-        template = "v2/reference/reference_tables.html"
-        context = {
-            "terrain_object": terrain,
-            "status_object": campaign_status_paginated,
-            "waypoint_type_object": waypoint_paginated,
-            "flight_task_object": flight_task_paginated,
-            "support_type_object": support_type,
-            "threat_type_object": threat_type,
-            "airframe_object": airframe_paginated,
-            "breadcrumbs": breadcrumbs,
-        }
+    template = "v2/reference/reference_tables.html"
+    context = {
+        "terrain_object": terrain_paginated,
+        "status_object": campaign_status_paginated,
+        "waypoint_type_object": waypoint_paginated,
+        "flight_task_object": flight_task_paginated,
+        "support_type_object": support_type_paginated,
+        "threat_type_object": threat_type_paginated,
+        "airframe_object": airframe_paginated,
+        "breadcrumbs": breadcrumbs,
+    }
+    
     return render(request, template_name=template, context=context)
 
 def waypoint_type_page_manager(request):
@@ -104,7 +103,35 @@ def campaign_status_page_manager(request):
     
     return render(request, template_name=template, context=context)
 
+def terrain_page_manager(request):
+    terrain = Terrain.objects.order_by("name")
+    page_num = request.GET.get("page", 1)
+    terrain_paginated = Paginator(object_list=terrain, per_page=5).get_page(page_num)
+    
+    template = "v2/reference/includes/terrain.html"
+    context = {"terrain_object": terrain_paginated}
+    
+    return render(request, template_name=template, context=context)
 
+def support_type_page_manager(request):
+    support_type = SupportType.objects.order_by("name")
+    page_num = request.GET.get("page", 1)
+    support_type_paginated = Paginator(object_list=support_type, per_page=5).get_page(page_num)
+    
+    template = "v2/reference/includes/support_types.html"
+    context = {"support_type_object": support_type_paginated}
+    
+    return render(request, template_name=template, context=context)
+
+def threat_type_page_manager(request):
+    threat_type = ThreatType.objects.order_by("name")
+    page_num = request.GET.get("page", 1)
+    threat_type_paginated = Paginator(object_list=threat_type, per_page=5).get_page(page_num)
+    
+    template = "v2/reference/includes/threat_types.html"
+    context = {"threat_type_object": threat_type_paginated}
+    
+    return render(request, template_name=template, context=context)
 
 def evaluate_reference_object(table, link_id):
     if table == "status":
