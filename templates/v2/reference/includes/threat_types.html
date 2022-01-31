@@ -1,0 +1,59 @@
+<div class="card">
+	<div class="card-header">
+		<i class="fa fa-align-justify"></i>
+		<h5>Threat Types</h5>
+		<div class="media text-muted">The ground threat classes that be assigned to a gorund threat.</div>
+	</div>
+	<div class="card-body">
+		<table class="table table-responsive-sm table-striped">
+			<thead>
+				<tr>
+					<th>Task</th>
+					<th>Date Added</th>
+					<th>Last Modified</th>
+					<th>User</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for threat_type in threat_type_object %}
+				<tr>
+					<td>{{threat_type.name}}</td>
+					<td>{{threat_type.date_created}}</td>
+					<td>{{threat_type.date_modified}}</td>
+					<td>{{threat_type.user}}</td>
+					<td>
+						<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							&nbspAction
+						</button>
+						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+							<a class="dropdown-item" href="{% url 'reference_object_update' threat_type.id 'threat_type' %}?returnUrl={{request.path}}">
+								<svg class="c-icon">
+									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
+								</svg>
+								&nbspEdit
+							</a>
+							<a class="dropdown-item" href="{% url 'reference_object_delete' threat_type.id 'threat_type' %}?returnUrl={{request.path}}">
+								<svg class="c-icon">
+									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+								</svg>
+								&nbspDelete
+							</a>
+						</div>
+					</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<div class="card-footer">
+	<h6>
+		<a href="{% url 'reference_object_add' 'threat_type' %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
+			<svg class="c-icon">
+				<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
+			</svg>
+			Add
+		</a>
+	</h6>
+	</div>
+</div>

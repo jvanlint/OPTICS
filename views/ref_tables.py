@@ -40,7 +40,8 @@ def reference_tables(request):
         threat_type = ThreatType.objects.order_by("name")
 
     page_num = request.GET.get("page", 1)
-    airframes = Paginator(object_list=airframe, per_page=5).get_page(page_num)
+    waypoint_paginated = Paginator(object_list=waypoint_type, per_page=5).get_page(page_num)
+    airframe_paginated = Paginator(object_list=airframe, per_page=5).get_page(page_num)
     breadcrumbs = {"Home": reverse("home"), "Reference Tables": ""}
 
     if request.htmx:
@@ -51,14 +52,35 @@ def reference_tables(request):
         context = {
             "terrain_object": terrain,
             "status_object": status,
-            "waypoint_type_object": waypoint_type,
+            "waypoint_type_object": waypoint_paginated,
             "flight_task_object": flight_task,
             "support_type_object": support_type,
             "threat_type_object": threat_type,
-            "airframe_object": airframes,
+            "airframe_object": airframe_paginated,
             "breadcrumbs": breadcrumbs,
         }
     return render(request, template_name=template, context=context)
+
+def waypoint_type_page_manager(request):
+    waypoint_type = WaypointType.objects.order_by("name")
+    page_num = request.GET.get("page", 1)
+    waypoint_paginated = Paginator(object_list=waypoint_type, per_page=5).get_page(page_num)
+    
+    template = "v2/reference/includes/waypoint_types.html"
+    context = {"waypoint_type_object": waypoint_paginated}
+    
+    return render(request, template_name=template, context=context)
+    
+def airframe_page_manager(request):
+    airframe = Airframe.objects.order_by("name")
+    page_num = request.GET.get("page", 1)
+    airframe_paginated = Paginator(object_list=airframe, per_page=5).get_page(page_num)
+    
+    template = "v2/reference/includes/airframes.html"
+    context = {"airframe_object": airframe_paginated}
+    
+    return render(request, template_name=template, context=context)
+    
 
 
 def evaluate_reference_object(table, link_id):

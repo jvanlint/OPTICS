@@ -1,0 +1,60 @@
+<div class="card">
+	<div class="card-header">
+		<i class="fa fa-align-justify"></i>
+		<h5>Support Types</h5>
+		<div class="media text-muted">The various support assets available in the mission.</div>
+	</div>
+	<div class="card-body">
+		<table class="table table-responsive-sm table-striped">
+			<thead>
+				<tr>
+					<th>Type</th>
+					<th>Date Added</th>
+					<th>Last Modified</th>
+					<th>User</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for support_type in support_type_object %}
+				<tr>
+					<td>{{support_type.name}}</td>
+					<td>{{support_type.date_created}}</td>
+					<td>{{support_type.date_modified}}</td>
+					<td>{{support_type.user}}</td>
+					<td>
+						<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							&nbspAction
+						</button>
+						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+							<a class="dropdown-item" href="{% url 'reference_object_update' support_type.id 'support_type' %}?returnUrl={{request.path}}">
+								<svg class="c-icon">
+									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
+								</svg>
+								&nbspEdit
+							</a>
+							<a class="dropdown-item" href="{% url 'reference_object_delete' support_type.id 'support_type' %}?returnUrl={{request.path}}">
+								<svg class="c-icon">
+									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+								</svg>
+								&nbspDelete
+							</a>
+						</div>
+					</td>
+				</tr>
+				{% endfor %}
+				
+			</tbody>
+		</table>
+	</div>
+	<div class="card-footer">
+	<h6>
+		<a href="{% url 'reference_object_add' 'support_type' %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
+			<svg class="c-icon">
+				<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
+			</svg>
+			Add
+		</a>
+	</h6>
+	</div>
+</div>
