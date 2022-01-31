@@ -23,7 +23,7 @@ def campaigns_all(request):
             A rendered HTML page with context containing campaign data, whether the user is an admin and breadcrumbs.
     """
 
-    campaigns_queryset = Campaign.objects.order_by("id")
+    campaigns_queryset = Campaign.objects.order_by("status")
     user_profile = UserProfile.objects.get(user=request.user)
 
     breadcrumbs = {"Home": ""}
