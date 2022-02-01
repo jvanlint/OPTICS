@@ -120,7 +120,6 @@ def campaign_update_v2(request, link_id):
 @login_required(login_url="account_login")
 def campaign_delete_v2(request, link_id):
     campaign = Campaign.objects.get(id=link_id)
-    return_url = request.GET.get("returnUrl")
 
     # Delete the campaign thumbnail before deleting the actual DB record.
     # Check to see if a campaign thumbnail exists.
@@ -133,7 +132,15 @@ def campaign_delete_v2(request, link_id):
 
     campaign.delete()
     # messages.success(request, "Campaign successfully deleted.")
-    return HttpResponseRedirect(return_url)
+    campaigns_queryset = Campaign.objects.order_by('status', 'name')
+    user_profile = UserProfile.objects.get(user=request.user)
+    
+    context = {
+        "campaigns": campaigns_queryset,
+        "isAdmin": user_profile.is_admin(),
+    }
+    
+    return render(request, "v2/campaign/includes/campaign_card.html", context=context)
 
 
 # **** End Campaigns Code *****
