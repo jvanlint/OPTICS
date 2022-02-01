@@ -23,7 +23,8 @@ def campaigns_all(request):
             A rendered HTML page with context containing campaign data, whether the user is an admin and breadcrumbs.
     """
 
-    campaigns_queryset = Campaign.objects.order_by('status', 'name')
+    #campaigns_queryset = Campaign.objects.order_by('status', 'name')
+    campaigns_queryset = Campaign.objects.filter(status__name__iexact="Active").order_by('status', 'name')
     user_profile = UserProfile.objects.get(user=request.user)
 
     breadcrumbs = {"Home": ""}
@@ -38,8 +39,15 @@ def campaigns_all(request):
     
 @login_required(login_url="account_login")
 def campaigns_filter(request):
+    filter = request.GET.get("filter")
     
-    campaigns_queryset = Campaign.objects.filter(status__name__iexact='Active').order_by('status', 'name')
+    if filter == "All":
+        campaigns_queryset = Campaign.objects.order_by('status', 'name')
+    else:
+        campaigns_queryset = Campaign.objects.filter(status__name__iexact=filter).order_by('status', 'name')
+    
+    
+    
     user_profile = UserProfile.objects.get(user=request.user)
     
     breadcrumbs = {"Home": ""}
