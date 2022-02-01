@@ -35,6 +35,29 @@
             </div>
             <!-- /.row-->
             
+            <!-- Filter Row -->
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                                    Status
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" hx-target="#campaigns" hx-get="{% url 'campaigns_filter' %}" href="">Active</a>
+                                    <a class="dropdown-item" href="#">Inactive</a>
+                                    <a class="dropdown-item" href="#">WIP</a>
+                                    <a class="dropdown-item" href="#">On Hold</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">All</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Campaign Cards -->
             <!-- .row -->
             <div class="row" id="campaigns">
@@ -51,7 +74,6 @@
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
-  <!-- Confirm Delete JS -->
   <script src="{% static 'js/htmx/htmx.min.js' %}"></script>
   <script src="{% static 'js/htmx/ext/event-header.js' %}"></script>
 {% endblock javascripts %}

@@ -35,7 +35,23 @@ def campaigns_all(request):
     }
 
     return render(request, "v2/campaign/campaigns.html", context=context)
-    # return render(request, "v2/generic/data_entry_form.html", context=context)
+    
+@login_required(login_url="account_login")
+def campaigns_filter(request):
+    
+    campaigns_queryset = Campaign.objects.filter(status__name__iexact='Active').order_by('status', 'name')
+    user_profile = UserProfile.objects.get(user=request.user)
+    
+    breadcrumbs = {"Home": ""}
+    
+    context = {
+        "campaigns": campaigns_queryset,
+        "isAdmin": user_profile.is_admin(),
+        "breadcrumbs": breadcrumbs,
+    }
+    
+    return render(request, "v2/campaign/includes/campaign_card.html", context=context)
+    
 
 @login_required(login_url="account_login")
 def campaign_detail_v2(request, link_id):
