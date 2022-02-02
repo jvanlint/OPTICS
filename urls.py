@@ -123,6 +123,8 @@ urlpatterns += [
     path('mission/add/image/<int:link_id>', views.mission_imagery_create_v2, name='mission_imagery_add_v2'),
     path('mission/update/image/<int:link_id>', views.mission_imagery_update_v2, name='mission_imagery_update_v2'),
     path('mission/delete/image/<int:link_id>', views.mission_imagery_delete_v2, name='mission_imagery_delete_v2'),
+    
+    path('v2/mission/signup/<int:link_id>', views.mission_signup_v2, name='mission_signup_v2'),
 ]
 
 # Package URL Patterns - V2

@@ -8,9 +8,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 from django.urls import reverse
 
-from ..models import Campaign, Mission, MissionImagery, UserProfile, MissionFile, Comment
-from ..forms import MissionForm, MissionFileForm, MissionImageryForm
+from django.core import serializers
 
+from ..models import Campaign, Mission, MissionImagery, UserProfile, MissionFile, Comment, Package, Aircraft
+from ..forms import MissionForm, MissionFileForm, MissionImageryForm
 
 # ---------------- Mission -------------------------
 
@@ -267,3 +268,43 @@ def mission_imagery_delete_v2(request, link_id):
         
     imagery.delete()
     return HttpResponseRedirect(returnURL)
+    
+@login_required(login_url="account_login")
+def mission_signup_v2(request, link_id):  # link_id is the mission ID
+    mission = Mission.objects.get(id=link_id)
+    comments = mission.comments.all()
+    packages = mission.package_set.all()
+
+    has_seat = 0
+    package_list = serializers.serialize("python", packages)
+    for package in package_list:
+        has_seat += (
+            Aircraft.objects.filter(flight__package__id=package["pk"])
+            .filter(pilot=request.user)
+            .count()
+        )
+        has_seat += (
+            Aircraft.objects.filter(flight__package__id=package["pk"])
+            .filter(rio_wso=request.user)
+            .count()
+        )
+    campaign = Campaign.objects.get(mission=mission)
+    is_owner = campaign.created_by == request.user
+    
+    breadcrumbs = {
+        "Campaigns": reverse("campaigns"),
+        mission.campaign.name: reverse("campaign_detail_v2", args=(mission.campaign.id,)),
+        mission.name: reverse('mission_v2', args=(mission.id,)), 
+        "Sign Up" : "",
+    }
+    
+    context = {
+        "mission_object": mission,
+        "package_object": packages,
+        "has_seat": has_seat,
+        "is_owner": is_owner,
+        "comments": comments,
+        "breadcrumbs": breadcrumbs,
+    }
+
+    return render(request, "v2/mission/mission_signup.html", context)

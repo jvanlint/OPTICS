@@ -1,0 +1,340 @@
+{% extends "v2/base.html" %}{% load static %} {% block title %} Mission {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<style>
+
+.date {
+    font-size: 11px
+}
+
+.comment-text {
+    font-size: 12px;
+	color: black;
+}
+
+.fs-12 {
+    font-size: 12px;
+	
+}
+
+.shadow-none {
+    box-shadow: none;
+}
+
+.name {
+    color: #007bff;
+}
+
+.cursor:hover {
+    color: blue;
+}
+
+.cursor {
+    cursor: pointer;
+}
+
+.textarea {
+    resize: none;
+</style>
+
+{% endblock stylesheets %} {% block content %}
+
+<main class="c-main">
+	<div class="container-fluid">
+		<div class="fade-in">
+			<div class="row">
+				<div class="col-sm-12 col-md-5">
+					<div class="card">
+						<div class="card-header">
+							<h6 class="text-muted">Mission</h6>
+							<h2>{{mission_object.name}}</h2>
+							<h6 class="text-muted">Actual Date-Time
+								{% if mission_object.notify_discord %} 
+								<svg class="c-icon">
+									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/brand.svg#cib-discord"></use>
+								</svg> 
+								{% endif %}
+							</h6>
+							<h5>{{ mission_object.mission_date }} ({{ mission_object.mission_date|timeuntil }} from now)</h5>
+							<h6 class="text-muted">In Game Date-Time</h6>
+							<h5>{{ mission_object.mission_game_date|date:"DATE_FORMAT" }} - {{ mission_object.mission_game_time }}</h5>
+							<div class="media text-muted pt-3">
+								<div class="c-avatar"><img class="c-avatar-img" src="{{ mission_object.created_by.profile.profile_image.url}}" alt="" /></div>
+								<p class="media-body pb-3 pl-2 mb-0  lh-125">
+								<strong class="d-block text-gray-dark">
+									{% if mission_object.created_by.username %}
+									<a href="{% url 'user_profile' mission_object.created_by.id %}" class="text-decoration-none text-reset">{{ mission_object.created_by.username }}</a>
+									{% endif %}
+								</strong>
+								{{ mission_object.date_created }}
+								</p>
+							</div>
+						</div>
+						<div class="card-body">
+							{{mission_object.description|linebreaks|urlize}}
+							<div class="nav-tabs-boxed">
+								<ul class="nav nav-tabs" role="tablist">
+									
+									<li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#brief" role="tab" aria-controls="brief">Brief</a></li>
+									<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#roe" role="tab" aria-controls="roe">Rules of Engagement</a></li>
+									<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#restrictions" role="tab" aria-controls="restrictions">Munitions Restrictions</a></li>
+									<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#weather" role="tab" aria-controls="weather">Weather</a></li>
+								</ul>
+								<div class="tab-content">
+									<div class="tab-pane active" id="brief" role="tabpanel">{{mission_object.brief|linebreaks|urlize}}</div>
+									<div class="tab-pane" id="roe" role="tabpanel">{{mission_object.roe|linebreaks|urlize}}</div>
+									<div class="tab-pane" id="restrictions" role="tabpanel">{{mission_object.munitions_restrictions|linebreaks|urlize}}</div>
+									<div class="tab-pane" id="weather" role="tabpanel">
+										<div class="table-responsive">
+											<table class="table table-striped">
+												<thead>
+													<tr>
+														<th>Visib.</th>
+														<th>Cloud Base</th>
+														<th>Tops</th>
+														<th>Wind@SL</th>
+														<th>Wind@7K</th>
+														<th>Wind@26K</th>
+														<th>QNH</th>
+														<th>Temp.</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>{{mission_object.visibility}}</td>
+														<td>{{mission_object.cloud_base}}</td>
+														<td>{{mission_object.cloud_top}}</td>
+														<td>{{mission_object.wind_sl}}</td>
+														<td>{{mission_object.wind_7k}}</td>
+														<td>{{mission_object.wind_26k}}</td>
+														<td>{{mission_object.qnh}}</td>
+														<td>{{mission_object.temperature}}</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>	<!-- ./tab -->
+								</div>
+							</div>
+						</div>
+		
+						<div class="card-footer">
+							<h6 class="media-body pb-3 pl-2 mb-0 lh-125">Last modified on {{ mission_object.date_modified }}
+								{% if mission_object.modified_by %}
+								<br>by <a href="{% url 'user_profile' mission_object.modified_by.id %}">{{ mission_object.modified_by.username }} </a>
+								{% endif %}
+							</h6> 
+						</div>
+						
+					</div>
+					<!-- /.card -->
+
+					<!--.card -->
+					<div class="card">
+						<div class="card-header">
+							Comments <span class="badge badge-pill badge-info ml-auto">{{comments.count}}</span>
+						</div>
+						<div class="card-body">
+								<form action="{% url 'mission_add_comment' %}?mission_id={{mission_object.id}}&returnUrl={{request.path}}" method="post">
+									{% csrf_token %}
+									<div class="d-flex flex-row align-items-start">
+										<img class="rounded-circle" src="{{ user.profile.profile_image.url }}" width="40">
+										<textarea class="form-control ml-1 shadow-none textarea" id="comment_text" name="comment_text"></textarea>
+									</div>
+                    				<div class="mt-2 text-right">
+										<button class="btn btn-info btn-sm shadow-none" type="submit" value="Post">Post Comment</button>
+									</div>
+								</form>
+						</div>	
+						<div class="card-body">
+							{% for comment in comments %}
+								<!-- Start Comment-->
+								<div class="media text-muted pt-3">
+									<div class="c-avatar"><img class="c-avatar-img" src="{{ comment.user.profile.profile_image.url }}" alt="" /></div>
+										<p class="media-body pb-3 pl-2 mb-0  lh-125 border-bottom border-gray">
+											<strong class="d-block text-gray-dark"><a href="{% url 'user_profile' comment.user.id %}" class="text-decoration-none text-reset">{{ comment.user.username}}</a></strong>
+											
+											{{ comment.comment|urlize }}
+											{% if comment.user.username == user.username %}
+											<br>
+											<a id="comment_{{comment.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the comment will be deleted." data-buttontext="Delete" href="{% url 'mission_delete_comment' comment.id %}?returnUrl={{request.path}}">
+												<svg class="c-icon">
+													<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+												</svg>
+											</a>
+											{% endif %}
+											<p class="small">{{ comment.date_created | timesince}} ago.</p>
+										</p>
+								</div>
+								<!-- End Comment -->
+								{% endfor %}
+						</div>
+						
+					</div>
+
+
+					<!--.card -->
+
+				</div>
+				<!-- /.col-->
+				<div class="col-sm-0 col-md-7">
+					{% if package_object %}
+						{% for package in package_object %}
+							<!-- .card -->
+							<div class="card">
+								<div class="card-header">
+									{{ package.name }} Package
+								</div>
+								<div class="card-body">
+									<div class="table-responsive">
+										<table class="table table-striped">
+											{% for flight in package.flight_set.all %}
+												<thead>
+													<tr>
+														<th class="w-25 text-left">{{ flight.callsign }} Flight - {{ flight.task }}</th>
+														<th class="w-25">A/C</th>
+														<th class="w-14">Pilot</th>
+														<th class="w-11"></th>
+														<th class="w-14">RIO/Gunner</th>
+														<th class="w-11"></th>
+													</tr>
+												</thead>
+											
+												<tbody>
+													{% for aircraft in flight.aircraft_set.all %}
+														<tr>
+													  		<td>
+																{% if aircraft.flight_lead %}<span class="badge badge-primary">Flight Lead</span>{% endif %}
+																{% if aircraft.package_lead %}&nbsp<span class="badge badge-info">Package Lead</span>{% endif %}
+													  		</td>
+													  		<td class="text-center">
+																{{ aircraft.type }}
+													  		</td>
+													
+													  		{% if aircraft.multicrew %}
+																{% if aircraft.pilot %}
+														  			<td class="text-center"> 
+																		  {{ aircraft.pilot }}
+																	</td>
+												  					<td>
+																		{% if aircraft.pilot == user %}
+													  						<a class="btn btn-sm btn-danger"
+														 						href="{% url 'mission_signup_remove' aircraft.id 1 %}?returnUrl={{ request.path }}"
+														 						role="button">Leave Slot
+																	 		</a>
+																		{% elif is_owner %}
+													  						<a class="btn btn-sm btn-warning"
+														 						href="{% url 'mission_signup_remove' aircraft.id 1 %}?returnUrl={{ request.path }}"
+														 						role="button">Clear Slot
+																	 		</a>
+																		{% endif %}
+												  					</td>
+																{% else %} {# no pilot yet #}
+														  			{% if has_seat %} {# User has a seat #}
+																		<td class="text-center">---</td>
+																		<td></td>
+														  			{% else %}
+																		<td class="text-center">
+															  				<a class="btn btn-sm btn-info"
+																 				href="{% url 'mission_signup_update' aircraft.id 1 %}?returnUrl={{ request.path }}"
+																 				role="button">Take Slot
+																			 </a>
+																		</td>
+																		<td></td>
+														  			{% endif %} {# end if has seat #}
+																{% endif %} {# end if pilot #}
+																{% if aircraft.rio_wso %}
+														  			<td class="text-center">
+																		  {{ aircraft.rio_wso }}
+																		  
+																	 </td>
+														  			<td>
+																		{% if aircraft.rio_wso == user %}
+															  				<a class="btn btn-sm btn-danger"
+																 				href="{% url 'mission_signup_remove' aircraft.id 2 %}?returnUrl={{ request.path }}"
+																 				role="button">Leave Slot
+																			 </a>
+																		{% elif is_owner %}
+															  				<a class="btn btn-sm btn-warning"
+																 				href="{% url 'mission_signup_remove' aircraft.id 2 %}?returnUrl={{ request.path }}"
+																 				role="button">Clear Slot
+																			 </a>
+																		{% endif %}
+														  			</td>
+																{% else %} {# no rio yet #}
+													  				{% if has_seat %}
+																		<td class="text-center">---</td>
+																		<td></td>
+													  				{% else %}
+																		<td class="text-center">
+														  					<a class="btn btn-sm btn-info"
+															 					href="{% url 'mission_signup_update' aircraft.id 2 %}?returnUrl={{ request.path }}"
+															 					role="button">Take Slot
+																			 </a>
+																		</td>
+																		<td></td>
+													  				{% endif %} {# has seat #}
+																{% endif %} {# RIO #}
+													  		{% else %} {# Not Multicrew #}
+																{% if aircraft.pilot %}
+														  			<td class="text-center">{{ aircraft.pilot }}</td>
+														  			<td>
+																		{% if aircraft.pilot == user %}
+															  			<a class="btn btn-sm btn-danger"
+																 			href="{% url 'mission_signup_remove' aircraft.id 1 %}?returnUrl={{ request.path }}"
+																 			role="button">Leave Slot</a>
+																		{% elif is_owner %}
+															  			<a class="btn btn-sm btn-warning"
+																 			href="{% url 'mission_signup_remove' aircraft.id 1 %}?returnUrl={{ request.path }}"
+																 			role="button">Clear Slot</a>
+																		{% endif %}
+														  			  </td>
+																{% else %}
+														  			{% if has_seat %} {# User has a seat #}
+																		<td class="text-center">---</td>
+																		<td></td>
+														  			{% else %}
+																		<td class="text-center">
+															  				<a class="btn btn-sm btn-info"
+																 				href="{% url 'mission_signup_update' aircraft.id 1 %}?returnUrl={{ request.path }}"
+																 				role="button">Take Slot
+																		 	</a>
+																		</td>
+																		<td></td>
+														  			{% endif %} {# end if has seat #}
+																{% endif %} {# pilot #}
+																<td></td>
+																<td></td>
+													  		{% endif %} {# Multicrew / single  #}
+														</tr>
+												  	{% endfor %}
+												</tbody>
+											{% endfor %}
+										</table>
+									</div>
+								</div>
+								<!--
+								<div class="card-footer">
+									
+								</div>
+								-->
+							</div>
+						{% endfor %}
+					{% endif %}
+					
+				</div>
+				<!-- /.col-->
+			</div>
+			<!-- /.row-->
+		</div>
+	</div>
+</main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<!-- Confirm Delete JS -->
+<script src="{% get_static_prefix %}assets/js/confirm_delete.js"></script>
+{% endblock javascripts %}

@@ -85,7 +85,7 @@
 					<div class="card">
 						<div class="card-header">
 							<h6 class="text-muted">Mission</h6>
-							<h2>{{mission_object.name}}</h2><a class="btn btn-sm btn-success float-right" href="{% url 'mission_signup' mission_object.id %}?returnUrl={{request.path}}" role="button">Mission Sign Up</a>
+							<h2>{{mission_object.name}}</h2><a class="btn btn-sm btn-success float-right" href="{% url 'mission_signup_v2' mission_object.id %}?returnUrl={{request.path}}" role="button">Mission Sign Up</a>
 							<h6 class="text-muted">Actual Date-Time
 								{% if mission_object.notify_discord %} 
 								<svg class="c-icon">
