@@ -269,6 +269,8 @@ def mission_imagery_delete_v2(request, link_id):
     imagery.delete()
     return HttpResponseRedirect(returnURL)
     
+# ---------------- Mission Signup -------------------------
+    
 @login_required(login_url="account_login")
 def mission_signup_v2(request, link_id):  # link_id is the mission ID
     mission = Mission.objects.get(id=link_id)
