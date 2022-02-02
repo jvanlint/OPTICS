@@ -71,7 +71,7 @@
 					
 					<!-- .dropdown-menu-->
 					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-						<a class="dropdown-item" href="{% url 'campaign_update_v2' campaign.id %}?returnUrl={{ request.path }}">
+						<a class="dropdown-item" href="{% url 'campaign_update_v2' campaign.id %}?returnUrl={% url 'index' %}">
 							<svg class="c-icon">
 								<use xlink:href="{% get_static_prefix %}assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
 							</svg>
