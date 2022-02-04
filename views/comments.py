@@ -10,7 +10,7 @@ from ..models import Campaign, Comment
 def campaign_add_comment(request):
 	# if this is a POST request we need to process the form data
 	campaign_id = request.GET.get('campaign_id')
-	returnURL = request.GET.get('returnUrl')
+	
 
 	if request.method == 'POST':
 		comment_data = request.POST.dict()
@@ -19,8 +19,15 @@ def campaign_add_comment(request):
 		campaign = Campaign.objects.get(pk=campaign_id)
 		campaign.comments.create(comment=comment, 
 								 user=request.user)
-
-		return HttpResponseRedirect(returnURL)
+		comments = campaign.comments.all()
+	
+	context = {
+		"comments": comments,
+		"campaign_object": campaign,
+	}
+	
+	return render(request, "v2/campaign/includes/comments.html", context=context)
+		
 
 def campaign_delete_comment(request, link_id):
 	comment = Comment.objects.get(id=link_id)
@@ -28,4 +35,13 @@ def campaign_delete_comment(request, link_id):
 	
 	comment.delete()
 	
-	return HttpResponseRedirect(returnURL)
+	campaign_id = request.GET.get('campaign_id')
+	campaign = Campaign.objects.get(id=campaign_id)
+	comments = campaign.comments.all()
+	
+	context = {
+		"comments": comments,
+		"campaign_object": campaign,
+	}
+	
+	return render(request, "v2/campaign/includes/comments.html", context=context)
