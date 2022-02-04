@@ -1,0 +1,42 @@
+<!--.card -->
+<div class="card">
+	<div class="card-header">
+		Comments <span class="badge badge-pill badge-info ml-auto">{{comments.count}}</span>
+	</div>
+	<div class="card-body">
+			<form action="{% url 'campaign_add_comment' %}?campaign_id={{campaign_object.id}}&returnUrl={{request.path}}" method="post">
+				{% csrf_token %}
+				<div class="d-flex flex-row align-items-start">
+					<img class="rounded-circle" src="{{ user.profile.profile_image.url}}" width="40">
+					<textarea class="form-control ml-1 shadow-none textarea" id="comment_text" name="comment_text"></textarea>
+				</div>
+				<div class="mt-2 text-right">
+					<button class="btn btn-info btn-sm shadow-none" type="submit" value="Post">Post Comment</button>
+				</div>
+			</form>
+	</div>	
+	<div class="card-body" id="comments">
+		{% for comment in comments %}
+			<!-- Start Comment-->
+			<div class="media text-muted pt-3">
+				<div class="c-avatar"><img class="c-avatar-img" src="{{comment.user.profile.profile_image.url}}" alt="" /></div>
+					<p class="media-body pb-3 pl-2 mb-0  lh-125 border-bottom border-gray">
+						<strong class="d-block text-gray-dark"><a href="{% url 'user_profile' comment.user.id %}" class="text-decoration-none text-reset">{{ comment.user.username}}</a></strong>
+						
+						{{ comment.comment }}
+						{% if comment.user.username == user.username %}
+						<br>
+						<a id="comment_{{comment.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the comment will be deleted." data-buttontext="Delete" href="{% url 'campaign_delete_comment' comment.id %}?returnUrl={{request.path}}">
+							<svg class="c-icon">
+								<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+							</svg>
+						</a>
+						{% endif %}
+						<p class="small">{{ comment.date_created | timesince}} ago.</p>
+					</p>
+			</div>
+			<!-- End Comment -->
+			{% endfor %}
+	</div>
+</div>
+<!--.card -->
