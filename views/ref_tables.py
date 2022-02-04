@@ -47,7 +47,7 @@ def reference_tables(request):
     support_type_paginated = Paginator(object_list=support_type, per_page=5).get_page(page_num)
     threat_type_paginated = Paginator(object_list=threat_type, per_page=5).get_page(page_num)
     
-    breadcrumbs = {"Home": reverse("home"), "Reference Tables": ""}
+    breadcrumbs = {"Home": reverse("index"), "Reference Tables": ""}
 
     template = "v2/reference/reference_tables.html"
     context = {
