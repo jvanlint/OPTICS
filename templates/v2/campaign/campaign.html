@@ -3,9 +3,7 @@
 {% block title %} Campaign Details {% endblock %}
 
 <!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}
-
-{% endblock stylesheets %}
+{% block stylesheets %}{% endblock stylesheets %}
 {% block content %}
 {% include 'v2/includes/confirm_delete_modal.html' %}
 
@@ -95,8 +93,12 @@
 						</div>
 					</div>
 					<!-- /.card -->
-
-					{% include "v2/campaign/includes/comments.html" %}
+					
+					<!--.card -->
+					<div class="card" id="comments">
+							{% include "v2/campaign/includes/comments.html" %}
+					</div>
+					<!--.card -->	
 
 				</div>
 				<!-- /.col-->
