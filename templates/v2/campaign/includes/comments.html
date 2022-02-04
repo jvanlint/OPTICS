@@ -25,9 +25,14 @@
 						{{ comment.comment }}
 						{% if comment.user.username == user.username %}
 						<br>
-						<a hx-target="#comments" hx-confirm="Are you sure? If you proceed, the comment will be deleted and cannot be recovered." hx-get="{% url 'campaign_delete_comment' comment.id %}?campaign_id={{campaign_object.id}}&returnUrl={{request.path}}">
+						<a hx-target="#comments" hx-confirm="Are you sure? If you proceed, the comment will be deleted and cannot be recovered." hx-get="{% url 'campaign_delete_comment' comment.id %}?campaign_id={{campaign_object.id}}">
 							<svg class="c-icon">
 								<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+							</svg>
+						</a>
+						<a hx-target="#comments" hx-confirm="Are you sure? If you proceed, the comment will be deleted and cannot be recovered." hx-get="{% url 'campaign_delete_comment' comment.id %}?campaign_id={{campaign_object.id}}">
+							<svg class="c-icon">
+								<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
 							</svg>
 						</a>
 						{% endif %}
