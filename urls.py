@@ -104,6 +104,10 @@ urlpatterns += [
     path('v2/campaign/comment/add', views.campaign_add_comment, name='campaign_add_comment'),
     path("v2/campaign/comment/delete/<int:link_id>", views.campaign_delete_comment,
       name="campaign_delete_comment"),
+    path("v2/campaign/comment/edit/<int:link_id>", views.campaign_edit_comment,
+        name="campaign_edit_comment"),
+    path('v2/campaign/comment/show', views.campaign_show_comments, name='campaign_show_comments'),
+    path('v2/campaign/comment/update/<int:link_id>', views.campaign_update_comment, name='campaign_update_comment'),
 ]
 
 # Mission URL Patterns - V2
