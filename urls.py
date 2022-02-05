@@ -129,6 +129,15 @@ urlpatterns += [
     path('mission/delete/image/<int:link_id>', views.mission_imagery_delete_v2, name='mission_imagery_delete_v2'),
     
     path('v2/mission/signup/<int:link_id>', views.mission_signup_v2, name='mission_signup_v2'),
+    
+    # Comments
+    path('v2/mission/comment/add', views.mission_add_comment, name='mission_add_comment'),
+    path("v2/mission/comment/delete/<int:link_id>", views.mission_delete_comment,
+      name="mission_delete_comment"),
+    path("v2/mission/comment/edit/<int:link_id>", views.mission_edit_comment,
+        name="mission_edit_comment"),
+    path('v2/mission/comment/show', views.mission_show_comments, name='mission_show_comments'),
+    path('v2/mission/comment/update/<int:link_id>', views.mission_update_comment, name='mission_update_comment'),
 ]
 
 # Package URL Patterns - V2
