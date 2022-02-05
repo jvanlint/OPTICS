@@ -117,9 +117,6 @@ urlpatterns += [
     path('v2/mission/update/<int:link_id>', views.mission_update_v2, name='mission_update_v2'),
     path("v2/mission/delete/<int:link_id>", views.mission_delete_v2, name="mission_delete_v2"),
     path('v2/mission/copy/<int:link_id>', views.mission_copy_v2, name='mission_copy_v2'),
-         
-    path("v2/mission/comment/add", views.mission_add_comment, name="mission_add_comment"),
-    path("v2/mission/comment/delete/<int:link_id>", views.mission_delete_comment, name="mission_delete_comment"),
           
     path('v2/mission/add/file', views.mission_file_add, name='mission_file_add'),
     path("v2/mission/file/delete/<int:link_id>", views.mission_file_delete, name="mission_file_delete"),
@@ -147,12 +144,18 @@ urlpatterns += [
     path('v2/package/update/<int:link_id>', views.package_update_v2, name='package_update_v2'),
     path("v2/package/delete/<int:link_id>", views.package_delete_v2, name="package_delete_v2"),
     
-    path("v2/package/comment/add", views.package_add_comment, name="package_add_comment"),
-    path("v2/package/comment/delete/<int:link_id>", views.package_delete_comment, name="package_delete_comment"),
-    
     path('package/add/image/<int:link_id>', views.package_imagery_create_v2, name='package_imagery_add_v2'),
     path('package/update/image/<int:link_id>', views.package_imagery_update_v2, name='package_imagery_update_v2'),
     path('package/delete/image/<int:link_id>', views.package_imagery_delete_v2, name='package_imagery_delete_v2'),
+    
+    # Comments
+    path('v2/package/comment/add', views.package_add_comment, name='package_add_comment'),
+    path("v2/package/comment/delete/<int:link_id>", views.package_delete_comment,
+      name="package_delete_comment"),
+    path("v2/package/comment/edit/<int:link_id>", views.package_edit_comment,
+        name="package_edit_comment"),
+    path('v2/package/comment/show', views.package_show_comments, name='package_show_comments'),
+    path('v2/package/comment/update/<int:link_id>', views.package_update_comment, name='package_update_comment'),
 ]
 
 # Flight URL Patterns - V2

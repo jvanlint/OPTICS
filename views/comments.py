@@ -31,7 +31,6 @@ def campaign_add_comment(request):
 
 def campaign_delete_comment(request, link_id):
 	comment = Comment.objects.get(id=link_id)
-	returnURL = request.GET.get("returnUrl")
 	
 	comment.delete()
 	

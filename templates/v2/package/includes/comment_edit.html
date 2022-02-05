@@ -6,8 +6,8 @@
 								<textarea class="form-control ml-1 shadow-none textarea" id="comment_edit_text" name="comment_edit_text">{{ comment.comment }}</textarea>
 							</div>
 							<div class="mt-2 text-right">
-								<button class="btn btn-danger btn-sm shadow-none" type="submit" hx-post="{% url 'mission_show_comments' %}?mission_id={{mission_object.id}}" hx-target="#comments">Cancel</button>
-								<button class="btn btn-success btn-sm shadow-none" type="submit" hx-post="{% url 'mission_update_comment' comment.id %}?mission_id={{mission_object.id}}" hx-target="#comments">Save</button>
+								<button class="btn btn-danger btn-sm shadow-none" type="submit" hx-post="{% url 'package_show_comments' %}?package_id={{package_object.id}}" hx-target="#comments">Cancel</button>
+								<button class="btn btn-success btn-sm shadow-none" type="submit" hx-post="{% url 'package_update_comment' comment.id %}?package_id={{package_object.id}}" hx-target="#comments">Save</button>
 							</div>
 						</form>
 					</p>
