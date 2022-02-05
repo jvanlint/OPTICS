@@ -165,12 +165,18 @@ urlpatterns += [
     path('v2/flight/update/<int:link_id>', views.flight_update_v2, name='flight_update_v2'),
     path("v2/flight/delete/<int:link_id>", views.flight_delete_v2, name="flight_delete_v2"),
     
-    path("v2/flight/comment/add", views.flight_add_comment, name="flight_add_comment"),
-    path("v2/flight/comment/delete/<int:link_id>", views.flight_delete_comment, name="flight_delete_comment"),
-    
     path('flight/add/image/<int:link_id>', views.flight_imagery_create_v2, name='flight_imagery_add_v2'),
     path('flight/update/image/<int:link_id>', views.flight_imagery_update_v2, name='flight_imagery_update_v2'),
     path('flight/delete/image/<int:link_id>', views.flight_imagery_delete_v2, name='flight_imagery_delete_v2'),
+    
+    # Comments
+    path('v2/flight/comment/add', views.flight_add_comment, name='flight_add_comment'),
+    path("v2/flight/comment/delete/<int:link_id>", views.flight_delete_comment,
+      name="flight_delete_comment"),
+    path("v2/flight/comment/edit/<int:link_id>", views.flight_edit_comment,
+        name="flight_edit_comment"),
+    path('v2/flight/comment/show', views.flight_show_comments, name='flight_show_comments'),
+    path('v2/flight/comment/update/<int:link_id>', views.flight_update_comment, name='flight_update_comment'),
 ]
 
 # Aircraft URL Patterns - V2

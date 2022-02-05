@@ -109,7 +109,6 @@ def flight_copy(request, link_id):
 def flight_add_comment(request):
 	# if this is a POST request we need to process the form data
 	flight_id = request.GET.get("flight_id")
-	returnURL = request.GET.get("returnUrl")
 
 	if request.method == "POST":
 		comment_data = request.POST.dict()
@@ -117,17 +116,77 @@ def flight_add_comment(request):
 		# Get the post object
 		flight_object = Flight.objects.get(pk=flight_id)
 		flight_object.comments.create(comment=comment, user=request.user)
+		comments = flight_object.comments.all()
 
-	return HttpResponseRedirect(returnURL)
+	context = {
+		"comments": comments,
+		"flight_object": flight_object,
+	}
+	
+	return render(request, "v2/flight/includes/comments.html", context=context)
 
 @login_required(login_url="account_login")
 def flight_delete_comment(request, link_id):
 	comment = Comment.objects.get(id=link_id)
-	returnURL = request.GET.get("returnUrl")
 	
 	comment.delete()
 	
-	return HttpResponseRedirect(returnURL)
+	flight_id = request.GET.get('flight_id')
+	flight = Flight.objects.get(id=flight_id)
+	comments = flight.comments.all()
+	
+	context = {
+		"comments": comments,
+		"flight_object": flight,
+	}
+	
+	return render(request, "v2/flight/includes/comments.html", context=context)
+	
+def flight_edit_comment(request, link_id):
+	comment = Comment.objects.get(id=link_id)
+	
+	flight_id = request.GET.get('flight_id')
+	flight = Flight.objects.get(id=flight_id)
+	
+	context = {
+		"comment": comment,
+		"flight_object": flight,
+	}
+	
+	return render(request, "v2/flight/includes/comment_edit.html", context=context)
+
+def flight_show_comments(request):
+	
+	flight_id = request.GET.get('flight_id')
+	flight = Flight.objects.get(id=flight_id)
+	comments = flight.comments.all()
+	
+	context = {
+		"comments": comments,
+		"flight_object": flight,
+	}
+	
+	return render(request, "v2/flight/includes/comments.html", context=context)
+
+def flight_update_comment(request, link_id):
+	comment = Comment.objects.get(id=link_id)
+	flight_id = request.GET.get('flight_id')
+	
+	if request.method == 'POST':
+		comment_data = request.POST.dict()
+		comment_text = comment_data.get("comment_edit_text")
+		comment.comment = comment_text
+		comment.save()
+	
+	flight = Flight.objects.get(id=flight_id)
+	comments = flight.comments.all()
+	
+	context = {
+		"comments": comments,
+		"flight_object": flight,
+	}
+	
+	return render(request, "v2/flight/includes/comments.html", context=context)
 	
 # ---------------- Flight Imagery -------------------------
 	
