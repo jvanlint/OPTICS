@@ -8,7 +8,7 @@ from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 
 from ..forms import CampaignForm
-from ..models import Campaign, UserProfile
+from ..models import Campaign, UserProfile, Comment
 
 
 @login_required(login_url="account_login")
@@ -166,5 +166,76 @@ def campaign_delete_v2(request, link_id):
     
     return render(request, "v2/campaign/includes/campaign_card.html", context=context)
 
+# ---------------- Campaign Comments -------------------------
+def campaign_add_comment(request):
 
+    campaign_id = request.GET.get('campaign_id')
+    
+    if request.method == 'POST':
+        comment_data = request.POST.dict()
+        comment = comment_data.get("comment_text")
+        # Get the post object
+        campaign = Campaign.objects.get(pk=campaign_id)
+        campaign.comments.create(comment=comment, 
+                                 user=request.user)
+    
+    context = campaign_all_comments(campaign_id)
+    
+    return render(request, "v2/campaign/includes/comments.html", context=context)
+        
+
+def campaign_delete_comment(request, link_id):
+    
+    comment = Comment.objects.get(id=link_id)
+    comment.delete()
+    
+    campaign_id = request.GET.get('campaign_id')
+    context = campaign_all_comments(campaign_id)
+    
+    return render(request, "v2/campaign/includes/comments.html", context=context)
+    
+def campaign_edit_comment(request, link_id):
+    comment = Comment.objects.get(id=link_id)
+    
+    campaign_id = request.GET.get('campaign_id')
+    campaign = Campaign.objects.get(id=campaign_id)
+    
+    context = {
+        "comment": comment,
+        "campaign_object": campaign,
+    }
+    
+    return render(request, "v2/campaign/includes/comment_edit.html", context=context)
+
+def campaign_show_comments(request):
+    campaign_id = request.GET.get('campaign_id')
+    context = campaign_all_comments(campaign_id)
+    
+    return render(request, "v2/campaign/includes/comments.html", context=context)
+
+def campaign_update_comment(request, link_id):
+    comment = Comment.objects.get(id=link_id)
+    campaign_id = request.GET.get('campaign_id')
+    
+    if request.method == 'POST':
+        comment_data = request.POST.dict()
+        comment_text = comment_data.get("comment_edit_text")
+        comment.comment = comment_text
+        comment.save()
+
+    context = campaign_all_comments(campaign_id)
+    
+    return render(request, "v2/campaign/includes/comments.html", context=context)
+    
+def campaign_all_comments(campaign_id):
+    
+    campaign = Campaign.objects.get(id=campaign_id)
+    comments = campaign.comments.all()
+    
+    context = {
+        "comments": comments,
+        "campaign_object": campaign,
+    }
+    
+    return context
 # **** End Campaigns Code *****
