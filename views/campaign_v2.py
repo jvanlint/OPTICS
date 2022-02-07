@@ -186,10 +186,11 @@ def campaign_add_comment(request):
 
 def campaign_delete_comment(request, link_id):
     
+    campaign_id = request.GET.get('campaign_id')
     comment = Comment.objects.get(id=link_id)
+    
     comment.delete()
     
-    campaign_id = request.GET.get('campaign_id')
     context = campaign_all_comments(campaign_id)
     
     return render(request, "v2/campaign/includes/comments.html", context=context)

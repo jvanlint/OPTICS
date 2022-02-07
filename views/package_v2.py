@@ -98,29 +98,19 @@ def package_add_comment(request):
 		# Get the post object
 		package_object = Package.objects.get(pk=package_id)
 		package_object.comments.create(comment=comment, user=request.user)
-		comments = package_object.comments.all()
-
-	context = {
-		"comments": comments,
-		"package_object": package_object,
-	}
+		
+	context = package_all_comments(package_id)
 	
 	return render(request, "v2/package/includes/comments.html", context=context)
 
 @login_required(login_url="account_login")
 def package_delete_comment(request, link_id):
 	comment = Comment.objects.get(id=link_id)
+	package_id = request.GET.get('package_id')
 	
 	comment.delete()
 	
-	package_id = request.GET.get('package_id')
-	package = Package.objects.get(id=package_id)
-	comments = package.comments.all()
-	
-	context = {
-		"comments": comments,
-		"package_object": package,
-	}
+	context = package_all_comments(package_id)
 	
 	return render(request, "v2/package/includes/comments.html", context=context)
 	
@@ -140,13 +130,7 @@ def package_edit_comment(request, link_id):
 def package_show_comments(request):
 	
 	package_id = request.GET.get('package_id')
-	package = Package.objects.get(id=package_id)
-	comments = package.comments.all()
-	
-	context = {
-		"comments": comments,
-		"package_object": package,
-	}
+	context = package_all_comments(package_id)
 	
 	return render(request, "v2/package/includes/comments.html", context=context)
 
@@ -160,6 +144,12 @@ def package_update_comment(request, link_id):
 		comment.comment = comment_text
 		comment.save()
 	
+	context = package_all_comments(package_id)
+	
+	return render(request, "v2/package/includes/comments.html", context=context)
+	
+def package_all_comments(package_id):
+	
 	package = Package.objects.get(id=package_id)
 	comments = package.comments.all()
 	
@@ -168,7 +158,7 @@ def package_update_comment(request, link_id):
 		"package_object": package,
 	}
 	
-	return render(request, "v2/package/includes/comments.html", context=context)
+	return context
 	
 # ---------------- Package Imagery -------------------------
 	

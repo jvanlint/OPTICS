@@ -116,29 +116,20 @@ def flight_add_comment(request):
 		# Get the post object
 		flight_object = Flight.objects.get(pk=flight_id)
 		flight_object.comments.create(comment=comment, user=request.user)
-		comments = flight_object.comments.all()
+		
 
-	context = {
-		"comments": comments,
-		"flight_object": flight_object,
-	}
+	context = flight_all_comments(flight_id)
 	
 	return render(request, "v2/flight/includes/comments.html", context=context)
 
 @login_required(login_url="account_login")
 def flight_delete_comment(request, link_id):
+	flight_id = request.GET.get('flight_id')
 	comment = Comment.objects.get(id=link_id)
 	
 	comment.delete()
 	
-	flight_id = request.GET.get('flight_id')
-	flight = Flight.objects.get(id=flight_id)
-	comments = flight.comments.all()
-	
-	context = {
-		"comments": comments,
-		"flight_object": flight,
-	}
+	context = flight_all_comments(flight_id)
 	
 	return render(request, "v2/flight/includes/comments.html", context=context)
 	
@@ -158,13 +149,7 @@ def flight_edit_comment(request, link_id):
 def flight_show_comments(request):
 	
 	flight_id = request.GET.get('flight_id')
-	flight = Flight.objects.get(id=flight_id)
-	comments = flight.comments.all()
-	
-	context = {
-		"comments": comments,
-		"flight_object": flight,
-	}
+	context = flight_all_comments(flight_id)
 	
 	return render(request, "v2/flight/includes/comments.html", context=context)
 
@@ -178,6 +163,12 @@ def flight_update_comment(request, link_id):
 		comment.comment = comment_text
 		comment.save()
 	
+	context = flight_all_comments(flight_id)
+	
+	return render(request, "v2/flight/includes/comments.html", context=context)
+
+def flight_all_comments(flight_id):
+	
 	flight = Flight.objects.get(id=flight_id)
 	comments = flight.comments.all()
 	
@@ -186,7 +177,7 @@ def flight_update_comment(request, link_id):
 		"flight_object": flight,
 	}
 	
-	return render(request, "v2/flight/includes/comments.html", context=context)
+	return context
 	
 # ---------------- Flight Imagery -------------------------
 	
