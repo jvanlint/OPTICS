@@ -1,7 +1,7 @@
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
 
-from airops import views
+from apps.airops import views
 
 urlpatterns = [
     path('', views.campaigns_all, name='index'),
@@ -64,11 +64,11 @@ urlpatterns = [
     path('mission_imagery/add/<int:link_id>', views.mission_imagery_create, name='mission_imagery_add'),
     path('mission_imagery/update/<int:link_id>', views.mission_imagery_update, name='mission_imagery_update'),
     path('mission_imagery/delete/<int:link_id>', views.mission_imagery_delete, name='mission_imagery_delete'),
-    
+
     path('package_imagery/add/<int:link_id>', views.package_imagery_create, name='package_imagery_add'),
     path('package_imagery/update/<int:link_id>', views.package_imagery_update, name='package_imagery_update'),
     path('package_imagery/delete/<int:link_id>', views.package_imagery_delete, name='package_imagery_delete'),
-    
+
     path('flight_imagery/add/<int:link_id>', views.flight_imagery_create, name='flight_imagery_add'),
     path('flight_imagery/update/<int:link_id>', views.flight_imagery_update, name='flight_imagery_update'),
     path('flight_imagery/delete/<int:link_id>', views.flight_imagery_delete, name='flight_imagery_delete'),
@@ -99,7 +99,7 @@ urlpatterns += [
     path('v2/campaign/update/<int:link_id>', views.campaign_update_v2, name='campaign_update_v2'),
     path('v2/campaign/<int:link_id>/', views.campaign_detail_v2, name='campaign_detail_v2'),
     path("v2/campaign/delete/<int:link_id>", views.campaign_delete_v2, name="campaign_delete_v2"),
-    
+
     # Comments
     path('v2/campaign/comment/add', views.campaign_add_comment, name='campaign_add_comment'),
     path("v2/campaign/comment/delete/<int:link_id>", views.campaign_delete_comment,
@@ -117,16 +117,16 @@ urlpatterns += [
     path('v2/mission/update/<int:link_id>', views.mission_update_v2, name='mission_update_v2'),
     path("v2/mission/delete/<int:link_id>", views.mission_delete_v2, name="mission_delete_v2"),
     path('v2/mission/copy/<int:link_id>', views.mission_copy_v2, name='mission_copy_v2'),
-          
+
     path('v2/mission/add/file', views.mission_file_add, name='mission_file_add'),
     path("v2/mission/file/delete/<int:link_id>", views.mission_file_delete, name="mission_file_delete"),
-         
+
     path('mission/add/image/<int:link_id>', views.mission_imagery_create_v2, name='mission_imagery_add_v2'),
     path('mission/update/image/<int:link_id>', views.mission_imagery_update_v2, name='mission_imagery_update_v2'),
     path('mission/delete/image/<int:link_id>', views.mission_imagery_delete_v2, name='mission_imagery_delete_v2'),
-    
+
     path('v2/mission/signup/<int:link_id>', views.mission_signup_v2, name='mission_signup_v2'),
-    
+
     # Comments
     path('v2/mission/comment/add', views.mission_add_comment, name='mission_add_comment'),
     path("v2/mission/comment/delete/<int:link_id>", views.mission_delete_comment,
@@ -143,11 +143,11 @@ urlpatterns += [
     path('v2/package/add/<int:link_id>', views.package_add_v2, name='package_add_v2'),
     path('v2/package/update/<int:link_id>', views.package_update_v2, name='package_update_v2'),
     path("v2/package/delete/<int:link_id>", views.package_delete_v2, name="package_delete_v2"),
-    
+
     path('package/add/image/<int:link_id>', views.package_imagery_create_v2, name='package_imagery_add_v2'),
     path('package/update/image/<int:link_id>', views.package_imagery_update_v2, name='package_imagery_update_v2'),
     path('package/delete/image/<int:link_id>', views.package_imagery_delete_v2, name='package_imagery_delete_v2'),
-    
+
     # Comments
     path('v2/package/comment/add', views.package_add_comment, name='package_add_comment'),
     path("v2/package/comment/delete/<int:link_id>", views.package_delete_comment,
@@ -164,11 +164,11 @@ urlpatterns += [
     path('v2/flight/add/<int:link_id>', views.flight_add_v2, name='flight_add_v2'),
     path('v2/flight/update/<int:link_id>', views.flight_update_v2, name='flight_update_v2'),
     path("v2/flight/delete/<int:link_id>", views.flight_delete_v2, name="flight_delete_v2"),
-    
+
     path('flight/add/image/<int:link_id>', views.flight_imagery_create_v2, name='flight_imagery_add_v2'),
     path('flight/update/image/<int:link_id>', views.flight_imagery_update_v2, name='flight_imagery_update_v2'),
     path('flight/delete/image/<int:link_id>', views.flight_imagery_delete_v2, name='flight_imagery_delete_v2'),
-    
+
     # Comments
     path('v2/flight/comment/add', views.flight_add_comment, name='flight_add_comment'),
     path("v2/flight/comment/delete/<int:link_id>", views.flight_delete_comment,
@@ -242,7 +242,7 @@ urlpatterns += [
 # User Password and Access Management URL Patterns
 
 urlpatterns += [
-    
+
     path("change_password/", auth_views.PasswordChangeView.as_view(
         template_name="authentication/change_password.html"), name="change_password_v2"),
 ]

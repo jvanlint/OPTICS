@@ -4,6 +4,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelatio
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 
+
 class Comment(models.Model):
 
 	user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -6,8 +6,8 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib import messages
-from airops.forms import ProfileForm
-from airops.models import Comment, UserProfile
+from apps.airops.forms import ProfileForm
+from apps.airops.models import Comment, UserProfile
 from collections import namedtuple
 
 
@@ -35,7 +35,7 @@ def own_profile_view(request):
 def select_avatar(request):
     context = {}
     new_file = []
-    files = os.listdir(os.path.join(settings.STATIC_ROOT, "assets/img/avatars/"))
+    files = os.listdir(os.path.join(settings.MEDIA_ROOT, "assets/img/avatars/"))
     for file in files:
         new_file.append("assets/img/avatars/" + file)
 

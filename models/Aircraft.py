@@ -1,17 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Aircraft(models.Model):
 	# Fields
 
 	type = models.ForeignKey(
-		"Airframe", 
-		on_delete=models.CASCADE, 
+		"Airframe",
+		on_delete=models.CASCADE,
 		null=True
 	)
 	flight = models.ForeignKey(
-		"Flight", 
-		on_delete=models.CASCADE, 
+		"Flight",
+		on_delete=models.CASCADE,
 		null=True
 	)
 	pilot = models.ForeignKey(
@@ -22,16 +23,16 @@ class Aircraft(models.Model):
 		related_name="user_pilot",
 	)
 	rio_wso = models.ForeignKey(
-		User, 
-		null=True, 
-		blank=True, 
-		on_delete=models.SET_NULL, 
+		User,
+		null=True,
+		blank=True,
+		on_delete=models.SET_NULL,
 		related_name="user_rio"
 	)
 	tailcode = models.CharField(
-		max_length=20, 
-		help_text="Enter A/C tail code.", 
-		null=True, 
+		max_length=20,
+		help_text="Enter A/C tail code.",
+		null=True,
 		blank=True
 	)
 	flight_lead = models.BooleanField(
@@ -52,20 +53,20 @@ class Aircraft(models.Model):
 
 	def multicrew(self):
 		return self.type.multicrew
-	
+
 	def new(self, flightObject):
 		new_aircraft_instance = Aircraft(
 			type = self.type,
 			flight = flightObject,
 		)
 		new_aircraft_instance.save()
-	
+
 	def copy(self):
 		flightID = self.flight.id
-	
+
 		self.new(self.flight)
-		
+
 		return flightID
-	
+
 	def copyToFlight(self, flight):
 		self.new(flight)

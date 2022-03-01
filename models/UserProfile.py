@@ -4,7 +4,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django_resized import ResizedImageField
-from airops.models import Squadron
+from apps.airops.models import Squadron
 
 
 def user_directory_path(instance, filename):

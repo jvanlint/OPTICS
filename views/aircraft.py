@@ -2,11 +2,12 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from ..decorators import allowed_users
+from apps.airops.decorators import allowed_users
 from django.views.decorators.cache import never_cache
 
 from ..models import Aircraft, Flight, UserProfile
 from ..forms import AircraftForm
+
 
 @login_required(login_url="account_login")
 def aircraft(request, link_id):

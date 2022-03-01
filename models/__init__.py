@@ -1,4 +1,4 @@
-from .Comment import *
+
 from .Campaign import *
 from .Terrain import *
 from .Status import *
@@ -21,7 +21,7 @@ from .CombatFliteFile import *
 from .WebHook import *
 from .FlightImagery import *
 from .PackageImagery import *
-
+from .Comment import *
 from .WaypointType import *
 from .SupportType import *
 from .ThreatType import *

@@ -7,10 +7,10 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.conf import settings
 from crispy_forms.helper import FormHelper
-from airops import utils
+from .utils import get_timezones
 
 # import GeeksModel from models.py
-from airops.models import (
+from apps.airops.models import (
     Campaign,
     Mission,
     Package,
@@ -136,7 +136,7 @@ class TargetForm(ModelForm):
 
 
 class FlightForm(ModelForm):
-       
+
     # specify the name of model to use
     def __init__(self, target, *args, **kwargs):
         super(FlightForm, self).__init__(*args, **kwargs)
@@ -193,12 +193,12 @@ class MissionImageryForm(ModelForm):
         super(MissionImageryForm, self).__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs.update({"class": "form-control"})
-            
+
     # specify the name of model to use
     class Meta:
         model = MissionImagery
         fields = "__all__"
-        
+
 class PackageImageryForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(PackageImageryForm, self).__init__(*args, **kwargs)
@@ -227,7 +227,7 @@ class TerrainForm(ModelForm):
         widgets = {
             'name': forms.TextInput(
                 attrs={
-                    "placeholder": "DCS terrain name.", 
+                    "placeholder": "DCS terrain name.",
                     "class": "form-control",
                     "autofocus": "autofocus"
                     }
@@ -242,7 +242,7 @@ class StatusForm(ModelForm):
         widgets = {
             'name': forms.TextInput(
                 attrs={
-                    "placeholder": "Campaign status.", 
+                    "placeholder": "Campaign status.",
                     "class": "form-control",
                     "autofocus": "autofocus"
                     }
@@ -257,7 +257,7 @@ class WaypointTypeForm(ModelForm):
         widgets = {
             'name': forms.TextInput(
                 attrs={
-                    "placeholder": "Waypoint type.", 
+                    "placeholder": "Waypoint type.",
                     "class": "form-control",
                     "autofocus": "autofocus"
                     }
@@ -272,7 +272,7 @@ class SupportTypeForm(ModelForm):
         widgets = {
             'name': forms.TextInput(
                 attrs={
-                    "placeholder": "Support type.", 
+                    "placeholder": "Support type.",
                     "class": "form-control",
                     "autofocus": "autofocus"
                     }
@@ -287,7 +287,7 @@ class TaskForm(ModelForm):
         widgets = {
             'name': forms.TextInput(
                 attrs={
-                    "placeholder": "Flight task.", 
+                    "placeholder": "Flight task.",
                     "class": "form-control",
                     "autofocus": "autofocus"
                     }
@@ -303,7 +303,7 @@ class ThreatTypeForm(ModelForm):
         widgets = {
             'name': forms.TextInput(
                 attrs={
-                    "placeholder": "Threat type.", 
+                    "placeholder": "Threat type.",
                     "class": "form-control",
                     "autofocus": "autofocus"
                     }
@@ -316,7 +316,7 @@ class AirframeForm(ModelForm):
         super(AirframeForm, self).__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs.update({"class": "form-control"})
-    
+
     class Meta:
         model = Airframe
         # fields = ("__all__")
@@ -326,7 +326,7 @@ class AirframeForm(ModelForm):
             "multicrew",
         )
         exclude = ("user",)
-       
+
 
 class NewUserForm(UserCreationForm):
 
@@ -355,7 +355,7 @@ class ProfileForm(forms.ModelForm):
 
     timezone = forms.ChoiceField(
         required=True,
-        choices=utils.get_timezones(),
+        choices=get_timezones(),
         initial=settings.TIME_ZONE,
     )
 
@@ -390,7 +390,7 @@ class UserForm(forms.ModelForm):
 class SignupForm(forms.ModelForm):  # Called by Allauth (see settings.py)
     timezone = forms.ChoiceField(
         required=True,
-        choices=utils.get_timezones(),
+        choices=get_timezones(),
         initial=settings.TIME_ZONE,
     )
 
