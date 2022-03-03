@@ -1,29 +1,29 @@
 {% extends "v2/profile/base_profile.html" %}
 {% block account_block %}
   {% load static %}
-
-   {% include "v2/profile/profile_nav.html" with active_tab='avatar' %}
+  {% include "v2/profile/profile_nav.html" with active_tab='avatar' %}
       <div class="col-md-12 mb-3">
-	<div class="card-deck">
-		<div class="fade-in">
-			<div class="row">
-					{% for file in files %}
-					<div class="col-lg-3 mb-5">
-						<div class="card">
-{#							<div class="card-header">{{file}}</div>#}
-							<div class="card-body">
-								<div class="d-flex flex-column align-items-center text-center">
-									<img src="{% static file %}" alt="Admin" class="rounded-circle" width="150"/></p>
-									<div class="mt-3">
-										<a href="{% url 'avatar_change' %}?avatar={{file}}"><button class="btn btn-outline-primary">Use This Avatar</button></a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					{% endfor %}
-			</div>
-		</div>
+        <div class="card-deck">
+          <div class="fade-in">
+            <div class="row">
+                {% for file in files %}
+                <div class="col-lg-3 mb-5">
+                  <div class="card">
+      {#							<div class="card-header">{{file}}</div>#}
+                    <div class="card-body">
+                      <div class="d-flex flex-column align-items-center text-center">
+
+                        <img src="{% static file %}" alt="Admin" class="rounded-circle" width="150"/></p>
+                        <div class="mt-3">
+                          <a href="{% url 'avatar_change' %}?avatar={{file}}"><button class="btn btn-outline-primary">Use This Avatar</button></a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+            </div>
+          </div>
 	</div>
   </div>
 {% endblock account_block %}

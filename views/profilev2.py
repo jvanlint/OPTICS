@@ -31,16 +31,19 @@ def own_profile_view(request):
             messages.error(request, "Please correct the error below.")
     return render(request, "v2/profile/profile.html", context=context)
 
+
 @login_required(login_url="account_login")
 def select_avatar(request):
     context = {}
     new_file = []
-    files = os.listdir(os.path.join(settings.MEDIA_ROOT, "assets/img/avatars/"))
+    avatar_location = "assets/img/avatars/"
+    files = os.listdir(settings.STATIC_ROOT.joinpath(avatar_location))
     for file in files:
-        new_file.append("assets/img/avatars/" + file)
+        new_file.append(avatar_location + file)
 
     context = {"files": new_file}
     return render(request, "v2/profile/avatar_selection.html", context=context)
+
 
 @login_required(login_url="account_login")
 def change_avatar(request):
