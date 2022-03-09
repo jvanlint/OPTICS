@@ -5,6 +5,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django_resized import ResizedImageField
 from apps.airops.models import Squadron
+from optics.settings.components.common import STATIC_URL
 
 
 def user_directory_path(instance, filename):
@@ -66,7 +67,13 @@ class UserProfile(models.Model):
     @property  # https://code.djangoproject.com/ticket/13327
     def image_url(self):
         if self.profile_image and hasattr(self.profile_image, "url"):
-            return self.profile_image.url
+            # be default ResizedImageField types save and expect to find
+            # the files under the MEDIA_ROOT setting.
+            # we are not allowing individual images at this stage so will be
+            # serving them from under STATIC_ROOT.
+            # patch the base url to come from STATIC_URL rather than the default MEDIA_URL
+            self.profile_image.storage.base_url = STATIC_URL
+            return self.profile_image
         else:
             self.profile_image = "assets/img/avatars/pilot1.png"
 
