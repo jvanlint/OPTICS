@@ -49,7 +49,9 @@ $RECYCLE.BIN/
 #####=== Python ===#####
 
 # Byte-compiled / optimized / DLL files
-__pycache__/
+/__pycache__/
+
+
 *.py[cod]
 
 # C extensions
@@ -212,9 +214,9 @@ fabric.properties
 
 #####=== Custom ===#####
 # Directories:
-media/
-.static/
-/static/
+# media/
+#.static/
+#/static/
 
 # File types:
 *.sqlite3
