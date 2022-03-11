@@ -1,23 +1,9 @@
 import pytest
-from allauth.account.forms import SignupForm
-from allauth.utils import get_user_model
-from django.conf import settings
-from django.contrib.auth import authenticate
-from django.db.utils import IntegrityError
-from django.urls import reverse
-from factoryman import create_populated_modelfactory
+from model_bakery import baker
+from apps.airops.models.UserProfile import UserProfile
+
 
 # https://medium.com/insightfulsolutions/elegant-and-dry-test-data-creation-for-django-be68373c69d4
-from pytest_django.asserts import (
-    assertTemplateUsed,
-    assertContains,
-    assertRedirects,
-    assertFormError,
-)
-
-from airops.models import UserProfile, Campaign
-
-from model_bakery import baker
 
 
 # https://model-bakery.readthedocs.io/en/latest/index.html
@@ -61,15 +47,13 @@ campaign creator will get a UI element on campaign screen when there are users i
     listing them and allowing assigning or declining editor permission.
         When allowed, the user is moved to the editors field.
         When declined, user is removed from the editor-requests field
-Campaign main page will have a list of editors 
+Campaign main page will have a list of editors
 Campaign main page will have a button or control to request editor permission.
 When viewing Campaigns and their children, only creators and editors will see edit controls.
 When POSTing changes to campiagns and children request.user will be checked against the creator and editor fields
     for permission.
-    
+
 '''
-
-
 
 
 # url = reverse("account_signup")

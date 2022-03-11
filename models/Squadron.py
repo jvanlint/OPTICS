@@ -3,8 +3,7 @@ from django.db import models
 
 class Squadron(models.Model):
     """Squadron model.
-    A list of squadrons for
-    users to be associated with
+    A list of squadrons for users to be associated with
     """
 
     squadron_name = models.CharField(

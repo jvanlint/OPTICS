@@ -9,7 +9,6 @@ from django.conf import settings
 from crispy_forms.helper import FormHelper
 from .utils import get_timezones
 
-# import GeeksModel from models.py
 from apps.airops.models import (
     Campaign,
     Mission,

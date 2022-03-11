@@ -1,19 +1,11 @@
+import uuid
+
 import pytest
 from allauth.account.forms import SignupForm
-from allauth.utils import get_user_model
 from django.conf import settings
-from django.contrib.auth import authenticate
-from django.db.utils import IntegrityError
 from django.urls import reverse
-from factoryman import create_populated_modelfactory
-from pytest_django.asserts import (
-    assertTemplateUsed,
-    assertContains,
-    assertRedirects,
-    assertFormError,
-)
-import uuid
-from airops.models import UserProfile
+from pytest_django.asserts import assertTemplateUsed
+
 
 url = reverse("own_profile")
 
@@ -46,7 +38,6 @@ def auto_login_user(db, client, create_user, test_password):
             backend=settings.AUTHENTICATION_BACKENDS[0],
         )
         return client, user
-
     return make_auto_login
 
 
