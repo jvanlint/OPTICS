@@ -209,11 +209,14 @@
                   </svg>
                   Add Flight
                 </a>
+                <a href="{% url 'miz_import_initial' package_object.id %}?returnUrl={{request.path}}"
+                  class="btn btn-sm btn-success " role="button">
+                  <svg class="c-icon">
+                    <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
+                  </svg>
+                  Import Flights from miz
+                </a>
               </h6>
-              <button hx-get="{% url 'test_modal' 1 %}" hx-target="#modals-here" hx-trigger="click"
-                class="btn btn-primary"
-                _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop">H2 Open
-                Modal</button>
 
             </div>
           </div>
@@ -271,17 +274,13 @@
             </div>
           </div>
           <!-- /.card -->
-          <div id="tree">
-            <p>Tree should be here</p>
-          </div>
+
         </div>
         <!-- /.col-->
       </div>
       <!-- /.row-->
     </div>
   </div>
-  <!-- Placeholder for the modal -->
-  <div id="modals-here"></div>
 
 </main>
 
@@ -291,7 +290,5 @@
 {% block javascripts %}
 <!-- Confirm Delete JS -->
 <script src="{% get_static_prefix %}assets/js/confirm_delete.js"></script>
-<script src="{% static "js/airops/htmx/closeModal.js" %}"></script>
-<script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
 
 {% endblock javascripts %}

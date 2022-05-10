@@ -1,5 +1,6 @@
 {% load static %}
 
+
 <head>
   <base href="./" />
   <meta charset="utf-8" />
@@ -32,4 +33,9 @@
 
   <!-- Specific Page CSS goes HERE  -->
   {% block stylesheets %}{% endblock stylesheets %}
+  <!-- Required js here -->
+  <script src="{% static 'js/htmx/htmx.min.js' %}"></script>
+  <script src="{% static 'js/htmx/ext/debug.js' %}" defer></script>
+  <script src="{% static 'js/htmx/ext/event-header.js' %}" defer></script>
+
 </head>
