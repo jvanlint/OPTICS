@@ -248,14 +248,11 @@ class Mission(models.Model):
 		mission_start_time = datetime.combine(self.mission_date, self.mission_time)
 		mission_end_time = mission_start_time + timedelta(hours=2)
 		
-		#description = (f'{self.name}\n**Mission Page:**\n[{mission_name}]({mission_page})\n **Sign Up Sheet:**\n ')
-		
 		#Webhook Specific Variables
 		url = WebHook.objects.get(service_name__exact='Discord').url
 		
 		#Webhook Specific Embed Variables
 		title = self.campaign.name
-		thumbnail = image_url
 		mission_name = self.name
 		now = str(timezone.now())
 		if self.mission_date:
@@ -272,7 +269,7 @@ class Mission(models.Model):
 		#New Discord Event API request data.
 		api_data = {
 			"name" : self.name,
-			"description" : self.description,
+			"description" : f'{self.description}\n**Mission Page**\n{mission_page}\n**Sign Up Sheet**\n{register_url}',
 			"scheduled_start_time" : mission_start_time.isoformat(),
 			"scheduled_end_time" : mission_end_time.isoformat(),
 			"entity_type" : 2,
@@ -300,12 +297,10 @@ class Mission(models.Model):
 					{
 						"name": "Mission Page",
 						"value": (f'[{mission_name}]({mission_page})'),
-						#"value": "[Cracking Eggs With A Hammer ](http://www.google.com)",
 						"inline": True
 					},
 					{
 						"name": "Sign Up Sheet",
-						#{% url 'mission_signup' self.id %}?returnUrl={{request.path}}
 						"value": (f'[Register here]({register_url})'),
 						"inline": True
 					}
