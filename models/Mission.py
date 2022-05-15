@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from datetime import datetime
+from datetime import datetime, timedelta
 from django_resized import ResizedImageField
 from django.contrib.auth.models import User
 from django.conf import settings
@@ -179,6 +179,11 @@ class Mission(models.Model):
 		null=True,
 		verbose_name="Discord Msg ID"
 	)
+	discord_api_id = models.CharField(max_length=20, 
+		blank=True, 
+		null=True,
+		verbose_name="Discord API Event ID"
+	)
 
 	# Metadata
 
@@ -191,22 +196,38 @@ class Mission(models.Model):
 		return self.name
 
 	def delete_discord_event(self):
-		webhook_instance = WebHook.objects.get(service_name__exact='Discord')
-		url = webhook_instance.url
+		
+		bot_token = WebHook.objects.get(service_name__exact='bot token').url
+		api_url = WebHook.objects.get(service_name__exact='Discord Event').url
+		api_headers = {
+			"Authorization": bot_token,
+			"Content-Type" : "application/json",
+			"User-Agent" : "DiscordBot (https://your.bot/url) Python/3.9 aiohttp/3.8.1"
+		}
+		
+		webhook_url = WebHook.objects.get(service_name__exact='Discord').url
 		params = {'wait': 'true'}
 		
 		if self.discord_msg_id:
 			
-			delete_url = url + (f'/messages/{self.discord_msg_id}')
-			result = requests.delete(delete_url, params = params)
+			delete_url = webhook_url + (f'/messages/{self.discord_msg_id}')
+			api_delete_url = f'{api_url}/{self.discord_api_id}'
+			webhook_result = requests.delete(delete_url, params = params)
+			api_result = requests.delete(api_delete_url, headers = api_headers)
 		
 			try:
-				result.raise_for_status()
+				webhook_result.raise_for_status()
 			except requests.exceptions.HTTPError as err:
 				print(err)
 			else:
-				print("Payload delivered successfully, code {}.".format(result.status_code))
-
+				print("Payload delivered successfully, code {}.".format(webhook_result.status_code))
+				
+			try:
+				api_result.raise_for_status()
+			except requests.exceptions.HTTPError as err:
+				print(err)
+			else:
+				print("Payload delivered successfully, code {}.".format(api_result.status_code))
 		return True
 		
 	def create_discord_event(self, image_url, request):
@@ -216,15 +237,23 @@ class Mission(models.Model):
 		# Edit message
 		# PATCH/webhooks/{webhook.id}/{webhook.token}/messages/{message.id}
 		
-		webhook_instance = WebHook.objects.get(service_name__exact='Discord')
-		url = webhook_instance.url
+		#Determine the information required for sending to webhook or API
 		
-		params = {'wait': 'true'}
+		#New Discord Event API Specific Variables
 		
-		data = {
-			"content" : "OPTICS Generated Mission Event",
-			"username" : "OPTICS Bot"
-		}
+		bot_token = WebHook.objects.get(service_name__exact='bot token').url
+		api_url = WebHook.objects.get(service_name__exact='Discord Event').url
+		channel_id = WebHook.objects.get(service_name__exact='channel id').url
+		
+		mission_start_time = datetime.combine(self.mission_date, self.mission_time)
+		mission_end_time = mission_start_time + timedelta(hours=2)
+		
+		#description = (f'{self.name}\n**Mission Page:**\n[{mission_name}]({mission_page})\n **Sign Up Sheet:**\n ')
+		
+		#Webhook Specific Variables
+		url = WebHook.objects.get(service_name__exact='Discord').url
+		
+		#Webhook Specific Embed Variables
 		title = self.campaign.name
 		thumbnail = image_url
 		mission_name = self.name
@@ -237,8 +266,31 @@ class Mission(models.Model):
 		register_url = request.build_absolute_uri(reverse('mission_signup_v2', args=(self.id,)))
 		mission_page = request.build_absolute_uri(reverse('mission_v2', args=(self.id,)))
 		
-		print(register_url)
 		
+		#Form the data and header json for sending.
+		
+		#New Discord Event API request data.
+		api_data = {
+			"name" : self.name,
+			"description" : self.description,
+			"scheduled_start_time" : mission_start_time.isoformat(),
+			"scheduled_end_time" : mission_end_time.isoformat(),
+			"entity_type" : 2,
+			"privacy_level" : "2",
+			"channel_id" : channel_id,
+		}
+		api_headers = {
+			"Authorization": bot_token,
+			"Content-Type" : "application/json",
+			"User-Agent" : "DiscordBot (https://your.bot/url) Python/3.9 aiohttp/3.8.1"
+		}
+		
+		#Webhook Request Data
+		params = {'wait': 'true'}
+		data = {
+			"content" : "OPTICS Generated Mission Event",
+			"username" : "OPTICS Bot"
+		}
 		data["embeds"] = [
 			{
 				"title": title,
@@ -265,23 +317,40 @@ class Mission(models.Model):
 			}
 		]
 		
+		#Check to see if a message id has been logged already. If so we are going to perform an edit.
 		
 		if self.discord_msg_id:
-			patch_url = url + (f'/messages/{self.discord_msg_id}')
-			result = requests.patch(patch_url, json = data, params = params)
+			webhook_patch_url = url + (f'/messages/{self.discord_msg_id}')
+			api_patch_url = f'{api_url}/{self.discord_api_id}'
+			webhook_result = requests.patch(webhook_patch_url, json = data, params = params)
+			api_result = requests.patch(api_patch_url, json = api_data, headers = api_headers)
 		else:
-			result = requests.post(url, json = data, params = params)
+			webhook_result = requests.post(url, json = data, params = params)
+			api_result = requests.post(api_url, json = api_data, headers = api_headers)
 		
-		print(result)
+		# Check the response for Webhook
+		
 		try:
-			result.raise_for_status()
-			jsonResponse = result.json()
+			webhook_result.raise_for_status()
+			webhook_jsonResponse = webhook_result.json()
 		except requests.exceptions.HTTPError as err:
 			print(err)
 		else:
-			print("Payload delivered successfully, code {}.".format(result.status_code))
-			print(jsonResponse['id'])
-			self.discord_msg_id = jsonResponse['id']
+			print("Payload delivered successfully, code {}.".format(webhook_result.status_code))
+			print(webhook_jsonResponse['id'])
+			self.discord_msg_id = webhook_jsonResponse['id']
+			self.save()
+		
+		#Check the response for the API Event
+		try:
+			api_result.raise_for_status()
+			api_jsonResponse = api_result.json()
+		except requests.exceptions.HTTPError as err:
+			print(err)
+		else:
+			print("Payload delivered successfully, code {}.".format(api_result.status_code))
+			print(api_jsonResponse['id'])
+			self.discord_api_id = api_jsonResponse['id']
 			self.save()
 		
 		return True
