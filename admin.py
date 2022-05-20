@@ -26,6 +26,7 @@ from .models import (
     ThreatReference,
     Squadron,
     UserProfile,
+    WaypointType,
 )
 
 # Define the admin class
@@ -258,3 +259,10 @@ class SquadronAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Squadron, SquadronAdmin)
+
+
+class WaypointTypeAdmin(admin.ModelAdmin):
+    list_display = ("name", "dcs_mapping")
+
+
+admin.site.register(WaypointType, WaypointTypeAdmin)
