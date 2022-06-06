@@ -101,7 +101,7 @@ def mission_update_v2(request, link_id):
 
     image_url = request.build_absolute_uri(mission.campaign.campaignImage.url)
 
-    mission.create_discord_event(image_url, request)
+    #mission.create_discord_event(image_url, request)
 
     form_title = "Mission"
 
