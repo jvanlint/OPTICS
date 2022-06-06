@@ -245,7 +245,13 @@ class Mission(models.Model):
 		api_url = WebHook.objects.get(service_name__exact='Discord Event').url
 		channel_id = WebHook.objects.get(service_name__exact='channel id').url
 		
-		mission_start_time = datetime.combine(self.mission_date, self.mission_time)
+		if self.mission_date and self.mission_time:
+			mission_start_time = datetime.combine(self.mission_date, self.mission_time)
+		else:
+			mission_start_time = datetime(2030, 1, 1, 10, 0, 0)
+
+		
+		#mission_start_time = datetime.combine(self.mission_date, self.mission_time)
 		mission_end_time = mission_start_time + timedelta(hours=2)
 		
 		#Webhook Specific Variables
