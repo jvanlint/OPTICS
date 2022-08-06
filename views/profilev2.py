@@ -37,7 +37,7 @@ def select_avatar(request):
     context = {}
     new_file = []
     avatar_location = "assets/img/avatars/"
-    files = os.listdir(settings.STATIC_ROOT.joinpath(avatar_location))
+    files = os.listdir(os.path.join(settings.STATIC_ROOT, avatar_location))
     for file in files:
         new_file.append(avatar_location + file)
 
