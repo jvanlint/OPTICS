@@ -20,6 +20,7 @@ from pytest_django.asserts import (
 # Model-bakery _was_ model-mommy
 
 from apps.airops.models import Squadron
+
 # UserFactory = create_populated_modelfactory(User)
 # CampaignFactory = create_populated_modelfactory(Campaign, creator=UserFactory())
 url = reverse("account_signup")
@@ -123,10 +124,10 @@ def test_valid_signup_creates_valid_user(db, client, valid_squadron):
         "password1": "TheRightStuff!",
         "password2": "TheRightStuff!",
         "timezone": "US/Arizona",
-        "squadron": 3,
+        "squadron": valid_squadron.id,
     }
-    response = client.post(url, data=valid_signup)
-    assert response.status_code == 302
+    response = client.post(url, data=valid_signup, follow=True)
+    assertRedirects(response, reverse(settings.ACCOUNT_SIGNUP_REDIRECT_URL))
     user = authenticate(
         username=valid_signup["username"], password=valid_signup["password1"]
     )
