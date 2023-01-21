@@ -8,6 +8,7 @@ class MissionFile (models.Model):
 		("MIZ", "Mission"),
 		("LIB", "Liberation"),
 		("COM", "CombatFlite"),
+		("TAC", "Tacview"),
 		("OTH", "Other"),
 	)
 	mission = models.ForeignKey('Mission', 
