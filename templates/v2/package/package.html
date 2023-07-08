@@ -3,39 +3,38 @@
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}
 <style>
+	.date {
+		font-size: 11px
+	}
 
-.date {
-    font-size: 11px
-}
+	.comment-text {
+		font-size: 12px;
+		color: black;
+	}
 
-.comment-text {
-    font-size: 12px;
-	color: black;
-}
+	.fs-12 {
+		font-size: 12px;
 
-.fs-12 {
-    font-size: 12px;
-	
-}
+	}
 
-.shadow-none {
-    box-shadow: none;
-}
+	.shadow-none {
+		box-shadow: none;
+	}
 
-.name {
-    color: #007bff;
-}
+	.name {
+		color: #007bff;
+	}
 
-.cursor:hover {
-    color: blue;
-}
+	.cursor:hover {
+		color: blue;
+	}
 
-.cursor {
-    cursor: pointer;
-}
+	.cursor {
+		cursor: pointer;
+	}
 
-.textarea {
-    resize: none;
+	.textarea {
+		resize: none;
 </style>
 
 {% endblock stylesheets %} {% block content %}
@@ -51,14 +50,17 @@
 							<h6 class="text-muted">Package</h6>
 							<h2>{{package_object.name}}</h2>
 							<div class="media text-muted pt-3">
-								<div class="c-avatar"><img class="c-avatar-img" src="{{ package_object.created_by.profile.profile_image.url }}" alt="" /></div>
+								<div class="c-avatar"><img class="c-avatar-img"
+										src="{{ package_object.created_by.profile.profile_image.url }}" alt="" /></div>
 								<p class="media-body pb-3 pl-2 mb-0  lh-125">
-								<strong class="d-block text-gray-dark">
-									{% if package_object.created_by.username %}
-									<a href="{% url 'user_profile' package_object.created_by.id %}" class="text-decoration-none text-reset">{{ package_object.created_by.username }}</a>
-									{% endif %}
-								</strong>
-								{{ package_object.date_created }}
+									<strong class="d-block text-gray-dark">
+										{% if package_object.created_by.username %}
+										<a href="{% url 'user_profile' package_object.created_by.id %}"
+											class="text-decoration-none text-reset">{{
+											package_object.created_by.username }}</a>
+										{% endif %}
+									</strong>
+									{{ package_object.date_created }}
 								</p>
 							</div>
 						</div>
@@ -66,53 +68,72 @@
 							{{package_object.summary|linebreaks|urlize}}
 							<div class="nav-tabs-boxed">
 								<ul class="nav nav-tabs" role="tablist">
-									
-									<li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#comms" role="tab" aria-controls="comms">Comms</a></li>
-									<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#notes" role="tab" aria-controls="notes">Package Coordination Notes</a></li>
+
+									<li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#comms"
+											role="tab" aria-controls="comms">Comms</a></li>
+									<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#notes" role="tab"
+											aria-controls="notes">Package Coordination Notes</a></li>
 								</ul>
 								<div class="tab-content">
-									<div class="tab-pane active" id="comms" role="tabpanel">{{package_object.frequency}}</div>
-									<div class="tab-pane" id="notes" role="tabpanel">{{package_object.package_coordination|linebreaks|urlize}}</div>
+									<div class="tab-pane active" id="comms" role="tabpanel">{{package_object.frequency}}
+									</div>
+									<div class="tab-pane" id="notes" role="tabpanel">
+										{{package_object.package_coordination|linebreaks|urlize}}</div>
 								</div>
 							</div>
 						</div>
 						<div class="card-footer">
 							{% if package_object.creator.username == user.username or isAdmin == True %}
-								<button class="btn-sm btn-primary dropdown-toggle float-right" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-							{% else %}
-								<button class="btn-sm btn-primary dropdown-toggle float-right" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled="">
-							{% endif %}
-								<svg class="c-icon">
-									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
-								</svg>
-								&nbspPackage
-							</button>
-							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-								<a class="dropdown-item" href="{% url 'package_update_v2' package_object.id %}?returnUrl={{request.path}}">
+							<button class="btn-sm btn-primary dropdown-toggle float-right" id="dropdownMenuButton"
+								type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								{% else %}
+								<button class="btn-sm btn-primary dropdown-toggle float-right" id="dropdownMenuButton"
+									type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+									disabled="">
+									{% endif %}
 									<svg class="c-icon">
-										<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
+										<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil">
+										</use>
 									</svg>
-									&nbspEdit
-								</a>
-								<a class="dropdown-item" id="generate_{{package_object.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the {{ package_object.name }} mission will be deleted." data-buttontext="Delete" href="{% url 'package_delete_v2' package_object.id %}?returnUrl={% url 'mission_v2' package_object.mission.id  %}">
-									<svg class="c-icon">
-										<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
-									</svg>
-									&nbspDelete
-								</a>
-							</div>
-							<h6 class="media-body pb-3 pl-2 mb-0 lh-125">Last modified on {{ package_object.date_modified }}
-								{% if package_object.modified_by %}
-								<br>by <a href="{% url 'user_profile' package_object.modified_by.id %}">{{ package_object.modified_by.username }} </a>
-								{% endif %}
-							</h6> 
+									&nbspPackage
+								</button>
+								<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+									<a class="dropdown-item"
+										href="{% url 'package_update_v2' package_object.id %}?returnUrl={{request.path}}">
+										<svg class="c-icon">
+											<use
+												xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil">
+											</use>
+										</svg>
+										&nbspEdit
+									</a>
+									<a class="dropdown-item" id="generate_{{package_object.id}}" data-toggle="modal"
+										data-target="#confirmModal"
+										data-message="Are you sure? If you proceed, the {{ package_object.name }} mission will be deleted."
+										data-buttontext="Delete"
+										href="{% url 'package_delete_v2' package_object.id %}?returnUrl={% url 'mission_v2' package_object.mission.id  %}">
+										<svg class="c-icon">
+											<use
+												xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash">
+											</use>
+										</svg>
+										&nbspDelete
+									</a>
+								</div>
+								<h6 class="media-body pb-3 pl-2 mb-0 lh-125">Last modified on {{
+									package_object.date_modified }}
+									{% if package_object.modified_by %}
+									<br>by <a href="{% url 'user_profile' package_object.modified_by.id %}">{{
+										package_object.modified_by.username }} </a>
+									{% endif %}
+								</h6>
 						</div>
 					</div>
 					<!-- /.card -->
 
 					<!--.card -->
 					<div class="card" id="comments">
-							{% include "v2/package/includes/comments.html" %}
+						{% include "v2/package/includes/comments.html" %}
 					</div>
 					<!--.card -->
 
@@ -122,7 +143,8 @@
 
 					<!-- .card -->
 					<div class="card">
-						<div class="card-header">Flight{{ flight_object|pluralize }} <span class="badge badge-pill badge-info ml-auto">{{ flight_object.count }}</span></div>
+						<div class="card-header">Flight{{ flight_object|pluralize }} <span
+								class="badge badge-pill badge-info ml-auto">{{ flight_object.count }}</span></div>
 						<div class="card-body">
 							<div class="table-responsive">
 								<table class="table table-striped">
@@ -138,32 +160,54 @@
 										</tr>
 									</thead>
 									<tbody>
-										{% if flight_object %} 
+										{% if flight_object %}
 										{% for flight in flight_object %}
 										<tr>
 											<td><a href="{% url 'flight_v2' flight.id %}">{{ flight.callsign }}</a></td>
 											<td>{{ flight.task }}</td>
 											<td>{{ flight.radio_frequency }}</td>
 											<td>{{ flight.tacan }}</td>
-											<td>{{ flight.aircraft_set.first.type  }}</td>
+											<td>{{ flight.aircraft_set.first.type }}</td>
 											<td>{{ flight.aircraft_set.count }}</td>
 											<td>
-												<button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+												<button class="btn btn-info btn-sm dropdown-toggle"
+													id="dropdownMenuButton" type="button" data-toggle="dropdown"
+													aria-haspopup="true" aria-expanded="false">
 													<svg class="c-icon">
-														<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
+														<use
+															xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil">
+														</use>
 													</svg>
 													&nbspFlight
 												</button>
 												<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-													<a class="dropdown-item" href="{% url 'flight_update_v2' flight.id %}?returnUrl={{request.path}}">
+													<a class="dropdown-item"
+														href="{% url 'flight_update_v2' flight.id %}?returnUrl={{request.path}}">
 														<svg class="c-icon">
-															<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
+															<use
+																xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil">
+															</use>
 														</svg>
 														&nbspEdit
 													</a>
-													<a class="dropdown-item" id="flight{{flight.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the {{ flight.callsign }} package will be deleted." data-buttontext="Delete" href="{% url 'flight_delete_v2' flight.id %}?returnUrl={{request.path}}">
+													<a class="dropdown-item"
+														href="{% url 'flight_copy' flight.id %}?returnUrl={{request.path}}">
 														<svg class="c-icon">
-															<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+															<use
+																xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus">
+															</use>
+														</svg>
+														&nbspCopy
+													</a>
+													<a class="dropdown-item" id="flight{{flight.id}}"
+														data-toggle="modal" data-target="#confirmModal"
+														data-message="Are you sure? If you proceed, the {{ flight.callsign }} package will be deleted."
+														data-buttontext="Delete"
+														href="{% url 'flight_delete_v2' flight.id %}?returnUrl={{request.path}}">
+														<svg class="c-icon">
+															<use
+																xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash">
+															</use>
 														</svg>
 														&nbspDelete
 													</a>
@@ -180,60 +224,77 @@
 							</div>
 						</div>
 						<div class="card-footer">
-						<h6>
-							<a href="{% url 'flight_add_v2' package_object.id %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
-								<svg class="c-icon">
-									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
-								</svg>
-								Add Flight
-							</a>
-						</h6>
+							<h6>
+								<a href="{% url 'flight_add_v2' package_object.id %}?returnUrl={{request.path}}"
+									class="btn btn-sm btn-success float-right" role="button">
+									<svg class="c-icon">
+										<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus">
+										</use>
+									</svg>
+									Add Flight
+								</a>
+							</h6>
 						</div>
 					</div>
 					<!-- /.card -->
-					
+
 					<!-- .card -->
 					<div class="card">
-						<div class="card-header">Package Image{{ imagery_object|pluralize }} <span class="badge badge-pill badge-info ml-auto">{{ imagery_object.count }}</span></div>
+						<div class="card-header">Package Image{{ imagery_object|pluralize }} <span
+								class="badge badge-pill badge-info ml-auto">{{ imagery_object.count }}</span></div>
 						<div class="card-body">
 							<div class="row">
-							{% if imagery_object %} {% for imagery in imagery_object %}
+								{% if imagery_object %} {% for imagery in imagery_object %}
 								<div class="col-sm-6 col-md-4">
 									<figure class="figure">
-										<a href="{{ imagery.image.url }}" add target="_blank"><img src="{{ imagery.image.url }}" class="figure-img img-fluid rounded" alt="{{imagery.caption}}" /></a>
+										<a href="{{ imagery.image.url }}" add target="_blank"><img
+												src="{{ imagery.image.url }}" class="figure-img img-fluid rounded"
+												alt="{{imagery.caption}}" /></a>
 										<figcaption class="figure-caption">
 											{{ imagery.caption }}
 											<br>
-											<a id="imagery{{imagery.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the image will be deleted." data-buttontext="Delete" href="{% url 'package_imagery_delete_v2' imagery.id %}?returnUrl={{request.path}}" role="button">
+											<a id="imagery{{imagery.id}}" data-toggle="modal"
+												data-target="#confirmModal"
+												data-message="Are you sure? If you proceed, the image will be deleted."
+												data-buttontext="Delete"
+												href="{% url 'package_imagery_delete_v2' imagery.id %}?returnUrl={{request.path}}"
+												role="button">
 												<svg class="c-icon">
-													<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+													<use
+														xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash">
+													</use>
 												</svg>
 											</a>
-											<a href="{% url 'package_imagery_update_v2' imagery.id %}?returnUrl={{request.path}}" role="button">
+											<a href="{% url 'package_imagery_update_v2' imagery.id %}?returnUrl={{request.path}}"
+												role="button">
 												<svg class="c-icon">
-													<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
+													<use
+														xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil">
+													</use>
 												</svg>
 											</a>
 										</figcaption>
 									</figure>
 								</div>
-							{% endfor %} 
+								{% endfor %}
 							</div>
 							{% else %}
-								<div class="col-sm-6 col-md-4">
-									No imagery available.
-								</div>
+							<div class="col-sm-6 col-md-4">
+								No imagery available.
+							</div>
 							{% endif %}
 						</div>
 						<div class="card-footer">
-						<h6>
-							<a href="{% url 'package_imagery_add_v2' package_object.id %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
-								<svg class="c-icon">
-									<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
-								</svg>
-								Add Imagery
-							</a>
-						</h6>
+							<h6>
+								<a href="{% url 'package_imagery_add_v2' package_object.id %}?returnUrl={{request.path}}"
+									class="btn btn-sm btn-success float-right" role="button">
+									<svg class="c-icon">
+										<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus">
+										</use>
+									</svg>
+									Add Imagery
+								</a>
+							</h6>
 						</div>
 					</div>
 					<!-- /.card -->
