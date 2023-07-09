@@ -56,8 +56,8 @@
 									<strong class="d-block text-gray-dark">
 										{% if package_object.created_by.username %}
 										<a href="{% url 'user_profile' package_object.created_by.id %}"
-											class="text-decoration-none text-reset">{{
-											package_object.created_by.username }}</a>
+											class="text-decoration-none text-reset">
+											{{ package_object.created_by.username }}</a>
 										{% endif %}
 									</strong>
 									{{ package_object.date_created }}
@@ -120,11 +120,11 @@
 										&nbspDelete
 									</a>
 								</div>
-								<h6 class="media-body pb-3 pl-2 mb-0 lh-125">Last modified on {{
-									package_object.date_modified }}
+								<h6 class="media-body pb-3 pl-2 mb-0 lh-125">Last modified on
+									{{ package_object.date_modified }}
 									{% if package_object.modified_by %}
-									<br>by <a href="{% url 'user_profile' package_object.modified_by.id %}">{{
-										package_object.modified_by.username }} </a>
+									<br>by <a href="{% url 'user_profile' package_object.modified_by.id %}">
+										{{ package_object.modified_by.username }} </a>
 									{% endif %}
 								</h6>
 						</div>
