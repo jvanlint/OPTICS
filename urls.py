@@ -164,6 +164,7 @@ urlpatterns += [
     path('v2/flight/add/<int:link_id>', views.flight_add_v2, name='flight_add_v2'),
     path('v2/flight/update/<int:link_id>', views.flight_update_v2, name='flight_update_v2'),
     path("v2/flight/delete/<int:link_id>", views.flight_delete_v2, name="flight_delete_v2"),
+    path("v2/flight/copy/<int:link_id>", views.flight_copy_v2, name="flight_copy_v2"),
     
     path('flight/add/image/<int:link_id>', views.flight_imagery_create_v2, name='flight_imagery_add_v2'),
     path('flight/update/image/<int:link_id>', views.flight_imagery_update_v2, name='flight_imagery_update_v2'),
