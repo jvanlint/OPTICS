@@ -98,6 +98,14 @@ def flight_delete_v2(request, link_id):
 	return HttpResponseRedirect(returnURL)
 
 @login_required(login_url="account_login")
+def flight_copy_v2(request, link_id):
+	flight = Flight.objects.get(id=link_id)
+	returnURL = request.GET.get('returnUrl')
+	packageID = flight.copy()
+
+	return HttpResponseRedirect(returnURL)
+
+@login_required(login_url="account_login")
 def flight_copy(request, link_id):
 	flight = Flight.objects.get(id=link_id)
 	packageID = flight.copy()
