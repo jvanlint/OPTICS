@@ -1,4 +1,5 @@
 from django.contrib import admin
+from import_export.admin import ImportExportModelAdmin
 
 # Register your models here.
 
@@ -131,7 +132,7 @@ class TerrainAdmin(admin.ModelAdmin):
 admin.site.register(Terrain, TerrainAdmin)
 
 
-class AirframeAdmin(admin.ModelAdmin):
+class AirframeAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ("name",)
 
 
