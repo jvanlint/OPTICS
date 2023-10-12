@@ -10,11 +10,19 @@ from django.urls import reverse
 
 from django.core import serializers
 
-from ..models import Campaign, Mission, MissionImagery, UserProfile, MissionFile, Comment, Package, Aircraft
+from ..models import (
+    Campaign,
+    Mission,
+    MissionImagery,
+    UserProfile,
+    MissionFile,
+    Comment,
+    Package,
+    Aircraft,
+)
 from ..forms import MissionForm, MissionFileForm, MissionImageryForm
 
 # ---------------- Mission -------------------------
-
 
 
 @login_required(login_url="account_login")
@@ -29,8 +37,10 @@ def mission_v2(request, link_id):
     supports = mission_queryset.support_set.all()
     imagery = mission_queryset.missionimagery_set.all()
     user_profile = UserProfile.objects.get(user=request.user)
-    
-    form = MissionFileForm(initial = {'mission': mission_queryset, 'uploaded_by': request.user.id})
+
+    form = MissionFileForm(
+        initial={"mission": mission_queryset, "uploaded_by": request.user.id}
+    )
 
     breadcrumbs = {
         "Campaigns": reverse("campaigns"),
@@ -51,7 +61,7 @@ def mission_v2(request, link_id):
         "combat_files": combat_files_queryset,
         "isAdmin": user_profile.is_admin(),
         "comments": comments,
-        'file_form': form,
+        "file_form": form,
         "breadcrumbs": breadcrumbs,
     }
 
@@ -79,7 +89,8 @@ def mission_add_v2(request, link_id):
         form = MissionForm(request.POST, request.FILES)
         if form.is_valid():
             tmp = form.save(commit=False)
-            tmp.creator = request.user
+            tmp.created_by = request.user
+            tmp.modified_by = request.user
             tmp.save()
             if tmp.notify_discord:
                 tmp.create_discord_event(image_url, request)
@@ -101,7 +112,7 @@ def mission_update_v2(request, link_id):
 
     image_url = request.build_absolute_uri(mission.campaign.campaignImage.url)
 
-    #mission.create_discord_event(image_url, request)
+    # mission.create_discord_event(image_url, request)
 
     form_title = "Mission"
 
@@ -109,9 +120,12 @@ def mission_update_v2(request, link_id):
 
     if request.method == "POST":
         form = MissionForm(request.POST, request.FILES, instance=mission)
-        
+
         if form.is_valid():
-            saved_obj = form.save(commit=True)
+            saved_obj = form.save(commit=False)
+            saved_obj.modified_by = request.user
+            saved_obj.save()
+
             if saved_obj.notify_discord:
                 saved_obj.create_discord_event(image_url, request)
             return HttpResponseRedirect(returnURL)
@@ -136,21 +150,24 @@ def mission_delete_v2(request, link_id):
     if mission_files:
         for file in mission_files:
             os.remove(os.path.join(settings.MEDIA_ROOT, str(file.mission_file)))
-    
+
     if mission.discord_msg_id:
         mission.delete_discord_event()
     mission.delete()
 
     return HttpResponseRedirect(returnURL)
 
+
 @login_required(login_url="account_login")
 def mission_copy_v2(request, link_id):
     mission = Mission.objects.get(id=link_id)
-    campaignID = mission.copy()
-    
+    # Send the user to the copy function so we know who created the mission.
+    campaignID = mission.copy(request.user)
+
     returnURL = request.GET.get("returnUrl")
 
     return HttpResponseRedirect(returnURL)
+
 
 # ---------------- Mission Comments -------------------------
 @login_required(login_url="account_login")
@@ -164,85 +181,91 @@ def mission_add_comment(request):
         # Get the post object
         mission_object = Mission.objects.get(pk=mission_id)
         mission_object.comments.create(comment=comment, user=request.user)
-    
+
     context = mission_all_comments(mission_id)
-    
+
     return render(request, "v2/mission/includes/comments.html", context=context)
+
 
 @login_required(login_url="account_login")
 def mission_delete_comment(request, link_id):
     comment = Comment.objects.get(id=link_id)
-    mission_id = request.GET.get('mission_id')
-    
+    mission_id = request.GET.get("mission_id")
+
     comment.delete()
-    
+
     context = mission_all_comments(mission_id)
-    
+
     return render(request, "v2/mission/includes/comments.html", context=context)
-    
+
+
 def mission_edit_comment(request, link_id):
     comment = Comment.objects.get(id=link_id)
-    
-    mission_id = request.GET.get('mission_id')
+
+    mission_id = request.GET.get("mission_id")
     mission = Mission.objects.get(id=mission_id)
-    
+
     context = {
         "comment": comment,
         "mission_object": mission,
     }
-    
+
     return render(request, "v2/mission/includes/comment_edit.html", context=context)
 
+
 def mission_show_comments(request):
-    
-    mission_id = request.GET.get('mission_id')
+    mission_id = request.GET.get("mission_id")
     context = mission_all_comments(mission_id)
-    
+
     return render(request, "v2/mission/includes/comments.html", context=context)
+
 
 def mission_update_comment(request, link_id):
     comment = Comment.objects.get(id=link_id)
-    mission_id = request.GET.get('mission_id')
-    
-    if request.method == 'POST':
+    mission_id = request.GET.get("mission_id")
+
+    if request.method == "POST":
         comment_data = request.POST.dict()
         comment_text = comment_data.get("comment_edit_text")
         comment.comment = comment_text
         comment.save()
-    
+
     context = mission_all_comments(mission_id)
-    
+
     return render(request, "v2/mission/includes/comments.html", context=context)
 
+
 def mission_all_comments(mission_id):
-    
     mission = Mission.objects.get(id=mission_id)
     comments = mission.comments.all()
-    
+
     context = {
         "comments": comments,
         "mission_object": mission,
     }
-    
+
     return context
-    
+
+
 # ---------------- Mission File -------------------------
+
 
 @login_required(login_url="account_login")
 def mission_file_add(request):
     # if this is a POST request we need to process the form data
-    returnURL = request.GET.get('returnUrl')
-    print('landed')
+    returnURL = request.GET.get("returnUrl")
+    print("landed")
     form = MissionFileForm(request.POST, request.FILES)
-    
+
     if form.is_valid():
-        print('form valid')
+        print("form valid")
         form.save(commit=True)
         return HttpResponseRedirect(returnURL)
-        print('success00')
-        
-    print('fail')
+        print("success00")
+
+    print("fail")
     return HttpResponseRedirect(returnURL)
+
 
 @login_required(login_url="account_login")
 def mission_file_delete(request, link_id):
@@ -257,8 +280,10 @@ def mission_file_delete(request, link_id):
 
     return HttpResponseRedirect(returnURL)
 
+
 # ---------------- Mission Imagery -------------------------
-    
+
+
 @login_required(login_url="account_login")
 def mission_imagery_create_v2(request, link_id):
     mission = Mission.objects.get(id=link_id)
@@ -279,7 +304,7 @@ def mission_imagery_create_v2(request, link_id):
         "link": link_id,
         "returnURL": returnURL,
     }
-    return render(request, 'v2/generic/data_entry_form.html', context=context)
+    return render(request, "v2/generic/data_entry_form.html", context=context)
 
 
 @login_required(login_url="account_login")
@@ -303,23 +328,25 @@ def mission_imagery_update_v2(request, link_id):
         "link": link_id,
         "returnURL": returnURL,
     }
-    return render(request, 'v2/generic/data_entry_form.html', context=context)
+    return render(request, "v2/generic/data_entry_form.html", context=context)
 
 
 @login_required(login_url="account_login")
 def mission_imagery_delete_v2(request, link_id):
     imagery = MissionImagery.objects.get(id=link_id)
     returnURL = request.GET.get("returnUrl")
-    
+
     # Check to see if an AO Image exists.
     if imagery:
         os.remove(os.path.join(settings.MEDIA_ROOT, str(imagery.image)))
-        
+
     imagery.delete()
     return HttpResponseRedirect(returnURL)
-    
+
+
 # ---------------- Mission Signup -------------------------
-    
+
+
 @login_required(login_url="account_login")
 def mission_signup_v2(request, link_id):  # link_id is the mission ID
     mission = Mission.objects.get(id=link_id)
@@ -341,14 +368,16 @@ def mission_signup_v2(request, link_id):  # link_id is the mission ID
         )
     campaign = Campaign.objects.get(mission=mission)
     is_owner = campaign.created_by == request.user
-    
+
     breadcrumbs = {
         "Campaigns": reverse("campaigns"),
-        mission.campaign.name: reverse("campaign_detail_v2", args=(mission.campaign.id,)),
-        mission.name: reverse('mission_v2', args=(mission.id,)), 
-        "Sign Up" : "",
+        mission.campaign.name: reverse(
+            "campaign_detail_v2", args=(mission.campaign.id,)
+        ),
+        mission.name: reverse("mission_v2", args=(mission.id,)),
+        "Sign Up": "",
     }
-    
+
     context = {
         "mission_object": mission,
         "package_object": packages,
