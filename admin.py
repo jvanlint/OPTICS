@@ -118,14 +118,14 @@ class AircraftAdmin(admin.ModelAdmin):
 admin.site.register(Aircraft, AircraftAdmin)
 
 
-class StatusAdmin(admin.ModelAdmin):
+class StatusAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ("name",)
 
 
 admin.site.register(Status, StatusAdmin)
 
 
-class TerrainAdmin(admin.ModelAdmin):
+class TerrainAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ("name",)
 
 
@@ -146,7 +146,7 @@ class ThreatAdmin(admin.ModelAdmin):
 admin.site.register(Threat, ThreatAdmin)
 
 
-class TaskAdmin(admin.ModelAdmin):
+class TaskAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ("name",)
 
 
@@ -206,7 +206,7 @@ admin.site.unregister(User)
 admin.site.register(User, UserProfileAdmin)
 
 
-class ThreatReferenceAdmin(admin.ModelAdmin):
+class ThreatReferenceAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ("name", "nato_code", "threat_class", "threat_type", "harm_code")
 
 
@@ -231,7 +231,7 @@ class MissionFileAdmin(admin.ModelAdmin):
 admin.site.register(MissionFile, MissionFileAdmin)
 
 
-class WebHookAdmin(admin.ModelAdmin):
+class WebHookAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = (
         "service_name",
         "url",
@@ -242,7 +242,7 @@ class WebHookAdmin(admin.ModelAdmin):
 admin.site.register(WebHook, WebHookAdmin)
 
 
-class UserProfileAdmin(admin.ModelAdmin):
+class UserProfileAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = (
         "user",
         "squadron",
