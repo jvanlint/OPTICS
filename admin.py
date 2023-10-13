@@ -27,6 +27,7 @@ from .models import (
     ThreatReference,
     Squadron,
     UserProfile,
+    AirframeDefaults,
 )
 
 # Define the admin class
@@ -137,6 +138,13 @@ class AirframeAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
 
 admin.site.register(Airframe, AirframeAdmin)
+
+
+class AirframeDefaultsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = ("airframe_type", "callsign", "default_radio_freq", "laser_code")
+
+
+admin.site.register(AirframeDefaults, AirframeDefaultsAdmin)
 
 
 class ThreatAdmin(admin.ModelAdmin):
