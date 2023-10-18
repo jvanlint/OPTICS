@@ -25,5 +25,4 @@ from .PackageImagery import *
 from .WaypointType import *
 from .SupportType import *
 from .ThreatType import *
-
 from .AirframeDefaults import *

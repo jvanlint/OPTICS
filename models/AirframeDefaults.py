@@ -20,6 +20,11 @@ class AirframeDefaults(models.Model):
         max_length=10, help_text="Default laser code.", null=False, blank=False
     )
 
+    date_created = models.DateTimeField(auto_now_add=True, null=True)
+    date_created.hidden = True
+    date_modified = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+
     # Metadata
 
     class Meta:

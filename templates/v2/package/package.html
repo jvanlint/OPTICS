@@ -168,7 +168,11 @@
 											<td>{{ flight.task }}</td>
 											<td>{{ flight.radio_frequency }}</td>
 											<td>{{ flight.tacan }}</td>
-											<td>{{ flight.aircraft_set.first.type }}</td>
+											{% if flight.airframe %}
+												<td>{{ flight.airframe }}</td>
+											{% else %}
+												<td>{{ flight.aircraft_set.first.type }}</td>
+											{% endif %}
 											<td>{{ flight.aircraft_set.count }}</td>
 											<td>
 												<button class="btn btn-info btn-sm dropdown-toggle"

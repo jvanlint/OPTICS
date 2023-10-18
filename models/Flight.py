@@ -8,6 +8,7 @@ class Flight(models.Model):
     # Fields
 
     package = models.ForeignKey("Package", on_delete=models.CASCADE, null=True)
+    airframe = models.ForeignKey("Airframe", on_delete=models.CASCADE, null=True)
     callsign = models.CharField(max_length=200, help_text="Enter Flight Callsign")
     task = models.ForeignKey("Task", on_delete=models.CASCADE, null=True)
     flight_coordination = models.TextField(

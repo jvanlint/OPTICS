@@ -32,7 +32,8 @@ from airops.models import (
     SupportType,
     Task,
     ThreatType,
-    Airframe
+    Airframe,
+    AirframeDefaults,
 )
 
 
@@ -58,7 +59,10 @@ class CampaignForm(ModelForm):
             "dcs_map": forms.Select(attrs={"style": "width: 150px;"}),
             "status": forms.Select(attrs={"style": "width: 150px;"}),
         }
-        exclude = ("modified_by","created_by",)
+        exclude = (
+            "modified_by",
+            "created_by",
+        )
 
 
 class MissionForm(ModelForm):
@@ -74,7 +78,11 @@ class MissionForm(ModelForm):
             "mission_date": DateInput(attrs={"style": "width: 150px;"}),
             "mission_game_date": DateInput(attrs={"style": "width: 150px;"}),
         }
-        exclude = ("discord_msg_id","modified_by","created_by",)
+        exclude = (
+            "discord_msg_id",
+            "modified_by",
+            "created_by",
+        )
 
     def clean(self):
         # Combine the Mission date and time and set to UTC
@@ -108,7 +116,10 @@ class PackageForm(ModelForm):
     class Meta:
         model = Package
         fields = "__all__"
-        exclude = ("modified_by","created_by",)
+        exclude = (
+            "modified_by",
+            "created_by",
+        )
 
 
 class ThreatForm(ModelForm):
@@ -136,7 +147,6 @@ class TargetForm(ModelForm):
 
 
 class FlightForm(ModelForm):
-       
     # specify the name of model to use
     def __init__(self, target, *args, **kwargs):
         super(FlightForm, self).__init__(*args, **kwargs)
@@ -147,7 +157,11 @@ class FlightForm(ModelForm):
     class Meta:
         model = Flight
         fields = "__all__"
-        exclude = ("modified_by","created_by",)
+        exclude = (
+            "modified_by",
+            "created_by",
+        )
+
 
 class AircraftForm(ModelForm):
     def __init__(self, flights, *args, **kwargs):
@@ -182,6 +196,7 @@ class WaypointForm(ModelForm):
         super(WaypointForm, self).__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs.update({"class": "form-control"})
+
     # specify the name of model to use
     class Meta:
         model = Waypoint
@@ -193,121 +208,124 @@ class MissionImageryForm(ModelForm):
         super(MissionImageryForm, self).__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs.update({"class": "form-control"})
-            
+
     # specify the name of model to use
     class Meta:
         model = MissionImagery
         fields = "__all__"
-        
+
+
 class PackageImageryForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(PackageImageryForm, self).__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs.update({"class": "form-control"})
+
     # specify the name of model to use
     class Meta:
         model = PackageImagery
         fields = "__all__"
+
 
 class FlightImageryForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(FlightImageryForm, self).__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs.update({"class": "form-control"})
+
     # specify the name of model to use
     class Meta:
         model = FlightImagery
         fields = "__all__"
 
-class TerrainForm(ModelForm):
 
+class TerrainForm(ModelForm):
     class Meta:
         model = Terrain
-        fields = ('name',)
+        fields = ("name",)
         widgets = {
-            'name': forms.TextInput(
+            "name": forms.TextInput(
                 attrs={
-                    "placeholder": "DCS terrain name.", 
+                    "placeholder": "DCS terrain name.",
                     "class": "form-control",
-                    "autofocus": "autofocus"
-                    }
-                ),
+                    "autofocus": "autofocus",
+                }
+            ),
         }
+
 
 class StatusForm(ModelForm):
-
     class Meta:
         model = Status
-        fields = ('name',)
+        fields = ("name",)
         widgets = {
-            'name': forms.TextInput(
+            "name": forms.TextInput(
                 attrs={
-                    "placeholder": "Campaign status.", 
+                    "placeholder": "Campaign status.",
                     "class": "form-control",
-                    "autofocus": "autofocus"
-                    }
-                ),
+                    "autofocus": "autofocus",
+                }
+            ),
         }
+
 
 class WaypointTypeForm(ModelForm):
-
     class Meta:
         model = WaypointType
-        fields = ('name',)
+        fields = ("name",)
         widgets = {
-            'name': forms.TextInput(
+            "name": forms.TextInput(
                 attrs={
-                    "placeholder": "Waypoint type.", 
+                    "placeholder": "Waypoint type.",
                     "class": "form-control",
-                    "autofocus": "autofocus"
-                    }
-                ),
+                    "autofocus": "autofocus",
+                }
+            ),
         }
+
 
 class SupportTypeForm(ModelForm):
-
     class Meta:
         model = SupportType
-        fields = ('name',)
+        fields = ("name",)
         widgets = {
-            'name': forms.TextInput(
+            "name": forms.TextInput(
                 attrs={
-                    "placeholder": "Support type.", 
+                    "placeholder": "Support type.",
                     "class": "form-control",
-                    "autofocus": "autofocus"
-                    }
-                ),
+                    "autofocus": "autofocus",
+                }
+            ),
         }
 
-class TaskForm(ModelForm):
 
+class TaskForm(ModelForm):
     class Meta:
         model = Task
-        fields = ('name',)
+        fields = ("name",)
         widgets = {
-            'name': forms.TextInput(
+            "name": forms.TextInput(
                 attrs={
-                    "placeholder": "Flight task.", 
+                    "placeholder": "Flight task.",
                     "class": "form-control",
-                    "autofocus": "autofocus"
-                    }
-                ),
+                    "autofocus": "autofocus",
+                }
+            ),
         }
 
 
 class ThreatTypeForm(ModelForm):
-
     class Meta:
         model = ThreatType
-        fields = ('name',)
+        fields = ("name",)
         widgets = {
-            'name': forms.TextInput(
+            "name": forms.TextInput(
                 attrs={
-                    "placeholder": "Threat type.", 
+                    "placeholder": "Threat type.",
                     "class": "form-control",
-                    "autofocus": "autofocus"
-                    }
-                ),
+                    "autofocus": "autofocus",
+                }
+            ),
         }
 
 
@@ -316,7 +334,7 @@ class AirframeForm(ModelForm):
         super(AirframeForm, self).__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs.update({"class": "form-control"})
-    
+
     class Meta:
         model = Airframe
         # fields = ("__all__")
@@ -326,10 +344,27 @@ class AirframeForm(ModelForm):
             "multicrew",
         )
         exclude = ("user",)
-       
+
+
+class AirframeDefaultsForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(AirframeDefaultsForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({"class": "form-control"})
+
+    class Meta:
+        model = AirframeDefaults
+        # fields = ("__all__")
+        fields = (
+            "airframe_type",
+            "callsign",
+            "default_radio_freq",
+            "laser_code",
+        )
+        # exclude = ("user",)
+
 
 class NewUserForm(UserCreationForm):
-
     email = forms.EmailField(required=True)
 
     class Meta:
@@ -352,7 +387,6 @@ class NewUserForm(UserCreationForm):
 
 
 class ProfileForm(forms.ModelForm):
-
     timezone = forms.ChoiceField(
         required=True,
         choices=utils.get_timezones(),

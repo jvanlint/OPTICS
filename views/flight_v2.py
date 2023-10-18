@@ -8,7 +8,17 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 from django.urls import reverse
 
-from ..models import Flight, FlightImagery, UserProfile, Comment, Package, Target
+from ..models import (
+    Flight,
+    FlightImagery,
+    UserProfile,
+    Comment,
+    Package,
+    Target,
+    Aircraft,
+    Airframe,
+    AirframeDefaults,
+)
 from ..forms import FlightForm, FlightImageryForm
 
 
@@ -67,7 +77,14 @@ def flight_add_v2(request, link_id):
             obj = form.save(commit=False)
             obj.modified_by = request.user
             obj.created_by = request.user
+            print(f"Object id is: {obj.id}")
+            flight_id = obj.id
+            airframe_id = obj.airframe.id
             obj.save()
+            print(f"Object id is: {obj.id}")
+            flight_id = obj.id
+            create_flight_aircraft(flight_id, airframe_id)
+            # populate_airframe_defaults(flight_id, airframe_id)
             return HttpResponseRedirect(returnURL)
 
     context = {
@@ -276,3 +293,22 @@ def flight_imagery_delete_v2(request, link_id):
 
     imagery.delete()
     return HttpResponseRedirect(returnURL)
+
+
+def create_flight_aircraft(flight_id, airframe_id):
+    airframe = Airframe.objects.get(id=airframe_id)
+    flight = Flight.objects.get(id=flight_id)
+
+    for _ in range(2):
+        new_aircraft = Aircraft(type=airframe, flight=flight)
+        new_aircraft.save()
+
+
+def populate_airframe_defaults(flight_id, airframe_id):
+    # airframe = Airframe.objects.get(id=airframe_id)
+    airframe_defaults = AirframeDefaults.objects.get(airframe_type=airframe_id)
+    flight = Flight.objects.get(id=flight_id)
+    flight.callsign = airframe_defaults.callsign
+    flight.radio_frequency = airframe_defaults.default_radio_freq
+    flight.flight_coordination = airframe_defaults.laser_code
+    flight.save()

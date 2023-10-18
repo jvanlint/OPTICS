@@ -1,0 +1,104 @@
+<div id="airframe_defaults">
+    <div class="card">
+        <div class="card-header">
+            <i class="fa fa-align-justify"></i>
+            <h5>Airframe Defaults</h5>
+            <div class="media text-muted">
+                Default attributes for airframes for mission planning.
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-responsive-sm table-striped">
+                <thead>
+                    <tr>
+                        <th>Airframe</th>
+                        <th>Call Sign</th>
+                        <th>Radio Freq</th>
+                        <th>Laser Codes</th>
+                        <th>Date Added</th>
+                        <th>Last Modified</th>
+                        <th>User</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for airframe_defaults in airframe_defaults_object %}
+                    <tr>
+                        <td>{{airframe_defaults.airframe_type}}</td>
+                        <td>{{airframe_defaults.callsign}}</td>
+                        <td>{{airframe_defaults.default_radio_freq}}</td>
+                        <td>{{airframe_defaults.laser_code}}</td>
+                        <td>{{airframe_defaults.date_created}}</td>
+                        <td>{{airframe_defaults.date_modified}}</td>
+                        <td>{{airframe_defaults.user}}</td>
+                        <td>
+                            <button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                &nbspAction
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item"
+                                    href="{% url 'reference_object_update' airframe_defaults.id 'airframe_defaults' %}?returnUrl={{request.path}}">
+                                    <svg class="c-icon">
+                                        <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil">
+                                        </use>
+                                    </svg>
+                                    &nbspEdit
+                                </a>
+                                <a class="dropdown-item"
+                                    href="{% url 'reference_object_delete' airframe_defaults.id 'airframe_defaults' %}?returnUrl={{request.path}}">
+                                    <svg class="c-icon">
+                                        <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash">
+                                        </use>
+                                    </svg>
+                                    &nbspDelete
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="media text-muted">Showing {{ airframe_defaults_object.start_index }} to {{ airframe_defaults_object.end_index }} of {{ airframe_defaults_object.paginator.count }} records.</div>
+        </div>
+        <div class="card-footer">
+            {% if airframe_defaults_object.has_other_pages %}
+                <div class="btn-group float-left" role="group" aria-label="Basic outlined example">
+                    {% if airframe_defaults_object.has_previous %}
+                    <button class="btn btn-outline-primary" type="button"
+                        hx-get="{% url 'airframe_defaults_page_manager' %}?page={{ airframe_object.previous_page_number}}"
+                        hx-target="#airframe_defaults" hx-swap="outerHTML">Previous</button>
+                    {% else %}
+                    <button class="btn btn-outline-primary" type="button" disabled="">Previous</button>
+                    {% endif %}
+
+                    {% for i in airframe_defaults_object.paginator.page_range %}
+                    {% if airframe_defaults_object.number == i %}
+                    <button class="btn btn-outline-primary active" type="button">{{ i }}</button>
+                    {% else %}
+                    <button class="btn btn-outline-primary" type="button"
+                        hx-get="{% url 'airframe_defaults_page_manager' %}?page={{ i }}" hx-target="#airframe_defaults" hx-swap="outerHTML">{{ i }}</button>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if airframe_defaults_object.has_next %}
+                    <button class="btn btn-outline-primary" type="button"
+                        hx-get="{% url 'airframe_defaults_page_manager' %}?page={{ airframe_defaults_object.next_page_number }}"
+                        hx-target="#airframe_defaults" hx-swap="outerHTML">Next</button>
+                    {% else %}
+                    <button class="btn btn-outline-primary" type="button" disabled="">Next</button>
+                    {% endif %}
+                </div>
+            {% endif %}
+                <h6>
+                    <a href="{% url 'reference_object_add' 'airframe_defaults' %}?returnUrl={{request.path}}"
+                        class="btn btn-sm btn-success float-right" role="button">
+                        <svg class="c-icon">
+                            <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
+                        </svg>
+                        Add
+                    </a>
+                </h6>
+            </div>
+        </div>
+    </div>
