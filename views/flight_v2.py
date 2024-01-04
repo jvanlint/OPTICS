@@ -98,6 +98,14 @@ def flight_delete_v2(request, link_id):
 	return HttpResponseRedirect(returnURL)
 
 @login_required(login_url="account_login")
+def flight_copy_v2(request, link_id):
+	flight = Flight.objects.get(id=link_id)
+	returnURL = request.GET.get('returnUrl')
+	packageID = flight.copy()
+
+	return HttpResponseRedirect(returnURL)
+
+@login_required(login_url="account_login")
 def flight_copy(request, link_id):
 	flight = Flight.objects.get(id=link_id)
 	packageID = flight.copy()
@@ -109,7 +117,6 @@ def flight_copy(request, link_id):
 def flight_add_comment(request):
 	# if this is a POST request we need to process the form data
 	flight_id = request.GET.get("flight_id")
-	returnURL = request.GET.get("returnUrl")
 
 	if request.method == "POST":
 		comment_data = request.POST.dict()
@@ -117,14 +124,126 @@ def flight_add_comment(request):
 		# Get the post object
 		flight_object = Flight.objects.get(pk=flight_id)
 		flight_object.comments.create(comment=comment, user=request.user)
+		
 
-	return HttpResponseRedirect(returnURL)
+	context = flight_all_comments(flight_id)
+	
+	return render(request, "v2/flight/includes/comments.html", context=context)
 
 @login_required(login_url="account_login")
 def flight_delete_comment(request, link_id):
+	flight_id = request.GET.get('flight_id')
 	comment = Comment.objects.get(id=link_id)
-	returnURL = request.GET.get("returnUrl")
 	
 	comment.delete()
 	
+	context = flight_all_comments(flight_id)
+	
+	return render(request, "v2/flight/includes/comments.html", context=context)
+	
+def flight_edit_comment(request, link_id):
+	comment = Comment.objects.get(id=link_id)
+	
+	flight_id = request.GET.get('flight_id')
+	flight = Flight.objects.get(id=flight_id)
+	
+	context = {
+		"comment": comment,
+		"flight_object": flight,
+	}
+	
+	return render(request, "v2/flight/includes/comment_edit.html", context=context)
+
+def flight_show_comments(request):
+	
+	flight_id = request.GET.get('flight_id')
+	context = flight_all_comments(flight_id)
+	
+	return render(request, "v2/flight/includes/comments.html", context=context)
+
+def flight_update_comment(request, link_id):
+	comment = Comment.objects.get(id=link_id)
+	flight_id = request.GET.get('flight_id')
+	
+	if request.method == 'POST':
+		comment_data = request.POST.dict()
+		comment_text = comment_data.get("comment_edit_text")
+		comment.comment = comment_text
+		comment.save()
+	
+	context = flight_all_comments(flight_id)
+	
+	return render(request, "v2/flight/includes/comments.html", context=context)
+
+def flight_all_comments(flight_id):
+	
+	flight = Flight.objects.get(id=flight_id)
+	comments = flight.comments.all()
+	
+	context = {
+		"comments": comments,
+		"flight_object": flight,
+	}
+	
+	return context
+	
+# ---------------- Flight Imagery -------------------------
+	
+@login_required(login_url="account_login")
+def flight_imagery_create_v2(request, link_id):
+	flight = Flight.objects.get(id=link_id)
+	returnURL = request.GET.get("returnUrl")
+
+	form = FlightImageryForm(initial={"flight": flight})
+	form_title = "Flight Image"
+
+	if request.method == "POST":
+		form = FlightImageryForm(request.POST, request.FILES)
+		if form.is_valid():
+			form.save(commit=True)
+			return HttpResponseRedirect(returnURL)
+
+	context = {
+		"form": form,
+		"form_title": form_title,
+		"link": link_id,
+		"returnURL": returnURL,
+	}
+	return render(request, 'v2/generic/data_entry_form.html', context=context)
+
+
+@login_required(login_url="account_login")
+def flight_imagery_update_v2(request, link_id):
+	imagery = FlightImagery.objects.get(id=link_id)
+	returnURL = request.GET.get("returnUrl")
+
+	form_title = "Flight Image"
+	form = FlightImageryForm(instance=imagery)
+
+	if request.method == "POST":
+		form = FlightImageryForm(request.POST, request.FILES, instance=imagery)
+		print(request.path)
+		if form.is_valid():
+			form.save(commit=True)
+			return HttpResponseRedirect(returnURL)
+
+	context = {
+		"form": form,
+		"form_title": form_title,
+		"link": link_id,
+		"returnURL": returnURL,
+	}
+	return render(request, 'v2/generic/data_entry_form.html', context=context)
+
+
+@login_required(login_url="account_login")
+def flight_imagery_delete_v2(request, link_id):
+	imagery = FlightImagery.objects.get(id=link_id)
+	returnURL = request.GET.get("returnUrl")
+	
+	# Check to see if an AO Image exists.
+	if imagery:
+		os.remove(os.path.join(settings.MEDIA_ROOT, str(imagery.image)))
+		
+	imagery.delete()
 	return HttpResponseRedirect(returnURL)

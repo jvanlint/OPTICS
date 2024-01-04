@@ -2,46 +2,12 @@
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}
-<style>
 
-.date {
-    font-size: 11px
-}
-
-.comment-text {
-    font-size: 12px;
-	color: black;
-}
-
-.fs-12 {
-    font-size: 12px;
-	
-}
-
-.shadow-none {
-    box-shadow: none;
-}
-
-.name {
-    color: #007bff;
-}
-
-.cursor:hover {
-    color: blue;
-}
-
-.cursor {
-    cursor: pointer;
-}
-
-.textarea {
-    resize: none;
-</style>
-
-{% endblock stylesheets %} {% block content %}
+{% endblock stylesheets %} 
+{% block content %}
 {% include 'v2/includes/confirm_delete_modal.html' %}
 
-<!-- Modal -->
+<!-- .modal -->
 <div class="modal fade" id="fileUploadModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
 	<div class="modal-content">
@@ -76,6 +42,7 @@
 	</div>
   </div>
 </div>
+<!-- ./modal -->
 
 <main class="c-main">
 	<div class="container-fluid">
@@ -85,7 +52,7 @@
 					<div class="card">
 						<div class="card-header">
 							<h6 class="text-muted">Mission</h6>
-							<h2>{{mission_object.name}}</h2><a class="btn btn-sm btn-success float-right" href="{% url 'mission_signup' mission_object.id %}?returnUrl={{request.path}}" role="button">Mission Sign Up</a>
+							<h2>{{mission_object.name}}</h2><a class="btn btn-sm btn-success float-right" href="{% url 'mission_signup_v2' mission_object.id %}?returnUrl={{request.path}}" role="button">Mission Sign Up</a>
 							<h6 class="text-muted">Actual Date-Time
 								{% if mission_object.notify_discord %} 
 								<svg class="c-icon">
@@ -231,49 +198,9 @@
 					<!-- /.card -->
 
 					<!--.card -->
-					<div class="card">
-						<div class="card-header">
-							Comments <span class="badge badge-pill badge-info ml-auto">{{comments.count}}</span>
-						</div>
-						<div class="card-body">
-								<form action="{% url 'mission_add_comment' %}?mission_id={{mission_object.id}}&returnUrl={{request.path}}" method="post">
-									{% csrf_token %}
-									<div class="d-flex flex-row align-items-start">
-										<img class="rounded-circle" src="{{ user.profile.profile_image.url }}" width="40">
-										<textarea class="form-control ml-1 shadow-none textarea" id="comment_text" name="comment_text"></textarea>
-									</div>
-                    				<div class="mt-2 text-right">
-										<button class="btn btn-info btn-sm shadow-none" type="submit" value="Post">Post Comment</button>
-									</div>
-								</form>
-						</div>	
-						<div class="card-body">
-							{% for comment in comments %}
-								<!-- Start Comment-->
-								<div class="media text-muted pt-3">
-									<div class="c-avatar"><img class="c-avatar-img" src="{{ comment.user.profile.profile_image.url }}" alt="" /></div>
-										<p class="media-body pb-3 pl-2 mb-0  lh-125 border-bottom border-gray">
-											<strong class="d-block text-gray-dark"><a href="{% url 'user_profile' comment.user.id %}" class="text-decoration-none text-reset">{{ comment.user.username}}</a></strong>
-											
-											{{ comment.comment|urlize }}
-											{% if comment.user.username == user.username %}
-											<br>
-											<a id="comment_{{comment.id}}" data-toggle="modal" data-target="#confirmModal" data-message="Are you sure? If you proceed, the comment will be deleted." data-buttontext="Delete" href="{% url 'mission_delete_comment' comment.id %}?returnUrl={{request.path}}">
-												<svg class="c-icon">
-													<use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
-												</svg>
-											</a>
-											{% endif %}
-											<p class="small">{{ comment.date_created | timesince}} ago.</p>
-										</p>
-								</div>
-								<!-- End Comment -->
-								{% endfor %}
-						</div>
-						
+					<div class="card" id="comments">
+							{% include "v2/mission/includes/comments.html" %}
 					</div>
-
-
 					<!--.card -->
 
 				</div>
@@ -593,7 +520,9 @@
 							{% endfor %} 
 							</div>
 							{% else %}
-							No imagery available.
+							<div class="col-sm-6 col-md-4">
+								No imagery available.
+							</div>
 							{% endif %}
 						</div>
 						<div class="card-footer">

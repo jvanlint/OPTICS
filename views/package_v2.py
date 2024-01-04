@@ -87,10 +87,10 @@ def package_delete_v2(request, link_id):
 	
 # ---------------- Package Comments -------------------------
 
+@login_required(login_url="account_login")
 def package_add_comment(request):
 	# if this is a POST request we need to process the form data
 	package_id = request.GET.get("package_id")
-	returnURL = request.GET.get("returnUrl")
 
 	if request.method == "POST":
 		comment_data = request.POST.dict()
@@ -98,16 +98,67 @@ def package_add_comment(request):
 		# Get the post object
 		package_object = Package.objects.get(pk=package_id)
 		package_object.comments.create(comment=comment, user=request.user)
+		
+	context = package_all_comments(package_id)
+	
+	return render(request, "v2/package/includes/comments.html", context=context)
 
-	return HttpResponseRedirect(returnURL)
-
+@login_required(login_url="account_login")
 def package_delete_comment(request, link_id):
 	comment = Comment.objects.get(id=link_id)
-	returnURL = request.GET.get("returnUrl")
+	package_id = request.GET.get('package_id')
 	
 	comment.delete()
 	
-	return HttpResponseRedirect(returnURL)
+	context = package_all_comments(package_id)
+	
+	return render(request, "v2/package/includes/comments.html", context=context)
+	
+def package_edit_comment(request, link_id):
+	comment = Comment.objects.get(id=link_id)
+	
+	package_id = request.GET.get('package_id')
+	package = Package.objects.get(id=package_id)
+	
+	context = {
+		"comment": comment,
+		"package_object": package,
+	}
+	
+	return render(request, "v2/package/includes/comment_edit.html", context=context)
+
+def package_show_comments(request):
+	
+	package_id = request.GET.get('package_id')
+	context = package_all_comments(package_id)
+	
+	return render(request, "v2/package/includes/comments.html", context=context)
+
+def package_update_comment(request, link_id):
+	comment = Comment.objects.get(id=link_id)
+	package_id = request.GET.get('package_id')
+	
+	if request.method == 'POST':
+		comment_data = request.POST.dict()
+		comment_text = comment_data.get("comment_edit_text")
+		comment.comment = comment_text
+		comment.save()
+	
+	context = package_all_comments(package_id)
+	
+	return render(request, "v2/package/includes/comments.html", context=context)
+	
+def package_all_comments(package_id):
+	
+	package = Package.objects.get(id=package_id)
+	comments = package.comments.all()
+	
+	context = {
+		"comments": comments,
+		"package_object": package,
+	}
+	
+	return context
 	
 # ---------------- Package Imagery -------------------------
 	

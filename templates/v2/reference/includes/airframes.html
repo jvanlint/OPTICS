@@ -1,0 +1,91 @@
+<div id="airframe">
+    <div class="card">
+        <div class="card-header">
+            <i class="fa fa-align-justify"></i>
+            <h5>Airframes</h5>
+            <div class="media text-muted">
+                The airframes that can be assigned as aircraft in flights.
+            </div>
+        </div>
+        <div class="card-body" >
+            <table class="table table-responsive-sm table-striped" >
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Stations</th>
+                        <th>Multicrew</th>
+                        <th>Date Added</th>
+                        <th>Last Modified</th>
+                        <th>User</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for airframe in airframe_object %}
+                    <tr>
+                        <td>{{airframe.name}}</td>
+                        <td>{{airframe.stations}}</td>
+                        <td>{{airframe.multicrew}}</td>
+                        <td>{{airframe.date_created}}</td>
+                        <td>{{airframe.date_modified}}</td>
+                        <td>{{airframe.user}}</td>
+                        <td>
+                            <button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                &nbspAction
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="{% url 'reference_object_update' airframe.id 'airframe' %}?returnUrl={{request.path}}">
+                                    <svg class="c-icon">
+                                        <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
+                                    </svg>
+                                    &nbspEdit
+                                </a>
+                                <a class="dropdown-item" href="{% url 'reference_object_delete' airframe.id 'airframe' %}?returnUrl={{request.path}}">
+                                    <svg class="c-icon">
+                                        <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+                                    </svg>
+                                    &nbspDelete
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="media text-muted">Showing {{ airframe_object.start_index }} to {{ airframe_object.end_index }} of {{ airframe_object.paginator.count }} records.</div>
+        </div>
+        <div class="card-footer">
+            {% if airframe_object.has_other_pages %}
+                <div class="btn-group float-left" role="group" aria-label="Basic outlined example">
+                    {% if airframe_object.has_previous %}
+                        <button class="btn btn-outline-primary" type="button" hx-get="{% url 'airframe_page_manager' %}?page={{ airframe_object.previous_page_number}}" hx-target="#airframe" hx-swap="outerHTML">Previous</button>
+                    {% else %}
+                        <button class="btn btn-outline-primary" type="button" disabled="">Previous</button>
+                    {% endif %}
+                    
+                    {% for i in airframe_object.paginator.page_range %}
+                        {% if airframe_object.number == i %}
+                            <button class="btn btn-outline-primary active" type="button" >{{ i }}</button>
+                        {% else %}
+                            <button class="btn btn-outline-primary" type="button" hx-get="{% url 'airframe_page_manager' %}?page={{ i }}" hx-target="#airframe" hx-swap="outerHTML">{{ i }}</button>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if airframe_object.has_next %}
+                        <button class="btn btn-outline-primary" type="button" hx-get="{% url 'airframe_page_manager' %}?page={{ airframe_object.next_page_number }}" hx-target="#airframe" hx-swap="outerHTML">Next</button>
+                    {% else %}
+                        <button class="btn btn-outline-primary" type="button" disabled="">Next</button>
+                    {% endif %}
+                </div>
+            {% endif %}
+        
+      <h6>
+          <a href="{% url 'reference_object_add' 'airframe' %}?returnUrl={{request.path}}" class="btn btn-sm btn-success float-right" role="button">
+              <svg class="c-icon">
+                  <use xlink:href="/static/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
+              </svg>
+              Add
+          </a>
+      </h6>
+    </div>
+</div>

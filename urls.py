@@ -12,6 +12,7 @@ urlpatterns = [
     path('campaign/add', views.campaign_create, name='campaign_add'),
     path('campaign/update/<int:link_id>', views.campaign_update, name='campaign_update'),
     path('campaign/delete/<int:link_id>', views.campaign_delete, name='campaign_delete'),
+    path('campaign/filter', views.campaigns_filter, name='campaigns_filter'),
 
     path('mission/<int:link_id>/', views.mission, name='mission'),
     path('mission/add/<int:link_id>', views.mission_create, name='mission_add'),
@@ -82,6 +83,13 @@ urlpatterns += [
     path('dashboard/', views.mission_dashboard, name='mission_dashboard'),
 ]
 
+# About URL Patterns - V2
+
+urlpatterns += [
+    path('about/', views.about, name='about'),
+]
+
+
 # Campaign URL Patterns - V2
 urlpatterns += [
     path('v2/', views.campaigns_all, name='home'),
@@ -93,10 +101,14 @@ urlpatterns += [
     path('v2/campaign/<int:link_id>/', views.campaign_detail_v2, name='campaign_detail_v2'),
     path("v2/campaign/delete/<int:link_id>", views.campaign_delete_v2, name="campaign_delete_v2"),
     
-    #Comments
+    # Comments
     path('v2/campaign/comment/add', views.campaign_add_comment, name='campaign_add_comment'),
     path("v2/campaign/comment/delete/<int:link_id>", views.campaign_delete_comment,
       name="campaign_delete_comment"),
+    path("v2/campaign/comment/edit/<int:link_id>", views.campaign_edit_comment,
+        name="campaign_edit_comment"),
+    path('v2/campaign/comment/show', views.campaign_show_comments, name='campaign_show_comments'),
+    path('v2/campaign/comment/update/<int:link_id>', views.campaign_update_comment, name='campaign_update_comment'),
 ]
 
 # Mission URL Patterns - V2
@@ -106,9 +118,6 @@ urlpatterns += [
     path('v2/mission/update/<int:link_id>', views.mission_update_v2, name='mission_update_v2'),
     path("v2/mission/delete/<int:link_id>", views.mission_delete_v2, name="mission_delete_v2"),
     path('v2/mission/copy/<int:link_id>', views.mission_copy_v2, name='mission_copy_v2'),
-         
-    path("v2/mission/comment/add", views.mission_add_comment, name="mission_add_comment"),
-    path("v2/mission/comment/delete/<int:link_id>", views.mission_delete_comment, name="mission_delete_comment"),
           
     path('v2/mission/add/file', views.mission_file_add, name='mission_file_add'),
     path("v2/mission/file/delete/<int:link_id>", views.mission_file_delete, name="mission_file_delete"),
@@ -116,6 +125,17 @@ urlpatterns += [
     path('mission/add/image/<int:link_id>', views.mission_imagery_create_v2, name='mission_imagery_add_v2'),
     path('mission/update/image/<int:link_id>', views.mission_imagery_update_v2, name='mission_imagery_update_v2'),
     path('mission/delete/image/<int:link_id>', views.mission_imagery_delete_v2, name='mission_imagery_delete_v2'),
+    
+    path('v2/mission/signup/<int:link_id>', views.mission_signup_v2, name='mission_signup_v2'),
+    
+    # Comments
+    path('v2/mission/comment/add', views.mission_add_comment, name='mission_add_comment'),
+    path("v2/mission/comment/delete/<int:link_id>", views.mission_delete_comment,
+      name="mission_delete_comment"),
+    path("v2/mission/comment/edit/<int:link_id>", views.mission_edit_comment,
+        name="mission_edit_comment"),
+    path('v2/mission/comment/show', views.mission_show_comments, name='mission_show_comments'),
+    path('v2/mission/comment/update/<int:link_id>', views.mission_update_comment, name='mission_update_comment'),
 ]
 
 # Package URL Patterns - V2
@@ -125,12 +145,18 @@ urlpatterns += [
     path('v2/package/update/<int:link_id>', views.package_update_v2, name='package_update_v2'),
     path("v2/package/delete/<int:link_id>", views.package_delete_v2, name="package_delete_v2"),
     
-    path("v2/package/comment/add", views.package_add_comment, name="package_add_comment"),
-    path("v2/package/comment/delete/<int:link_id>", views.package_delete_comment, name="package_delete_comment"),
-    
     path('package/add/image/<int:link_id>', views.package_imagery_create_v2, name='package_imagery_add_v2'),
     path('package/update/image/<int:link_id>', views.package_imagery_update_v2, name='package_imagery_update_v2'),
     path('package/delete/image/<int:link_id>', views.package_imagery_delete_v2, name='package_imagery_delete_v2'),
+    
+    # Comments
+    path('v2/package/comment/add', views.package_add_comment, name='package_add_comment'),
+    path("v2/package/comment/delete/<int:link_id>", views.package_delete_comment,
+      name="package_delete_comment"),
+    path("v2/package/comment/edit/<int:link_id>", views.package_edit_comment,
+        name="package_edit_comment"),
+    path('v2/package/comment/show', views.package_show_comments, name='package_show_comments'),
+    path('v2/package/comment/update/<int:link_id>', views.package_update_comment, name='package_update_comment'),
 ]
 
 # Flight URL Patterns - V2
@@ -139,9 +165,20 @@ urlpatterns += [
     path('v2/flight/add/<int:link_id>', views.flight_add_v2, name='flight_add_v2'),
     path('v2/flight/update/<int:link_id>', views.flight_update_v2, name='flight_update_v2'),
     path("v2/flight/delete/<int:link_id>", views.flight_delete_v2, name="flight_delete_v2"),
+    path("v2/flight/copy/<int:link_id>", views.flight_copy_v2, name="flight_copy_v2"),
     
-    path("v2/flight/comment/add", views.flight_add_comment, name="flight_add_comment"),
-    path("v2/flight/comment/delete/<int:link_id>", views.flight_delete_comment, name="flight_delete_comment"),
+    path('flight/add/image/<int:link_id>', views.flight_imagery_create_v2, name='flight_imagery_add_v2'),
+    path('flight/update/image/<int:link_id>', views.flight_imagery_update_v2, name='flight_imagery_update_v2'),
+    path('flight/delete/image/<int:link_id>', views.flight_imagery_delete_v2, name='flight_imagery_delete_v2'),
+    
+    # Comments
+    path('v2/flight/comment/add', views.flight_add_comment, name='flight_add_comment'),
+    path("v2/flight/comment/delete/<int:link_id>", views.flight_delete_comment,
+      name="flight_delete_comment"),
+    path("v2/flight/comment/edit/<int:link_id>", views.flight_edit_comment,
+        name="flight_edit_comment"),
+    path('v2/flight/comment/show', views.flight_show_comments, name='flight_show_comments'),
+    path('v2/flight/comment/update/<int:link_id>', views.flight_update_comment, name='flight_update_comment'),
 ]
 
 # Aircraft URL Patterns - V2
@@ -187,6 +224,13 @@ urlpatterns += [
     path('referenceobject/add/<str:table>', views.reference_object_add, name='reference_object_add'),
     path('referenceobject/update/<int:link_id>/<str:table>', views.reference_object_update, name='reference_object_update'),
     path('referenceobject/delete/<int:link_id>/<str:table>', views.reference_object_delete, name='reference_object_delete'),
+    path('reference/waypoint_type_page', views.waypoint_type_page_manager, name='waypoint_type_page_manager'),
+    path('reference/airframe_page', views.airframe_page_manager, name='airframe_page_manager'),
+    path('reference/flight_task_page', views.flight_task_page_manager, name='flight_task_page_manager'),
+    path('reference/campaign_status_page', views.campaign_status_page_manager, name='campaign_status_page_manager'),
+    path('reference/terrain_page', views.terrain_page_manager, name='terrain_page_manager'),
+    path('reference/support_type_page', views.support_type_page_manager, name='support_type_page_manager'),
+    path('reference/threat_type_page', views.threat_type_page_manager, name='threat_type_page_manager'),
 ]
 
 # Profile URL Patterns - V2

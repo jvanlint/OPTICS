@@ -8,9 +8,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 from django.urls import reverse
 
-from ..models import Campaign, Mission, MissionImagery, UserProfile, MissionFile, Comment
-from ..forms import MissionForm, MissionFileForm, MissionImageryForm
+from django.core import serializers
 
+from ..models import Campaign, Mission, MissionImagery, UserProfile, MissionFile, Comment, Package, Aircraft
+from ..forms import MissionForm, MissionFileForm, MissionImageryForm
 
 # ---------------- Mission -------------------------
 
@@ -100,7 +101,7 @@ def mission_update_v2(request, link_id):
 
     image_url = request.build_absolute_uri(mission.campaign.campaignImage.url)
 
-    mission.create_discord_event(image_url, request)
+    #mission.create_discord_event(image_url, request)
 
     form_title = "Mission"
 
@@ -156,7 +157,6 @@ def mission_copy_v2(request, link_id):
 def mission_add_comment(request):
     # if this is a POST request we need to process the form data
     mission_id = request.GET.get("mission_id")
-    returnURL = request.GET.get("returnUrl")
 
     if request.method == "POST":
         comment_data = request.POST.dict()
@@ -164,17 +164,67 @@ def mission_add_comment(request):
         # Get the post object
         mission_object = Mission.objects.get(pk=mission_id)
         mission_object.comments.create(comment=comment, user=request.user)
-
-    return HttpResponseRedirect(returnURL)
+    
+    context = mission_all_comments(mission_id)
+    
+    return render(request, "v2/mission/includes/comments.html", context=context)
 
 @login_required(login_url="account_login")
 def mission_delete_comment(request, link_id):
     comment = Comment.objects.get(id=link_id)
-    returnURL = request.GET.get("returnUrl")
+    mission_id = request.GET.get('mission_id')
     
     comment.delete()
     
-    return HttpResponseRedirect(returnURL)
+    context = mission_all_comments(mission_id)
+    
+    return render(request, "v2/mission/includes/comments.html", context=context)
+    
+def mission_edit_comment(request, link_id):
+    comment = Comment.objects.get(id=link_id)
+    
+    mission_id = request.GET.get('mission_id')
+    mission = Mission.objects.get(id=mission_id)
+    
+    context = {
+        "comment": comment,
+        "mission_object": mission,
+    }
+    
+    return render(request, "v2/mission/includes/comment_edit.html", context=context)
+
+def mission_show_comments(request):
+    
+    mission_id = request.GET.get('mission_id')
+    context = mission_all_comments(mission_id)
+    
+    return render(request, "v2/mission/includes/comments.html", context=context)
+
+def mission_update_comment(request, link_id):
+    comment = Comment.objects.get(id=link_id)
+    mission_id = request.GET.get('mission_id')
+    
+    if request.method == 'POST':
+        comment_data = request.POST.dict()
+        comment_text = comment_data.get("comment_edit_text")
+        comment.comment = comment_text
+        comment.save()
+    
+    context = mission_all_comments(mission_id)
+    
+    return render(request, "v2/mission/includes/comments.html", context=context)
+
+def mission_all_comments(mission_id):
+    
+    mission = Mission.objects.get(id=mission_id)
+    comments = mission.comments.all()
+    
+    context = {
+        "comments": comments,
+        "mission_object": mission,
+    }
+    
+    return context
     
 # ---------------- Mission File -------------------------
 
@@ -267,3 +317,45 @@ def mission_imagery_delete_v2(request, link_id):
         
     imagery.delete()
     return HttpResponseRedirect(returnURL)
+    
+# ---------------- Mission Signup -------------------------
+    
+@login_required(login_url="account_login")
+def mission_signup_v2(request, link_id):  # link_id is the mission ID
+    mission = Mission.objects.get(id=link_id)
+    comments = mission.comments.all()
+    packages = mission.package_set.all()
+
+    has_seat = 0
+    package_list = serializers.serialize("python", packages)
+    for package in package_list:
+        has_seat += (
+            Aircraft.objects.filter(flight__package__id=package["pk"])
+            .filter(pilot=request.user)
+            .count()
+        )
+        has_seat += (
+            Aircraft.objects.filter(flight__package__id=package["pk"])
+            .filter(rio_wso=request.user)
+            .count()
+        )
+    campaign = Campaign.objects.get(mission=mission)
+    is_owner = campaign.created_by == request.user
+    
+    breadcrumbs = {
+        "Campaigns": reverse("campaigns"),
+        mission.campaign.name: reverse("campaign_detail_v2", args=(mission.campaign.id,)),
+        mission.name: reverse('mission_v2', args=(mission.id,)), 
+        "Sign Up" : "",
+    }
+    
+    context = {
+        "mission_object": mission,
+        "package_object": packages,
+        "has_seat": has_seat,
+        "is_owner": is_owner,
+        "comments": comments,
+        "breadcrumbs": breadcrumbs,
+    }
+
+    return render(request, "v2/mission/mission_signup.html", context)

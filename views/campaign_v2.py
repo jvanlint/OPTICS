@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 
 from ..forms import CampaignForm
-from ..models import Campaign, UserProfile
+from ..models import Campaign, UserProfile, Comment
 
 
 @login_required(login_url="account_login")
@@ -23,7 +23,8 @@ def campaigns_all(request):
             A rendered HTML page with context containing campaign data, whether the user is an admin and breadcrumbs.
     """
 
-    campaigns_queryset = Campaign.objects.order_by("id")
+    #campaigns_queryset = Campaign.objects.order_by('status', 'name')
+    campaigns_queryset = Campaign.objects.filter(status__name__iexact="Active").order_by('status', 'name')
     user_profile = UserProfile.objects.get(user=request.user)
 
     breadcrumbs = {"Home": ""}
@@ -35,7 +36,30 @@ def campaigns_all(request):
     }
 
     return render(request, "v2/campaign/campaigns.html", context=context)
-    # return render(request, "v2/generic/data_entry_form.html", context=context)
+    
+@login_required(login_url="account_login")
+def campaigns_filter(request):
+    filter = request.GET.get("filter")
+    
+    if filter == "All":
+        campaigns_queryset = Campaign.objects.order_by('status', 'name')
+    else:
+        campaigns_queryset = Campaign.objects.filter(status__name__iexact=filter).order_by('status', 'name')
+    
+    
+    
+    user_profile = UserProfile.objects.get(user=request.user)
+    
+    breadcrumbs = {"Home": ""}
+    
+    context = {
+        "campaigns": campaigns_queryset,
+        "isAdmin": user_profile.is_admin(),
+        "breadcrumbs": breadcrumbs,
+    }
+    
+    return render(request, "v2/campaign/includes/campaign_card.html", context=context)
+    
 
 @login_required(login_url="account_login")
 def campaign_detail_v2(request, link_id):
@@ -119,7 +143,6 @@ def campaign_update_v2(request, link_id):
 @login_required(login_url="account_login")
 def campaign_delete_v2(request, link_id):
     campaign = Campaign.objects.get(id=link_id)
-    return_url = request.GET.get("returnUrl")
 
     # Delete the campaign thumbnail before deleting the actual DB record.
     # Check to see if a campaign thumbnail exists.
@@ -132,9 +155,85 @@ def campaign_delete_v2(request, link_id):
 
     campaign.delete()
     # messages.success(request, "Campaign successfully deleted.")
+
     return HttpResponseRedirect(return_url)
 
 
 @login_required(login_url="account_login")
 def campaign_redirect(request):
     return redirect('campaigns')
+
+# ---------------- Campaign Comments -------------------------
+def campaign_add_comment(request):
+
+    campaign_id = request.GET.get('campaign_id')
+    
+    if request.method == 'POST':
+        comment_data = request.POST.dict()
+        comment = comment_data.get("comment_text")
+        # Get the post object
+        campaign = Campaign.objects.get(pk=campaign_id)
+        campaign.comments.create(comment=comment, 
+                                 user=request.user)
+    
+    context = campaign_all_comments(campaign_id)
+    
+    return render(request, "v2/campaign/includes/comments.html", context=context)
+        
+
+def campaign_delete_comment(request, link_id):
+    
+    campaign_id = request.GET.get('campaign_id')
+    comment = Comment.objects.get(id=link_id)
+    
+    comment.delete()
+    
+    context = campaign_all_comments(campaign_id)
+    
+    return render(request, "v2/campaign/includes/comments.html", context=context)
+    
+def campaign_edit_comment(request, link_id):
+    comment = Comment.objects.get(id=link_id)
+    
+    campaign_id = request.GET.get('campaign_id')
+    campaign = Campaign.objects.get(id=campaign_id)
+    
+    context = {
+        "comment": comment,
+        "campaign_object": campaign,
+    }
+    
+    return render(request, "v2/campaign/includes/comment_edit.html", context=context)
+
+def campaign_show_comments(request):
+    campaign_id = request.GET.get('campaign_id')
+    context = campaign_all_comments(campaign_id)
+    
+    return render(request, "v2/campaign/includes/comments.html", context=context)
+
+def campaign_update_comment(request, link_id):
+    comment = Comment.objects.get(id=link_id)
+    campaign_id = request.GET.get('campaign_id')
+    
+    if request.method == 'POST':
+        comment_data = request.POST.dict()
+        comment_text = comment_data.get("comment_edit_text")
+        comment.comment = comment_text
+        comment.save()
+
+    context = campaign_all_comments(campaign_id)
+    
+    return render(request, "v2/campaign/includes/comments.html", context=context)
+    
+def campaign_all_comments(campaign_id):
+    
+    campaign = Campaign.objects.get(id=campaign_id)
+    comments = campaign.comments.all()
+    
+    context = {
+        "comments": comments,
+        "campaign_object": campaign,
+    }
+    
+    return context
+# **** End Campaigns Code *****

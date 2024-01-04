@@ -22,7 +22,6 @@ from .threat import *
 from .waypoint import *
 from .waypoint_v2 import *
 
-from .comments import *
 from .profile import *
 from .profilev2 import *
 from .mission_imagery import *
@@ -35,3 +34,5 @@ from .support_v2 import *
 
 from .ref_tables import *
 from .dashboard import *
+
+from .about import *
